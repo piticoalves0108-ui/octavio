@@ -1,0 +1,484 @@
+{
+  "data": "01/10/2026",
+  "ponto": "Top Life Miami Beach, QI 24, Setor Industrial, Taguatinga Norte - DF (CEP 72135-240)",
+  "comercios": [
+    {
+      "id": "churrasquinho-do-bruce",
+      "nome": "Churrasquinho do Bruce",
+      "ramo": "Churrasquinho, hambúrguer e almoço",
+      "setor": "frente",
+      "setorNome": "Em frente ao Top Life",
+      "quadra": "QI 23",
+      "endereco": "QI 23 nº 01, Setor Industrial, Taguatinga Norte (em frente ao Top Life Miami Beach)",
+      "instagram": "churrasquinhodobruce",
+      "seguidores": "27 mil seguidores",
+      "telefones": [
+        {
+          "tipo": "WhatsApp",
+          "numero": "(61) 99177-8057"
+        }
+      ],
+      "presenca": "Só Instagram, Facebook e iFood. Nenhum site próprio encontrado.",
+      "fatos": [
+        "Segunda a sábado, das 11h às 23h",
+        "Delivery pelo iFood",
+        "Fica na QI 23/24, em frente ao Top Life Miami Beach"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/churrasquinhodobruce/"
+        },
+        {
+          "nome": "Foursquare",
+          "url": "https://pt.foursquare.com/v/churrasquinho-do-bruce/5a5d40d59e0d54787d2a5f82"
+        },
+        {
+          "nome": "Guia de Restaurantes",
+          "url": "https://guiaderestaurantesbrasil.com.br/df/churrasquinho-do-bruce-cardapio-preco-whatsapp-setor-industrial-taguatinga-brasilia-208007"
+        },
+        {
+          "nome": "iFood",
+          "url": "https://www.ifood.com.br/delivery/brasilia-df/churrasquinho-do-bruce-setor-industrial-taguatinga/c26e70f6-5817-4e8b-929d-f209eeb81a3d"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **Churrasquinho do Bruce** (churrasquinho, hambúrguer e almoço), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: Churrasquinho do Bruce\n- Ramo: Churrasquinho, hambúrguer e almoço\n- Endereço: QI 23 nº 01, Setor Industrial, Taguatinga Norte (em frente ao Top Life Miami Beach)\n- Contato: WhatsApp (61) 99177-8057\n- Instagram: @churrasquinhodobruce (https://www.instagram.com/churrasquinhodobruce/)\n- Informações públicas já confirmadas: segunda a sábado, das 11h às 23h; delivery pelo iFood; fica na QI 23/24, em frente ao Top Life Miami Beach.\n- Confirmar com o dono antes de publicar: cardápio completo e preços; ano de abertura e história; fotos em alta resolução; se aceita reserva para grupos\n\n## Objetivo e público\n- Objetivo: levar o cliente a pedir pelo WhatsApp ou pelo iFood e a vir comer no local; a conversão principal é o botão \"Pedir agora\".\n- Público: moradores do Top Life e do Setor Industrial, trabalhadores da região na hora do almoço e quem busca um churrasquinho à noite.\n\n## Direção de arte\n- Conceito: \"Brasa ao vivo\": o site parece estar em cima da churrasqueira. Fundo de carvão, luz quente vindo de baixo, fumaça que reage ao mouse.\n- Paleta: carvão #121212, brasa #FF5A1F, âmbar #FFB347, osso #F2EDE4, fumaça #8A8580.\n- Tipografia (Google Fonts via next/font): Big Shoulders Display (títulos, peso 800, caixa alta) + Barlow (texto).\n- Tom de voz: direto, de bairro e com fome: frases curtas como \"Espeto saindo agora\", sem gourmetização.\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Um espeto de churrasquinho em 3D gira devagar sobre uma grelha com brasas. As brasas usam shader emissivo com ruído animado e Bloom; faíscas são partículas instanciadas que sobem com turbulência; a fumaça é feita com planos volumétricos em shader de ruído que se desviam do cursor. A câmera faz um leve dolly-in na entrada.\n- Ao rolar, o espeto sai da grelha e os pedaços (carne, frango, linguiça, queijo coalho) se separam em vista explodida, cada um ligado ao item do cardápio que aparece ao lado.\n- Na seção de hambúrguer, o espeto vira um hambúrguer que se monta camada por camada, sincronizado com o scroll (timeline do GSAP controlando posições e rotações).\n- No rodapé, as brasas se apagam devagar e sobra só o brilho, junto ao endereço e ao horário.\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Preloader com o contador \"acendendo a brasa\" de 0 a 100% e uma chama SVG que cresce.\n- Títulos entram com SplitText caractere a caractere, com leve tremor de calor (displacement em CSS/SVG).\n- Cardápio em cards com tilt 3D no hover e preço contando de 0 até o valor (quando houver preço confirmado).\n- Faixa marquee infinita com \"Churrasquinho • Hambúrguer • Almoço • Delivery\".\n- Botão \"Pedir agora\" magnético, com pulso de brasa a cada 6 segundos.\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com o espeto 3D, nome, horário de funcionamento e os botões \"Pedir no WhatsApp\" e \"Pedir no iFood\"\n2. Cardápio por categoria (espetinhos, hambúrgueres, almoço, bebidas)\n3. \"Na brasa desde...\" com a história do Bruce, em 3 blocos com fotos\n4. Galeria em grid masonry puxando fotos do Instagram\n5. Como chegar: \"em frente ao Top Life Miami Beach\", com mapa estilizado e botão para o Google Maps\n6. Rodapé com horário, telefone, Instagram e iFood\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo Restaurant (servesCuisine: Churrasco, Hambúrguer) com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"Churrasquinho do Bruce | Churrasquinho, hambúrguer e almoço em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta (https://wa.me/5561991778057?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido.), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    },
+    {
+      "id": "barbearia-don-pietro",
+      "nome": "Barbearia Don Pietro",
+      "ramo": "Barbearia",
+      "setor": "qi",
+      "setorNome": "Setor Industrial (QI)",
+      "quadra": "QI 23",
+      "endereco": "QI 23, lotes 40/41/42, loja 03, Setor Industrial, Taguatinga Norte (CEP 72135-230)",
+      "instagram": "barbeariadonpietro",
+      "seguidores": "",
+      "telefones": [
+        {
+          "tipo": "WhatsApp",
+          "numero": "(61) 99334-7026"
+        },
+        {
+          "tipo": "Fixo",
+          "numero": "(61) 3970-6308"
+        }
+      ],
+      "presenca": "Tem app de agendamento (Barbearia Don Pietro na App Store e no Google Play), mas nenhum site próprio.",
+      "fatos": [
+        "Barbearia na QI 23, a uma quadra do Top Life",
+        "Agendamento pelo app próprio (iOS e Android)"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/barbeariadonpietro/"
+        },
+        {
+          "nome": "Barbearias Perto de Mim",
+          "url": "https://barbeariaspertodemim.com/e/barbearia-don-pietro-asyuvm/"
+        },
+        {
+          "nome": "App Store",
+          "url": "https://apps.apple.com/br/app/barbearia-don-pietro/id6748758890"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **Barbearia Don Pietro** (barbearia), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: Barbearia Don Pietro\n- Ramo: Barbearia\n- Endereço: QI 23, lotes 40/41/42, loja 03, Setor Industrial, Taguatinga Norte (CEP 72135-230)\n- Contato: WhatsApp (61) 99334-7026; Fixo (61) 3970-6308\n- Instagram: @barbeariadonpietro (https://www.instagram.com/barbeariadonpietro/)\n- Informações públicas já confirmadas: barbearia na QI 23, a uma quadra do Top Life; agendamento pelo app próprio (iOS e Android).\n- Confirmar com o dono antes de publicar: tabela de serviços e preços; horário de funcionamento; nomes e fotos dos barbeiros; link do app no Google Play\n\n## Objetivo e público\n- Objetivo: levar o cliente a agendar: botões para o app (App Store e Google Play) e para o WhatsApp.\n- Público: homens de 18 a 45 anos de Taguatinga Norte e do Setor Industrial que querem corte e barba com hora marcada.\n\n## Direção de arte\n- Conceito: \"Clássico italiano, acabamento cromado\": barbearia de alfaiataria, com preto profundo, metal polido e luz de estúdio.\n- Paleta: ônix #0E0E10, dourado envelhecido #B8955A, couro #6B3E26, marfim #EFE9DF, cromo #C9CDD2.\n- Tipografia (Google Fonts via next/font): Bodoni Moda (títulos, itálico nos destaques) + Manrope (texto).\n- Tom de voz: confiante e elegante, com pitada italiana (\"Benvenuto\", \"Il taglio\") sem exagero.\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Uma navalha clássica em 3D, com lâmina cromada (MeshPhysicalMaterial com clearcoat e reflexos de HDRI de estúdio), abre e fecha devagar enquanto gira. Ao fundo, um barber pole listrado em shader gira em loop. O mouse muda o ângulo da luz principal e o reflexo corre pela lâmina.\n- No scroll, a navalha fecha e dá lugar a uma tesoura e a um pente que se alinham como em uma vitrine; cada peça ilumina um serviço (corte, barba, sobrancelha, combo).\n- Seção \"Antes e depois\" com slider e um leve efeito de profundidade (parallax 2.5D com mapa de profundidade nas fotos).\n- Transição entre seções com uma \"lâmina de luz\" que corta a tela na diagonal (máscara animada em GSAP).\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Intro: o logo é desenhado em traço dourado (SVG stroke-dashoffset) e depois preenchido.\n- Títulos em Bodoni com reveal de máscara linha a linha.\n- Cursor personalizado em forma de círculo fino dourado que cresce sobre links (só no desktop).\n- Lista de serviços com hover que revela foto em movimento seguindo o cursor.\n- Botões \"Agendar no app\" magnéticos, com brilho metálico que atravessa no hover.\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com a navalha 3D e o CTA \"Agende seu horário\"\n2. Serviços (lista com descrição; preços só depois de confirmados)\n3. A experiência: ambiente, bebida, atendimento (com fotos)\n4. Equipe de barbeiros com cards de foto e Instagram de cada um\n5. Antes e depois\n6. Baixe o app: QR code e links para App Store e Google Play\n7. Localização na QI 23 e horário\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo BarberShop com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"Barbearia Don Pietro | Barbearia em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta (https://wa.me/5561993347026?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20agendar%20um%20hor%C3%A1rio.), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    },
+    {
+      "id": "so-salao-brasilia",
+      "nome": "Só Salão Brasília",
+      "ramo": "Fábrica de móveis para salão de beleza e esmalteria",
+      "setor": "qi",
+      "setorNome": "Setor Industrial (QI)",
+      "quadra": "QI 19",
+      "endereco": "QI 19, lotes 34 a 38, Setor Industrial, Taguatinga Norte",
+      "instagram": "sosalaobrasilia",
+      "seguidores": "",
+      "telefones": [
+        {
+          "tipo": "WhatsApp",
+          "numero": "(61) 99999-7349"
+        },
+        {
+          "tipo": "WhatsApp",
+          "numero": "(61) 99911-6311"
+        },
+        {
+          "tipo": "WhatsApp",
+          "numero": "(61) 98417-4212"
+        }
+      ],
+      "presenca": "Só Instagram, Facebook, OLX e diretórios. Nenhum site próprio ou loja virtual encontrados.",
+      "fatos": [
+        "Fábrica própria de móveis para salão de beleza e esmalteria",
+        "Showroom na fábrica, na QI 19",
+        "Produção sob encomenda com entrega em até 7 dias úteis",
+        "Parcelamento em até 12x sem juros no cartão"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/sosalaobrasilia/"
+        },
+        {
+          "nome": "Facebook",
+          "url": "https://www.facebook.com/sosalaobrasilia/"
+        },
+        {
+          "nome": "OLX",
+          "url": "https://df.olx.com.br/distrito-federal-e-regiao/moveis/sofas-e-poltronas/fabrica-de-moveis-para-salao-de-beleza-1318824651"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **Só Salão Brasília** (fábrica de móveis para salão de beleza e esmalteria), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: Só Salão Brasília\n- Ramo: Fábrica de móveis para salão de beleza e esmalteria\n- Endereço: QI 19, lotes 34 a 38, Setor Industrial, Taguatinga Norte\n- Contato: WhatsApp (61) 99999-7349; WhatsApp (61) 99911-6311; WhatsApp (61) 98417-4212\n- Instagram: @sosalaobrasilia (https://www.instagram.com/sosalaobrasilia/)\n- Informações públicas já confirmadas: fábrica própria de móveis para salão de beleza e esmalteria; showroom na fábrica, na QI 19; produção sob encomenda com entrega em até 7 dias úteis; parcelamento em até 12x sem juros no cartão.\n- Confirmar com o dono antes de publicar: catálogo de modelos com medidas; cores e tecidos disponíveis; garantia e frete; horário do showroom; fotos de salões de clientes (com autorização)\n\n## Objetivo e público\n- Objetivo: gerar pedidos de orçamento qualificados pelo WhatsApp, já com o modelo e a cor escolhidos no configurador.\n- Público: donas e donos de salão, esmalteria, barbearia e estúdio de beleza no DF e entorno, abrindo ou reformando o espaço.\n\n## Direção de arte\n- Conceito: \"Showroom 3D\": o site é a vitrine da fábrica. O cliente gira, troca a cor do estofado e monta o salão antes de pedir.\n- Paleta: grafite #2A2A2E, rosé #E8C5BD, nude #D9C3B0, champanhe #CBB089, branco gelo #F7F5F3.\n- Tipografia (Google Fonts via next/font): DM Serif Display (títulos) + Outfit (texto e interface).\n- Tom de voz: consultivo e seguro, voltado a quem empreende: prazo, qualidade e parcelamento em primeiro plano.\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Uma cadeira de cabeleireiro em 3D gira sobre um pedestal com sombra de contato, em luz de estúdio fotográfico. Ao lado, amostras de tecido clicáveis trocam em tempo real a cor e o material do estofado (MeshPhysicalMaterial com sheen para corino e veludo) e o acabamento da base (cromado, preto fosco, dourado).\n- Configurador 3D completo (modelo, cor do estofado, acabamento da base) com resumo e o botão \"Pedir orçamento deste modelo\", que abre o WhatsApp com a configuração escrita na mensagem.\n- \"Monte seu salão\": cena isométrica de um salão vazio que, no scroll, vai sendo mobiliado peça por peça (cadeira, lavatório, bancada de manicure, recepção) com animação de queda suave e sombra.\n- Catálogo em carrossel 3D (cards em curva, estilo coverflow) com os modelos da fábrica.\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Intro curta: tecido em shader de ondulação revela o nome da marca.\n- Números da fábrica animados: \"até 7 dias úteis\" e \"12x sem juros\" contando ao entrar na tela.\n- Timeline horizontal com pin do ScrollTrigger mostrando o processo: escolha, produção, entrega e montagem.\n- Hover nos cards do catálogo com tilt e troca de foto (frente e perfil).\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com a cadeira 3D configurável e o CTA \"Monte e peça seu orçamento\"\n2. Linhas de produto: cadeiras, lavatórios, bancadas de manicure, recepção, espelhos\n3. Configurador 3D\n4. Como funciona: prazo de até 7 dias úteis e pagamento em até 12x sem juros\n5. Salões que já montamos (galeria de clientes)\n6. Visite o showroom na QI 19: endereço, horário e mapa\n7. Perguntas frequentes: frete, montagem, garantia, personalização\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo FurnitureStore + LocalBusiness (com Product para cada linha de móvel) com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"Só Salão Brasília | Fábrica de móveis para salão de beleza e esmalteria em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta (https://wa.me/5561999997349?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20um%20or%C3%A7amento%20de%20m%C3%B3veis%20para%20sal%C3%A3o.), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    },
+    {
+      "id": "ksa-gas",
+      "nome": "KSA Distribuidora de Gás",
+      "ramo": "Distribuidora de gás (revenda autorizada Telegás)",
+      "setor": "qi",
+      "setorNome": "Setor Industrial (QI)",
+      "quadra": "QI 16",
+      "endereco": "QI 16, lotes 19/21, Setor Industrial, Taguatinga Norte",
+      "instagram": "ksa_gas",
+      "seguidores": "",
+      "telefones": [
+        {
+          "tipo": "Telefone",
+          "numero": "(61) 3355-5222"
+        }
+      ],
+      "presenca": "Só Instagram e diretórios (AppLocal, Planeta Brasileiro). Nenhum site próprio encontrado.",
+      "fatos": [
+        "Revenda autorizada Telegás",
+        "Segunda a sábado, das 7h às 21h",
+        "Endereço no Instagram: QI 16, lote 19/21. Alguns diretórios ainda mostram QI 3, lote 23 (confirmar)"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/ksa_gas/"
+        },
+        {
+          "nome": "AppLocal",
+          "url": "https://applocal.com.br/empresa/ksa-distribuidora-de-gas/brasilia/df/11073675"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **KSA Distribuidora de Gás** (distribuidora de gás (revenda autorizada telegás)), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: KSA Distribuidora de Gás\n- Ramo: Distribuidora de gás (revenda autorizada Telegás)\n- Endereço: QI 16, lotes 19/21, Setor Industrial, Taguatinga Norte\n- Contato: Telefone (61) 3355-5222\n- Instagram: @ksa_gas (https://www.instagram.com/ksa_gas/)\n- Informações públicas já confirmadas: revenda autorizada Telegás; segunda a sábado, das 7h às 21h; endereço no Instagram: QI 16, lote 19/21. Alguns diretórios ainda mostram QI 3, lote 23 (confirmar).\n- Confirmar com o dono antes de publicar: endereço atual (QI 16 ou QI 3); se o número fixo tem WhatsApp; produtos e preços; bairros atendidos e prazo; regras de uso da marca Telegás antes de usar o logo\n\n## Objetivo e público\n- Objetivo: fazer o pedido de gás em até 2 toques: ligar ou abrir o WhatsApp com o pedido escrito.\n- Público: moradores de Taguatinga Norte, Setor Industrial, Ceilândia e Vicente Pires que precisam de gás rápido, muitas vezes pelo celular e com pressa.\n\n## Direção de arte\n- Conceito: \"Chama azul, entrega rápida\": interface limpa e muito clara, com um único momento 3D forte. Velocidade é a mensagem.\n- Paleta: azul noite #0A1A3F, azul chama #1E5BFF, laranja segurança #FF7A00, aço #9AA4B2, branco #FFFFFF.\n- Tipografia (Google Fonts via next/font): Archivo (títulos em largura expandida, peso 800) + Plus Jakarta Sans (texto).\n- Tom de voz: objetivo e confiável: preço claro, prazo claro, segurança em primeiro lugar.\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Um botijão P13 estilizado em 3D (sem logo de terceiros) gira sobre a base. Uma chama azul em shader (ruído + gradiente + Bloom) acende acima dele quando a página carrega. O mouse inclina o botijão com física de mola (react-spring/three).\n- No scroll, o botijão percorre uma maquete low-poly do bairro (ruas da QI e quadras vizinhas) até chegar a uma casa, mostrando o trajeto da entrega com uma linha de luz.\n- Seção \"Qual gás você precisa?\": P13, P20, P45 e água mineral (só o que for confirmado) em cards 3D que giram ao passar o mouse, com o botão \"Pedir este\".\n- Seção de segurança com o botijão em vista explodida (válvula, lacre, selo do Inmetro) explicando o que conferir na hora de receber.\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Barra fixa no topo e no rodapé (mobile) com \"Ligar\" e \"WhatsApp\" sempre visíveis.\n- Indicador \"Aberto agora\" que lê o horário (7h às 21h, seg a sáb) e muda para \"Fechado\" fora dele.\n- Contadores animados de entregas e tempo médio (só com números confirmados).\n- Microanimação de chama acendendo nos botões de pedido.\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com o botijão 3D, \"Gás na sua porta\" e os botões Ligar e WhatsApp\n2. Produtos e preços\n3. Bairros atendidos e tempo médio de entrega\n4. Por que comprar de revenda autorizada (segurança)\n5. Perguntas frequentes: formas de pagamento, troca de vasilhame, horário\n6. Endereço na QI 16 com mapa e horário\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo Store (com areaServed listando os bairros atendidos) com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"KSA Distribuidora de Gás | Distribuidora de gás em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta (https://wa.me/556133555222?text=Ol%C3%A1%21%20Quero%20pedir%20um%20g%C3%A1s.), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    },
+    {
+      "id": "armazem-do-pao",
+      "nome": "Padaria Armazém do Pão",
+      "ramo": "Padaria, confeitaria, pizzaria e restaurante",
+      "setor": "qnl",
+      "setorNome": "Setor L Norte (QNL)",
+      "quadra": "QNL 14",
+      "endereco": "QNL 14, Via 29, Taguatinga Norte (em frente ao Detran), CEP 72160-429",
+      "instagram": "padariaarmazemdopaoqnl",
+      "seguidores": "",
+      "telefones": [
+        {
+          "tipo": "Telefone e WhatsApp",
+          "numero": "(61) 3967-0383"
+        }
+      ],
+      "presenca": "Só Instagram e iFood. Nenhum site próprio encontrado.",
+      "fatos": [
+        "Panificadora, confeitaria, pizzaria e restaurante",
+        "Em frente ao Detran, na QNL 14",
+        "Delivery próprio e pelo iFood"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/padariaarmazemdopaoqnl/"
+        },
+        {
+          "nome": "iFood",
+          "url": "https://www.ifood.com.br/delivery/brasilia-df/padaria-armazem-do-pao-1-taguatinga-norte-taguatinga/1e1f5d8a-a7e2-4c87-ad12-4c1cb81aa950"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **Padaria Armazém do Pão** (padaria, confeitaria, pizzaria e restaurante), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: Padaria Armazém do Pão\n- Ramo: Padaria, confeitaria, pizzaria e restaurante\n- Endereço: QNL 14, Via 29, Taguatinga Norte (em frente ao Detran), CEP 72160-429\n- Contato: Telefone e WhatsApp (61) 3967-0383\n- Instagram: @padariaarmazemdopaoqnl (https://www.instagram.com/padariaarmazemdopaoqnl/)\n- Informações públicas já confirmadas: panificadora, confeitaria, pizzaria e restaurante; em frente ao Detran, na QNL 14; delivery próprio e pelo iFood.\n- Confirmar com o dono antes de publicar: horários de funcionamento e de fornada; cardápio e preços; prazo mínimo para encomendas; fotos dos produtos\n\n## Objetivo e público\n- Objetivo: aumentar pedidos de delivery e encomendas de bolos e salgados para festa pelo WhatsApp.\n- Público: famílias da QNL e arredores, quem passa pelo Detran e quem encomenda para festas e eventos.\n\n## Direção de arte\n- Conceito: \"Saindo do forno\": tudo quente e dourado, com farinha no ar e a casca do pão estalando.\n- Paleta: crosta #B5651D, miolo #F3E3C3, café #3B2416, farinha #FAF7F0, oliva #6B7B3A.\n- Tipografia (Google Fonts via next/font): Young Serif (títulos) + Nunito Sans (texto).\n- Tom de voz: acolhedor e de vizinhança: \"o pão das 6h\", \"encomende o bolo do aniversário\".\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Um pão francês e um croissant em 3D com textura de casca realista (normal map e subsurface leve) giram devagar sobre uma tábua. Partículas de farinha flutuam e reagem ao mouse. A luz quente vem de um forno ao fundo, com brilho alaranjado pulsando.\n- No scroll, o pão se divide em quatro objetos que viram a porta de cada área: pão (padaria), fatia de bolo (confeitaria), pizza (pizzaria) e prato feito (restaurante).\n- Na confeitaria, um bolo de andares gira e recebe a cobertura em tempo real (morph targets) enquanto o texto de encomendas aparece.\n- Vitrine horizontal com pin, com salgados e doces em 3D ou fotos recortadas com parallax.\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Preloader com timer de forno: \"assando... 100%\".\n- Títulos aparecem com fade e leve subida, como vapor.\n- Cards do cardápio com hover que \"aquece\" a foto (filtro de saturação e brilho).\n- Selo \"Pão quentinho às __h\" com pulso suave nos horários de fornada (quando confirmados).\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com o pão 3D e os botões \"Pedir delivery\" e \"Encomendar para festa\"\n2. Padaria (fornadas e pães especiais)\n3. Confeitaria (bolos, doces e encomendas)\n4. Pizzaria (sabores e horário)\n5. Restaurante (almoço)\n6. Onde estamos: \"em frente ao Detran, QNL 14\", com mapa e horário\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo Bakery (com hasMenu para padaria, confeitaria e pizzaria) com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"Padaria Armazém do Pão | Padaria, confeitaria, pizzaria e restaurante em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta (https://wa.me/556139670383?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido.), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    },
+    {
+      "id": "pet-shop-premium",
+      "nome": "Pet Shop Premium",
+      "ramo": "Pet shop: banho e tosa, rações, vacinas e acessórios",
+      "setor": "qnl",
+      "setorNome": "Setor L Norte (QNL)",
+      "quadra": "QNL 01/03",
+      "endereco": "QNL 01/03, bloco D, loja 06, Taguatinga Norte (CEP 72150-000)",
+      "instagram": "petshoppremiumm",
+      "seguidores": "",
+      "telefones": [
+        {
+          "tipo": "WhatsApp",
+          "numero": "(61) 99186-0612"
+        },
+        {
+          "tipo": "Fixo",
+          "numero": "(61) 3028-0629"
+        }
+      ],
+      "presenca": "Só Instagram, Foursquare e diretórios. Nenhum site próprio encontrado.",
+      "fatos": [
+        "Banho e tosa",
+        "Rações, vacinas e brinquedos"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/petshoppremiumm/"
+        },
+        {
+          "nome": "Foursquare",
+          "url": "https://pt.foursquare.com/v/pet-shop-premium/5b227461c66666002c348dfa"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **Pet Shop Premium** (pet shop: banho e tosa, rações, vacinas e acessórios), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: Pet Shop Premium\n- Ramo: Pet shop: banho e tosa, rações, vacinas e acessórios\n- Endereço: QNL 01/03, bloco D, loja 06, Taguatinga Norte (CEP 72150-000)\n- Contato: WhatsApp (61) 99186-0612; Fixo (61) 3028-0629\n- Instagram: @petshoppremiumm (https://www.instagram.com/petshoppremiumm/)\n- Informações públicas já confirmadas: banho e tosa; rações, vacinas e brinquedos.\n- Confirmar com o dono antes de publicar: horário de funcionamento; tabela de banho e tosa por porte; quem aplica as vacinas (veterinário responsável); se faz busca e entrega do pet; fotos\n\n## Objetivo e público\n- Objetivo: agendar banho e tosa pelo WhatsApp e vender ração com entrega.\n- Público: tutores de cães e gatos da QNL, do Setor Industrial e do M Norte.\n\n## Direção de arte\n- Conceito: \"Spa pet\": leve, limpo e divertido, com espuma, bolhas e um mascote 3D que reage ao visitante.\n- Paleta: marinho #14213D, turquesa #19C2B5, amarelo #FFD23F, espuma #F5FBFF, coral #FF6B6B.\n- Tipografia (Google Fonts via next/font): Fredoka (títulos) + Nunito (texto).\n- Tom de voz: carinhoso e alegre, mas profissional sobre saúde e cuidado.\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Um cachorro estilizado em 3D (low-poly arredondado, toon shading) toma banho numa banheira. Bolhas de sabão iridescentes (MeshTransmissionMaterial com iridescência) sobem e estouram quando o cursor passa. O mascote segue o cursor com a cabeça e abana o rabo quando o mouse para sobre o botão de agendar.\n- No scroll, o mascote sai da banheira, se sacode (partículas de água) e aparece tosado e com laço, ilustrando o \"antes e depois\" do serviço.\n- Seção de produtos com sacos de ração e brinquedos em 3D numa prateleira que gira (ou fotos recortadas com profundidade).\n- Na seção de vacinas, uma linha do tempo com o mascote crescendo de filhote a adulto.\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Bolhas de fundo em canvas leve que seguem o scroll.\n- Patinhas animadas marcando o caminho entre as seções.\n- Botão \"Agendar banho\" com micro-bounce e bolha que estoura no clique.\n- Cards de serviço com flip mostrando o que está incluso.\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com o mascote 3D e o CTA \"Agende o banho do seu pet\"\n2. Serviços: banho, tosa, hidratação e outros que forem confirmados\n3. Loja: rações, petiscos, brinquedos\n4. Vacinas (com aviso para consultar o veterinário responsável)\n5. Galeria de clientes de quatro patas (fotos do Instagram)\n6. Endereço na QNL 01/03, horário e WhatsApp\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo PetStore com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"Pet Shop Premium | Pet shop em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta (https://wa.me/5561991860612?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20agendar%20banho%20e%20tosa.), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    },
+    {
+      "id": "poco-loco",
+      "nome": "Poco Loco Pizzaria",
+      "ramo": "Pizzaria",
+      "setor": "qnl",
+      "setorNome": "Setor L Norte (QNL)",
+      "quadra": "QNL 3",
+      "endereco": "QNL 3, conjunto A, lote 17, Taguatinga Norte (CEP 72150-301)",
+      "instagram": "pocolocoqnl",
+      "seguidores": "7,6 mil seguidores",
+      "telefones": [
+        {
+          "tipo": "WhatsApp",
+          "numero": "(61) 99804-2052"
+        }
+      ],
+      "presenca": "Tem só cardápio de pedidos (ola.click) e Instagram. Nenhum site institucional encontrado.",
+      "fatos": [
+        "Pizzaria",
+        "Quinta a domingo, das 19h às 23h",
+        "Pedidos pelo cardápio digital ola.click"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/pocolocoqnl/"
+        },
+        {
+          "nome": "Restaurant Guru",
+          "url": "https://restaurantguru.com.br/PIZZARIA-POCO-LOCO-TAGUATINGA-NORTE-Brasilia"
+        },
+        {
+          "nome": "Cardápio ola.click",
+          "url": "https://pizzaria-poco-loco.ola.click/"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **Poco Loco Pizzaria** (pizzaria), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: Poco Loco Pizzaria\n- Ramo: Pizzaria\n- Endereço: QNL 3, conjunto A, lote 17, Taguatinga Norte (CEP 72150-301)\n- Contato: WhatsApp (61) 99804-2052\n- Instagram: @pocolocoqnl (https://www.instagram.com/pocolocoqnl/)\n- Informações públicas já confirmadas: pizzaria; quinta a domingo, das 19h às 23h; pedidos pelo cardápio digital ola.click.\n- Confirmar com o dono antes de publicar: sabores, tamanhos e preços; se trabalha com meio a meio; área e taxa de entrega; fotos\n\n## Objetivo e público\n- Objetivo: gerar pedidos de quinta a domingo, levando para o cardápio de pedidos ou para o WhatsApp.\n- Público: famílias e grupos de amigos da QNL e arredores, principalmente no fim de semana à noite.\n\n## Direção de arte\n- Conceito: \"Um pouco loca\": energia de fim de semana, cores fortes e uma pizza que se monta sozinha na tela.\n- Paleta: forno #1B1B1B, tomate #D7263D, mussarela #FFF4D6, manjericão #2E8B57, orégano #6A7F3B.\n- Tipografia (Google Fonts via next/font): Bowlby One (títulos) + Work Sans (texto).\n- Tom de voz: brincalhão e animado (\"loucura de quinta a domingo\"), sem perder a clareza no pedido.\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Uma pizza em 3D gira sobre uma pá de forno. Ao carregar, ela se monta: a massa abre (morph), o molho espalha em espiral (shader com máscara animada), o queijo derrete (deformação de vértices) e os ingredientes caem com física (Rapier) e quicam de leve. O fundo tem a boca do forno a lenha com brilho de brasa.\n- No scroll, a pizza é fatiada e cada fatia vira um sabor do cardápio, com o \"puxa-puxa\" do queijo animado entre a fatia e a pizza.\n- Seção \"Monte a sua\" (se houver meio a meio): o usuário clica em dois sabores e vê a pizza meio a meio em 3D antes de pedir.\n- Contagem regressiva para abrir (\"Abrimos quinta às 19h\") quando estiver fechado.\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Status \"Aberto agora\" ou \"Abre quinta às 19h\" calculado pelo horário real.\n- Títulos com SplitText em bounce desencontrado (stagger) para dar o tom \"loco\".\n- Marquee de sabores com velocidade que aumenta conforme o scroll.\n- Botão \"Pedir agora\" grudado no rodapé do mobile, com animação de fatia saindo.\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com a pizza 3D, horário e o CTA \"Pedir agora\" (cardápio ola.click) e WhatsApp\n2. Sabores (salgadas e doces) com destaque para as mais pedidas\n3. Monte a sua / meio a meio\n4. Combos e promoções da semana\n5. Galeria e avaliações reais (só com autorização e fonte)\n6. Endereço na QNL 3, horário e entrega\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo Restaurant (servesCuisine: Pizza) com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"Poco Loco Pizzaria | Pizzaria em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta (https://wa.me/5561998042052?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20pedir%20uma%20pizza.), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    },
+    {
+      "id": "seu-ze-e-seu-mane",
+      "nome": "Seu Zé e Seu Mané",
+      "ramo": "Bar e restaurante (boteco)",
+      "setor": "qnl",
+      "setorNome": "Setor L Norte (QNL)",
+      "quadra": "EQNL 2/4",
+      "endereco": "EQNL 2/4, bloco B, Setor L Norte, Taguatinga Norte (CEP 72155-215)",
+      "instagram": "seuzeeseumane",
+      "seguidores": "28 mil seguidores",
+      "telefones": [
+        {
+          "tipo": "Celular",
+          "numero": "(61) 98273-5004"
+        },
+        {
+          "tipo": "Fixo",
+          "numero": "(61) 3042-2456"
+        }
+      ],
+      "presenca": "Só Instagram, Tripadvisor e a página do Comida di Buteco. Nenhum site próprio encontrado.",
+      "fatos": [
+        "Bar e restaurante no estilo boteco",
+        "Terça a sexta das 17h à 0h; sábado das 11h à 0h; domingo das 11h às 22h",
+        "Nota 4,5 de 5 no Tripadvisor",
+        "Tem página no Comida di Buteco (confirmar o ano de participação)"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/seuzeeseumane/"
+        },
+        {
+          "nome": "Tripadvisor",
+          "url": "https://www.tripadvisor.com/Restaurant_Review-g2221561-d12148711-Reviews-Seu_Ze_e_seu_Mane-Taguatinga_Federal_District.html"
+        },
+        {
+          "nome": "Comida di Buteco",
+          "url": "https://comidadibuteco.com.br/buteco/seu-ze-e-seu-mane/"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **Seu Zé e Seu Mané** (bar e restaurante (boteco)), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: Seu Zé e Seu Mané\n- Ramo: Bar e restaurante (boteco)\n- Endereço: EQNL 2/4, bloco B, Setor L Norte, Taguatinga Norte (CEP 72155-215)\n- Contato: Celular (61) 98273-5004; Fixo (61) 3042-2456\n- Instagram: @seuzeeseumane (https://www.instagram.com/seuzeeseumane/)\n- Informações públicas já confirmadas: bar e restaurante no estilo boteco; terça a sexta das 17h à 0h; sábado das 11h à 0h; domingo das 11h às 22h; nota 4,5 de 5 no Tripadvisor; tem página no Comida di Buteco (confirmar o ano de participação).\n- Confirmar com o dono antes de publicar: cardápio e preços; ano e prato do Comida di Buteco; agenda fixa de eventos; se aceita reserva e para quantas pessoas; qual número é o WhatsApp\n\n## Objetivo e público\n- Objetivo: encher as mesas: reservas pelo WhatsApp, agenda de música ao vivo e jogos, e cardápio de petiscos.\n- Público: adultos de Taguatinga que procuram boteco com petisco caprichado, chopp gelado e clima de bairro.\n\n## Direção de arte\n- Conceito: \"Boteco de raiz com luz de neon\": azulejo português, mesa de metal, chopp suando e um letreiro de neon que liga.\n- Paleta: verde garrafa #0F5132, âmbar chopp #F4A300, espuma #FFF8E7, azulejo #1D4E89, vermelho boteco #B3261E.\n- Tipografia (Google Fonts via next/font): Alfa Slab One (títulos, estilo letreiro) + Karla (texto).\n- Tom de voz: bem-humorado e de mesa de bar (\"Seu Zé guardou sua mesa\"), com informação clara.\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Um copo de chopp em 3D com vidro realista (MeshTransmissionMaterial), espuma que se forma ao carregar e bolhas subindo em partículas. O copo \"sua\" (gotas em normal map). Ao fundo, uma parede de azulejos em padrão português e um letreiro de neon \"Seu Zé e Seu Mané\" que pisca ao ligar e depois fica estável. O mouse inclina o copo e o líquido acompanha (shader de superfície do líquido).\n- No scroll, a câmera desce para a mesa de metal e os petiscos aparecem um a um em 3D ou em fotos recortadas com profundidade, cada um ligado ao cardápio.\n- Seção Comida di Buteco em destaque, com o prato do concurso girando num prato de louça.\n- Agenda da semana como um quadro-negro de boteco escrito à mão (SVG animado com traço de giz).\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Letreiro de neon que acende com flicker na entrada e responde ao scroll.\n- Títulos com efeito de giz desenhado (stroke-dashoffset).\n- Hover em pratos com vapor subindo (shader leve ou sprite).\n- Botão \"Reservar mesa\" com tilintar de copos (som só depois do clique e com botão para silenciar).\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com o chopp 3D, horário de hoje e os botões \"Reservar mesa\" e \"Ver cardápio\"\n2. Cardápio: petiscos, pratos, bebidas\n3. Comida di Buteco: o prato e a história\n4. Agenda: música ao vivo, jogos e eventos\n5. Avaliações (com fonte, ex.: Tripadvisor 4,5)\n6. Como chegar na EQNL 2/4, horário completo\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo BarOrPub + Restaurant com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"Seu Zé e Seu Mané | Bar e restaurante em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta (https://wa.me/5561982735004?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20reservar%20uma%20mesa.), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    },
+    {
+      "id": "snack-grill",
+      "nome": "Snack Grill",
+      "ramo": "Lanches e grelhados",
+      "setor": "qng",
+      "setorNome": "Setor G Norte (QNG)",
+      "quadra": "QNG 13",
+      "endereco": "QNG 13, lote 02, lojas 04 e 05, Setor G Norte, Taguatinga Norte (CEP 72130-130)",
+      "instagram": "snack.grillqng",
+      "seguidores": "1,8 mil seguidores",
+      "telefones": [
+        {
+          "tipo": "Telefone e WhatsApp",
+          "numero": "(61) 3354-1491"
+        }
+      ],
+      "presenca": "Só Instagram e um cardápio em plataforma de terceiros. Nenhum site próprio encontrado.",
+      "fatos": [
+        "Lanches e grelhados",
+        "Delivery pelo WhatsApp",
+        "Empresa aberta em 2013"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/snack.grillqng/"
+        },
+        {
+          "nome": "Solutudo",
+          "url": "https://www.solutudo.com.br/empresas/df/brasilia/restaurantes/snack-lanches-e-grelhados-ltda-2353196"
+        },
+        {
+          "nome": "Cardápio do Chef",
+          "url": "https://www.cardapiodochef.com/delivery/cardapio-snack-grill-lanches-em-brasilia-df/212123"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **Snack Grill** (lanches e grelhados), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: Snack Grill\n- Ramo: Lanches e grelhados\n- Endereço: QNG 13, lote 02, lojas 04 e 05, Setor G Norte, Taguatinga Norte (CEP 72130-130)\n- Contato: Telefone e WhatsApp (61) 3354-1491\n- Instagram: @snack.grillqng (https://www.instagram.com/snack.grillqng/)\n- Informações públicas já confirmadas: lanches e grelhados; delivery pelo WhatsApp; empresa aberta em 2013.\n- Confirmar com o dono antes de publicar: horário de funcionamento; cardápio e preços; área e taxa de entrega; se o fixo recebe WhatsApp; fotos\n\n## Objetivo e público\n- Objetivo: aumentar o delivery próprio pelo WhatsApp, sem taxa de aplicativo.\n- Público: moradores do G Norte e arredores, almoço rápido e lanche à noite.\n\n## Direção de arte\n- Conceito: \"Na chapa\": marcas de grelha, fumaça e um lanche que se monta no ar.\n- Paleta: grelha #101010, mostarda #F2B705, ketchup #C1121F, pão #E9C46A, fumaça #3A3A3A.\n- Tipografia (Google Fonts via next/font): Saira Condensed (títulos, peso 800) + Rubik (texto).\n- Tom de voz: rápido e saboroso: \"saiu da chapa\", \"chega quente\".\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Um X-tudo em 3D em vista explodida flutua sobre uma chapa quente: pão, carne com marcas de grelha, queijo derretendo, alface, tomate, bacon e ovo, cada camada oscilando devagar. A chapa tem shader de calor (distorção de ar) e gotas de gordura que estalam em partículas.\n- No scroll, as camadas descem e se encaixam uma a uma (timeline do GSAP), com um \"ploc\" visual a cada encaixe; no fim o lanche está montado e o botão de pedir aparece.\n- Seção de grelhados com um espeto ou filé girando sobre a chapa e a fumaça subindo.\n- Monte seu lanche: o usuário escolhe adicionais e vê as camadas entrarem no 3D; o resumo vai pronto para o WhatsApp.\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Marcas de grelha desenhadas em SVG nos títulos ao entrar na tela.\n- Botão de pedir fixo no mobile com contador de itens.\n- Cards de lanche com tilt e fumaça em CSS no hover.\n- Selo \"Desde 2013\" com rotação contínua lenta.\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com o lanche 3D e o CTA \"Pedir no WhatsApp\"\n2. Cardápio: lanches, grelhados, porções, bebidas\n3. Monte seu lanche\n4. Combos\n5. Desde 2013 no G Norte (história curta)\n6. Endereço na QNG 13, horário e área de entrega\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo Restaurant (servesCuisine: Lanches, Grelhados) com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"Snack Grill | Lanches e grelhados em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta (https://wa.me/556133541491?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido.), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    },
+    {
+      "id": "mega-artesanatos",
+      "nome": "Mega Artesanatos e Festas",
+      "ramo": "Artesanato, MDF, artigos de festa e lembrancinhas",
+      "setor": "qng",
+      "setorNome": "Setor G Norte (QNG)",
+      "quadra": "QNG 39",
+      "endereco": "QNG 39, lote 19, loja 01, Taguatinga Norte (abaixo do Mercado Norte), CEP 72130-390",
+      "instagram": "megaartesanatoefestas",
+      "seguidores": "43 mil seguidores",
+      "telefones": [
+        {
+          "tipo": "Fixo",
+          "numero": "(61) 3049-1300"
+        },
+        {
+          "tipo": "Celular",
+          "numero": "(61) 9951-4582 (formato antigo, confirmar o 9 a mais)"
+        }
+      ],
+      "presenca": "Só Instagram, Facebook, Pinterest e diretórios. Nenhum site ou loja virtual encontrados.",
+      "fatos": [
+        "Artesanato, peças em MDF, artigos de festa e lembrancinhas",
+        "Fica abaixo do Mercado Norte, na QNG 39",
+        "Mantém um grupo de WhatsApp com clientes"
+      ],
+      "fontes": [
+        {
+          "nome": "Instagram",
+          "url": "https://www.instagram.com/megaartesanatoefestas/"
+        },
+        {
+          "nome": "Facebook",
+          "url": "https://www.facebook.com/megaartesanatosefestas/"
+        },
+        {
+          "nome": "Econodata",
+          "url": "https://www.econodata.com.br/consulta-empresa/49777013000160-mega-artesanatos-e-festas-ltda"
+        }
+      ],
+      "prompt": "Você é diretor(a) de arte e dev front-end sênior, especialista em sites premium com WebGL e motion design. Crie o site completo de **Mega Artesanatos e Festas** (artesanato, mdf, artigos de festa e lembrancinhas), em Taguatinga Norte, Brasília - DF. Quero um resultado de nível de agência premiada (padrão Awwwards), com 3D e motion que tenham propósito e que vendam, sem efeito gratuito.\n\n## Dados reais do negócio (use exatamente estes; não invente outros)\n- Nome: Mega Artesanatos e Festas\n- Ramo: Artesanato, MDF, artigos de festa e lembrancinhas\n- Endereço: QNG 39, lote 19, loja 01, Taguatinga Norte (abaixo do Mercado Norte), CEP 72130-390\n- Contato: Fixo (61) 3049-1300; Celular (61) 9951-4582 (formato antigo, confirmar o 9 a mais)\n- Instagram: @megaartesanatoefestas (https://www.instagram.com/megaartesanatoefestas/)\n- Informações públicas já confirmadas: artesanato, peças em MDF, artigos de festa e lembrancinhas; fica abaixo do Mercado Norte, na QNG 39; mantém um grupo de WhatsApp com clientes.\n- Confirmar com o dono antes de publicar: número de WhatsApp atual (o celular aparece no formato antigo); horário; categorias e se faz entrega; link do grupo de WhatsApp; fotos\n\n## Objetivo e público\n- Objetivo: levar visitas à loja e gerar pedidos pelo WhatsApp de kits de festa e peças em MDF, além de crescer o grupo de clientes.\n- Público: mães e pais organizando festa infantil, artesãs que compram MDF e material, e decoradoras de festa.\n\n## Direção de arte\n- Conceito: \"A festa abre na tela\": uma caixa de presente 3D se abre e solta a loja inteira em confete.\n- Paleta: papel kraft #E8D5B5, magenta #E0479E, turquesa #2EC4B6, amarelo #FFBF00, lilás #9B5DE5, com fundo escuro #1E1B2E nas seções de destaque.\n- Tipografia (Google Fonts via next/font): Lilita One (títulos) + Quicksand (texto).\n- Tom de voz: alegre e prático: \"tudo para sua festa em um só lugar\".\n- Layout: grid editorial de 12 colunas, muito respiro, hierarquia forte e no máximo um momento \"uau\" por seção.\n\n## Experiência 3D (React Three Fiber)\n- Hero: Uma caixa de presente em 3D com textura de MDF cru abre a tampa ao carregar e solta confetes (partículas instanciadas com física simples) e balões que flutuam e balançam. O cursor empurra os balões (Rapier) e um clique estoura um deles, mostrando uma categoria da loja.\n- No scroll, peças de MDF (letras, caixinhas, bandejas, topos de bolo) se montam a partir de chapas planas, como um quebra-cabeça que se dobra em 3D.\n- Escolha o tema da festa: a cena muda de cor e de enfeites conforme o tema (ex.: safari, princesa, futebol) e mostra os produtos daquele tema.\n- Carrossel 3D em formato de varal de bandeirinhas com as categorias.\n\n## Motion design (GSAP + ScrollTrigger + Lenis + Motion)\n- Confete leve no fundo ao rolar (canvas, desligado com prefers-reduced-motion).\n- Títulos com bounce e cores alternadas por letra.\n- Cards de produto com hover que \"embrulha\" a foto (máscara animada).\n- CTA \"Entrar no grupo de ofertas\" com balão que sobe.\n- Transições entre páginas com cortina na cor de destaque da paleta (Motion + App Router).\n\n## Estrutura das seções\n1. Hero com a caixa 3D e os botões \"Ver categorias\" e \"Chamar no WhatsApp\"\n2. Categorias: MDF, festa, lembrancinhas, papelaria e material de artesanato\n3. Kits por tema de festa\n4. Personalizados sob encomenda\n5. Grupo de ofertas no WhatsApp\n6. Visite a loja: QNG 39, abaixo do Mercado Norte, com horário e mapa\n\n## Especificação técnica (obrigatória)\n- Stack: Next.js 15 (App Router) + TypeScript + Tailwind CSS v4. Use shadcn/ui só onde ajudar (formulários, accordion, dialog).\n- 3D: three + @react-three/fiber + @react-three/drei + @react-three/postprocessing (Bloom, Depth of Field e Noise com moderação). Física com @react-three/rapier só onde o conceito pedir. Modelos .glb comprimidos com Draco ou Meshopt e texturas KTX2; iluminação de estúdio com <Environment> leve, <ContactShadows> e <AccumulativeShadows> quando couber.\n- Motion: GSAP 3 + ScrollTrigger + SplitText; Lenis para smooth scroll, sincronizado com o ScrollTrigger; Motion (Framer Motion) para microinterações de interface (hover, botões magnéticos, transições de página).\n- Performance do 3D: carregue o <Canvas> com next/dynamic e ssr: false, só quando o hero estiver visível. Até lá, mostre um pôster estático (AVIF) com o mesmo enquadramento da cena, para o LCP não depender do WebGL. Limite o dpr a [1, 1.75], use <PerformanceMonitor> do drei para baixar a qualidade em aparelhos fracos, use frameloop \"demand\" quando a cena estiver parada e pause o render fora da tela.\n- Mobile: cena simplificada (menos partículas, sem pós-processamento) e interação por toque e giroscópio opcional. Em aparelhos muito fracos, troque o Canvas por um vídeo curto em loop (WebM/MP4) gravado da própria cena.\n- Acessibilidade: respeite prefers-reduced-motion (desliga smooth scroll, parallax e animações longas e mantém só fades curtos). Contraste WCAG AA, navegação por teclado com foco visível, texto alternativo em todas as imagens. Todo o conteúdo precisa ser legível sem WebGL.\n- SEO local: metadata e Open Graph por página; JSON-LD schema.org do tipo Store (HobbyShop) com Product para as categorias principais com nome, endereço completo, telefone, geo, horário (openingHoursSpecification) e Instagram em sameAs; sitemap.xml, robots.txt, lang=\"pt-BR\". Título da home no formato \"Mega Artesanatos e Festas | Artesanato, MDF, artigos de festa e lembrancinhas em Taguatinga Norte - DF\".\n- Conversão: botão flutuante de WhatsApp com mensagem pronta ({{CONFIRMAR: número de WhatsApp}}), link tel:, botão \"Como chegar\" abrindo o Google Maps com o endereço, link para o Instagram. Meça os cliques com Vercel Analytics ou GA4.\n- Metas: Lighthouse mobile com 90+ em Performance e 100 em Acessibilidade, SEO e Boas práticas; LCP abaixo de 2,5 s; CLS abaixo de 0,1; JS inicial abaixo de 200 kB, sem contar o chunk do 3D.\n- Conteúdo: todos os textos em português do Brasil, prontos para publicar. Não invente preços, avaliações, prêmios, números ou depoimentos. Onde faltar informação, deixe o marcador {{CONFIRMAR: ...}} visível no código e liste todos no README.\n- Imagens: use as fotos do Instagram do cliente (com autorização) em /public/images. Até lá, use placeholders na mesma proporção, com uma legenda descrevendo a foto ideal.\n\n## Entregáveis\n- Projeto completo e funcionando, com a estrutura de pastas comentada.\n- README com: como rodar, como trocar textos e fotos, a lista de marcadores CONFIRMAR, a origem e a licença de cada modelo 3D (Sketchfab ou Poly Pizza com licença CC0/CC-BY, ou geometria procedural feita no código) e o passo a passo de deploy na Vercel com domínio próprio.\n- No fim, explique em até 5 linhas as decisões de direção de arte."
+    }
+  ],
+  "descartados": [
+    {
+      "nome": "Pet Shop e Agropecuária Vida Rural",
+      "onde": "M Norte, EQNM 38/40",
+      "motivo": "Tem site (petshopagrovidarural.com.br)"
+    },
+    {
+      "nome": "Marmoraria Alvorada",
+      "onde": "QI 6",
+      "motivo": "Tem site"
+    },
+    {
+      "nome": "Satélite Vidros",
+      "onde": "QI 17",
+      "motivo": "Tem site"
+    },
+    {
+      "nome": "Tozetti Madeiras",
+      "onde": "QI 2",
+      "motivo": "Tem site"
+    },
+    {
+      "nome": "Cei Norte Decorações e Atacado",
+      "onde": "QI 1 e QNG 28",
+      "motivo": "Tem site"
+    },
+    {
+      "nome": "Barbearia Main Street",
+      "onde": "QI 13 / QNJ 26",
+      "motivo": "Tem site (Framer)"
+    },
+    {
+      "nome": "Homem.com Barbearia",
+      "onde": "QNM 36",
+      "motivo": "Tem site"
+    },
+    {
+      "nome": "Barbearia Carioca",
+      "onde": "QNM 34",
+      "motivo": "Tem site"
+    },
+    {
+      "nome": "La Fruta Açaí",
+      "onde": "QI 23",
+      "motivo": "Rede com site"
+    },
+    {
+      "nome": "Smart Fit, Skyfit, Domino's, Pague Menos, Drogasil",
+      "onde": "QI 21 a QI 25 e M Norte",
+      "motivo": "Redes com site"
+    },
+    {
+      "nome": "Pet Shop 4 Patas",
+      "onde": "QI 24, lojas do Top Life",
+      "motivo": "Não achei Instagram confirmado. Vale conferir pessoalmente"
+    },
+    {
+      "nome": "Spartan Barbearia",
+      "onde": "QNM 38",
+      "motivo": "Instagram não confirmado"
+    },
+    {
+      "nome": "Xerife Lava Jato",
+      "onde": "QNL 10",
+      "motivo": "Instagram não encontrado"
+    },
+    {
+      "nome": "Salão M Norte",
+      "onde": "QNM 36",
+      "motivo": "Sem Instagram nem telefone encontrados"
+    },
+    {
+      "nome": "Cool Pet",
+      "onde": "QI 8",
+      "motivo": "Sem Instagram nem telefone completo"
+    },
+    {
+      "nome": "Japão Auto Peças",
+      "onde": "QI 10",
+      "motivo": "Instagram não encontrado"
+    }
+  ]
+}
