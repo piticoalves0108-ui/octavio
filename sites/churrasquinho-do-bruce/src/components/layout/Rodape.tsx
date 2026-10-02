@@ -88,7 +88,7 @@ export function Rodape() {
       </div>
 
       <div className="relative border-t border-osso/15 bg-carvao">
-        <div className="moldura flex flex-col gap-4 py-7 text-sm text-osso/80 md:flex-row md:items-center md:justify-between">
+        <div className="moldura flex flex-col gap-4 pb-24 pt-7 text-sm text-osso/80 md:flex-row md:items-center md:justify-between md:py-7 md:pr-28">
           <p className="flex items-center gap-2">
             <IconeChama className="h-4 w-auto text-brasa" />© {ano} {negocio.nome} · {negocio.endereco.bairro} - {negocio.endereco.uf}
           </p>

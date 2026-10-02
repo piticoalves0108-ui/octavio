@@ -9,7 +9,7 @@ type Limpeza = void | (() => void);
  * Roda `montar` quando o motor de animação estiver pronto, dentro de um
  * gsap.context (tudo é revertido ao desmontar ou trocar de página).
  */
-export function useMotor(montar: (motor: Motor) => Limpeza, escopo?: RefObject<HTMLElement | null>, deps: DependencyList = []) {
+export function useMotor(montar: (motor: Motor) => Limpeza, escopo?: RefObject<Element | null>, deps: DependencyList = []) {
   useEffect(() => {
     let cancelado = false;
     let limpar: Limpeza;

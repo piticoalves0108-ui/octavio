@@ -90,6 +90,7 @@
     line-height: 0.86;
     letter-spacing: -0.005em;
     font-kerning: none;
+    font-variation-settings: "opsz" 72;
   }
   .titulo-xl {
     font-size: clamp(3.6rem, 13.2vw, 13.5rem);
@@ -177,6 +178,13 @@
       );
     border: 1px dashed color-mix(in oklab, var(--color-fumaca) 55%, transparent);
   }
+}
+
+/* Máscara de cada letra do SplitText: folga em cima para acentos (É, Ú, Ã)
+   não serem cortados, sem mudar o layout. */
+.letra-mask {
+  padding-block: 0.2em 0.06em;
+  margin-block: -0.2em -0.06em;
 }
 
 /* ------------------------------------------------------------------

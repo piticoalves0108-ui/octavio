@@ -60,6 +60,7 @@ export function TituloCalor({
       const split = SplitText.create(el, {
         type: "words,chars",
         mask: "chars",
+        charsClass: "letra",
         aria: "auto",
         autoSplit: true,
         onSplit(self) {
