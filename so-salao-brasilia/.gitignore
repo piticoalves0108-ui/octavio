@@ -17,3 +17,6 @@ next-env.d.ts
 
 npm-debug.log*
 .DS_Store
+
+# arquivo único (gerado por npm run html)
+/html-unico/.cache/

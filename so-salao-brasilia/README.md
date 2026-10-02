@@ -27,9 +27,20 @@ npm run dev                  # http://localhost:3000
 | `npm run build` / `npm start` | Build de produção e servidor de produção |
 | `npm run lint` / `npm run typecheck` | ESLint e TypeScript |
 | `npm run confirmar` | Lista todos os marcadores `{{CONFIRMAR: ...}}` (use `-- --falhar` no CI para bloquear a publicação) |
+| `npm run html` | Gera o site inteiro em um único arquivo: `html-unico/dist/so-salao-brasilia.html` |
 | `npm run capture` | Regrava pôster, renders, maquete e vídeo a partir da própria cena 3D (ver seção 4) |
 
 Para testar os níveis de qualidade do 3D no seu computador, acrescente na URL: `?qualidade=alto`, `?qualidade=medio`, `?qualidade=video` ou `?qualidade=sem-webgl`.
+
+### Versão em arquivo HTML único
+
+```bash
+npm run html   # gera html-unico/dist/so-salao-brasilia.html
+```
+
+Um único arquivo `.html` (~2,8 MB) com o site inteiro: os mesmos componentes, 3D, animações, configurador, todas as páginas (como rotas `#/configurador`, `#/showroom`, `#/linhas/...`), fontes, imagens e vídeo embutidos. Abre com dois cliques, sem servidor e sem internet (só o mapa interativo do Google precisa de conexão). Também pode ser enviado por e-mail/WhatsApp ou subido em qualquer hospedagem como `index.html`.
+
+Para SEO e desempenho, a versão Next.js continua sendo a recomendada para publicar no domínio.
 
 ---
 
@@ -44,6 +55,11 @@ so-salao-brasilia/
 │   │   ├── salao/*.avif                # maquete do "Monte seu salão" vazia e montada
 │   │   └── galeria/                    # coloque aqui as fotos dos salões de clientes (com autorização)
 │   └── video/cadeira-giro.{webm,mp4}   # loop da cadeira para aparelhos muito fracos
+├── html-unico/                      # gera o site em um único arquivo HTML (npm run html)
+│   ├── build.mjs                    # empacota JS, CSS, fontes, imagens e vídeo dentro do HTML
+│   ├── spa/                         # rotas com "#", transição e pré-renderização da home
+│   ├── substitutos/                 # trocas de next/image, next/link, next/dynamic, next/navigation
+│   └── dist/so-salao-brasilia.html  # o arquivo pronto
 ├── scripts/
 │   ├── capturar-cenas.mjs              # grava pôster, renders, maquete, vídeo e imagens de Open Graph
 │   └── listar-confirmar.mjs            # lista os marcadores {{CONFIRMAR}}

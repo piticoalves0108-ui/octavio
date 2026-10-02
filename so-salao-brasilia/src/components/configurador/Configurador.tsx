@@ -11,6 +11,7 @@ import { secaoConfigurador } from "@/content/textos";
 import { configuracaoDosParams, paramsDaConfiguracao, useConfiguracao } from "@/lib/configuracao";
 import { linkWhatsapp, mensagemDoConfigurador, momentos, tiposDeEspaco } from "@/lib/whatsapp";
 import { medir } from "@/lib/analytics";
+import { baseDoConfigurador } from "@/lib/ativos";
 import { cn } from "@/lib/cn";
 import { classesBotao } from "@/components/ui/botao";
 import { IconeCheck, IconeCopiar, IconeWhatsapp } from "@/components/ui/icones";
@@ -36,7 +37,7 @@ export function Configurador({ sincronizarUrl = false, className, nivelTitulo = 
   const [copiado, setCopiado] = useState(false);
   const [origem, setOrigem] = useState("");
 
-  useEffect(() => setOrigem(window.location.origin), []);
+  useEffect(() => setOrigem(baseDoConfigurador()), []);
 
   // Lê a configuração da URL uma vez (ex.: /configurador?modelo=lavatorio&cor=nude).
   useEffect(() => {
@@ -54,7 +55,7 @@ export function Configurador({ sincronizarUrl = false, className, nivelTitulo = 
     return () => window.clearTimeout(t);
   }, [params, sincronizarUrl]);
 
-  const linkConfiguracao = origem ? `${origem}/configurador?${params}` : undefined;
+  const linkConfiguracao = origem ? `${origem}?${params}` : undefined;
   const mensagem = useMemo(() => mensagemDoConfigurador({ ...c, linkConfiguracao }), [c, linkConfiguracao]);
   const linha = linhaPorModelo(c.modelo);
 

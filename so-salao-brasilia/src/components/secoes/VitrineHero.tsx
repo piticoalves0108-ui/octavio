@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useConfiguracao } from "@/lib/configuracao";
 import { useMovimentoReduzido } from "@/lib/movimento";
 import { cn } from "@/lib/cn";
+import { ativo } from "@/lib/ativos";
 import { hero } from "@/content/textos";
 import { corPorId, tecidoPorId, acabamentoPorId } from "@/content/catalogo";
 import { useGiro, useNaTela } from "@/components/cena3d/giro";
@@ -61,11 +62,11 @@ export function VitrineHero() {
             loop
             playsInline
             preload="none"
-            poster="/images/hero/cadeira-poster.avif"
+            poster={ativo("/images/hero/cadeira-poster.avif")}
             aria-hidden
           >
-            <source src="/video/cadeira-giro.webm" type="video/webm" />
-            <source src="/video/cadeira-giro.mp4" type="video/mp4" />
+            <source src={ativo("/video/cadeira-giro.webm")} type="video/webm" />
+            <source src={ativo("/video/cadeira-giro.mp4")} type="video/mp4" />
           </video>
         )}
 

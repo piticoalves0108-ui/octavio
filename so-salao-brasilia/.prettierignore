@@ -2,3 +2,5 @@
 node_modules
 public
 *.avif
+html-unico/dist
+html-unico/.cache
