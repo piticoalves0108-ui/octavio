@@ -26,7 +26,7 @@ export function Cardapio() {
                   <li key={c.id}>
                     <LinkTransicao
                       href={`/#${c.id}`}
-                      className="inline-flex min-h-11 items-center rounded-full border border-carvao-3 bg-carvao/60 px-4 text-[0.9375rem] font-medium backdrop-blur transition-colors hover:border-ambar hover:text-ambar"
+                      className="inline-flex min-h-11 items-center rounded-full border border-carvao-3 bg-carvao/60 px-4 text-[0.9375rem] font-normal backdrop-blur transition-colors hover:border-ambar hover:text-ambar"
                     >
                       {c.titulo}
                     </LinkTransicao>

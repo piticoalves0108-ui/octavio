@@ -30,7 +30,17 @@ export function AvisoPreco({ categoria, className }: { categoria: Categoria; cla
  * pendências estiverem escondidas), mostra um card de chamada para o iFood e
  * o WhatsApp no lugar, sem inventar item nenhum.
  */
-export function CategoriaCartoes({ categoria, colunas = "sm:grid-cols-2 xl:grid-cols-3", origem }: { categoria: Categoria; colunas?: string; origem: string }) {
+export function CategoriaCartoes({
+  categoria,
+  colunas = "sm:grid-cols-2 xl:grid-cols-3",
+  origem,
+  nivelItem = "h4",
+}: {
+  categoria: Categoria;
+  colunas?: string;
+  origem: string;
+  nivelItem?: "h3" | "h4";
+}) {
   const itens = itensVisiveis(categoria);
 
   if (itens.length === 0) {
@@ -58,7 +68,7 @@ export function CategoriaCartoes({ categoria, colunas = "sm:grid-cols-2 xl:grid-
     <ul className={cn("grid gap-4 md:gap-5", colunas)}>
       {itens.map((item) => (
         <li key={item.id}>
-          <CartaoItem item={item} />
+          <CartaoItem item={item} nivelTitulo={nivelItem} />
         </li>
       ))}
     </ul>

@@ -22,7 +22,7 @@ export function Marcador({ texto, className }: { texto: string; className?: stri
       data-confirmar
       title="Informação pendente: confirmar com o dono antes de publicar"
       className={cn(
-        "inline rounded-md border border-dashed border-ambar/70 bg-ambar/10 px-1.5 py-0.5 font-texto text-[0.8125rem] font-medium normal-case tracking-normal text-ambar [box-decoration-break:clone]",
+        "inline rounded-md border border-dashed border-ambar/70 bg-ambar/10 px-1.5 py-0.5 font-texto text-[0.8125rem] font-normal normal-case tracking-normal text-ambar [box-decoration-break:clone]",
         className,
       )}
     >

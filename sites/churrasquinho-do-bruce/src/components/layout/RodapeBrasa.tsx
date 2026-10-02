@@ -28,7 +28,7 @@ export function RodapeBrasa() {
   return (
     <div ref={ref} aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       {/* Brilho em CSS (sem WebGL). Com 3D, fica bem mais discreto. */}
-      <div className="absolute inset-0 transition-opacity duration-700 [html[data-palco=3d]_&]:opacity-25">
+      <div className="absolute inset-0 transition-opacity duration-700 [html[data-palco='3d']_&]:opacity-25">
         <div
           ref={brilho}
           className="absolute inset-x-[-10%] bottom-[-38%] h-[85%] origin-bottom bg-[radial-gradient(50%_55%_at_50%_100%,rgba(255,90,31,0.6),rgba(255,90,31,0.14)_45%,transparent_72%)]"

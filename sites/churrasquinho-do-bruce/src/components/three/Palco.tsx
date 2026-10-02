@@ -31,7 +31,9 @@ function avaliarAparelho(): Aparelho {
  * Estratégia de carregamento (LCP e TBT protegidos):
  * 1. O hero chega com o pôster AVIF (mesmo enquadramento da cena).
  * 2. O chunk do 3D (three + R3F) só é baixado com o hero na tela E depois da
- *    primeira interação (mouse, toque, scroll, tecla) ou ~5 s após o load.
+ *    primeira interação (mouse, toque, scroll, tecla). Quem não interage
+ *    continua vendo o pôster, que é um frame da própria cena. Assim o
+ *    three.js nunca disputa a main thread com o carregamento da página.
  * 3. Movimento reduzido ou economia de dados: fica no pôster.
  *    Aparelho muito fraco: vídeo em loop gravado da própria cena.
  */
@@ -60,7 +62,6 @@ export function Palco() {
 
     const EVENTOS = ["pointermove", "pointerdown", "keydown", "wheel", "touchstart", "scroll"] as const;
     let iniciado = false;
-    let timer = 0;
 
     const iniciar = () => {
       if (iniciado) return;
@@ -79,15 +80,10 @@ export function Palco() {
     };
 
     EVENTOS.forEach((ev) => window.addEventListener(ev, iniciar, { passive: true }));
-    const agendar = () => (timer = window.setTimeout(iniciar, 5000));
-    if (document.readyState === "complete") agendar();
-    else window.addEventListener("load", agendar, { once: true });
 
     return () => {
       limpar();
       EVENTOS.forEach((ev) => window.removeEventListener(ev, iniciar));
-      window.removeEventListener("load", agendar);
-      window.clearTimeout(timer);
       palco.set("poster");
     };
   }, []);

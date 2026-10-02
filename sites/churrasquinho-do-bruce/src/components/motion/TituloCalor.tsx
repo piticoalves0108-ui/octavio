@@ -44,47 +44,59 @@ export function TituloCalor({
     ({ gsap, SplitText, reduzido }) => {
       const el = ref.current;
       if (!el) return;
+      const deslocamento = document.getElementById(`${idFiltro}-d`);
+      const turbulencia = document.getElementById(`${idFiltro}-t`);
+      const calor = (tl: GSAPTimeline) =>
+        tl
+          .fromTo(deslocamento, { attr: { scale: 26 } }, { attr: { scale: 0 }, duration: 1.5, ease: "power2.out" }, 0)
+          .fromTo(turbulencia, { attr: { baseFrequency: "0.004 0.11" } }, { attr: { baseFrequency: "0.012 0.05" }, duration: 1.5, ease: "none" }, 0);
+      const comFiltro = { onStart: () => void (el.style.filter = `url(#${idFiltro})`), onComplete: () => void (el.style.filter = "") };
 
       if (gatilho === "preloader") {
-        const preloaderAtivo =
-          document.documentElement.dataset.preloader !== "off" && !(window as { __brasaAcesa?: boolean }).__brasaAcesa;
+        // Título do hero: fica visível por cima do preloader (é o LCP) e,
+        // quando a brasa acende, passa uma onda de calor pelas letras.
+        const preloaderAtivo = document.documentElement.dataset.preloader !== "off" && !(window as { __brasaAcesa?: boolean }).__brasaAcesa;
         if (!preloaderAtivo || reduzido) return;
-      } else if (reduzido) {
+        const tl = gsap.timeline({ paused: true, ...comFiltro });
+        calor(tl);
+        liberado.current = () => tl.play();
+        return () => {
+          liberado.current = null;
+        };
+      }
+
+      if (reduzido) {
         gsap.from(el, { opacity: 0, duration: 0.35, scrollTrigger: { trigger: el, start: "top 92%", once: true } });
         return;
       }
 
-      const deslocamento = document.getElementById(`${idFiltro}-d`);
-      const turbulencia = document.getElementById(`${idFiltro}-t`);
-
-      const split = SplitText.create(el, {
-        type: "words,chars",
-        mask: "chars",
-        charsClass: "letra",
-        aria: "auto",
-        autoSplit: true,
-        onSplit(self) {
-          const tl = gsap.timeline({
-            paused: gatilho === "preloader",
-            scrollTrigger: gatilho === "scroll" ? { trigger: el, start: "top 86%", once: true } : undefined,
-            onStart: () => {
-              el.style.filter = `url(#${idFiltro})`;
-            },
-            onComplete: () => {
-              el.style.filter = "";
+      // Divide em letras só quando o título se aproxima da tela (menos trabalho no load).
+      let split: SplitText | null = null;
+      const observador = new IntersectionObserver(
+        ([entrada]) => {
+          if (!entrada.isIntersecting || split) return;
+          observador.disconnect();
+          split = SplitText.create(el, {
+            type: "words,chars",
+            mask: "chars",
+            charsClass: "letra",
+            aria: "auto",
+            autoSplit: true,
+            onSplit(self) {
+              const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 86%", once: true }, ...comFiltro });
+              tl.from(self.chars, { yPercent: 108, duration: 1, ease: "expo.out", stagger: { each: 0.022, from: "start" } }, 0);
+              calor(tl);
+              return tl;
             },
           });
-          tl.from(self.chars, { yPercent: 108, duration: 1, ease: "expo.out", stagger: { each: 0.022, from: "start" } }, 0)
-            .fromTo(deslocamento, { attr: { scale: 26 } }, { attr: { scale: 0 }, duration: 1.5, ease: "power2.out" }, 0)
-            .fromTo(turbulencia, { attr: { baseFrequency: "0.004 0.11" } }, { attr: { baseFrequency: "0.012 0.05" }, duration: 1.5, ease: "none" }, 0);
-          if (gatilho === "preloader") liberado.current = () => tl.play();
-          return tl;
         },
-      });
+        { rootMargin: "60% 0px 60% 0px" },
+      );
+      observador.observe(el);
 
       return () => {
-        liberado.current = null;
-        split.revert();
+        observador.disconnect();
+        split?.revert();
       };
     },
     ref,

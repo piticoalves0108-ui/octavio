@@ -61,6 +61,28 @@ export function carregarMotor(): Promise<Motor> {
   return promessa;
 }
 
+/**
+ * Fila de montagem: cada seção monta suas animações numa tarefa curta
+ * (≤ ~10 ms por fatia), em vez de tudo num bloco só. Mantém o TBT baixo.
+ */
+const fila: (() => void)[] = [];
+let processando = false;
+export function enfileirar(tarefa: () => void) {
+  fila.push(tarefa);
+  if (processando) return;
+  processando = true;
+  setTimeout(processarFila, 0);
+}
+function processarFila() {
+  const inicio = performance.now();
+  while (fila.length && performance.now() - inicio < 10) fila.shift()!();
+  if (fila.length) setTimeout(processarFila, 0);
+  else {
+    processando = false;
+    agendarRefresh();
+  }
+}
+
 let refreshAgendado = 0;
 /** Junta vários pedidos de refresh num só (cada seção pede o seu ao montar). */
 export function agendarRefresh() {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, type DependencyList, type RefObject } from "react";
-import { agendarRefresh, carregarMotor, type Motor } from "@/lib/motor";
+import { carregarMotor, enfileirar, type Motor } from "@/lib/motor";
 
 type Limpeza = void | (() => void);
 
@@ -15,13 +15,14 @@ export function useMotor(montar: (motor: Motor) => Limpeza, escopo?: RefObject<E
     let limpar: Limpeza;
     let contexto: { revert: () => void } | null = null;
 
-    carregarMotor().then((motor) => {
-      if (cancelado) return;
-      contexto = motor.gsap.context(() => {
-        limpar = montar(motor);
-      }, escopo?.current ?? undefined);
-      agendarRefresh();
-    });
+    carregarMotor().then((motor) =>
+      enfileirar(() => {
+        if (cancelado) return;
+        contexto = motor.gsap.context(() => {
+          limpar = montar(motor);
+        }, escopo?.current ?? undefined);
+      }),
+    );
 
     return () => {
       cancelado = true;

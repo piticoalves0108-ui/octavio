@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
  * Preloader "acendendo a brasa": contador de 0 a 100% e uma chama SVG que cresce.
  *
  * - O progresso é real: fontes prontas, página carregada e um tempo mínimo
- *   para a animação respirar. Nunca passa de ~3 s.
+ *   para a animação respirar. Nunca passa de ~2,5 s.
  * - Só na primeira visita da sessão; um script no <head> esconde antes do
  *   primeiro paint nas visitas seguintes, com movimento reduzido ou sem JS.
  * - O conteúdo do hero é renderizado por baixo desde o início (o LCP não espera).
@@ -49,12 +49,12 @@ export function Preloader() {
     const tempoMinimo = window.setTimeout(() => {
       marcos.tempo = true;
       recalcular();
-    }, 1100);
-    // Rede ruim não segura o site: em 3 s a brasa acende de qualquer jeito.
+    }, 900);
+    // Rede ruim não segura o site: em 2,4 s a brasa acende de qualquer jeito.
     const limite = window.setTimeout(() => {
       marcos.fontes = marcos.carregou = marcos.tempo = true;
       recalcular();
-    }, 3000);
+    }, 2400);
 
     const finalizar = () => {
       terminou = true;
@@ -98,7 +98,7 @@ export function Preloader() {
       id="preloader"
       ref={raiz}
       aria-hidden
-      className="group fixed inset-0 z-[90] flex flex-col items-center justify-center bg-carvao transition-[clip-path] duration-[850ms] ease-[var(--ease-cortina)] [clip-path:inset(0_0_0_0)] data-[saindo=true]:[clip-path:inset(0_0_100%_0)]"
+      className="group fixed inset-0 z-[90] flex flex-col items-center justify-center pb-[18vh] bg-carvao transition-[clip-path] duration-[850ms] ease-[var(--ease-cortina)] [clip-path:inset(0_0_0_0)] data-[saindo=true]:[clip-path:inset(0_0_100%_0)]"
     >
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55vh] bg-[radial-gradient(60%_80%_at_50%_100%,rgba(255,90,31,0.28),transparent_70%)]" />
       <svg viewBox="0 0 80 100" className="relative h-32 w-auto md:h-40" role="presentation">

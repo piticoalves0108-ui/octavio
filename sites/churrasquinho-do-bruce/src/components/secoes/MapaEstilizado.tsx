@@ -95,7 +95,7 @@ export function MapaEstilizado() {
         <path className="rota" d="M400 390 C 400 360, 420 345, 420 328 S 400 290, 400 240" fill="none" stroke="#FFB347" strokeWidth="4" strokeLinecap="round" strokeDasharray="1 0" />
         <g className="rotulo-mapa">
           <rect x="452" y="312" width="132" height="32" rx="16" fill="#FFB347" />
-          <text x="518" y="333" textAnchor="middle" fill="#121212" fontFamily="var(--font-barlow)" fontWeight="700" fontSize="15">
+          <text x="518" y="333" textAnchor="middle" fill="#121212" fontFamily="var(--font-barlow)" fontWeight="600" fontSize="15">
             Em frente
           </text>
         </g>

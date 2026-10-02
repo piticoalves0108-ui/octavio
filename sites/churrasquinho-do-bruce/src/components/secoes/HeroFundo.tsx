@@ -83,8 +83,8 @@ export function HeroFundo() {
           aria-hidden
           poster={retrato ? "/poster/hero-mobile-1080.webp" : "/poster/hero-desktop-1920.webp"}
         >
-          <source src={retrato ? "/video/hero-mobile.webm" : "/video/hero-desktop.webm"} type="video/webm" />
           <source src={retrato ? "/video/hero-mobile.mp4" : "/video/hero-desktop.mp4"} type="video/mp4" />
+          <source src={retrato ? "/video/hero-mobile.webm" : "/video/hero-desktop.webm"} type="video/webm" />
         </video>
       )}
 

@@ -6,7 +6,7 @@ import { DicaInteracao, HeroFundo } from "./HeroFundo";
 
 export function Hero() {
   return (
-    <section id="inicio" aria-labelledby="titulo-hero" className="relative z-[1] h-[100svh] min-h-[600px] overflow-hidden">
+    <section id="inicio" aria-labelledby="titulo-hero" className="relative h-[100svh] min-h-[600px] overflow-hidden">
       <HeroFundo />
 
       <div className="moldura relative flex h-full flex-col pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[calc(var(--altura-header)+1rem)] md:pb-10">
@@ -35,10 +35,10 @@ export function Hero() {
             como="h1"
             id="titulo-hero"
             gatilho="preloader"
-            className="mt-6 text-[15.4vw] text-osso md:mt-8 md:whitespace-nowrap md:text-[8.9vw] min-[1800px]:text-[10.25rem]"
+            className="relative mt-6 text-[15.4vw] text-osso [html:not([data-preloader='off'])_&]:z-[95] md:mt-8 md:whitespace-nowrap md:text-[8.9vw] min-[1800px]:text-[10.25rem]"
           >
-            <span className="block md:inline">Churrasquinho </span>
-            <span className="block text-brasa md:inline">do Bruce</span>
+            <span className="block md:inline-block">Churrasquinho</span>{" "}
+            <span className="block text-brasa md:inline-block">do Bruce</span>
           </TituloCalor>
         </div>
       </div>

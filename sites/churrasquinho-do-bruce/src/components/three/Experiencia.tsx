@@ -176,7 +176,8 @@ function Vitrine({ captura }: { captura: Captura }) {
 
   return (
     <group ref={grupo}>
-      <pointLight position={[0, -1.4, 1.2]} color="#ff6326" intensity={12} distance={8} decay={1.6} />
+      <pointLight position={[0, -1.4, 1.2]} color="#ff6326" intensity={3.5} distance={8} decay={1.6} />
+      <directionalLight position={[1.5, 3, 4]} color="#fff1df" intensity={1.6} />
       {peca && <mesh geometry={peca.geometria} material={peca.material} rotation={[0.25, 0, 0.1]} />}
       {captura.tipo === "hamburguer" && (
         <group>

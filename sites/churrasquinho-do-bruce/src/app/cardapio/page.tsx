@@ -42,7 +42,7 @@ export default function PaginaCardapio() {
           <ul className="flex flex-wrap gap-2">
             {cardapio.map((c) => (
               <li key={c.id}>
-                <a href={`#${c.id}`} className="inline-flex min-h-11 items-center rounded-full border border-carvao-3 px-4 font-medium transition-colors hover:border-ambar hover:text-ambar">
+                <a href={`#${c.id}`} className="inline-flex min-h-11 items-center rounded-full border border-carvao-3 px-4 font-normal transition-colors hover:border-ambar hover:text-ambar">
                   {c.titulo}
                 </a>
               </li>
@@ -63,7 +63,7 @@ export default function PaginaCardapio() {
                 </div>
                 <AvisoPreco categoria={cat} />
               </Revelar>
-              <CategoriaCartoes categoria={cat} origem={`pagina-cardapio-${cat.id}`} />
+              <CategoriaCartoes categoria={cat} origem={`pagina-cardapio-${cat.id}`} nivelItem="h3" />
             </section>
           ))}
         </div>

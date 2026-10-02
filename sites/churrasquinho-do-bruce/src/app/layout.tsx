@@ -26,7 +26,7 @@ const bigShoulders = Big_Shoulders({
 
 const barlow = Barlow({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   variable: "--font-barlow",
   display: "swap",
 });
@@ -86,7 +86,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <WhatsAppFlutuante />
           </TransicaoProvider>
         </MotorDeMovimento>
-        <Analytics />
+        {/* O script da Vercel Analytics só existe no deploy da Vercel. */}
+        {process.env.VERCEL && <Analytics />}
         {GA_ID && (
           <>
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="lazyOnload" />

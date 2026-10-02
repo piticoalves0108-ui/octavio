@@ -31,11 +31,11 @@ export function Header() {
       )}
     >
       <div className="moldura flex h-[var(--altura-header)] items-center gap-4">
-        <LinkTransicao href="/" className="group flex items-center gap-2.5" aria-label={`${negocio.nome}, início`}>
+        <LinkTransicao href="/" className="group flex items-center gap-2.5">
           <IconeChama className="h-7 w-auto text-brasa transition-transform duration-500 group-hover:scale-110" />
           <span className="titulo text-[1.35rem] leading-[0.85] tracking-wide">
-            Churrasquinho
-            <span className="block text-ambar">do Bruce</span>
+            Churrasquinho <span className="block text-ambar">do Bruce</span>
+            <span className="sr-only">, início</span>
           </span>
         </LinkTransicao>
 
@@ -45,7 +45,7 @@ export function Header() {
               <li key={link.href}>
                 <LinkTransicao
                   href={link.href}
-                  className="rounded-full px-4 py-2.5 text-[0.9375rem] font-medium text-osso/85 transition-colors hover:bg-carvao-3/70 hover:text-osso"
+                  className="rounded-full px-4 py-2.5 text-[0.9375rem] font-normal text-osso/85 transition-colors hover:bg-carvao-3/70 hover:text-osso"
                 >
                   {link.rotulo}
                 </LinkTransicao>

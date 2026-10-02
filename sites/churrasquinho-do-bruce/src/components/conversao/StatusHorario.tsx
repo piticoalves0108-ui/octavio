@@ -20,7 +20,7 @@ export function StatusHorario({ className }: { className?: string }) {
   }, []);
 
   return (
-    <p className={cn("inline-flex items-center gap-2.5 text-sm font-medium", className)} aria-live="polite">
+    <p className={cn("inline-flex items-center gap-2.5 text-sm font-normal", className)} aria-live="polite">
       <span
         aria-hidden
         className={cn(

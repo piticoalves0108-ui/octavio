@@ -12,7 +12,10 @@ const recursos = () => import("@/lib/motion-recursos").then((m) => m.default);
  */
 export function MotorDeMovimento({ children }: { children: ReactNode }) {
   useEffect(() => {
-    carregarMotor();
+    // Depois do primeiro paint e com a main thread livre.
+    const ocioso = window.requestIdleCallback ?? ((f: () => void) => window.setTimeout(f, 200));
+    const id = ocioso(() => carregarMotor(), { timeout: 1500 });
+    return () => (window.cancelIdleCallback ?? window.clearTimeout)(id);
   }, []);
 
   return (

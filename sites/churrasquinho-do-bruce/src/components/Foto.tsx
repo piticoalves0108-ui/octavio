@@ -28,11 +28,11 @@ export function Foto({
   }
 
   return (
-    <figure className={cn("foto-pendente flex items-end", className)} style={proporcao} role="img" aria-label={foto.alt}>
-      <figcaption aria-hidden className="m-3 max-w-[32ch] rounded-xl bg-carvao/85 p-3 text-[0.8125rem] leading-snug text-osso/90 backdrop-blur">
+    <div className={cn("foto-pendente flex items-end", className)} style={proporcao} role="img" aria-label={foto.alt}>
+      <p aria-hidden className="m-3 max-w-[32ch] rounded-xl bg-carvao/85 p-3 text-[0.8125rem] leading-snug text-osso/90 backdrop-blur">
         <span className="rotulo mb-1 block text-[0.6875rem] text-ambar">Foto pendente · {foto.proporcao.replace("/", ":")}</span>
         {foto.legenda}
-      </figcaption>
-    </figure>
+      </p>
+    </div>
   );
 }
