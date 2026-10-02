@@ -25,6 +25,7 @@ npm run dev          # http://localhost:3000
 | `npm run confirmar` | Lista todos os marcadores `{{CONFIRMAR}}` que faltam |
 | `npm run capturar` | Grava o pôster (AVIF/JPG) e o vídeo de reserva (WebM/MP4) a partir da própria cena 3D. Precisa do site rodando e de `ffmpeg` |
 | `npm run html` | Gera a [edição HTML](#edição-html-arquivos-estáticos) na pasta `html/` |
+| `npm run exe` | Gera o [executável para Windows](#executável-para-windows) em `dist/PorangoPneus.exe` (precisa do Go) |
 
 Variáveis de ambiente (copie `.env.example` para `.env.local`):
 
@@ -48,8 +49,10 @@ porango-pneus/
 ├─ scripts/
 │  ├─ confirmar.mjs         lista os {{CONFIRMAR}}; bloqueia o build de publicação se sobrar algum
 │  ├─ capturar-cena.mjs     grava pôster e vídeo da própria cena (Playwright + ffmpeg + sharp)
-│  └─ edicao-html.mjs       gera a edição HTML (npm run html)
+│  ├─ edicao-html.mjs       gera a edição HTML (npm run html)
+│  └─ executavel.mjs        gera o .exe para Windows (npm run exe)
 ├─ html/                    EDIÇÃO HTML pronta: abra html/index.html (arquivo gerado, não edite à mão)
+├─ executavel/              programa (Go) que leva o site dentro do .exe e o abre no navegador
 └─ src/
    ├─ content/
    │  ├─ site.ts            DADOS DO NEGÓCIO: nome, endereço, contato, horário, serviços, marcas, galeria
@@ -169,6 +172,15 @@ A pasta **`html/`** tem o site inteiro em arquivos `.html` comuns, com o mesmo v
 - **Para gerar de novo** depois de mudar textos ou fotos: `npm run html`. O script (`scripts/edicao-html.mjs`) faz o export estático do Next, troca todos os caminhos para relativos e embute no CSS as fontes do alfabeto latino, porque o navegador bloqueia fonte carregada de arquivo local.
 - **Segue o modo prévia** (marcadores `{{CONFIRMAR}}` visíveis, `noindex`). Para gerar a versão final: `NEXT_PUBLIC_MODO_PREVIA=false NEXT_PUBLIC_SITE_URL=https://seudominio npm run html`.
 - **Diferenças para o site na Vercel:** cada página é um arquivo, então a troca de página recarrega (a cortina amarela cobre a saída e revela a página nova); as fotos não passam pelo otimizador de imagens do Next; o Vercel Analytics só mede quando o site está publicado na Vercel. Para publicar de verdade, prefira a Vercel (seção abaixo).
+
+### Executável para Windows
+
+**`PorangoPneus.exe`** é um arquivo único (cerca de 6 MB) com a edição HTML inteira dentro. Clique duplo e o site abre no navegador padrão. Não instala nada, não abre porta de rede e não precisa de internet.
+
+- **O que ele faz:** na primeira vez, extrai os arquivos para `%LOCALAPPDATA%\PorangoPneus\site-<versão>` (é instantâneo); depois abre o `index.html` com o programa padrão do `.html`. Se não houver um, tenta o Edge, o Chrome e o Firefox. Nas vezes seguintes só abre. Uma versão nova do `.exe` apaga a pasta da versão anterior.
+- **Aviso do Windows:** o arquivo não tem assinatura digital (isso exige um certificado pago de uma autoridade certificadora), então na primeira vez o Windows pode mostrar "O Windows protegeu o computador". Clique em **Mais informações → Executar assim mesmo**. Navegadores também podem perguntar se você quer manter o arquivo baixado.
+- **Para gerar de novo:** `npm run exe` (refaz a edição HTML e monta o `.exe`; com `-- --rapido`, usa a pasta `html/` como está). Precisa do [Go](https://go.dev/dl) instalado; o ícone e os dados do arquivo entram com o go-winres, que o Go baixa sozinho. O `.exe` sai em `dist/` e não vai para o Git.
+- **Mac e Linux:** use a pasta `html/` (abra o `index.html`).
 
 ---
 
