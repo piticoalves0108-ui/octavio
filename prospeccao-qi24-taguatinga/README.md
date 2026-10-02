@@ -51,6 +51,7 @@ Entraram só comércios que têm **Instagram e telefone públicos** e **nenhum s
 - **Presença online hoje:** Só Instagram, Facebook, OLX e diretórios. Nenhum site próprio ou loja virtual encontrados.
 - **Fontes:** [Instagram](https://www.instagram.com/sosalaobrasilia/), [Facebook](https://www.facebook.com/sosalaobrasilia/), [OLX](https://df.olx.com.br/distrito-federal-e-regiao/moveis/sofas-e-poltronas/fabrica-de-moveis-para-salao-de-beleza-1318824651)
 - **Prompt do site:** [prompts/03-so-salao-brasilia.md](prompts/03-so-salao-brasilia.md)
+- **Site gerado:** [so-salao-brasilia/](../so-salao-brasilia/) (Next.js 15 + 3D; veja o README da pasta)
 
 ### 4. KSA Distribuidora de Gás
 

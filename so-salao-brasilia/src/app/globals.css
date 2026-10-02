@@ -1,0 +1,302 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Tokens da marca                                                     */
+/* ------------------------------------------------------------------ */
+@theme {
+  --color-grafite: #2a2a2e;
+  --color-grafite-2: #36363b;
+  --color-rose: #e8c5bd;
+  --color-rose-claro: #f4e3de;
+  --color-nude: #d9c3b0;
+  --color-champanhe: #cbb089;
+  /* Champanhe escurecido para texto pequeno sobre fundo claro (contraste AA 5.2:1). */
+  --color-champanhe-texto: #7a6440;
+  --color-gelo: #f7f5f3;
+  --color-areia: #ece5df;
+  --color-tinta: #2a2a2e;
+  --color-tinta-suave: #5b5a60;
+  --color-nevoa: #bdb7b1;
+
+  --font-serif: var(--font-dm-serif), "Times New Roman", serif;
+  --font-sans: var(--font-outfit), system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ease-saida: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-cortina: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --breakpoint-xs: 30rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    background: var(--color-gelo);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-rose);
+    color: var(--color-grafite);
+  }
+
+  /* Foco visível e consistente para navegação por teclado. */
+  :focus-visible {
+    outline: 2px solid var(--color-grafite);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .tema-escuro :focus-visible {
+    outline-color: var(--color-rose);
+  }
+}
+
+/* Lenis (rolagem suave) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ */
+/* Utilitários de layout                                               */
+/* ------------------------------------------------------------------ */
+@utility grade {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 4rem);
+}
+
+@utility conteiner {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 4rem);
+}
+
+@utility secao {
+  padding-block: clamp(5rem, 11vw, 10rem);
+}
+
+@utility sobretitulo {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@utility titulo-secao {
+  font-family: var(--font-serif);
+  font-size: clamp(2.35rem, 5vw, 4.75rem);
+  line-height: 1;
+}
+
+@utility texto-grande {
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.6;
+}
+
+/* ------------------------------------------------------------------ */
+/* Marcador {{CONFIRMAR: ...}} visível                                 */
+/* ------------------------------------------------------------------ */
+.confirmar {
+  display: inline;
+  padding: 0.05em 0.4em;
+  border: 1px dashed #9a5b4e;
+  border-radius: 0.35em;
+  background: #fbefe9;
+  color: #7a3b2f;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.82em;
+  line-height: 1.5;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* ------------------------------------------------------------------ */
+/* Intro: tecido em shader revela o nome da marca (só na 1ª visita)    */
+/* ------------------------------------------------------------------ */
+.intro {
+  display: none;
+}
+.intro-ativa .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--color-grafite);
+  color: var(--color-gelo);
+  pointer-events: none;
+  /* Sai sozinha mesmo sem JavaScript. */
+  animation: intro-saida 0.6s var(--ease-cortina) 1.2s forwards;
+}
+.intro canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Sem WebGL/JS: um tecido liso sobe por CSS. Com WebGL, o script troca pelo shader. */
+  background: var(--color-rose);
+  animation: tecido-sobe 0.85s var(--ease-cortina) 0.12s forwards;
+}
+@keyframes tecido-sobe {
+  to {
+    transform: translateY(-100%);
+  }
+}
+.intro-marca {
+  position: relative;
+  text-align: center;
+  animation: intro-marca 1.3s var(--ease-saida) both;
+}
+@keyframes intro-saida {
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
+}
+@keyframes intro-marca {
+  from {
+    transform: scale(1.06);
+    letter-spacing: 0.04em;
+  }
+  to {
+    transform: none;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Entrada do hero (CSS puro: não depende do JS nem atrasa o LCP)      */
+/* ------------------------------------------------------------------ */
+.linha-revela {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.linha-revela > span {
+  display: block;
+  animation: linha-sobe 1s var(--ease-saida) both;
+  animation-delay: calc(0.08s + var(--i, 0) * 0.09s);
+}
+.surge {
+  animation: surge 0.9s var(--ease-saida) both;
+  animation-delay: calc(0.35s + var(--i, 0) * 0.08s);
+}
+.intro-ativa .linha-revela > span {
+  animation-delay: calc(1.25s + var(--i, 0) * 0.09s);
+}
+.intro-ativa .surge {
+  animation-delay: calc(1.5s + var(--i, 0) * 0.08s);
+}
+@keyframes linha-sobe {
+  from {
+    transform: translateY(105%);
+  }
+}
+@keyframes surge {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Movimento reduzido: só fades curtos                                 */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  .intro-ativa .intro {
+    display: none;
+  }
+}
+
+/* Animações dos componentes (accordion, dialog, mapa) */
+.pulso-mapa {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulso 2.6s ease-in-out infinite;
+}
+@keyframes pulso {
+  50% {
+    transform: scale(1.35);
+    opacity: 0.25;
+  }
+}
+@keyframes acordeao-abre {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+@keyframes acordeao-fecha {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+@keyframes aparece {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes dialogo-entra {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}

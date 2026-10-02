@@ -1,0 +1,19 @@
+# dependências
+/node_modules
+
+# build do Next
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# ambiente
+.env*.local
+.vercel
+
+# relatórios locais (Lighthouse, capturas temporárias)
+/relatorios/tmp/
+/.capturas/
+
+npm-debug.log*
+.DS_Store
