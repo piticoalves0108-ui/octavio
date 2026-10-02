@@ -4,20 +4,11 @@ import { useRef } from "react";
 import { useMotor } from "@/hooks/useMotor";
 import { useSecaoCena } from "@/hooks/useSecaoCena";
 import { categoria } from "@/content/cardapio";
-import { CAMADAS, cena, registrarAncora, type Camada } from "@/lib/cena";
+import { CAMADAS, cena, ENTRADAS, registrarAncora } from "@/lib/cena";
 import { AvisoPreco, CategoriaCartoes } from "./CategoriaCartoes";
 
 const hamburgueres = categoria("hamburgueres");
 
-/** De onde cada camada vem (unidades locais do hambúrguer) e quando pousa na timeline. */
-const ENTRADAS: Record<Camada, { de: number; giro: number; em: number }> = {
-  carne: { de: 0, giro: -1.4, em: 0.15 }, // nasce da fusão dos pedaços do espeto
-  paoBase: { de: -2.6, giro: 0.9, em: 0.3 },
-  queijo: { de: 2.8, giro: 1.6, em: 0.41 },
-  tomate: { de: 3.0, giro: -1.2, em: 0.51 },
-  alface: { de: 3.2, giro: 1.1, em: 0.6 },
-  paoTopo: { de: 3.6, giro: -0.8, em: 0.69 },
-};
 
 /**
  * Hambúrguer: o espeto vira hambúrguer. Uma timeline do GSAP (scrub no scroll)
@@ -67,7 +58,7 @@ export function Hamburguer() {
 
   return (
     <div id="hamburgueres" aria-labelledby="titulo-hamburgueres">
-      <div ref={trilho} className="trilho trilho-hamburguer">
+      <div ref={trilho} data-secao-cena="hamburguer" className="trilho trilho-hamburguer">
         <div className="trilho-palco">
           <div className="moldura grade h-full content-center gap-y-4 pb-8 pt-[calc(var(--altura-header)+0.5rem)]">
             <div className="col-span-12 lg:col-span-5 lg:self-center">
@@ -76,14 +67,14 @@ export function Hamburguer() {
                 {hamburgueres.titulo}
               </h3>
               <p className="mt-3 max-w-[34ch] text-lg text-osso/85 lg:mt-5">{hamburgueres.chamada}</p>
-              <ol ref={marcadores} aria-hidden className="mt-6 hidden gap-1.5 lg:flex">
+              <ol ref={marcadores} data-marcadores aria-hidden className="mt-6 hidden gap-1.5 lg:flex">
                 {CAMADAS.map((c) => (
                   <li key={c} className="h-1.5 w-10 origin-left rounded-full bg-brasa" />
                 ))}
               </ol>
             </div>
             <div className="relative col-span-12 h-[46svh] lg:col-span-7 lg:h-[78svh]">
-              <div ref={(el) => registrarAncora("hamburguer", el)} className="absolute inset-0">
+              <div ref={(el) => registrarAncora("hamburguer", el)} data-ancora="hamburguer" className="absolute inset-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/renders/hamburguer.webp"

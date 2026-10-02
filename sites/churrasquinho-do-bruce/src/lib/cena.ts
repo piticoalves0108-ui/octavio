@@ -11,6 +11,16 @@ export const PECAS: PecaEspeto[] = ["carne", "frango", "linguica", "queijo"];
 export const CAMADAS = ["paoBase", "carne", "queijo", "tomate", "alface", "paoTopo"] as const;
 export type Camada = (typeof CAMADAS)[number];
 
+/** De onde cada camada do hambúrguer vem (unidades locais) e quando pousa na timeline. */
+export const ENTRADAS: Record<Camada, { de: number; giro: number; em: number }> = {
+  carne: { de: 0, giro: -1.4, em: 0.15 }, // nasce da fusão dos pedaços do espeto
+  paoBase: { de: -2.6, giro: 0.9, em: 0.3 },
+  queijo: { de: 2.8, giro: 1.6, em: 0.41 },
+  tomate: { de: 3.0, giro: -1.2, em: 0.51 },
+  alface: { de: 3.2, giro: 1.1, em: 0.6 },
+  paoTopo: { de: 3.6, giro: -0.8, em: 0.69 },
+};
+
 /** Estado de cada camada do hambúrguer: deslocamento vertical, giro e escala. */
 export type EstadoCamada = { y: number; giro: number; escala: number };
 

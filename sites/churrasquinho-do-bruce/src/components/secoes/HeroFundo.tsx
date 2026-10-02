@@ -55,7 +55,7 @@ export function HeroFundo() {
   }, []);
 
   return (
-    <div ref={ref} className="absolute inset-0 overflow-hidden">
+    <div ref={ref} data-secao-cena="hero" className="absolute inset-0 overflow-hidden">
       <picture>
         <source media={MEDIA_RETRATO} type="image/avif" srcSet="/poster/hero-mobile-720.avif 720w, /poster/hero-mobile-1080.avif 1080w" sizes="100vw" />
         <source media={MEDIA_RETRATO} type="image/webp" srcSet="/poster/hero-mobile-1080.webp 1080w" sizes="100vw" />

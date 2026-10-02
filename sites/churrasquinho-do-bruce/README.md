@@ -26,6 +26,7 @@ npm run dev                     # http://localhost:3000
 | `npm run build` e `npm start` | Build e servidor de produção. Em produção, o que não foi confirmado some da tela. |
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript. |
 | `npm run pendencias` | Lista todos os `{{CONFIRMAR: ...}}` com arquivo e linha. |
+| `npm run html` | Gera **um único arquivo** `dist/churrasquinho-do-bruce.html` com o site inteiro (CSS, fontes, imagens, 3D e animações embutidos). Abre com dois cliques, sem servidor (ver seção 9). |
 | `npm run captura` | Gera pôster, miniaturas, vídeo, imagens de Open Graph e ícones a partir da própria cena 3D (ver seção 6). |
 
 Para o Bruce revisar uma prévia publicada com os marcadores visíveis, use `NEXT_PUBLIC_MOSTRAR_PENDENCIAS=true` no deploy de prévia.
@@ -257,3 +258,16 @@ SO=poster,og npm run captura            # só algumas etapas (poster, og, miniat
 
 - **Fonte dos títulos:** no Google Fonts, a "Big Shoulders Display" hoje é o corte de tamanho óptico 72 da família variável **Big Shoulders**. O site carrega essa família com o eixo `opsz` e fixa `opsz 72` nos títulos, que é exatamente o desenho Display, peso 800, em caixa alta.
 - `npm audit` acusa uma vulnerabilidade no PostCSS que vem embutido no próprio Next 15 (só roda no build, não no navegador). A correção do audit exige o Next 16, e o briefing pede o Next 15.
+
+---
+
+## 9. Site em um arquivo só (`dist/churrasquinho-do-bruce.html`)
+
+`npm run html` faz o build de produção, renderiza a home e junta tudo num HTML autocontido (cerca de 2,4 MB): CSS e fontes embutidos, pôster e miniaturas em base64, e um bundle (esbuild) com a **mesma** cena 3D e o **mesmo** motor GSAP/Lenis do projeto (`scripts/html-unico/entrada.tsx`).
+
+Serve para mostrar o site ao Bruce (abre direto do celular ou do computador), mandar por WhatsApp ou e-mail, ou hospedar em qualquer servidor estático. Diferenças em relação ao site Next:
+- é uma página só: os links de menu rolam até as seções, e "Cardápio completo" leva à seção do cardápio;
+- sem o vídeo de fallback (aparelhos sem WebGL ficam no pôster) e sem analytics;
+- os textos pendentes (`{{CONFIRMAR}}`) seguem a regra de produção: ficam escondidos.
+
+Para publicar de verdade, use o projeto Next (seção 7): SEO, analytics e performance são melhores.

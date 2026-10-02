@@ -68,7 +68,7 @@ export function PedirAgora({ origem, className, compacto = false }: { origem: st
         <div className="mt-6 flex flex-col gap-2 border-t border-carvao-3 pt-5 text-sm text-fumaca">
           <StatusHorario className="text-osso" />
           <p>
-            Ou vem comer aqui: {negocio.endereco.linha}, {negocio.endereco.referencia.toLowerCase()}.{" "}
+            Ou vem comer aqui: {negocio.endereco.linha}, {negocio.endereco.referencia.replace(/^E/, "e")}.{" "}
             <LinkRastreado href={linkComoChegar} evento="como_chegar" origem={`dialog-${origem}`} className="font-semibold text-ambar underline underline-offset-4">
               Como chegar
             </LinkRastreado>

@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "pendencias": "node scripts/pendencias.mjs",
     "captura": "node scripts/captura.mjs",
-    "icones": "node scripts/icones.mjs"
+    "icones": "node scripts/icones.mjs",
+    "html": "node scripts/html-unico/gerar.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.1.23",
@@ -38,6 +39,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.186.0",
+    "esbuild": "^0.25.12",
     "eslint": "^9",
     "eslint-config-next": "15.5.27",
     "playwright-core": "1.63.0",

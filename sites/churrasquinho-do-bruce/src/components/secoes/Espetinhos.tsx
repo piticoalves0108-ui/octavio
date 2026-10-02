@@ -51,7 +51,7 @@ export function Espetinhos() {
   }, trilho);
 
   return (
-    <div id="espetinhos" ref={trilho} className="trilho trilho-espetinhos" aria-labelledby="titulo-espetinhos">
+    <div id="espetinhos" ref={trilho} data-secao-cena="espetinhos" className="trilho trilho-espetinhos" aria-labelledby="titulo-espetinhos">
       <div className="trilho-palco">
         <div className="moldura grade h-full content-center gap-y-6 pb-6 pt-[calc(var(--altura-header)+0.5rem)] lg:gap-y-0">
           <div className="col-span-12 lg:col-span-5 lg:self-center">
@@ -66,7 +66,7 @@ export function Espetinhos() {
           <ol className="col-span-12 flex flex-col gap-2.5 md:gap-3 lg:col-span-6 lg:col-start-7 lg:self-center">
             {espetinhos.itens.map((item) => (
               <li key={item.id} className="linha-espetinho grid grid-cols-[clamp(4.25rem,8.5vw,8rem)_1fr] items-center gap-3 md:gap-6">
-                <div ref={(el) => registrarAncora(`peca-${item.peca}`, el)} className="relative aspect-square">
+                <div ref={(el) => registrarAncora(`peca-${item.peca}`, el)} data-ancora={`peca-${item.peca}`} className="relative aspect-square">
                   {/* Miniatura renderizada da cena 3D: aparece quando não há WebGL. */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

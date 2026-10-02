@@ -26,16 +26,17 @@ export function RodapeBrasa() {
   }, ref);
 
   return (
-    <div ref={ref} aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div ref={ref} data-secao-cena="rodape" aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       {/* Brilho em CSS (sem WebGL). Com 3D, fica bem mais discreto. */}
       <div className="absolute inset-0 transition-opacity duration-700 [html[data-palco='3d']_&]:opacity-25">
         <div
           ref={brilho}
+          data-brilho-rodape
           className="absolute inset-x-[-10%] bottom-[-38%] h-[85%] origin-bottom bg-[radial-gradient(50%_55%_at_50%_100%,rgba(255,90,31,0.6),rgba(255,90,31,0.14)_45%,transparent_72%)]"
         />
       </div>
       {/* Âncora da churrasqueira 3D no rodapé */}
-      <div ref={(el) => registrarAncora("rodape-brasa", el)} className="absolute bottom-0 left-1/2 h-[46%] w-[min(92vw,70rem)] -translate-x-1/2" />
+      <div ref={(el) => registrarAncora("rodape-brasa", el)} data-ancora="rodape-brasa" className="absolute bottom-0 left-1/2 h-[46%] w-[min(92vw,70rem)] -translate-x-1/2" />
     </div>
   );
 }

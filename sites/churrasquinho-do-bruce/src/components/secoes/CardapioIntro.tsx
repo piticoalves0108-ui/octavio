@@ -7,5 +7,9 @@ import { useSecaoCena } from "@/hooks/useSecaoCena";
 export function CardapioIntro({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   useSecaoCena(ref, "cardapio");
-  return <div ref={ref}>{children}</div>;
+  return (
+    <div ref={ref} data-secao-cena="cardapio">
+      {children}
+    </div>
+  );
 }
