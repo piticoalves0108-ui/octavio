@@ -9,7 +9,8 @@
     "lint": "eslint",
     "confirmar": "node scripts/confirmar.mjs",
     "prebuild": "node scripts/confirmar.mjs --antes-do-build",
-    "capturar": "node scripts/capturar-cena.mjs"
+    "capturar": "node scripts/capturar-cena.mjs",
+    "html": "node scripts/edicao-html.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",

@@ -1,0 +1,13 @@
+Porango Pneus: edição HTML do site
+
+Abra o arquivo index.html (dois cliques). Não precisa de servidor nem de internet,
+a não ser para os links externos (WhatsApp, Instagram e Google Maps).
+
+Páginas:
+  index.html          início
+  servicos.html       serviços
+  guia-do-pneu.html   guia do pneu
+  404.html            página não encontrada
+
+Os textos marcados com {{CONFIRMAR: ...}} ainda dependem da loja.
+Para gerar de novo depois de mudar o site: npm run html (na pasta porango-pneus).

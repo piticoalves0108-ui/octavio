@@ -5,12 +5,14 @@
  * O desenho é um arquivo em /public (carrega só quando chega perto da tela) e os
  * rótulos ficam em HTML, com a fonte do site.
  */
+import { ativo } from "@/lib/edicao";
+
 export function MapaSvg() {
   return (
     <div className="relative">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/mapa-ilustrativo.svg"
+        src={ativo("/images/mapa-ilustrativo.svg")}
         alt="Mapa ilustrativo com o caminho até a loja"
         width={600}
         height={540}

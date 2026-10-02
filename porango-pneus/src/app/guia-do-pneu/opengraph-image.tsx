@@ -1,5 +1,8 @@
 import { gerarOg, tamanhoOg } from "@/lib/og";
 
+// gerado no build (também no export estático da edição HTML)
+export const dynamic = "force-static";
+
 export const alt = "Guia do pneu: como ler a medida, TWI, calibragem e rodízio";
 export const size = tamanhoOg;
 export const contentType = "image/png";

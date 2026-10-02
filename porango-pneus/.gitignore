@@ -42,3 +42,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .captura-temp/
+
+# builds em pasta separada (ex.: .next-html, da edição HTML; o resultado fica em html/)
+/.next-*/

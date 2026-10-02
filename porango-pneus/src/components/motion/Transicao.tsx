@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { EDICAO_HTML, hrefPagina, paginaAtual } from "@/lib/edicao";
 import { movimentoReduzido } from "@/lib/gsap";
 import { carregarMotion } from "@/lib/motion";
 import { obterLenis, rolarPara } from "@/lib/rolagem";
@@ -11,7 +12,11 @@ import { obterLenis, rolarPara } from "@/lib/rolagem";
  * Transição entre páginas: cortina amarela (cor de destaque) que sobe, troca a rota
  * no App Router e sai por cima revelando a página nova. A animação usa o `animate`
  * do Motion, carregado só na primeira navegação.
+ *
+ * Na edição HTML (arquivos estáticos) cada página é um arquivo: a cortina cobre, o
+ * navegador abre o arquivo novo e a página nova começa coberta e revela.
  */
+const CHAVE_CORTINA = "porango-cortina";
 type Ctx = { navegar: (href: string, rotulo?: string) => void };
 
 const Contexto = createContext<Ctx>({ navegar: () => {} });
@@ -22,6 +27,8 @@ export function TransicaoProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [ativa, setAtiva] = useState(false);
   const [rotulo, setRotulo] = useState("");
+  // edição HTML: a página nova nasce coberta quando veio de uma troca com cortina
+  const [entrandoCoberta, setEntrandoCoberta] = useState(false);
   const cortina = useRef<HTMLDivElement>(null);
   const caminhoAtual = useRef(pathname);
   const aoTrocarRota = useRef<(() => void) | null>(null);
@@ -29,14 +36,23 @@ export function TransicaoProvider({ children }: { children: React.ReactNode }) {
 
   const navegar = useCallback(
     async (href: string, nome = "") => {
+      const irPara = (destino: string) => (EDICAO_HTML ? window.location.assign(destino) : router.push(destino));
       if (movimentoReduzido()) {
-        router.push(href);
+        irPara(href);
         return;
       }
       if (ocupado.current) return;
       ocupado.current = true;
       setRotulo(nome);
       setAtiva(true);
+      // edição HTML: a página nova abre mesmo se a animação travar
+      const abrirArquivo = () => {
+        try {
+          sessionStorage.setItem(CHAVE_CORTINA, nome);
+        } catch {}
+        window.location.assign(href);
+      };
+      const reserva = EDICAO_HTML ? window.setTimeout(abrirArquivo, 2000) : 0;
       try {
         const [{ animate }] = await Promise.all([
           carregarMotion(),
@@ -45,6 +61,13 @@ export function TransicaoProvider({ children }: { children: React.ReactNode }) {
         const el = cortina.current;
         if (!el) throw new Error("sem cortina");
         await animate(el, { y: ["100%", "0%"] }, { duration: 0.55, ease: CURVA });
+
+        if (EDICAO_HTML) {
+          // a cortina fica cobrindo enquanto o arquivo novo carrega
+          window.clearTimeout(reserva);
+          abrirArquivo();
+          return;
+        }
 
         const [caminho] = href.split("#");
         if ((caminho || "/") === caminhoAtual.current) {
@@ -59,8 +82,10 @@ export function TransicaoProvider({ children }: { children: React.ReactNode }) {
         }
         await animate(el, { y: ["0%", "-100%"] }, { duration: 0.65, ease: CURVA });
       } catch {
-        router.push(href);
+        window.clearTimeout(reserva);
+        irPara(href);
       } finally {
+        if (EDICAO_HTML) return;
         aoTrocarRota.current = null;
         ocupado.current = false;
         setAtiva(false);
@@ -68,6 +93,53 @@ export function TransicaoProvider({ children }: { children: React.ReactNode }) {
     },
     [router],
   );
+
+  // Página aberta com âncora (#medida): garante a posição. Nem sempre o navegador
+  // rola sozinho quando a página vem de outra (com o preloader na frente, por exemplo).
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    const alvo = id ? document.getElementById(id) : null;
+    if (alvo && window.scrollY < 2) rolarPara(alvo, true);
+  }, []);
+
+  // Edição HTML: chegou de uma troca com cortina? Começa coberta e revela.
+  useEffect(() => {
+    if (!EDICAO_HTML) return;
+    // voltou pelo botão "voltar" (página restaurada da memória): sem cortina parada na tela
+    const aoMostrar = (e: PageTransitionEvent) => {
+      if (!e.persisted) return;
+      ocupado.current = false;
+      setAtiva(false);
+      setEntrandoCoberta(false);
+    };
+    window.addEventListener("pageshow", aoMostrar);
+    let nome: string | null = null;
+    try {
+      nome = sessionStorage.getItem(CHAVE_CORTINA);
+      sessionStorage.removeItem(CHAVE_CORTINA);
+    } catch {}
+    let cancelado = false;
+    if (nome !== null && !movimentoReduzido()) {
+      setRotulo(nome);
+      setEntrandoCoberta(true);
+      setAtiva(true);
+      Promise.all([carregarMotion(), new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))]).then(
+        async ([{ animate }]) => {
+          const el = cortina.current;
+          if (cancelado || !el) return;
+          await animate(el, { y: ["0%", "-100%"] }, { duration: 0.65, ease: CURVA });
+          if (!cancelado) {
+            setAtiva(false);
+            setEntrandoCoberta(false);
+          }
+        },
+      );
+    }
+    return () => {
+      cancelado = true;
+      window.removeEventListener("pageshow", aoMostrar);
+    };
+  }, []);
 
   // Rota nova montada: volta ao topo (ou à âncora) e libera a cortina.
   useEffect(() => {
@@ -89,7 +161,7 @@ export function TransicaoProvider({ children }: { children: React.ReactNode }) {
         <div
           ref={cortina}
           aria-hidden="true"
-          style={{ transform: "translateY(100%)" }}
+          style={{ transform: entrandoCoberta ? "translateY(0%)" : "translateY(100%)" }}
           className="fixed inset-0 z-[90] flex items-center justify-center bg-sinal text-asfalto"
         >
           {/* borda de ataque com marca de banda de rodagem */}
@@ -116,6 +188,36 @@ export function LinkTransicao({ href, rotulo, onClick, ...resto }: LinkProps) {
   const { navegar } = useTransicao();
   const pathname = usePathname();
   const alvo = typeof href === "string" ? href : href.pathname ?? "/";
+
+  if (EDICAO_HTML) {
+    const destino = hrefPagina(alvo);
+    const { className, children, id, "aria-label": ariaLabel } = resto;
+    return (
+      <a
+        href={destino}
+        className={className}
+        id={id}
+        aria-label={ariaLabel}
+        onClick={(e) => {
+          onClick?.(e);
+          if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+          const [arquivo, ancora] = destino.split("#");
+          if (arquivo === paginaAtual()) {
+            if (ancora === undefined) return;
+            // âncora na mesma página: rolagem suave, sem cortina
+            e.preventDefault();
+            rolarPara(`#${ancora}`);
+            history.replaceState(null, "", `#${ancora}`);
+            return;
+          }
+          e.preventDefault();
+          navegar(destino, rotulo);
+        }}
+      >
+        {children}
+      </a>
+    );
+  }
 
   return (
     <Link

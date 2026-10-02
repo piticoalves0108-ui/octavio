@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
+import { ativo } from "@/lib/edicao";
 import { movimentoReduzido } from "@/lib/gsap";
 import { avisar, palco } from "@/lib/palco";
 
@@ -194,18 +195,18 @@ export function Palco() {
             loop
             playsInline
             preload="auto"
-            poster={layout === "mobile" ? "/images/hero/poster-mobile.jpg" : "/images/hero/poster-desktop.jpg"}
+            poster={layout === "mobile" ? ativo("/images/hero/poster-mobile.jpg") : ativo("/images/hero/poster-desktop.jpg")}
           >
-            <source src={layout === "mobile" ? "/video/hero-mobile.webm" : "/video/hero-desktop.webm"} type="video/webm" />
-            <source src={layout === "mobile" ? "/video/hero-mobile.mp4" : "/video/hero-desktop.mp4"} type="video/mp4" />
+            <source src={layout === "mobile" ? ativo("/video/hero-mobile.webm") : ativo("/video/hero-desktop.webm")} type="video/webm" />
+            <source src={layout === "mobile" ? ativo("/video/hero-mobile.mp4") : ativo("/video/hero-desktop.mp4")} type="video/mp4" />
           </video>
         ) : pedirPoster ? (
           <picture>
-            <source media="(max-aspect-ratio: 1/1)" srcSet="/images/hero/poster-mobile.avif" type="image/avif" />
-            <source media="(max-aspect-ratio: 1/1)" srcSet="/images/hero/poster-mobile.jpg" type="image/jpeg" />
-            <source srcSet="/images/hero/poster-desktop.avif" type="image/avif" />
+            <source media="(max-aspect-ratio: 1/1)" srcSet={ativo("/images/hero/poster-mobile.avif")} type="image/avif" />
+            <source media="(max-aspect-ratio: 1/1)" srcSet={ativo("/images/hero/poster-mobile.jpg")} type="image/jpeg" />
+            <source srcSet={ativo("/images/hero/poster-desktop.avif")} type="image/avif" />
             <img
-              src="/images/hero/poster-desktop.jpg"
+              src={ativo("/images/hero/poster-desktop.jpg")}
               alt="Pneu montado em roda de liga leve sobre o asfalto, em luz de estúdio"
               className={`h-full w-full object-cover transition-opacity duration-700 ${posterCarregado ? "opacity-100" : "opacity-0"}`}
               decoding="async"
@@ -220,10 +221,10 @@ export function Palco() {
         ) : (
           <noscript>
             <picture>
-              <source media="(max-aspect-ratio: 1/1)" srcSet="/images/hero/poster-mobile.avif" type="image/avif" />
-              <source srcSet="/images/hero/poster-desktop.avif" type="image/avif" />
+              <source media="(max-aspect-ratio: 1/1)" srcSet={ativo("/images/hero/poster-mobile.avif")} type="image/avif" />
+              <source srcSet={ativo("/images/hero/poster-desktop.avif")} type="image/avif" />
               <img
-                src="/images/hero/poster-desktop.jpg"
+                src={ativo("/images/hero/poster-desktop.jpg")}
                 alt="Pneu montado em roda de liga leve sobre o asfalto, em luz de estúdio"
                 className="h-full w-full object-cover"
                 width={1920}

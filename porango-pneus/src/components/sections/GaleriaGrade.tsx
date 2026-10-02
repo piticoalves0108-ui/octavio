@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import type { FotoGaleria } from "@/content/site";
 import { Revelar } from "@/components/motion/Revelar";
+import { ativo } from "@/lib/edicao";
 import { MODO_PREVIA } from "@/lib/pendente";
 import { cn } from "@/lib/cn";
 
@@ -30,7 +31,7 @@ export function GaleriaGrade({ fotos }: { fotos: FotoGaleria[] }) {
                   aria-label={`Ampliar foto: ${f.alt}`}
                 >
                   <Image
-                    src={f.src}
+                    src={ativo(f.src)}
                     alt={f.alt}
                     fill
                     sizes="(min-width: 768px) 33vw, 50vw"

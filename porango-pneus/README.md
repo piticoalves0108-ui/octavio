@@ -24,6 +24,7 @@ npm run dev          # http://localhost:3000
 | `npm run lint` | ESLint |
 | `npm run confirmar` | Lista todos os marcadores `{{CONFIRMAR}}` que faltam |
 | `npm run capturar` | Grava o pôster (AVIF/JPG) e o vídeo de reserva (WebM/MP4) a partir da própria cena 3D. Precisa do site rodando e de `ffmpeg` |
+| `npm run html` | Gera a [edição HTML](#edição-html-arquivos-estáticos) na pasta `html/` |
 
 Variáveis de ambiente (copie `.env.example` para `.env.local`):
 
@@ -46,7 +47,9 @@ porango-pneus/
 │  └─ video/                vídeo curto em loop da cena (WebM + MP4) para aparelhos muito fracos
 ├─ scripts/
 │  ├─ confirmar.mjs         lista os {{CONFIRMAR}}; bloqueia o build de publicação se sobrar algum
-│  └─ capturar-cena.mjs     grava pôster e vídeo da própria cena (Playwright + ffmpeg + sharp)
+│  ├─ capturar-cena.mjs     grava pôster e vídeo da própria cena (Playwright + ffmpeg + sharp)
+│  └─ edicao-html.mjs       gera a edição HTML (npm run html)
+├─ html/                    EDIÇÃO HTML pronta: abra html/index.html (arquivo gerado, não edite à mão)
 └─ src/
    ├─ content/
    │  ├─ site.ts            DADOS DO NEGÓCIO: nome, endereço, contato, horário, serviços, marcas, galeria
@@ -148,6 +151,24 @@ Nada de preço, avaliação, prêmio, número de clientes ou depoimento foi inve
 | Indexação | `noindex` + `robots.txt` bloqueando | liberada, com sitemap |
 
 Fluxo: preencher `site.ts` com o dono → `npm run confirmar` até zerar → definir `NEXT_PUBLIC_MODO_PREVIA=false` e `NEXT_PUBLIC_SITE_URL` → deploy.
+
+---
+
+## Edição HTML (arquivos estáticos)
+
+A pasta **`html/`** tem o site inteiro em arquivos `.html` comuns, com o mesmo visual, o 3D, as animações e os links de WhatsApp, telefone, mapa e Instagram:
+
+| Arquivo | Página |
+|---|---|
+| `index.html` | início |
+| `servicos.html` | serviços |
+| `guia-do-pneu.html` | guia do pneu |
+| `404.html` | página não encontrada |
+
+- **Para ver:** abra `html/index.html` com dois cliques. Não precisa de servidor, de Node nem de internet (a internet só faz falta para os links externos). Os caminhos são relativos, então a pasta funciona em qualquer lugar: pendrive, e-mail zipado, ou subida por FTP para uma hospedagem comum (mantendo a pasta inteira, com `_next/`, `images/` e `video/`).
+- **Para gerar de novo** depois de mudar textos ou fotos: `npm run html`. O script (`scripts/edicao-html.mjs`) faz o export estático do Next, troca todos os caminhos para relativos e embute no CSS as fontes do alfabeto latino, porque o navegador bloqueia fonte carregada de arquivo local.
+- **Segue o modo prévia** (marcadores `{{CONFIRMAR}}` visíveis, `noindex`). Para gerar a versão final: `NEXT_PUBLIC_MODO_PREVIA=false NEXT_PUBLIC_SITE_URL=https://seudominio npm run html`.
+- **Diferenças para o site na Vercel:** cada página é um arquivo, então a troca de página recarrega (a cortina amarela cobre a saída e revela a página nova); as fotos não passam pelo otimizador de imagens do Next; o Vercel Analytics só mede quando o site está publicado na Vercel. Para publicar de verdade, prefira a Vercel (seção abaixo).
 
 ---
 
