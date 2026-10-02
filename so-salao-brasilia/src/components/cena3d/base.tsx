@@ -8,7 +8,7 @@
  *   e "demand" quando a cena está parada (renderiza só quando algo muda).
  * - <Giratorio>: aplica o giro do ref (arraste/teclado/giroscópio) com amortecimento.
  */
-import { lazy, Suspense, useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
+import { Component, lazy, Suspense, useEffect, useLayoutEffect, useRef, type ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { PerformanceMonitor } from "@react-three/drei";
 import * as THREE from "three";
@@ -57,51 +57,67 @@ export function PalcoCanvas({
   const usarEfeitos = !!efeitos && nivel === "alto";
 
   return (
-    <Canvas
-      className={className}
-      dpr={captura ? [1.5, 1.5] : dprPara(nivel, fator)}
-      frameloop="demand"
-      shadows={sombras ? "percentage" : false}
-      orthographic={ortografica}
-      camera={camera}
-      gl={{
-        antialias: !usarEfeitos,
-        // alpha ligado mesmo com fundo opaco: as sombras de contato renderizam num
-        // render target que precisa ser limpo com alfa 0.
-        alpha: true,
-        powerPreference: "high-performance",
-        preserveDrawingBuffer: captura,
-        toneMapping: THREE.NeutralToneMapping,
-        toneMappingExposure: 1,
-      }}
-      // A tela não deve "roubar" a rolagem vertical no celular.
-      style={{ touchAction: "pan-y" }}
-      aria-hidden="true"
-    >
-      {fundo && <color attach="background" args={[fundo]} />}
-      <ControleDeQuadros visivel={visivel} continuo={continuo} />
-      {aoPrimeiroQuadro && <AvisoPrimeiroQuadro aoPrimeiroQuadro={aoPrimeiroQuadro} />}
-      {monitorar && !captura ? (
-        <PerformanceMonitor
-          ms={400}
-          iterations={8}
-          onIncline={() => definirFator(1)}
-          onDecline={() => definirFator(0.4)}
-          onFallback={() => rebaixar()}
-          flipflops={3}
-        >
-          {children}
-        </PerformanceMonitor>
-      ) : (
-        children
-      )}
-      {usarEfeitos && (
-        <Suspense fallback={null}>
-          <Efeitos foco={efeitos ? efeitos.foco : undefined} />
-        </Suspense>
-      )}
-    </Canvas>
+    <LimiteDeErro3D>
+      <Canvas
+        className={className}
+        dpr={captura ? [1.5, 1.5] : dprPara(nivel, fator)}
+        frameloop="demand"
+        shadows={sombras ? "percentage" : false}
+        orthographic={ortografica}
+        camera={camera}
+        gl={{
+          antialias: !usarEfeitos,
+          // alpha ligado mesmo com fundo opaco: as sombras de contato renderizam num
+          // render target que precisa ser limpo com alfa 0.
+          alpha: true,
+          powerPreference: "high-performance",
+          preserveDrawingBuffer: captura,
+          toneMapping: THREE.NeutralToneMapping,
+          toneMappingExposure: 1,
+        }}
+        // A tela não deve "roubar" a rolagem vertical no celular.
+        style={{ touchAction: "pan-y" }}
+        aria-hidden="true"
+      >
+        {fundo && <color attach="background" args={[fundo]} />}
+        <ControleDeQuadros visivel={visivel} continuo={continuo} />
+        {aoPrimeiroQuadro && <AvisoPrimeiroQuadro aoPrimeiroQuadro={aoPrimeiroQuadro} />}
+        {monitorar && !captura ? (
+          <PerformanceMonitor
+            ms={400}
+            iterations={8}
+            onIncline={() => definirFator(1)}
+            onDecline={() => definirFator(0.4)}
+            onFallback={() => rebaixar()}
+            flipflops={3}
+          >
+            {children}
+          </PerformanceMonitor>
+        ) : (
+          children
+        )}
+        {usarEfeitos && (
+          <Suspense fallback={null}>
+            <Efeitos foco={efeitos ? efeitos.foco : undefined} />
+          </Suspense>
+        )}
+      </Canvas>
+    </LimiteDeErro3D>
   );
+}
+
+/** Se o WebGL falhar (contexto recusado, GPU bloqueada), some com o 3D e fica o pôster. */
+class LimiteDeErro3D extends Component<{ children: ReactNode }, { erro: boolean }> {
+  state = { erro: false };
+  static getDerivedStateFromError() {
+    return { erro: true };
+  }
+  componentDidCatch() {
+    useQualidade.getState().definirNivel("sem-webgl");
+  }
+  render() {
+    return this.state.erro ? null : this.props.children;
+  }
 }
 
 function ControleDeQuadros({ visivel, continuo }: { visivel: boolean; continuo: boolean }) {

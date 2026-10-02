@@ -21,20 +21,18 @@ type Estado = {
   detectar: () => void;
   rebaixar: () => void;
   definirFator: (f: number) => void;
+  definirNivel: (n: Nivel) => void;
 };
 
 const ORDEM: Nivel[] = ["alto", "medio", "video", "sem-webgl"];
 
+/**
+ * Só verifica se a API existe: criar um contexto WebGL só para testar custa dezenas de
+ * milissegundos (centenas em aparelhos sem GPU) bem na hora da carga. Se a criação do
+ * contexto falhar de verdade, o <LimiteDeErro3D> rebaixa para "sem-webgl".
+ */
 function temWebgl() {
-  try {
-    const canvas = document.createElement("canvas");
-    const gl = (canvas.getContext("webgl2") || canvas.getContext("webgl")) as WebGLRenderingContext | null;
-    if (!gl) return false;
-    gl.getExtension("WEBGL_lose_context")?.loseContext();
-    return true;
-  } catch {
-    return false;
-  }
+  return typeof window.WebGL2RenderingContext !== "undefined" || typeof window.WebGLRenderingContext !== "undefined";
 }
 
 function detectarNivel(): Nivel {
@@ -69,6 +67,7 @@ export const useQualidade = create<Estado>((set, get) => ({
     set({ nivel: proximo, fator: 1 });
   },
   definirFator: (fator) => set({ fator }),
+  definirNivel: (nivel) => set({ nivel }),
 }));
 
 /** dpr limitado a [1, 1.75], reduzido pelo PerformanceMonitor em aparelhos fracos. */

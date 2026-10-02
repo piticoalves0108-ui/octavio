@@ -1,4 +1,5 @@
 import { Intro } from "@/components/layout/Intro";
+import { HidratarAoVer } from "@/components/layout/HidratarAoVer";
 import { JsonLd } from "@/components/layout/JsonLd";
 import { Hero } from "@/components/secoes/Hero";
 import { Linhas } from "@/components/secoes/Linhas";
@@ -20,13 +21,31 @@ export default function Inicio() {
     <>
       <Intro />
       <Hero />
-      <Linhas />
-      <SecaoConfigurador />
-      <MonteSeuSalao />
-      <ComoFunciona />
-      <Galeria />
-      <Showroom />
-      <Duvidas />
+      {/*
+        Seções abaixo da dobra: HTML completo do servidor, hidratação só quando a seção
+        chega perto da tela (ver HidratarAoVer). O carregamento hidrata só a 1ª dobra.
+      */}
+      <HidratarAoVer>
+        <Linhas />
+      </HidratarAoVer>
+      <HidratarAoVer>
+        <SecaoConfigurador />
+      </HidratarAoVer>
+      <HidratarAoVer>
+        <MonteSeuSalao />
+      </HidratarAoVer>
+      <HidratarAoVer>
+        <ComoFunciona />
+      </HidratarAoVer>
+      <HidratarAoVer>
+        <Galeria />
+      </HidratarAoVer>
+      <HidratarAoVer>
+        <Showroom />
+      </HidratarAoVer>
+      <HidratarAoVer>
+        <Duvidas />
+      </HidratarAoVer>
       <JsonLd dados={schemaPerguntas()} />
     </>
   );

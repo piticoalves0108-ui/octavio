@@ -17,7 +17,7 @@ import { IconeGiro } from "@/components/ui/icones";
 
 const CenaConfigurador = dynamic(() => import("@/components/cena3d/CenaConfigurador"), { ssr: false });
 
-export function VisorConfigurador({ className }: { className?: string }) {
+export function VisorConfigurador({ className, prioridade = false }: { className?: string; prioridade?: boolean }) {
   const { ref, visivel } = useNaTela<HTMLDivElement>("150px");
   const { carregar, nivel } = useCarregar3D(visivel);
   const [pronto, setPronto] = useState(false);
@@ -59,6 +59,7 @@ export function VisorConfigurador({ className }: { className?: string }) {
         alt={`${linha.nomeDoModelo}: pré-visualização ilustrativa.`}
         fill
         sizes="(min-width: 1024px) 55vw, 100vw"
+        priority={prioridade}
         className={cn("object-contain transition-opacity duration-500", tem3D ? "opacity-0" : "opacity-100")}
       />
       {carregar && (

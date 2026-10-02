@@ -3,6 +3,7 @@ import { negocio } from "@/content/negocio";
 import { perguntas } from "@/content/textos";
 import { Showroom } from "@/components/secoes/Showroom";
 import { Duvidas } from "@/components/secoes/Duvidas";
+import { HidratarAoVer } from "@/components/layout/HidratarAoVer";
 import { JsonLd } from "@/components/layout/JsonLd";
 import { schemaTrilha } from "@/lib/schema";
 
@@ -21,9 +22,11 @@ export default function PaginaShowroom() {
       <div className="pt-20">
         <Showroom comoTituloDaPagina />
       </div>
-      <Duvidas
-        itens={perguntas.filter((p) => ["showroom", "prazo", "pagamento", "frete", "montagem"].includes(p.id))}
-      />
+      <HidratarAoVer>
+        <Duvidas
+          itens={perguntas.filter((p) => ["showroom", "prazo", "pagamento", "frete", "montagem"].includes(p.id))}
+        />
+      </HidratarAoVer>
       <JsonLd
         dados={schemaTrilha([
           { nome: "Início", caminho: "/" },

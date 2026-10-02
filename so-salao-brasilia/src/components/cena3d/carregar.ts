@@ -4,13 +4,13 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { useQualidade } from "@/lib/qualidade";
 
 /*
- * No celular, o 3D só começa depois do primeiro sinal de interesse (toque, rolagem
- * ou tecla). Até lá, o pôster (idêntico ao primeiro quadro da cena) segura o visual:
+ * O 3D só começa depois do primeiro sinal de interesse (mexer o mouse, tocar, rolar
+ * ou teclar). Até lá, o pôster (idêntico ao primeiro quadro da cena) segura o visual:
  * quem sai antes não paga o custo do WebGL em bateria, dados e processador.
  */
 let interagiu = false;
 const ouvintes = new Set<() => void>();
-const EVENTOS = ["pointerdown", "touchstart", "keydown", "wheel", "scroll"] as const;
+const EVENTOS = ["pointermove", "pointerdown", "touchstart", "keydown", "wheel", "scroll"] as const;
 
 function marcarInteracao() {
   if (interagiu) return;
@@ -23,7 +23,7 @@ if (typeof window !== "undefined") {
   EVENTOS.forEach((ev) => window.addEventListener(ev, marcarInteracao, { passive: true }));
 }
 
-function useInteragiu() {
+export function useInteragiu() {
   return useSyncExternalStore(
     (f) => {
       ouvintes.add(f);
@@ -37,7 +37,7 @@ function useInteragiu() {
 /**
  * Decide quando montar um <Canvas>: só com WebGL e qualidade suficiente, só quando a
  * seção está visível, depois da intro e com o navegador ocioso (não disputa com o LCP).
- * No celular (nível "medio"), também espera a primeira interação.
+ * Também espera a primeira interação (ver acima).
  * Depois de montado, fica montado (a pausa fora da tela é feita pelo frameloop).
  */
 export function useCarregar3D(visivel: boolean) {
@@ -53,7 +53,7 @@ export function useCarregar3D(visivel: boolean) {
   useEffect(() => {
     if (carregar || !visivel) return;
     if (nivel !== "alto" && nivel !== "medio") return;
-    if (nivel === "medio" && !houveInteracao) return;
+    if (!houveInteracao) return;
     let cancelado = false;
     let idIdle: number | undefined;
     const introAtiva = document.documentElement.classList.contains("intro-ativa");

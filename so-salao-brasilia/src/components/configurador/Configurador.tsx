@@ -20,12 +20,17 @@ import { SeletorAcabamento, SeletorCor, SeletorModelo, SeletorTecido } from "./S
 import { VisorConfigurador } from "./VisorConfigurador";
 
 type Props = {
+  /** Nível dos títulos dos passos: 3 dentro de uma seção (home), 2 na página própria. */
+  nivelTitulo?: 2 | 3;
+  /** Pôster do visor com prioridade de carregamento (página /configurador, acima da dobra). */
+  prioridade?: boolean;
   /** Na página /configurador, lê e escreve a escolha na URL (link compartilhável). */
   sincronizarUrl?: boolean;
   className?: string;
 };
 
-export function Configurador({ sincronizarUrl = false, className }: Props) {
+export function Configurador({ sincronizarUrl = false, className, nivelTitulo = 3, prioridade = false }: Props) {
+  const Titulo = nivelTitulo === 2 ? "h2" : "h3";
   const c = useConfiguracao();
   const id = useId();
   const [copiado, setCopiado] = useState(false);
@@ -69,7 +74,10 @@ export function Configurador({ sincronizarUrl = false, className }: Props) {
     <div className={cn("grid gap-8 lg:grid-cols-12 lg:gap-10", className)}>
       <div className="lg:col-span-7">
         <div className="lg:sticky lg:top-24">
-          <VisorConfigurador className="aspect-[4/5] w-full sm:aspect-[5/4] lg:aspect-[4/5] lg:max-h-[calc(100svh-8rem)]" />
+          <VisorConfigurador
+            prioridade={prioridade}
+            className="aspect-[4/5] w-full sm:aspect-[5/4] lg:aspect-[4/5] lg:max-h-[calc(100svh-8rem)]"
+          />
           <p className="mt-4 text-sm text-nevoa">
             O estofado vai em: {linha.ondeVaiOEstofado}. O acabamento vai em: {linha.ondeVaiOAcabamento}.
           </p>
@@ -78,11 +86,11 @@ export function Configurador({ sincronizarUrl = false, className }: Props) {
 
       <div className="lg:col-span-5">
         <ol className="space-y-9">
-          <Passo numero="01" titulo="Escolha o modelo">
+          <Passo nivel={Titulo} numero="01" titulo="Escolha o modelo">
             <SeletorModelo nome={`${id}-modelo`} valor={c.modelo} aoMudar={(v) => c.definir({ modelo: v })} />
           </Passo>
 
-          <Passo numero="02" titulo="Escolha o estofado">
+          <Passo nivel={Titulo} numero="02" titulo="Escolha o estofado">
             <div className="space-y-6">
               <SeletorTecido
                 nome={`${id}-tecido`}
@@ -99,7 +107,7 @@ export function Configurador({ sincronizarUrl = false, className }: Props) {
             </div>
           </Passo>
 
-          <Passo numero="03" titulo="Escolha o acabamento">
+          <Passo nivel={Titulo} numero="03" titulo="Escolha o acabamento">
             <SeletorAcabamento
               nome={`${id}-acabamento`}
               valor={c.acabamento}
@@ -108,7 +116,7 @@ export function Configurador({ sincronizarUrl = false, className }: Props) {
             />
           </Passo>
 
-          <Passo numero="04" titulo="Conte sobre o seu projeto">
+          <Passo nivel={Titulo} numero="04" titulo="Conte sobre o seu projeto">
             <div className="space-y-6">
               <div>
                 <label htmlFor={`${id}-quantidade`} className="sobretitulo mb-3 block text-champanhe">
@@ -178,9 +186,9 @@ export function Configurador({ sincronizarUrl = false, className }: Props) {
         </ol>
 
         <section aria-labelledby={`${id}-resumo`} className="mt-10 rounded-[1.5rem] bg-gelo p-6 text-tinta md:p-8">
-          <h3 id={`${id}-resumo`} className="text-[1.9rem]">
+          <Titulo id={`${id}-resumo`} className="text-[1.9rem]">
             Seu pedido
-          </h3>
+          </Titulo>
           <dl className="mt-5 divide-y divide-grafite/10 text-[0.95rem]">
             <LinhaResumo rotulo="Modelo" valor={linha.nomeDoModelo} />
             <LinhaResumo
@@ -191,7 +199,7 @@ export function Configurador({ sincronizarUrl = false, className }: Props) {
             <LinhaResumo rotulo="Quantidade" valor={String(c.quantidade)} />
           </dl>
           <div className="mt-7 flex flex-col gap-3">
-            <Magnetico className="flex">
+            <Magnetico bloco>
               <a
                 href={linkWhatsapp(mensagem)}
                 target="_blank"
@@ -230,13 +238,24 @@ export function Configurador({ sincronizarUrl = false, className }: Props) {
   );
 }
 
-function Passo({ numero, titulo, children }: { numero: string; titulo: string; children: React.ReactNode }) {
+function Passo({
+  numero,
+  titulo,
+  children,
+  nivel,
+}: {
+  numero: string;
+  titulo: string;
+  children: React.ReactNode;
+  nivel: "h2" | "h3";
+}) {
+  const Titulo = nivel;
   return (
     <li className="border-t border-gelo/15 pt-7">
-      <h3 className="mb-6 flex items-baseline gap-4 font-serif text-[1.65rem] leading-none text-gelo">
+      <Titulo className="mb-6 flex items-baseline gap-4 font-serif text-[1.65rem] leading-none text-gelo">
         <span className="font-sans text-sm font-medium tracking-[0.2em] text-champanhe">{numero}</span>
         {titulo}
-      </h3>
+      </Titulo>
       {children}
     </li>
   );

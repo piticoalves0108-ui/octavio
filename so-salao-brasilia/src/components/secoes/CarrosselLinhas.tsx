@@ -7,9 +7,7 @@
  * Com movimento reduzido, vira uma lista horizontal simples.
  */
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
-import { useMotionValue, useSpring } from "motion/react";
-import * as m from "motion/react-m";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { linhas, type Linha } from "@/content/catalogo";
 import { useMovimentoReduzido } from "@/lib/movimento";
 import { cn } from "@/lib/cn";
@@ -150,30 +148,34 @@ export function CarrosselLinhas() {
 
 function Cartao({ linha, ativo, indice }: { linha: Linha; ativo: boolean; indice: number }) {
   const [perfil, setPerfil] = useState(false);
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const srx = useSpring(rx, { stiffness: 180, damping: 18 });
-  const sry = useSpring(ry, { stiffness: 180, damping: 18 });
+  const moldura = useRef<HTMLDivElement>(null);
+
+  // Tilt com Motion, carregado no primeiro hover (fora do JS inicial).
+  useEffect(() => {
+    const el = moldura.current;
+    if (!el || !window.matchMedia("(pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let desligar: (() => void) | undefined;
+    let cancelado = false;
+    const iniciar = () =>
+      import("@/components/ui/magnetismo").then((m) => {
+        if (!cancelado) desligar = m.ligarInclinacao(el, el);
+      });
+    el.addEventListener("pointerenter", iniciar, { once: true });
+    return () => {
+      cancelado = true;
+      el.removeEventListener("pointerenter", iniciar);
+      desligar?.();
+    };
+  }, []);
 
   return (
     <article className="group/cartao" aria-labelledby={`linha-${linha.slug}`}>
-      <m.div
+      <div
+        ref={moldura}
         className="relative aspect-[4/5] overflow-hidden rounded-[1.6rem] bg-[#ece5df] shadow-[0_40px_80px_-40px_rgba(42,42,46,0.45)]"
-        style={{ rotateX: srx, rotateY: sry, transformPerspective: 900 }}
-        onPointerMove={(e) => {
-          if (e.pointerType !== "mouse") return;
-          const r = e.currentTarget.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width;
-          const py = (e.clientY - r.top) / r.height;
-          ry.set((px - 0.5) * 12);
-          rx.set((0.5 - py) * 10);
-          setPerfil(true);
-        }}
-        onPointerLeave={() => {
-          rx.set(0);
-          ry.set(0);
-          setPerfil(false);
-        }}
+        onPointerEnter={(e) => e.pointerType === "mouse" && setPerfil(true)}
+        onPointerLeave={(e) => e.pointerType === "mouse" && setPerfil(false)}
       >
         <Image
           src={linha.imagens.frente}
@@ -207,7 +209,7 @@ function Cartao({ linha, ativo, indice }: { linha: Linha; ativo: boolean; indice
         >
           {perfil ? "Ver de frente" : "Ver de perfil"}
         </button>
-      </m.div>
+      </div>
       <div
         className={cn("mt-6 transition-opacity duration-500", ativo ? "opacity-100" : "pointer-events-none opacity-0")}
       >

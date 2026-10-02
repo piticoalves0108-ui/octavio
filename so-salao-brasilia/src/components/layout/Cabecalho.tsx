@@ -2,30 +2,26 @@
 
 /**
  * Cabeçalho fixo: some ao rolar para baixo e volta ao rolar para cima.
- * No celular, o menu abre num Dialog (foco preso, Esc fecha).
+ * No celular, o menu abre num Dialog (foco preso, Esc fecha), baixado só no primeiro toque.
  */
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
 import { navegacao } from "@/content/textos";
-import { linkWhatsappPadrao, negocio, whatsappPrincipal } from "@/content/negocio";
+import { linkWhatsappPadrao, negocio } from "@/content/negocio";
 import { cn } from "@/lib/cn";
 import { classesBotao } from "@/components/ui/botao";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { IconeInstagram, IconeMenu, IconeWhatsapp } from "@/components/ui/icones";
+import { IconeMenu, IconeWhatsapp } from "@/components/ui/icones";
 import { LinkRastreado } from "@/components/ui/LinkRastreado";
 import { LinkTransicao } from "./Transicao";
 import { Marca } from "./Marca";
+
+const MenuCelular = dynamic(() => import("./MenuCelular").then((m) => m.MenuCelular), { ssr: false });
 
 export function Cabecalho() {
   const [rolou, setRolou] = useState(false);
   const [oculto, setOculto] = useState(false);
   const [menuAberto, setMenuAberto] = useState(false);
+  const botaoMenu = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let ultimo = window.scrollY;
@@ -52,7 +48,7 @@ export function Cabecalho() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-[transform,background-color,box-shadow] duration-500 ease-[var(--ease-saida)]",
         oculto && !menuAberto ? "-translate-y-full" : "translate-y-0",
-        rolou ? "bg-gelo/85 shadow-[0_1px_0_rgba(42,42,46,0.08)] backdrop-blur-md" : "bg-transparent",
+        rolou ? "bg-gelo/95 shadow-[0_1px_0_rgba(42,42,46,0.08)] backdrop-blur-md" : "bg-gelo/95",
       )}
     >
       <a
@@ -95,63 +91,18 @@ export function Cabecalho() {
             </LinkRastreado>
           </div>
 
-          <Dialog open={menuAberto} onOpenChange={setMenuAberto}>
-            <DialogTrigger
-              className="grid size-12 place-items-center rounded-full border border-grafite/20 lg:hidden"
-              aria-label="Abrir menu"
-            >
-              <IconeMenu className="size-5" />
-            </DialogTrigger>
-            <DialogContent
-              className="inset-0 flex flex-col overflow-y-auto px-6 pt-24 pb-10"
-              rotuloFechar="Fechar menu"
-            >
-              <DialogTitle className="sr-only">Menu</DialogTitle>
-              <DialogDescription className="sr-only">
-                Navegação do site e contatos da Só Salão Brasília.
-              </DialogDescription>
-              <nav aria-label="Menu do celular">
-                <ul className="flex flex-col gap-1">
-                  {navegacao.map((item, i) => (
-                    <li
-                      key={item.href}
-                      style={{ animationDelay: `${0.05 + i * 0.05}s` }}
-                      className="animate-[surge_0.6s_var(--ease-saida)_both]"
-                    >
-                      <DialogClose asChild>
-                        <LinkTransicao href={item.href} className="block py-3 font-serif text-[2.6rem] leading-none">
-                          {item.rotulo}
-                        </LinkTransicao>
-                      </DialogClose>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-              <div className="mt-auto space-y-4 pt-10">
-                <LinkRastreado
-                  href={linkWhatsappPadrao}
-                  evento="whatsapp_clique"
-                  origem="menu"
-                  externo
-                  className={classesBotao("primario", "w-full")}
-                >
-                  <IconeWhatsapp className="size-5" />
-                  WhatsApp {whatsappPrincipal.exibicao}
-                </LinkRastreado>
-                <LinkRastreado
-                  href={negocio.instagram.url}
-                  evento="instagram_clique"
-                  origem="menu"
-                  externo
-                  className={classesBotao("secundario", "w-full")}
-                >
-                  <IconeInstagram className="size-5" />
-                  {negocio.instagram.usuario}
-                </LinkRastreado>
-                <p className="text-sm text-tinta-suave">{negocio.endereco.completo}</p>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <button
+            ref={botaoMenu}
+            type="button"
+            onClick={() => setMenuAberto(true)}
+            className="grid size-12 place-items-center rounded-full border border-grafite/20 lg:hidden"
+            aria-label="Abrir menu"
+            aria-haspopup="dialog"
+            aria-expanded={menuAberto}
+          >
+            <IconeMenu className="size-5" />
+          </button>
+          {menuAberto && <MenuCelular aberto={menuAberto} aoMudar={setMenuAberto} botao={botaoMenu} />}
         </div>
       </div>
     </header>

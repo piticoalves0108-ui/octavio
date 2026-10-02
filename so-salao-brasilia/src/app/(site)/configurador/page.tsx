@@ -23,7 +23,7 @@ export default function PaginaConfigurador() {
         <h1 className="mt-5 max-w-4xl text-[clamp(2.6rem,5.6vw,5.2rem)] leading-none">{secaoConfigurador.titulo}</h1>
         <p className="mt-6 max-w-2xl texto-grande text-nevoa">{secaoConfigurador.texto}</p>
         <div className="mt-14">
-          <Configurador sincronizarUrl />
+          <Configurador sincronizarUrl nivelTitulo={2} prioridade />
         </div>
       </div>
       <JsonLd

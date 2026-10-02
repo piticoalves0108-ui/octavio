@@ -10,12 +10,17 @@ function assinar(callback: () => void) {
   return () => mq.removeEventListener("change", callback);
 }
 
-/** true quando a pessoa pediu menos movimento no sistema. No servidor, assume movimento reduzido. */
+/**
+ * true quando a pessoa pediu menos movimento no sistema.
+ * No servidor, assume movimento permitido (o caso da maioria): assim a hidratação não
+ * precisa refazer a página inteira de forma síncrona. Quem pediu menos movimento recebe
+ * a troca logo após a hidratação (e o CSS já desliga as animações antes disso).
+ */
 export function useMovimentoReduzido() {
   return useSyncExternalStore(
     assinar,
     () => window.matchMedia(CONSULTA).matches,
-    () => true,
+    () => false,
   );
 }
 

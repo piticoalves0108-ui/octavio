@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { dmSerif, outfit } from "@/lib/fontes";
+import { dmSerif, dmSerifItalico, outfit } from "@/lib/fontes";
 import { siteUrl } from "@/lib/site";
 import { negocio } from "@/content/negocio";
 import { scriptClasseIntro } from "@/components/layout/Intro";
@@ -42,7 +42,11 @@ export const viewport: Viewport = {
 
 export default function LayoutRaiz({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${dmSerif.variable} ${outfit.variable}`} suppressHydrationWarning>
+    <html
+      lang="pt-BR"
+      className={`${dmSerif.variable} ${dmSerifItalico.variable} ${outfit.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: scriptClasseIntro }} />
       </head>

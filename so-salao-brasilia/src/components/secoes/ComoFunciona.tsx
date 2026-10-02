@@ -28,7 +28,7 @@ export function ComoFunciona() {
               <p className="sr-only">{`${n.prefixo} ${n.valor}${n.colado} ${n.sufixo}`.trim()}</p>
               <p aria-hidden className="flex items-baseline gap-3 font-serif leading-[0.8]">
                 {n.prefixo && (
-                  <span className="text-[clamp(1.6rem,3vw,2.6rem)] text-tinta-suave italic">{n.prefixo}</span>
+                  <span className="text-[clamp(1.6rem,3vw,2.6rem)] text-tinta-suave italico">{n.prefixo}</span>
                 )}
                 <span className="text-[clamp(7rem,17vw,15rem)]">
                   <Contador valor={n.valor} inicio={n.inicio} />

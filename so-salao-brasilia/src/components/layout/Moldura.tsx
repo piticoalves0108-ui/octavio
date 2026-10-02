@@ -3,23 +3,23 @@ import { Rodape } from "./Rodape";
 import { WhatsappFlutuante } from "./WhatsappFlutuante";
 import { ProvedorTransicao } from "./Transicao";
 import { RolagemSuave } from "./RolagemSuave";
-import { ProvedorMovimento } from "./ProvedorMovimento";
 import { Medicao } from "./Medicao";
+import { HidratarAoVer } from "./HidratarAoVer";
 
 /** Moldura do site: cabeçalho, conteúdo, rodapé, WhatsApp flutuante, rolagem e medição. */
 export function Moldura({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <ProvedorMovimento>
-        <ProvedorTransicao>
-          <Cabecalho />
-          <main id="conteudo" tabIndex={-1} className="outline-none">
-            {children}
-          </main>
+      <ProvedorTransicao>
+        <Cabecalho />
+        <main id="conteudo" tabIndex={-1} className="outline-none">
+          {children}
+        </main>
+        <HidratarAoVer>
           <Rodape />
-          <WhatsappFlutuante />
-        </ProvedorTransicao>
-      </ProvedorMovimento>
+        </HidratarAoVer>
+        <WhatsappFlutuante />
+      </ProvedorTransicao>
       <RolagemSuave />
       <Medicao />
     </>

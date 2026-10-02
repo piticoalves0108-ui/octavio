@@ -2,49 +2,51 @@
 
 /**
  * Efeito magnético nos botões principais (Motion): o botão segue levemente o cursor.
- * Desligado no toque e com movimento reduzido.
+ * Só com mouse e sem "reduzir movimento". O Motion é baixado no primeiro hover.
  */
-import { useRef, type ReactNode } from "react";
-import { useMotionValue, useSpring } from "motion/react";
-import * as m from "motion/react-m";
+import { useEffect, useRef, type ReactNode } from "react";
+import { cn } from "@/lib/cn";
 
 export function Magnetico({
   children,
   forca = 0.28,
   className,
+  bloco = false,
 }: {
   children: ReactNode;
   forca?: number;
   className?: string;
+  /** Ocupa a largura toda (botões de largura total). */
+  bloco?: boolean;
 }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 260, damping: 18, mass: 0.6 });
-  const sy = useSpring(y, { stiffness: 260, damping: 18, mass: 0.6 });
+  const area = useRef<HTMLSpanElement>(null);
+  const alvo = useRef<HTMLSpanElement>(null);
 
-  const ativo = () =>
-    typeof window !== "undefined" &&
-    window.matchMedia("(pointer: fine)").matches &&
-    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  useEffect(() => {
+    const a = area.current;
+    const b = alvo.current;
+    if (!a || !b) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let desligar: (() => void) | undefined;
+    let cancelado = false;
+    const iniciar = () =>
+      import("./magnetismo").then((m) => {
+        if (!cancelado) desligar = m.ligarMagnetismo(a, b, forca);
+      });
+    a.addEventListener("pointerenter", iniciar, { once: true });
+    return () => {
+      cancelado = true;
+      a.removeEventListener("pointerenter", iniciar);
+      desligar?.();
+    };
+  }, [forca]);
 
   return (
-    <m.span
-      ref={ref}
-      className={className ?? "inline-flex"}
-      style={{ x: sx, y: sy }}
-      onPointerMove={(e) => {
-        if (!ativo() || !ref.current) return;
-        const r = ref.current.getBoundingClientRect();
-        x.set((e.clientX - (r.left + r.width / 2)) * forca);
-        y.set((e.clientY - (r.top + r.height / 2)) * forca * 1.2);
-      }}
-      onPointerLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-    >
-      {children}
-    </m.span>
+    <span ref={area} className={cn(bloco ? "flex w-full" : "inline-flex", className)}>
+      <span ref={alvo} className={bloco ? "flex w-full" : "inline-flex"}>
+        {children}
+      </span>
+    </span>
   );
 }

@@ -2,18 +2,22 @@
 
 /**
  * Rolagem suave com Lenis, sincronizada com o ScrollTrigger (mesmo relógio do GSAP).
- * Carregada depois da hidratação (fora do JS inicial) e desligada com movimento reduzido.
+ * Carregada na primeira interação (fora do JS inicial) e desligada com movimento reduzido.
  */
 import { useEffect } from "react";
 import { carregarGsap } from "@/lib/gsap";
 import { definirLenis } from "@/lib/rolagem";
 import { useMovimentoReduzido } from "@/lib/movimento";
+import { useInteragiu } from "@/components/cena3d/carregar";
 
 export function RolagemSuave() {
   const reduzido = useMovimentoReduzido();
+  // Carrega na primeira interação: a carga inicial fica livre, e a rolagem suave
+  // assume a partir do primeiro gesto.
+  const interagiu = useInteragiu();
 
   useEffect(() => {
-    if (reduzido) return;
+    if (reduzido || !interagiu) return;
     let cancelado = false;
     let limpar = () => {};
 
@@ -36,7 +40,7 @@ export function RolagemSuave() {
       cancelado = true;
       limpar();
     };
-  }, [reduzido]);
+  }, [reduzido, interagiu]);
 
   return null;
 }

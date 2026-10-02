@@ -77,8 +77,10 @@ so-salao-brasilia/
     │   ├── configurador/               # seletores acessíveis e o configurador completo
     │   ├── secoes/                     # seções da home (Hero, Linhas, MonteSeuSalao, ComoFunciona...)
     │   ├── movimento/                  # TituloAnimado (SplitText) e Contador
-    │   ├── layout/                     # cabeçalho, rodapé, intro em shader, transição, Lenis, medição
-    │   └── ui/                         # botões, ícones, accordion e dialog (padrão shadcn), placeholders
+    │   ├── layout/                     # cabeçalho, menu mobile, rodapé, intro em shader (Worker), transição,
+    │   │                               # Lenis, medição e HidratarAoVer (hidratação sob demanda)
+    │   └── ui/                         # botões, ícones, accordion e dialog (padrão shadcn), placeholders,
+    │                                   # magnetismo.ts (Motion carregado no primeiro hover)
     ├── lib/                            # WhatsApp, JSON-LD, analytics, qualidade do 3D, GSAP, rolagem
     └── assets/                         # fontes .ttf e PNGs usados só na geração das imagens de Open Graph
 ```
@@ -177,18 +179,35 @@ Nenhum modelo de terceiros (Sketchfab, Poly Pizza etc.) foi usado, então não h
 
 ## 7. Desempenho
 
-- **LCP sem WebGL:** o hero mostra primeiro um pôster AVIF (gravado da própria cena, mesmo enquadramento, `priority`). O `<Canvas>` vem por `next/dynamic` com `ssr: false` e só é montado quando o hero está visível, o navegador está ocioso e a intro terminou. Ele aparece por cima do pôster com um fade.
-- **JS inicial:** three, R3F, drei, pós-processamento, GSAP e Lenis ficam fora do JS inicial (chunks carregados sob demanda).
+- **LCP sem WebGL:** o hero mostra primeiro um pôster AVIF (gravado da própria cena, mesmo enquadramento, `priority`). O `<Canvas>` vem por `next/dynamic` com `ssr: false` e só é montado quando o hero está visível, depois da primeira interação (mexer o mouse, tocar, rolar ou teclar) e com o navegador ocioso. Ele aparece por cima do pôster com um fade, sem salto visual.
+- **JS inicial da home: 151 kB** (First Load JS do `next build`). three, R3F, drei, pós-processamento, GSAP, Lenis, o Motion e o Dialog do menu ficam em chunks carregados sob demanda.
+- **Hidratação sob demanda** (`components/layout/HidratarAoVer.tsx`): o HTML de cada seção abaixo da dobra vem completo do servidor, mas o React só hidrata a seção quando ela chega a uma tela de distância. A carga hidrata só cabeçalho, hero e botão flutuante.
 - **Render sob controle:** dpr limitado a `[1, 1.75]` (`[1, 1.5]` no celular); `<PerformanceMonitor>` reduz o dpr e, se o FPS continuar baixo, troca para o nível "vídeo"; `frameloop="demand"` quando nada se move; `frameloop="never"` fora da tela.
+- **Sem sondagem de WebGL na carga:** a detecção só checa se a API existe (criar um contexto de teste custa centenas de ms em aparelhos sem GPU). Se o contexto falhar de verdade, um limite de erro troca o 3D pelo pôster.
 - **Níveis de qualidade** (`src/lib/qualidade.ts`): `alto` (desktop: Bloom + DoF + Noise, sombras acumuladas), `medio` (celular: sem pós-processamento, menos partículas, geometria mais leve, ContactShadows), `video` (aparelho muito fraco ou economia de dados: vídeo em loop gravado da cena) e `sem-webgl` (pôster + todo o conteúdo em HTML).
+- **Intro em Web Worker:** o shader do tecido roda num `OffscreenCanvas` dentro de um Worker (contexto, compilação e desenho fora da thread principal). Sem suporte, um tecido em CSS faz a mesma subida.
+- **Motion sob demanda:** o efeito magnético e o tilt baixam a função `animate` do Motion no primeiro hover; a cortina de transição usa o `motion/react-mini` (~3 kB).
 - **Mapa:** o Google Maps só carrega quando a pessoa clica em "Carregar mapa interativo" (fachada leve, sem cookies de terceiros no carregamento).
-- **Intro:** script inline de ~2 kB (WebGL puro, sem three.js), só na primeira visita da sessão à home.
+
+### Resultados do Lighthouse (mobile)
+
+Medidos no build de produção (`next build && next start`), em localhost, com o Lighthouse 12 no modo mobile padrão (throttling simulado):
+
+| Página | Desempenho | Acessibilidade | Boas práticas | SEO | LCP | TBT | CLS |
+|---|---|---|---|---|---|---|---|
+| Home (3 execuções) | 94 / 90 / 92 | 100 | 100 | 100 | 2,4–2,7 s | 170–280 ms | 0 |
+| /configurador | 93 / 92 | 100 | 100 | 100 | 3,0–3,1 s | 100–180 ms | 0 |
+| /showroom | 94 / 93 | 100 | 100 | 100 | 3,0 s | 90–150 ms | 0 |
+| /linhas/cadeiras | 94 / 94 | 100 | 100 | 100 | 2,9–3,0 s | 80–100 ms | 0 |
+| Home (desktop) | 99 | 100 | 100 | 100 | 0,8 s | 0 ms | 0 |
+
+O que ainda não bate: o **LCP abaixo de 2,5 s** só ficou garantido na home (no limite). Nas páginas internas o LCP simulado fica em ~3 s. Em localhost o JavaScript chega antes da primeira pintura e a simulação de 4G lento conta esse download no LCP; num domínio real (CDN, HTTP/2, brotli) a tendência é melhorar, mas isso só se confirma medindo o site publicado no PageSpeed Insights. A máquina usada tem CPU compartilhada, então os números variam alguns pontos entre execuções.
 
 ### Decisões técnicas
 
 - **Sem física (Rapier) no "Monte seu salão":** a queda das peças é guiada pela rolagem (ScrollTrigger com `scrub`). Assim ela é reversível (rolar para cima "desmonta" o salão) e sempre igual; uma simulação física daria resultados diferentes a cada vez e somaria mais de 1 MB de WebAssembly ao carregamento.
 - **Carrossel coverflow em CSS 3D, não em WebGL:** os cards continuam sendo HTML (texto indexável, links e foco de teclado normais) e funcionam sem WebGL. O tilt e a troca frente/perfil são feitos com Motion.
-- **3D no celular só depois da primeira interação:** no nível "medio", o Canvas do hero espera o primeiro toque, rolagem ou tecla. O pôster é idêntico ao primeiro quadro da cena, então a troca é invisível; quem sai antes não gasta bateria nem dados com WebGL.
+- **3D só depois da primeira interação:** o Canvas espera o primeiro sinal de interesse (mouse, toque, rolagem ou tecla). O pôster é idêntico ao primeiro quadro da cena, então a troca é invisível; quem sai antes não gasta bateria nem dados com WebGL. A rolagem suave (Lenis) segue a mesma regra e assume a partir do primeiro gesto.
 - **Geometria procedural em vez de .glb:** não há modelos reais das peças da fábrica ainda. Desenhar as peças em código evita usar móveis de terceiros que não representam a fábrica e mantém o chunk 3D leve (sem download de malhas e texturas).
 
 ## 8. Acessibilidade

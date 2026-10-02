@@ -8,7 +8,7 @@ import { VitrineHero } from "./VitrineHero";
 /** Divide "*trecho*" em itálico rosé (destaque do título). */
 function Linha({ texto }: { texto: string }) {
   const m = texto.match(/^\*(.*)\*$/);
-  return m ? <em className="text-[#b5776a] italic">{m[1]}</em> : <>{texto}</>;
+  return m ? <em className="italico text-[#b5776a]">{m[1]}</em> : <>{texto}</>;
 }
 
 export function Hero() {

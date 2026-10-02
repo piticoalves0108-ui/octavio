@@ -10,8 +10,8 @@
   --color-rose-claro: #f4e3de;
   --color-nude: #d9c3b0;
   --color-champanhe: #cbb089;
-  /* Champanhe escurecido para texto pequeno sobre fundo claro (contraste AA 5.2:1). */
-  --color-champanhe-texto: #7a6440;
+  /* Champanhe escurecido para texto pequeno sobre fundos claros (contraste AA ≥ 4,9:1 até no nude). */
+  --color-champanhe-texto: #6f5b39;
   --color-gelo: #f7f5f3;
   --color-areia: #ece5df;
   --color-tinta: #2a2a2e;
@@ -74,6 +74,12 @@
   .tema-escuro :focus-visible {
     outline-color: var(--color-rose);
   }
+}
+
+/* Itálico do DM Serif (instância própria, carregada sem preload) */
+.italico {
+  font-family: var(--font-dm-serif-italico), var(--font-dm-serif), "Times New Roman", serif;
+  font-style: italic;
 }
 
 /* Lenis (rolagem suave) */
@@ -167,7 +173,7 @@ html.lenis body {
   color: var(--color-gelo);
   pointer-events: none;
   /* Sai sozinha mesmo sem JavaScript. */
-  animation: intro-saida 0.6s var(--ease-cortina) 1.2s forwards;
+  animation: intro-saida 0.55s var(--ease-cortina) 0.95s forwards;
 }
 .intro canvas {
   position: absolute;
@@ -176,7 +182,7 @@ html.lenis body {
   height: 100%;
   /* Sem WebGL/JS: um tecido liso sobe por CSS. Com WebGL, o script troca pelo shader. */
   background: var(--color-rose);
-  animation: tecido-sobe 0.85s var(--ease-cortina) 0.12s forwards;
+  animation: tecido-sobe 0.7s var(--ease-cortina) 0.1s forwards;
 }
 @keyframes tecido-sobe {
   to {
@@ -197,11 +203,6 @@ html.lenis body {
 @keyframes intro-marca {
   from {
     transform: scale(1.06);
-    letter-spacing: 0.04em;
-  }
-  to {
-    transform: none;
-    letter-spacing: -0.01em;
   }
 }
 
@@ -224,20 +225,20 @@ html.lenis body {
   animation-delay: calc(0.35s + var(--i, 0) * 0.08s);
 }
 .intro-ativa .linha-revela > span {
-  animation-delay: calc(1.25s + var(--i, 0) * 0.09s);
+  animation-delay: calc(1s + var(--i, 0) * 0.09s);
 }
 .intro-ativa .surge {
-  animation-delay: calc(1.5s + var(--i, 0) * 0.08s);
+  animation-delay: calc(1.2s + var(--i, 0) * 0.08s);
 }
+/* Só transform: o texto fica visível desde o primeiro quadro (não atrasa o LCP). */
 @keyframes linha-sobe {
   from {
-    transform: translateY(105%);
+    transform: translateY(42%);
   }
 }
 @keyframes surge {
   from {
-    opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(16px);
   }
 }
 
