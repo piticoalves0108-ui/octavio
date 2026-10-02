@@ -1,0 +1,315 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Tokens da marca: "Brasa ao vivo"
+   ------------------------------------------------------------------ */
+@theme {
+  --color-carvao: #121212;
+  --color-carvao-2: #191817;
+  --color-carvao-3: #24211f;
+  --color-brasa: #ff5a1f;
+  --color-ambar: #ffb347;
+  --color-osso: #f2ede4;
+  --color-fumaca: #8a8580;
+
+  --font-display: var(--font-big-shoulders), "Arial Narrow", sans-serif;
+  --font-texto: var(--font-barlow), system-ui, sans-serif;
+
+  --ease-brasa: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-cortina: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --animate-marquee: marquee 38s linear infinite;
+}
+
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    color-scheme: dark;
+    --altura-header: 4.25rem;
+  }
+
+  html {
+    background: var(--color-carvao);
+    color: var(--color-osso);
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--altura-header);
+  }
+
+  body {
+    background: var(--color-carvao);
+    font-family: var(--font-texto);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-brasa);
+    color: var(--color-carvao);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ambar);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Componentes de layout
+   ------------------------------------------------------------------ */
+@layer components {
+  /* Moldura + grid editorial de 12 colunas */
+  .moldura {
+    width: 100%;
+    max-width: 1680px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+  }
+  .grade {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(0.75rem, 1.6vw, 1.75rem);
+  }
+
+  /* Títulos: Big Shoulders Display 800, caixa alta.
+     font-kerning: none deixa o layout idêntico antes e depois do SplitText (sem CLS). */
+  .titulo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.86;
+    letter-spacing: -0.005em;
+    font-kerning: none;
+  }
+  .titulo-xl {
+    font-size: clamp(3.6rem, 13.2vw, 13.5rem);
+  }
+  .titulo-lg {
+    font-size: clamp(3rem, 9vw, 8.75rem);
+  }
+  .titulo-md {
+    font-size: clamp(2.25rem, 5.4vw, 5rem);
+  }
+  .titulo-sm {
+    font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+    line-height: 0.95;
+  }
+
+  .rotulo {
+    font-family: var(--font-texto);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* Botões */
+  .botao {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    transition:
+      background-color 0.25s var(--ease-brasa),
+      color 0.25s var(--ease-brasa),
+      border-color 0.25s var(--ease-brasa);
+    white-space: nowrap;
+  }
+  .botao-brasa {
+    background: var(--color-brasa);
+    color: var(--color-carvao);
+  }
+  .botao-brasa:hover {
+    background: var(--color-ambar);
+  }
+  .botao-linha {
+    border: 1.5px solid color-mix(in oklab, var(--color-osso) 40%, transparent);
+    color: var(--color-osso);
+    background: color-mix(in oklab, var(--color-carvao) 55%, transparent);
+    backdrop-filter: blur(6px);
+  }
+  .botao-linha:hover {
+    border-color: var(--color-ambar);
+    color: var(--color-ambar);
+  }
+
+  /* Pulso de brasa a cada 6 s no "Pedir agora" */
+  .pulso-brasa::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    box-shadow:
+      0 0 0 0 color-mix(in oklab, var(--color-brasa) 70%, transparent),
+      0 0 18px 2px color-mix(in oklab, var(--color-ambar) 0%, transparent);
+    animation: pulso-brasa 6s var(--ease-brasa) infinite;
+    pointer-events: none;
+  }
+
+  /* Placeholder de foto: mesma proporção da foto final + legenda da foto ideal */
+  .foto-pendente {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 90% at 50% 110%, color-mix(in oklab, var(--color-brasa) 22%, transparent), transparent 60%),
+      repeating-linear-gradient(
+        -45deg,
+        var(--color-carvao-2) 0 14px,
+        color-mix(in oklab, var(--color-carvao-3) 80%, transparent) 14px 15px
+      );
+    border: 1px dashed color-mix(in oklab, var(--color-fumaca) 55%, transparent);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Animações
+   ------------------------------------------------------------------ */
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes pulso-brasa {
+  0%,
+  78% {
+    box-shadow:
+      0 0 0 0 color-mix(in oklab, var(--color-brasa) 70%, transparent),
+      0 0 0 0 transparent;
+  }
+  86% {
+    box-shadow:
+      0 0 0 10px color-mix(in oklab, var(--color-brasa) 0%, transparent),
+      0 0 28px 6px color-mix(in oklab, var(--color-ambar) 45%, transparent);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 transparent,
+      0 0 0 0 transparent;
+  }
+}
+
+@keyframes chama {
+  0%,
+  100% {
+    transform: scaleX(1) skewX(0deg);
+  }
+  33% {
+    transform: scaleX(0.94) skewX(2deg);
+  }
+  66% {
+    transform: scaleX(1.04) skewX(-2.5deg);
+  }
+}
+
+@keyframes brilho-pino {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Smooth scroll (Lenis)
+   ------------------------------------------------------------------ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------
+   Preloader: some antes do primeiro paint em visitas repetidas,
+   sem JS (noscript) e com movimento reduzido.
+   ------------------------------------------------------------------ */
+html[data-preloader="off"] #preloader {
+  display: none;
+}
+
+/* ------------------------------------------------------------------
+   Palco 3D: troca pôster/miniaturas pelo WebGL quando ele está pronto
+   ------------------------------------------------------------------ */
+.poster-hero {
+  transition: opacity 0.9s var(--ease-brasa);
+}
+html[data-palco="3d"] .poster-hero {
+  opacity: 0;
+}
+html[data-palco="3d"] .so-sem-3d {
+  visibility: hidden;
+}
+html:not([data-palco="3d"]) .so-com-3d {
+  display: none;
+}
+
+/* Trilhos com sticky: só existem com movimento liberado.
+   Com movimento reduzido, as seções viram fluxo normal. */
+.trilho {
+  position: relative;
+}
+.trilho > .trilho-palco {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+.trilho-espetinhos {
+  height: 260vh;
+}
+.trilho-hamburguer {
+  height: 300vh;
+}
+
+/* ------------------------------------------------------------------
+   Movimento reduzido: sem smooth scroll, sem parallax, sem loops longos
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.2s !important;
+    scroll-behavior: auto !important;
+  }
+  .trilho-espetinhos,
+  .trilho-hamburguer {
+    height: auto;
+  }
+  .trilho > .trilho-palco {
+    position: relative;
+    height: auto;
+    min-height: 0;
+  }
+  .marquee-faixa {
+    animation: none !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,23 @@
+# dependências
+node_modules/
+
+# build do Next
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# ambiente
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
+
+# saída temporária do script de captura
+.captura/
+
+# sistema
+.DS_Store
+npm-debug.log*
