@@ -1,0 +1,9 @@
+Fontes usadas só para gerar as imagens de Open Graph (next/og).
+O site em si carrega as mesmas famílias via next/font/google.
+
+- Chakra Petch (Cadson Demak), SIL Open Font License 1.1
+  https://fonts.google.com/specimen/Chakra+Petch
+- Red Hat Text (Red Hat, Inc.), SIL Open Font License 1.1
+  https://fonts.google.com/specimen/Red+Hat+Text
+
+Texto da licença: https://openfontlicense.org/open-font-license-official-text/
