@@ -21,6 +21,7 @@ export function HeroTitle() {
   return (
     <h1
       key={variant}
+      data-h="hero-title"
       className="hero-wipe font-display text-[clamp(2.4rem,4.9vw,4.6rem)] font-bold leading-[0.98] tracking-[-0.045em] text-balance text-[#c7c7cd]"
     >
       {parseMarks(hero.titles[variant]).map((t, k) =>

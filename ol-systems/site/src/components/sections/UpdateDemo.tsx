@@ -119,13 +119,13 @@ export function UpdateDemo() {
   const { msgs, site } = stateFor(pos.step, pos.phase);
 
   return (
-    <section ref={section} className="relative mx-auto max-w-[1320px] px-4 pt-10 sm:px-6 lg:px-10" aria-label="Exemplo: pedido no WhatsApp vira mudança no site">
+    <section ref={section} data-h="demo" className="relative mx-auto max-w-[1320px] px-4 pt-10 sm:px-6 lg:px-10" aria-label="Exemplo: pedido no WhatsApp vira mudança no site">
       <div className="grid gap-8 lg:grid-cols-12">
         <SectionTitle index="02" label={solution.label} title={solution.title} className="lg:col-span-7" />
         <p className="max-w-md self-end text-lg leading-relaxed text-muted lg:col-span-5 lg:justify-self-end">{solution.text}</p>
       </div>
 
-      <div ref={stage} className="relative mt-12 lg:mt-16 lg:h-[calc(100svh-96px)] lg:min-h-[560px]">
+      <div ref={stage} data-h="demo-stage" className="relative mt-12 lg:mt-16 lg:h-[calc(100svh-96px)] lg:min-h-[560px]">
         <div className="relative overflow-hidden rounded-[2rem] border border-line bg-panel/70 p-4 sm:p-8 lg:flex lg:h-full lg:items-center lg:p-12">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_70%_40%,rgb(255_255_255/0.06),transparent)]" />
 
@@ -133,7 +133,7 @@ export function UpdateDemo() {
             {/* Lado do celular. No celular de verdade vira um cartão de conversa
                 (texto legível) logo acima do site, para os dois caberem na tela. */}
             <div className="order-2 lg:order-1 lg:col-span-4 lg:flex lg:justify-center">
-              <div className="hidden w-[min(22vw,290px)] [perspective:1200px] lg:block">
+              <div data-h="demo-chat-desktop" className="hidden w-[min(22vw,290px)] [perspective:1200px] lg:block">
                 <div className="[transform:rotateY(10deg)_rotateX(3deg)]">
                   <Phone className="aspect-[9/18.5]">
                     <Chat messages={msgs} />
@@ -149,6 +149,8 @@ export function UpdateDemo() {
                   <button
                     key={s.tab}
                     role="tab"
+                    data-h="demo-tab"
+                    data-step={i}
                     aria-selected={pos.step === i}
                     onClick={() => {
                       if (!auto) {
@@ -169,7 +171,7 @@ export function UpdateDemo() {
                   </button>
                 ))}
               </div>
-              <div className="mb-4 h-[188px] overflow-hidden rounded-2xl border border-line [container-type:inline-size] lg:hidden">
+              <div data-h="demo-chat-mobile" className="mb-4 h-[188px] overflow-hidden rounded-2xl border border-line [container-type:inline-size] lg:hidden">
                 <Chat messages={msgs.slice(-2)} notch={false} />
               </div>
               <div className="relative">
@@ -177,6 +179,7 @@ export function UpdateDemo() {
                   <MiniSite theme="bakery" state={site} />
                 </Laptop>
                 <span
+                  data-h="demo-badge"
                   className={`absolute -top-3 right-[6%] inline-flex items-center gap-1.5 rounded-full border border-wa/40 bg-ink/90 px-3 py-1 text-xs font-semibold text-wa shadow-lg transition-all duration-500 ${
                     site.flash ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
                   }`}
@@ -193,6 +196,7 @@ export function UpdateDemo() {
             {S.map((s, i) => (
               <div key={s.tab} className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/10">
                 <div
+                  data-h="demo-progress"
                   className="h-full origin-left bg-wa transition-transform duration-500"
                   style={{ transform: `scaleX(${i < pos.step ? 1 : i > pos.step ? 0 : (pos.phase + 1) / PHASES})` }}
                 />

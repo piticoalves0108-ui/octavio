@@ -196,7 +196,7 @@ export function MiniSite({
   const flash = (k: DemoState["flash"]) => (state.flash === k ? "updated-flash" : "");
 
   return (
-    <div className={`@container h-full w-full ${className}`}>
+    <div data-h="minisite" data-theme={theme} className={`@container h-full w-full ${className}`}>
       <div
         className="flex h-full w-full flex-col overflow-hidden text-left"
         style={{ background: t.bg, color: t.ink, fontFamily: "var(--font-sans)", fontSize: cq(1.7) }}
@@ -228,7 +228,7 @@ export function MiniSite({
               Pedir pelo WhatsApp
             </span>
           </div>
-          <div key={`s${state.flashKey ?? 0}`} className={`overflow-hidden ${flash("showcase")}`} style={{ aspectRatio: "3 / 2", borderRadius: cq(1.2) }}>
+          <div key={`s${state.flashKey ?? 0}`} data-h="ms-showcase" className={`overflow-hidden ${flash("showcase")}`} style={{ aspectRatio: "3 / 2", borderRadius: cq(1.2) }}>
             <Showcase theme={theme} variant={state.showcase ?? "a"} />
           </div>
         </div>
@@ -248,6 +248,7 @@ export function MiniSite({
                 {price && (
                   <span
                     key={isCake ? `p${state.flashKey ?? 0}` : undefined}
+                    data-h={isCake ? "ms-price" : undefined}
                     className={isCake ? flash("price") : ""}
                     style={{ fontWeight: 700, color: t.accent, borderRadius: cq(0.6), padding: `0 ${cq(0.5)}` }}
                   >
@@ -265,6 +266,7 @@ export function MiniSite({
             <span style={{ opacity: 0.7 }}>{t.hours[0]}</span>
             <span
               key={`h${state.flashKey ?? 0}`}
+              data-h="ms-saturday"
               className={flash("hours")}
               style={{ fontWeight: 700, borderRadius: cq(0.6), padding: `${cq(0.2)} ${cq(0.6)}` }}
             >

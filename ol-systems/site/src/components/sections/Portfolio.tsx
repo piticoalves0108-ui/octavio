@@ -40,6 +40,7 @@ export function Portfolio() {
           <div className="flex gap-2">
             <button
               onClick={() => go(-1)}
+              data-h="carousel-prev"
               disabled={index === 0}
               aria-label="Site anterior"
               className="grid h-12 w-12 place-items-center rounded-full border border-line-strong transition-colors hover:bg-white hover:text-ink disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-fg"
@@ -48,6 +49,7 @@ export function Portfolio() {
             </button>
             <button
               onClick={() => go(1)}
+              data-h="carousel-next"
               disabled={index === items.length - 1}
               aria-label="Próximo site"
               className="grid h-12 w-12 place-items-center rounded-full border border-line-strong transition-colors hover:bg-white hover:text-ink disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-fg"
@@ -61,6 +63,7 @@ export function Portfolio() {
 
       <div
         ref={wrap}
+        data-h="carousel"
         className="relative mt-12 h-[min(64vw,480px)] cursor-grab touch-pan-y select-none overflow-hidden [perspective:1600px] active:cursor-grabbing sm:h-[min(42vw,520px)]"
         role="region"
         aria-roledescription="carrossel"
@@ -103,6 +106,8 @@ export function Portfolio() {
             return (
               <div
                 key={it.name}
+                data-h="carousel-card"
+                data-index={i}
                 className="absolute top-0"
                 style={{
                   width: cardW,
@@ -116,6 +121,7 @@ export function Portfolio() {
               >
                 <span
                   aria-hidden="true"
+                  data-h="carousel-shade"
                   className="pointer-events-none absolute inset-0 z-10 rounded-xl bg-ink transition-opacity duration-700"
                   style={{ opacity: Math.min(abs * 0.32, 0.85) }}
                 />

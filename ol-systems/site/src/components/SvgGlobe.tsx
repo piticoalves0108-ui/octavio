@@ -52,6 +52,8 @@ export function SvgGlobe({ className, animate = false, strokeWidth = 1.1, title 
   return (
     <svg
       ref={ref}
+      data-h="globe-svg"
+      data-animate={animate ? "" : undefined}
       viewBox={`${-VIEW} ${-VIEW} ${VIEW * 2} ${VIEW * 2}`}
       className={className}
       role={title ? "img" : undefined}

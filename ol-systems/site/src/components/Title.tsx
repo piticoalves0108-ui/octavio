@@ -123,6 +123,7 @@ export function SectionTitle({
       </p>
       <h2
         ref={ref}
+        data-h="section-title"
         className="font-display text-[clamp(2.1rem,5.2vw,4.4rem)] font-bold leading-[0.98] tracking-[-0.035em] text-balance"
       >
         <Marked text={title} underlinePaused />

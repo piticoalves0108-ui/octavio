@@ -31,9 +31,14 @@ export function BrowserFrame({ children, url, className = "" }: { children: Reac
 }
 
 /** Moldura de celular. */
-export function Phone({ children, className = "" }: { children: ReactNode; className?: string }) {
+export function Phone({
+  children,
+  className = "",
+  ...rest
+}: { children: ReactNode; className?: string; "data-h"?: string }) {
   return (
     <div
+      {...rest}
       className={`relative rounded-[2.2rem] border border-white/15 bg-[#0b0c0f] p-[7px] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.95),inset_0_1px_0_rgb(255_255_255/0.08)] ${className}`}
     >
       <div className="relative h-full overflow-hidden rounded-[1.75rem] bg-[#0b141a] [container-type:inline-size]">
@@ -59,6 +64,9 @@ export function Chat({
 }) {
   return (
     <div
+      data-h="chat"
+      data-compact={compact ? "" : undefined}
+      data-notch={notch ? "" : undefined}
       className="flex h-full flex-col"
       style={{ fontSize: compact ? "clamp(6px, 5.6cqw, 12px)" : "clamp(12px, 4.6cqw, 14px)" }}
     >
@@ -79,6 +87,7 @@ export function Chat({
           backgroundSize: "14px 14px",
         }}
         aria-live="polite"
+        data-h="chat-msgs"
       >
         {messages.map((m) => (
           <div

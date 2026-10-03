@@ -45,7 +45,7 @@ export function HowItWorks() {
             </div>
           </div>
         </div>
-        <ol ref={list} className="relative lg:col-span-6 lg:col-start-7">
+        <ol ref={list} data-h="steps" className="relative lg:col-span-6 lg:col-start-7">
           <span className="absolute bottom-6 left-[23px] top-6 w-px bg-line-strong" aria-hidden="true" />
           <span data-line className="absolute bottom-6 left-[23px] top-6 w-px origin-top bg-wa" aria-hidden="true" />
           {steps.items.map((s, i) => (

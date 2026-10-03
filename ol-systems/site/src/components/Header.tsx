@@ -33,6 +33,7 @@ export function Header() {
 
   return (
     <header
+      data-h="header"
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500 ${
         scrolled ? "border-b border-line bg-ink/70 backdrop-blur-xl" : "border-b border-transparent"
       }`}

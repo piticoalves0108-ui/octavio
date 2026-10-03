@@ -64,10 +64,10 @@ export function Pricing() {
               <h3 className="mt-2 font-display text-2xl font-bold tracking-tight">{pricing.planName}</h3>
               <p className="mt-8 flex items-end gap-1 font-display font-bold tracking-[-0.05em]">
                 <span className="mb-3 text-2xl text-muted">R$</span>
-                <span ref={num} className="text-[5.5rem] leading-none tabular-nums sm:text-[7rem]" aria-label={`${site.price} reais`}>
+                <span ref={num} data-h="price-num" className="text-[5.5rem] leading-none tabular-nums sm:text-[7rem]" aria-label={`${site.price} reais`}>
                   {site.price}
                 </span>
-                <span ref={per} className="mb-3 text-2xl text-muted">
+                <span ref={per} data-h="price-per" className="mb-3 text-2xl text-muted">
                   /mês
                 </span>
               </p>

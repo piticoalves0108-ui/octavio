@@ -28,7 +28,7 @@ export function Reveal({
     });
   }, []);
   return (
-    <div ref={ref} className={className} style={{ "--rd": `${delay}s`, "--ry": `${y}px` } as CSSProperties}>
+    <div ref={ref} data-h="reveal" className={className} style={{ "--rd": `${delay}s`, "--ry": `${y}px` } as CSSProperties}>
       {children}
     </div>
   );

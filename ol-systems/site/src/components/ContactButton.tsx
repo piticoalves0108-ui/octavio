@@ -44,6 +44,7 @@ export function ContactButton({ children, source, size = "md", pulse = false, cl
       target="_blank"
       rel="noopener noreferrer"
       data-cta={source}
+      data-h="cta-magnetic"
       onPointerMove={onMove}
       onPointerLeave={reset}
       onPointerEnter={() => setTouched(true)}

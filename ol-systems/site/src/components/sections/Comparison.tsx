@@ -59,7 +59,7 @@ export function Comparison() {
   return (
     <section className="relative mx-auto max-w-[1320px] px-4 py-24 sm:px-6 lg:px-10 lg:py-32">
       <SectionTitle index="05" label={comparison.label} title={comparison.title} className="max-w-3xl" />
-      <div ref={ref} className="mt-14 overflow-hidden rounded-3xl border border-line">
+      <div ref={ref} data-h="comparison" className="mt-14 overflow-hidden rounded-3xl border border-line">
         <table className="w-full border-collapse text-left">
           <caption className="sr-only">Comparativo entre um site do jeito tradicional e a assinatura da OL Systems</caption>
           <thead>

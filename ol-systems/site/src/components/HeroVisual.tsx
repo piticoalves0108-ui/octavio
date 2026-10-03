@@ -110,9 +110,9 @@ export function HeroVisual() {
   }, []);
 
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[640px] lg:max-w-none">
+    <div data-h="hero-visual" className="relative mx-auto aspect-square w-full max-w-[640px] lg:max-w-none">
       {/* Globo */}
-      <div className="absolute left-[5%] top-[-3%] aspect-square w-[90%]">
+      <div data-h="hero-globe" className="absolute left-[5%] top-[-3%] aspect-square w-[90%]">
         <SvgGlobe
           className={`absolute inset-0 h-full w-full text-white transition-opacity duration-[1200ms] ${
             mode === "webgl" && ready ? "opacity-0" : "opacity-80"
@@ -132,6 +132,7 @@ export function HeroVisual() {
       <div className="absolute inset-0 [perspective:1400px]">
         <div
           ref={tiltRef}
+          data-h="hero-tilt"
           className="absolute inset-0 transition-transform duration-700 ease-out [transform-style:preserve-3d]"
           style={{ transform: "rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))" }}
         >
@@ -140,6 +141,7 @@ export function HeroVisual() {
               <MiniSite theme="bakery" assemble state={site} />
             </Laptop>
             <span
+              data-h="hero-badge"
               className={`absolute -top-3 left-[6%] inline-flex items-center gap-1.5 rounded-full border border-wa/40 bg-ink/90 px-3 py-1 text-xs font-semibold text-wa shadow-lg backdrop-blur transition-all duration-500 ${
                 site.flash ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
               }`}
@@ -152,7 +154,7 @@ export function HeroVisual() {
             className="fade-up absolute bottom-0 right-[4%] aspect-[9/18.5] w-[25%] [transform:translateZ(60px)]"
             style={{ ["--d" as string]: "650ms" }}
           >
-            <Phone className="h-full">
+            <Phone className="h-full" data-h="hero-phone">
               <Chat messages={msgs} compact />
             </Phone>
           </div>
