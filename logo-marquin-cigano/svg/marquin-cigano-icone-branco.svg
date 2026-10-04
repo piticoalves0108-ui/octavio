@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0.0 0.0 1000.0 1000.0" width="1000" height="1000" role="img" aria-label="Marquin Cigano">
+  <title>Marquin Cigano</title>
+  <defs>
+  
+  </defs>
+  <circle cx="500" cy="500" r="480" fill="none" stroke="#ffffff" stroke-width="22"/>
+  <path fill="#ffffff" d="M245.00 276.00C249.76 305.24 249.76 305.24 279.00 310.00C249.76 314.76 249.76 314.76 245.00 344.00C240.24 314.76 240.24 314.76 211.00 310.00C240.24 305.24 240.24 305.24 245.00 276.00Z"/>
+  <path fill="#ffffff" d="M755.00 276.00C759.76 305.24 759.76 305.24 789.00 310.00C759.76 314.76 759.76 314.76 755.00 344.00C750.24 314.76 750.24 314.76 721.00 310.00C750.24 305.24 750.24 305.24 755.00 276.00Z"/>
+  <g transform="translate(274.19 183.87) scale(4.5161)"><defs>
+    <clipPath id="mic-slots-i"><path d="M33 30a17 17 0 0 1 34 0v40a17 17 0 0 1-34 0z"/></clipPath>
+    <mask id="mic-mask-i" maskUnits="userSpaceOnUse" x="-20" y="-20" width="140" height="180">
+      <path d="M28 30a22 22 0 0 1 44 0v40a22 22 0 0 1-44 0z" fill="#fff"/>
+      <g clip-path="url(#mic-slots-i)" fill="#000"><rect x="0" y="12" width="100" height="3"/><rect x="0" y="19" width="100" height="3"/><rect x="0" y="26" width="100" height="3"/><rect x="0" y="33" width="100" height="3"/><rect x="0" y="40" width="100" height="3"/><rect x="0" y="47" width="100" height="3"/><rect x="0" y="54" width="100" height="3"/><rect x="0" y="61" width="100" height="3"/><rect x="0" y="68" width="100" height="3"/><rect x="0" y="75" width="100" height="3"/><rect x="0" y="82" width="100" height="3"/><rect x="0" y="89" width="100" height="3"/><rect x="0" y="96" width="100" height="3"/></g>
+    </mask>
+  </defs>
+  <g fill="#ffffff">
+    <path d="M28 30a22 22 0 0 1 44 0v40a22 22 0 0 1-44 0z" mask="url(#mic-mask-i)"/>
+    <rect x="24" y="47" width="52" height="7" rx="3.5"/>
+    <path d="M17 50v8a33 33 0 0 0 66 0v-8h-7v8a26 26 0 0 1-52 0v-8z"/>
+    <rect x="46.5" y="90" width="7" height="34"/>
+    <path d="M30 132a20 8 0 0 1 40 0z"/>
+  </g></g>
+</svg>
