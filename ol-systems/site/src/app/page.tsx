@@ -25,6 +25,8 @@ function JsonLd() {
     url: site.url,
     description: "Criação e manutenção de sites profissionais para empresas e perfis do Instagram, por assinatura mensal com atualizações inclusas.",
     sameAs: [site.instagram.url],
+    areaServed: { "@type": "Place", name: "Região Centro-Oeste do Brasil" },
+    paymentAccepted: "Pix",
     ...(site.whatsapp ? { telephone: `+${site.whatsapp}` } : {}),
     makesOffer: {
       "@type": "Offer",

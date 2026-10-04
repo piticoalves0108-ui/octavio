@@ -30,7 +30,13 @@ export function Footer() {
       </div>
       <div className="mx-auto mt-12 flex max-w-[1320px] flex-col gap-2 border-t border-line pt-6 text-xs text-dim sm:flex-row sm:justify-between">
         <span>
-          © {new Date().getFullYear()} {site.name} · CNPJ <Fill text={site.cnpj} />
+          © {new Date().getFullYear()} {site.name}
+          {site.cnpj && (
+            <>
+              {" "}
+              · CNPJ <Fill text={site.cnpj} />
+            </>
+          )}
         </span>
         <span>Feito com cuidado pela própria {site.name}.</span>
       </div>

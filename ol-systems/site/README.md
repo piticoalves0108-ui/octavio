@@ -71,27 +71,19 @@ Tudo que ainda depende do dono está marcado com `{{CONFIRMAR: ...}}` no código
 
 - [ ] Grafia exata do nome e logo oficial (`site.ts`)
 - [ ] WhatsApp: DDD e número (`site.ts` → `whatsapp`)
-- [ ] Área de atendimento: só a região ou o Brasil todo, online (`site.ts`)
-- [ ] CNPJ (`site.ts`, aparece no rodapé e na política de privacidade)
-- [ ] Linha de confiança abaixo dos botões do topo, ex.: "sem taxa de adesão · sem fidelidade · no ar em X dias" (`terms.trustLine`)
-- [ ] Tem taxa de criação ou começa só com a 1ª mensalidade? (`terms.setupFee`)
-- [ ] Tem fidelidade mínima? Multa para cancelar? (`terms.loyalty`)
-- [ ] O que acontece com o site e o domínio se o cliente cancelar (`terms.cancel`)
+- [ ] O que acontece com o site se o cliente cancelar (`terms.cancel`)
 - [ ] Prazo de entrega do site (`terms.deliveryTime`)
 - [ ] Prazo de cada atualização (`terms.updateTime`)
 - [ ] O que conta como atualização (`terms.updateScope`)
 - [ ] Atualizações ilimitadas ou com limite por mês (`terms.updateLimit`)
 - [ ] Quantas páginas ou seções o site tem (`terms.pages`)
-- [ ] Domínio .com.br e hospedagem inclusos? (`terms.domainHosting`)
-- [ ] Em nome de quem o domínio é registrado (`terms.domainOwner`)
-- [ ] Certificado SSL incluso? (`terms.ssl`)
 - [ ] E-mail profissional e Google Meu Negócio inclusos? (`terms.extras`)
-- [ ] Formas de pagamento (`terms.payment`)
-- [ ] Precisa de CNPJ para contratar? (`terms.cnpjRequired`)
 - [ ] IDs do GA4 e do Meta Pixel (variáveis de ambiente, ver abaixo)
 - [ ] Domínio de produção (`NEXT_PUBLIC_SITE_URL`)
 - [ ] Texto da política de privacidade, data e canal para pedidos de privacidade (`politica-de-privacidade/page.tsx`)
 - [ ] Sites reais para o portfólio e depoimentos reais
+
+Já confirmados: sem taxa de adesão (começa com a 1ª mensalidade), sem fidelidade, pagamento via Pix, hospedagem e certificado SSL inclusos, domínio não incluso, atendimento em todo o Centro-Oeste, sem CNPJ (a linha do CNPJ não aparece) e o cliente não precisa de CNPJ para contratar.
 
 Quando uma resposta do FAQ ainda tem marcador, ela fica fora dos dados estruturados (FAQPage) que vão para o Google.
 

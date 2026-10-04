@@ -81,8 +81,8 @@ export const included = {
     { icon: "map", title: "Mapa e como chegar", text: "Endereço com rota direto no Google Maps." },
     { icon: "instagram", title: "Ligado ao Instagram", text: "Site e perfil trabalhando juntos." },
     { icon: "search", title: "SEO básico", text: "Estrutura certa para aparecer no Google." },
-    { icon: "server", title: "Hospedagem e domínio", text: terms.domainHosting },
-    { icon: "lock", title: "Certificado SSL", text: terms.ssl },
+    { icon: "server", title: "Hospedagem inclusa", text: "Seu site no ar sem você contratar servidor. O domínio (.com.br) é à parte." },
+    { icon: "lock", title: "Certificado SSL", text: "Cadeado de conexão segura no navegador, incluso." },
     { icon: "refresh", title: "Atualizações sempre que pedir", text: "Mudou algo? Manda no WhatsApp e a gente atualiza." },
   ],
 };
@@ -106,7 +106,7 @@ export const comparison = {
     {
       label: "Investimento inicial",
       them: "Valor alto pago de uma vez",
-      us: `${site.priceLabel}/mês · ${terms.setupFee}`,
+      us: `${site.priceLabel}/mês, sem taxa de adesão`,
     },
     {
       label: "Alterações",
@@ -115,9 +115,9 @@ export const comparison = {
     },
     { label: "Quem cuida do site", them: "Você", us: site.name },
     {
-      label: "Hospedagem e domínio",
+      label: "Hospedagem",
       them: "Você contrata e paga",
-      us: terms.domainHosting,
+      us: "Inclusa, com certificado SSL",
     },
     {
       label: "Suporte",
@@ -175,11 +175,11 @@ export const pricing = {
     "Versão perfeita para celular",
     "Botão de WhatsApp, mapa e Instagram",
     "SEO básico para aparecer no Google",
-    `Hospedagem e domínio: ${terms.domainHosting}`,
+    "Hospedagem e certificado SSL inclusos",
     "Atualizações sempre que você pedir",
     "Suporte direto no WhatsApp",
   ],
-  conditions: [`Pagamento: ${terms.payment}`, `Adesão: ${terms.setupFee}`, `Fidelidade: ${terms.loyalty}`],
+  conditions: [`Pagamento via ${terms.payment}`],
 };
 
 /**
@@ -192,8 +192,10 @@ export const faq = {
   label: "Perguntas frequentes",
   title: "Ficou alguma dúvida?",
   items: [
-    { q: "Tem taxa de criação?", a: terms.setupFee },
-    { q: "Tem fidelidade?", a: terms.loyalty },
+    { q: "Tem taxa de criação?", a: "Não. Sem taxa de adesão: você começa pagando só a primeira mensalidade." },
+    { q: "Tem fidelidade?", a: "Não. O plano não tem fidelidade." },
+    { q: "Como é o pagamento?", a: `Via ${terms.payment}, todo mês.` },
+    { q: "Vocês atendem a minha cidade?", a: `Atendemos ${site.serviceArea}.` },
     { q: "Em quanto tempo o site fica pronto?", a: terms.deliveryTime },
     {
       q: "O que conta como atualização e em quanto tempo ela é feita?",
@@ -202,7 +204,10 @@ export const faq = {
     { q: "Posso pedir quantas atualizações quiser?", a: terms.updateLimit },
     { q: "Quantas páginas o site tem?", a: terms.pages },
     { q: "Inclui e-mail profissional e Google Meu Negócio?", a: terms.extras },
-    { q: "O domínio fica no meu nome?", a: terms.domainOwner },
+    {
+      q: "O domínio está incluso?",
+      a: "Não. A mensalidade inclui a hospedagem e o certificado SSL; o domínio (.com.br) é contratado à parte.",
+    },
     { q: "Se eu cancelar, o que acontece com o site?", a: terms.cancel },
     { q: "Preciso ter CNPJ?", a: terms.cnpjRequired },
     {

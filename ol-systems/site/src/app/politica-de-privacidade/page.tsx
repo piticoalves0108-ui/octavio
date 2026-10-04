@@ -35,7 +35,13 @@ export default function Privacidade() {
         <Fill text={confirmar("e-mail ou canal oficial para pedidos de privacidade")} />
       </p>
       <p className="mt-10 text-sm text-dim">
-        {site.name} · CNPJ <Fill text={site.cnpj} />
+        {site.name}
+        {site.cnpj && (
+          <>
+            {" "}
+            · CNPJ <Fill text={site.cnpj} />
+          </>
+        )}
       </p>
     </main>
   );

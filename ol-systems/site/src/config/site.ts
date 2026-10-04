@@ -31,8 +31,9 @@ export const site = {
   // 250 / 30 = 8,33. Usado na ancoragem "menos de R$ 9 por dia".
   pricePerDayLabel: "menos de R$\u00a09 por dia",
 
-  serviceArea: confirmar("só a cidade/região ou o Brasil todo, online"),
-  cnpj: confirmar("CNPJ"),
+  serviceArea: "todo o Centro-Oeste",
+  // Sem CNPJ: o rodapé e a política de privacidade não mostram a linha do CNPJ.
+  cnpj: "",
 
   /**
    * Domínio de produção. Na Vercel o domínio do projeto é usado
@@ -53,9 +54,9 @@ export const site = {
 
 /** Regras comerciais que ainda dependem do dono. Aparecem na página e no FAQ. */
 export const terms = {
-  setupFee: confirmar("tem taxa de criação ou começa só com a 1ª mensalidade?"),
-  loyalty: confirmar("tem fidelidade mínima? multa para cancelar?"),
-  cancel: confirmar("o que acontece com o site e o domínio se cancelar"),
+  setupFee: "Sem taxa de adesão: você começa pagando só a 1ª mensalidade.",
+  loyalty: "Sem fidelidade.",
+  cancel: confirmar("o que acontece com o site se cancelar"),
   deliveryTime: confirmar("prazo de entrega do site"),
   updateTime: confirmar("prazo de cada atualização, ex.: até 24 h úteis"),
   updateScope: confirmar(
@@ -63,13 +64,13 @@ export const terms = {
   ),
   updateLimit: confirmar("atualizações ilimitadas ou com limite por mês?"),
   pages: confirmar("quantas páginas ou seções o site tem"),
-  domainHosting: confirmar("domínio .com.br e hospedagem inclusos?"),
-  domainOwner: confirmar("o domínio fica registrado no nome de quem?"),
-  ssl: confirmar("certificado SSL incluso?"),
+  hosting: "Hospedagem inclusa.",
+  domain: "O domínio (.com.br) não está incluso: é contratado à parte.",
+  ssl: "Certificado SSL incluso: o site abre com o cadeado de conexão segura.",
   extras: confirmar("e-mail profissional e Google Meu Negócio inclusos?"),
-  payment: confirmar("formas de pagamento: Pix, cartão, boleto, recorrência"),
-  cnpjRequired: confirmar("precisa ter CNPJ para contratar?"),
-  trustLine: confirmar("ex.: sem taxa de adesão · sem fidelidade · no ar em X dias"),
+  payment: "Pix",
+  cnpjRequired: "Não. Você não precisa ter CNPJ para contratar.",
+  trustLine: "Sem taxa de adesão · Sem fidelidade · Pagamento via Pix",
 } as const;
 
 export const PENDING_RE = /\{\{CONFIRMAR:[^}]*\}\}/g;
