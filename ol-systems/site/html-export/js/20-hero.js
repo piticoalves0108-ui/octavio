@@ -23,11 +23,14 @@ function initHero() {
   const title = $('h1[data-h="hero-title"]');
   const titles = CONFIG.heroTitles ?? [];
   const n = Number(new URLSearchParams(window.location.search).get("titulo"));
-  // Título 1 (ou parâmetro ausente/inválido) é o que já veio no HTML: não mexe.
   if (title && Number.isInteger(n) && n > 1 && n <= titles.length) {
     title.innerHTML = titleHtml(titles[n - 1]);
     // Equivale ao key={variant} do React: a varredura recomeça com o título novo.
     restartClass(title, "hero-wipe");
+  } else if (title && titles[0]) {
+    // Título 1: se alguém editou CONFIG.heroTitles[0], a página segue o CONFIG.
+    const plain = (s) => s.replace(/[*_]/g, "").replace(/\s+/g, " ").trim();
+    if (plain(title.textContent) !== plain(titles[0])) title.innerHTML = titleHtml(titles[0]);
   }
 
   /* ---------- Mini-história em loop ---------- */

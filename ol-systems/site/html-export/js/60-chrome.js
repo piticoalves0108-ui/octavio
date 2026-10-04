@@ -54,8 +54,6 @@ function initChrome() {
   run("sticky", () => {
     const els = [$('[data-h="sticky-bar"]'), $('[data-h="sticky-float"]')].filter(Boolean);
     if (!els.length) return;
-    const price = $('[data-h="sticky-price"]');
-    if (price) price.textContent = `R$ ${CONFIG.price}`;
 
     let shown = null;
     const on = () => {

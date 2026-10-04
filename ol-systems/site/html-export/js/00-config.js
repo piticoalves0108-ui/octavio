@@ -19,7 +19,6 @@ const CONFIG = {
     "Site pronto, no ar e sempre _atualizado_. Você só manda *mensagem*.",
     "O Instagram mostra. O site *vende*. Tenha os dois por *R$ 250/mês*.",
   ],
-  price: 250,
   demo: {
     scenarios: [
       { tab: "Horário", ask: "Oi! Muda o horário de sábado para 8h às 14h, por favor", reply: "Feito! ✓ Já está no site.", update: { saturday: "Sábado: 8h às 14h" } },

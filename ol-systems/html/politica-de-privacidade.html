@@ -11,18 +11,16 @@
       content="A OL Systems cria, publica e cuida do site da sua empresa ou perfil do Instagram por R$ 250/mês. Mudou preço, horário ou foto? Manda no WhatsApp que a gente atualiza."
     />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://www.seudominio.com.br/politica-de-privacidade/" />
     <meta property="og:title" content="Sites profissionais por R$ 250/mês com atualizações | OL Systems" />
     <meta
       property="og:description"
       content="A OL Systems cria, publica e cuida do site da sua empresa ou perfil do Instagram por R$ 250/mês. Mudou preço, horário ou foto? Manda no WhatsApp que a gente atualiza."
     />
-    <meta property="og:url" content="https://www.seudominio.com.br/" />
     <meta property="og:site_name" content="OL Systems" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:image:alt" content="OL Systems: sites profissionais por R$ 250/mês com atualizações" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image" content="https://www.seudominio.com.br/og-image.png" />
+    <meta property="og:image" content="og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
@@ -34,14 +32,15 @@
     />
     <meta name="twitter:image:alt" content="OL Systems: sites profissionais por R$ 250/mês com atualizações" />
     <meta name="twitter:image:type" content="image/png" />
-    <meta name="twitter:image" content="https://www.seudominio.com.br/og-image.png" />
+    <meta name="twitter:image" content="og-image.png" />
     <meta name="twitter:image:width" content="1200" />
     <meta name="twitter:image:height" content="630" />
     <!--
   politica-de-privacidade.html — versão em HTML puro, gerada a partir do projeto Next.js (ol-systems/site).
   Para trocar WhatsApp, IDs de medição e textos da conversa de exemplo, edite o objeto CONFIG
-  no começo do <script> no fim da página. Procure por "a confirmar" para achar o que falta.
-  Domínio: troque https://www.seudominio.com.br pelo endereço final do site.
+  no começo do <script> no fim da página.
+  Quando tiver domínio, gere de novo com SITE_URL=https://seudominio.com.br npm run export:html
+  (ou adicione <link rel="canonical"> e use o endereço completo em og:image).
 -->
     <link
       rel="icon"
@@ -509,6 +508,9 @@
         .relative {
           position: relative;
         }
+        .sticky {
+          position: sticky;
+        }
         .-inset-px {
           inset: -1px;
         }
@@ -713,6 +715,9 @@
         }
         .inline-flex {
           display: inline-flex;
+        }
+        .table {
+          display: table;
         }
         .aspect-\[9\/18\.5\] {
           aspect-ratio: 9/18.5;
@@ -1845,10 +1850,16 @@
             var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
             var(--tw-shadow);
         }
+        .blur {
+          --tw-blur: blur(8px);
+        }
+        .blur,
         .blur-3xl {
-          --tw-blur: blur(var(--blur-3xl));
           filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,)
             var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+        }
+        .blur-3xl {
+          --tw-blur: blur(var(--blur-3xl));
         }
         .backdrop-blur {
           --tw-backdrop-blur: blur(8px);
@@ -2321,8 +2332,8 @@
           }
         }
         @media (min-width: 80rem) {
-          .xl\:-mr-12 {
-            margin-right: calc(var(--spacing) * -12);
+          .xl\:-mr-10 {
+            margin-right: calc(var(--spacing) * -10);
           }
         }
         @container (min-width:260px) {
@@ -2925,6 +2936,84 @@
           transform: scale(2);
         }
       }
+      /* ===== 50-scrollfx.css ===== */
+      /* Sem o Lenis (CDN fora ou "reduzir movimento"), os links "#secao" do
+         navegador param abaixo do cabeçalho fixo, como o Lenis faz (offset 72px). */
+      html:not(.lenis) section[id] {
+        scroll-margin-top: 72px;
+      }
+
+      /* ===== 60-chrome.css ===== */
+      /* Contato fixo (StickyContact): entrada e saída como as molas do Motion.
+         Escondido = fora da tela e visibility: hidden quando a saída termina
+         (some do Tab e do leitor de tela mesmo sem suporte a "inert"). */
+
+      /* Barra do celular: sobe de 100px (mola stiffness 260 / damping 28). */
+      [data-h="sticky-bar"] {
+        transition:
+          transform 450ms cubic-bezier(0.22, 1.2, 0.36, 1),
+          visibility 0s linear 0s;
+      }
+      [data-h="sticky-bar"][data-state="hidden"] {
+        transform: translateY(100px);
+        visibility: hidden;
+        transition:
+          transform 450ms cubic-bezier(0.22, 1.2, 0.36, 1),
+          visibility 0s linear 450ms;
+      }
+
+      /* Botão flutuante do desktop: cresce do zero com um leve passo além
+         (mola stiffness 300 / damping 20). "scale" fica com o hover:scale-110. */
+      [data-h="sticky-float"] {
+        transition:
+          transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 200ms ease-out,
+          scale 150ms cubic-bezier(0.4, 0, 0.2, 1),
+          visibility 0s linear 0s;
+      }
+      [data-h="sticky-float"][data-state="hidden"] {
+        transform: scale(0);
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 200ms ease-out,
+          scale 150ms cubic-bezier(0.4, 0, 0.2, 1),
+          visibility 0s linear 300ms;
+      }
+
+      /* Botões principais (ContactButton): seguem o cursor com uma mola curta
+         (stiffness 220 / damping 16 / mass 0.4) e afundam um pouco ao apertar.
+         Usa "translate" e "scale" (não "transform") para não brigar com outras animações. */
+      [data-h="cta-magnetic"] {
+        translate: 0px 0px;
+        transition-property: background-color, box-shadow, translate, scale;
+        transition-duration: 150ms, 150ms, 350ms, 200ms;
+        transition-timing-function:
+          cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.22, 1, 0.36, 1),
+          cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      [data-h="cta-magnetic"][data-pressed] {
+        scale: 0.97;
+      }
+
+      /* Reduzir movimento: a barra e o botão só aparecem e somem (sem deslizar/crescer). */
+      @media (prefers-reduced-motion: reduce) {
+        [data-h="sticky-bar"],
+        [data-h="sticky-float"] {
+          transition:
+            opacity 200ms ease,
+            visibility 0s linear 0s;
+        }
+        [data-h="sticky-bar"][data-state="hidden"],
+        [data-h="sticky-float"][data-state="hidden"] {
+          transform: none;
+          opacity: 0;
+          transition:
+            opacity 200ms ease,
+            visibility 0s linear 200ms;
+        }
+      }
     </style>
   </head>
   <body>
@@ -3077,15 +3166,11 @@
         ></a
       >
       <h1 class="mt-14 font-display text-4xl font-bold tracking-tight">Política de privacidade</h1>
-      <p class="mt-4 leading-relaxed text-muted">
-        <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-          >a confirmar: revisar este texto com o dono antes de publicar; data da última atualização</mark
-        >
-      </p>
+      <p class="mt-4 leading-relaxed text-muted">Última atualização: outubro de 2026.</p>
       <h2 class="mt-10 font-display text-xl font-bold">O que coletamos</h2>
       <p class="mt-4 leading-relaxed text-muted">
         Esta página não tem formulário. Quando você clica em um botão de contato, abrimos o WhatsApp ou o Instagram e a conversa acontece
-        por lá. Para entender de onde vêm as visitas, usamos ferramentas de medição (Google Analytics, Meta Pixel e Vercel Analytics), que
+        por lá. Para entender de onde vêm as visitas, podemos usar ferramentas de medição (como Google Analytics e Meta Pixel), que
         registram dados de navegação como páginas vistas, cliques nos botões e a origem da visita.
       </p>
       <h2 class="mt-10 font-display text-xl font-bold">Para que usamos</h2>
@@ -3094,14 +3179,9 @@
       </p>
       <h2 class="mt-10 font-display text-xl font-bold">Seus direitos (LGPD)</h2>
       <p class="mt-4 leading-relaxed text-muted">
-        Você pode pedir acesso, correção ou exclusão dos seus dados pelo Instagram @ol_systemss.
-        <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-          >a confirmar: e-mail ou canal oficial para pedidos de privacidade</mark
-        >
+        Você pode pedir acesso, correção ou exclusão dos seus dados pelo WhatsApp (62) 99929-1420 ou pelo Instagram @ol_systemss.
       </p>
-      <p class="mt-10 text-sm text-dim">
-        OL Systems · CNPJ <mark class="pending" title="Informação a confirmar com o dono antes de publicar">a confirmar: CNPJ</mark>
-      </p>
+      <p class="mt-10 text-sm text-dim">OL Systems</p>
     </main>
   </body>
 </html>

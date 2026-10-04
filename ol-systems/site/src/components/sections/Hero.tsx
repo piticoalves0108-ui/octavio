@@ -40,7 +40,7 @@ export function Hero() {
           <Fill text={hero.trustLine} />
         </p>
       </div>
-      <div className="relative lg:col-span-5 lg:-mr-6 xl:-mr-12">
+      <div className="relative lg:col-span-5 lg:-mr-6 xl:-mr-10">
         <HeroVisual />
       </div>
     </section>

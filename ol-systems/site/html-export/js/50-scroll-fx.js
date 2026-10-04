@@ -28,20 +28,49 @@ function initScrollFx() {
   // Links "#secao" ficam com o Lenis (desliza, descontando o cabeçalho);
   // sem ele, o navegador rola sozinho (scroll-behavior: smooth do CSS e
   // scroll-margin-top em css/50-scrollfx.css).
+  // Quem abre a página com #secao (ex.: index.html#preco) precisa cair na
+  // seção mesmo depois que o pin da demo e o Lenis mudam as posições. Só vale
+  // até a pessoa mexer na página por conta própria.
+  let lenis = null;
+  let userMoved = false;
+  for (const n of ["wheel", "touchstart", "keydown", "pointerdown"]) {
+    window.addEventListener(n, () => (userMoved = true), { once: true, passive: true });
+  }
+  const goToHash = () => {
+    if (userMoved || location.hash.length < 2) return;
+    let el = null;
+    try {
+      el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    } catch {}
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 72;
+    if (lenis) lenis.scrollTo(top, { immediate: true, force: true });
+    else window.scrollTo({ top, behavior: "instant" });
+  };
+
   if (!reduce) {
-    Promise.all([loadScript(CONFIG.cdn.lenis), loadGsap()]).then(
-      ([, { gsap, ScrollTrigger }]) => {
-        const Lenis = window.Lenis;
-        if (typeof Lenis !== "function") return;
-        const lenis = new Lenis({ duration: 1.1, anchors: { offset: -72 } });
-        lenis.on("scroll", ScrollTrigger.update);
-        gsap.ticker.add((time) => lenis.raf(time * 1000));
-        gsap.ticker.lagSmoothing(0);
+    // Lenis e GSAP baixam em paralelo; sem Lenis, a rolagem segue nativa.
+    const lenisReady = loadScript(CONFIG.cdn.lenis).then(
+      () => window.Lenis,
+      () => null,
+    );
+    loadGsap().then(
+      async ({ gsap, ScrollTrigger }) => {
+        const Lenis = await lenisReady;
+        if (typeof Lenis === "function") {
+          lenis = new Lenis({ duration: 1.1, anchors: { offset: -72 } });
+          lenis.on("scroll", ScrollTrigger.update);
+          gsap.ticker.add((time) => lenis.raf(time * 1000));
+          gsap.ticker.lagSmoothing(0);
+        }
         // As seções criam seus ScrollTriggers antes; um refresh no quadro
         // seguinte recalcula as posições já com o espaço do pin.
-        requestAnimationFrame(() => ScrollTrigger.refresh());
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+          goToHash();
+        });
       },
-      // Sem CDN: rolagem nativa.
+      // Sem CDN: rolagem nativa (o navegador já cuida do #secao).
       () => {},
     );
   }
@@ -49,7 +78,11 @@ function initScrollFx() {
   // A página pode mudar de altura quando tudo termina de carregar (imagens,
   // fontes): recalcula os ScrollTriggers, se o GSAP já estiver na página.
   const refresh = () => {
-    if (window.ScrollTrigger) loadGsap().then(({ ScrollTrigger }) => ScrollTrigger.refresh(), () => {});
+    if (window.ScrollTrigger)
+      loadGsap().then(({ ScrollTrigger }) => {
+        ScrollTrigger.refresh();
+        goToHash();
+      }, () => {});
   };
   if (document.readyState !== "complete") window.addEventListener("load", refresh, { once: true });
   document.fonts?.ready.then(refresh, () => {});
@@ -157,10 +190,9 @@ function initScrollFx() {
   const num = $('[data-h="price-num"]');
   const per = $('[data-h="price-per"]');
   if (num) {
-    const final = String(CONFIG.price);
-    // O número e o aria-label acompanham o CONFIG.
-    if (num.textContent.trim() !== final) num.textContent = final;
-    num.setAttribute("aria-label", `${final} reais`);
+    // O valor é o que está escrito na página (troque o preço direto no HTML).
+    const final = num.textContent.trim();
+    const target = Number(final.replace(/\D/g, "")) || 0;
     if (!reduce) {
       const restore = () => {
         num.textContent = final;
@@ -176,7 +208,7 @@ function initScrollFx() {
               num.textContent = "0";
               const tl = gsap.timeline();
               tl.to(o, {
-                v: CONFIG.price,
+                v: target,
                 duration: 1.6,
                 ease: "expo.out",
                 onUpdate: () => {

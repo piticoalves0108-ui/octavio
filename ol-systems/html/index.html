@@ -11,18 +11,16 @@
       content="A OL Systems cria, publica e cuida do site da sua empresa ou perfil do Instagram por R$ 250/mês. Mudou preço, horário ou foto? Manda no WhatsApp que a gente atualiza."
     />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://www.seudominio.com.br/" />
     <meta property="og:title" content="Sites profissionais por R$ 250/mês com atualizações | OL Systems" />
     <meta
       property="og:description"
       content="A OL Systems cria, publica e cuida do site da sua empresa ou perfil do Instagram por R$ 250/mês. Mudou preço, horário ou foto? Manda no WhatsApp que a gente atualiza."
     />
-    <meta property="og:url" content="https://www.seudominio.com.br/" />
     <meta property="og:site_name" content="OL Systems" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:image:alt" content="OL Systems: sites profissionais por R$ 250/mês com atualizações" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image" content="https://www.seudominio.com.br/og-image.png" />
+    <meta property="og:image" content="og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
@@ -34,14 +32,15 @@
     />
     <meta name="twitter:image:alt" content="OL Systems: sites profissionais por R$ 250/mês com atualizações" />
     <meta name="twitter:image:type" content="image/png" />
-    <meta name="twitter:image" content="https://www.seudominio.com.br/og-image.png" />
+    <meta name="twitter:image" content="og-image.png" />
     <meta name="twitter:image:width" content="1200" />
     <meta name="twitter:image:height" content="630" />
     <!--
   index.html — versão em HTML puro, gerada a partir do projeto Next.js (ol-systems/site).
   Para trocar WhatsApp, IDs de medição e textos da conversa de exemplo, edite o objeto CONFIG
-  no começo do <script> no fim da página. Procure por "a confirmar" para achar o que falta.
-  Domínio: troque https://www.seudominio.com.br pelo endereço final do site.
+  no começo do <script> no fim da página.
+  Quando tiver domínio, gere de novo com SITE_URL=https://seudominio.com.br npm run export:html
+  (ou adicione <link rel="canonical"> e use o endereço completo em og:image).
 -->
     <link
       rel="icon"
@@ -509,6 +508,9 @@
         .relative {
           position: relative;
         }
+        .sticky {
+          position: sticky;
+        }
         .-inset-px {
           inset: -1px;
         }
@@ -713,6 +715,9 @@
         }
         .inline-flex {
           display: inline-flex;
+        }
+        .table {
+          display: table;
         }
         .aspect-\[9\/18\.5\] {
           aspect-ratio: 9/18.5;
@@ -1845,10 +1850,16 @@
             var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
             var(--tw-shadow);
         }
+        .blur {
+          --tw-blur: blur(8px);
+        }
+        .blur,
         .blur-3xl {
-          --tw-blur: blur(var(--blur-3xl));
           filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,)
             var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+        }
+        .blur-3xl {
+          --tw-blur: blur(var(--blur-3xl));
         }
         .backdrop-blur {
           --tw-backdrop-blur: blur(8px);
@@ -2321,8 +2332,8 @@
           }
         }
         @media (min-width: 80rem) {
-          .xl\:-mr-12 {
-            margin-right: calc(var(--spacing) * -12);
+          .xl\:-mr-10 {
+            margin-right: calc(var(--spacing) * -10);
           }
         }
         @container (min-width:260px) {
@@ -2925,15 +2936,93 @@
           transform: scale(2);
         }
       }
+      /* ===== 50-scrollfx.css ===== */
+      /* Sem o Lenis (CDN fora ou "reduzir movimento"), os links "#secao" do
+         navegador param abaixo do cabeçalho fixo, como o Lenis faz (offset 72px). */
+      html:not(.lenis) section[id] {
+        scroll-margin-top: 72px;
+      }
+
+      /* ===== 60-chrome.css ===== */
+      /* Contato fixo (StickyContact): entrada e saída como as molas do Motion.
+         Escondido = fora da tela e visibility: hidden quando a saída termina
+         (some do Tab e do leitor de tela mesmo sem suporte a "inert"). */
+
+      /* Barra do celular: sobe de 100px (mola stiffness 260 / damping 28). */
+      [data-h="sticky-bar"] {
+        transition:
+          transform 450ms cubic-bezier(0.22, 1.2, 0.36, 1),
+          visibility 0s linear 0s;
+      }
+      [data-h="sticky-bar"][data-state="hidden"] {
+        transform: translateY(100px);
+        visibility: hidden;
+        transition:
+          transform 450ms cubic-bezier(0.22, 1.2, 0.36, 1),
+          visibility 0s linear 450ms;
+      }
+
+      /* Botão flutuante do desktop: cresce do zero com um leve passo além
+         (mola stiffness 300 / damping 20). "scale" fica com o hover:scale-110. */
+      [data-h="sticky-float"] {
+        transition:
+          transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 200ms ease-out,
+          scale 150ms cubic-bezier(0.4, 0, 0.2, 1),
+          visibility 0s linear 0s;
+      }
+      [data-h="sticky-float"][data-state="hidden"] {
+        transform: scale(0);
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 200ms ease-out,
+          scale 150ms cubic-bezier(0.4, 0, 0.2, 1),
+          visibility 0s linear 300ms;
+      }
+
+      /* Botões principais (ContactButton): seguem o cursor com uma mola curta
+         (stiffness 220 / damping 16 / mass 0.4) e afundam um pouco ao apertar.
+         Usa "translate" e "scale" (não "transform") para não brigar com outras animações. */
+      [data-h="cta-magnetic"] {
+        translate: 0px 0px;
+        transition-property: background-color, box-shadow, translate, scale;
+        transition-duration: 150ms, 150ms, 350ms, 200ms;
+        transition-timing-function:
+          cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.22, 1, 0.36, 1),
+          cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      [data-h="cta-magnetic"][data-pressed] {
+        scale: 0.97;
+      }
+
+      /* Reduzir movimento: a barra e o botão só aparecem e somem (sem deslizar/crescer). */
+      @media (prefers-reduced-motion: reduce) {
+        [data-h="sticky-bar"],
+        [data-h="sticky-float"] {
+          transition:
+            opacity 200ms ease,
+            visibility 0s linear 0s;
+        }
+        [data-h="sticky-bar"][data-state="hidden"],
+        [data-h="sticky-float"][data-state="hidden"] {
+          transform: none;
+          opacity: 0;
+          transition:
+            opacity 200ms ease,
+            visibility 0s linear 200ms;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="dot-grid" aria-hidden="true"></div>
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"ProfessionalService","name":"OL Systems","url":"https://www.seudominio.com.br","description":"Criação e manutenção de sites profissionais para empresas e perfis do Instagram, por assinatura mensal com atualizações inclusas.","sameAs":["https://www.instagram.com/ol_systemss/"],"makesOffer":{"@type":"Offer","name":"Site Sempre Atualizado","description":"Site profissional com hospedagem e atualizações sempre que o cliente pedir.","price":"250.00","priceCurrency":"BRL","priceSpecification":{"@type":"UnitPriceSpecification","price":"250.00","priceCurrency":"BRL","unitCode":"MON","referenceQuantity":{"@type":"QuantitativeValue","value":1,"unitCode":"MON"}}}}
+      {"@context":"https://schema.org","@type":"ProfessionalService","name":"OL Systems","description":"Criação e manutenção de sites profissionais para empresas e perfis do Instagram, por assinatura mensal com atualizações inclusas.","sameAs":["https://www.instagram.com/ol_systemss/"],"areaServed":{"@type":"Place","name":"Região Centro-Oeste do Brasil"},"paymentAccepted":"Pix","telephone":"+5562999291420","makesOffer":{"@type":"Offer","name":"Site Sempre Atualizado","description":"Site profissional com hospedagem e atualizações sempre que o cliente pedir.","price":"250.00","priceCurrency":"BRL","priceSpecification":{"@type":"UnitPriceSpecification","price":"250.00","priceCurrency":"BRL","unitCode":"MON","referenceQuantity":{"@type":"QuantitativeValue","value":1,"unitCode":"MON"}}}}
     </script>
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Já tenho Instagram. Preciso mesmo de site?","acceptedAnswer":{"@type":"Answer","text":"O site é o endereço próprio da sua empresa na internet. Ele aparece quando procuram o seu nome no Google, não depende do algoritmo e reúne num lugar só o que o cliente precisa para comprar: serviços, preços, horário, endereço e o botão do WhatsApp."}},{"@type":"Question","name":"Não entendo nada de site. Vou ter que mexer em alguma coisa?","acceptedAnswer":{"@type":"Answer","text":"Não. A gente cria, publica e cuida de tudo. Você só manda mensagem quando quiser mudar algo."}}]}
+      {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Tem taxa de criação?","acceptedAnswer":{"@type":"Answer","text":"Não. Sem taxa de adesão: você começa pagando só a primeira mensalidade."}},{"@type":"Question","name":"Tem fidelidade?","acceptedAnswer":{"@type":"Answer","text":"Não. O plano não tem fidelidade."}},{"@type":"Question","name":"Como é o pagamento?","acceptedAnswer":{"@type":"Answer","text":"Via Pix, todo mês."}},{"@type":"Question","name":"Vocês atendem a minha cidade?","acceptedAnswer":{"@type":"Answer","text":"Atendemos todo o Centro-Oeste."}},{"@type":"Question","name":"Em quanto tempo o site fica pronto?","acceptedAnswer":{"@type":"Answer","text":"Em 1 dia."}},{"@type":"Question","name":"O que conta como atualização e em quanto tempo ela é feita?","acceptedAnswer":{"@type":"Answer","text":"Trocas de texto, preço, horário e foto entram na mensalidade, sem limite. Prazo: até 3 horas."}},{"@type":"Question","name":"Posso pedir quantas atualizações quiser?","acceptedAnswer":{"@type":"Answer","text":"Sim. Não tem limite: peça quantas atualizações quiser."}},{"@type":"Question","name":"O domínio está incluso?","acceptedAnswer":{"@type":"Answer","text":"Não. A mensalidade inclui a hospedagem e o certificado SSL; o domínio (.com.br) é contratado à parte."}},{"@type":"Question","name":"Se eu cancelar, o que acontece com o site?","acceptedAnswer":{"@type":"Answer","text":"O site é excluído e sai do ar. Como não tem fidelidade, você pode cancelar quando quiser."}},{"@type":"Question","name":"Preciso ter CNPJ?","acceptedAnswer":{"@type":"Answer","text":"Não. Você não precisa ter CNPJ para contratar."}},{"@type":"Question","name":"Já tenho Instagram. Preciso mesmo de site?","acceptedAnswer":{"@type":"Answer","text":"O site é o endereço próprio da sua empresa na internet. Ele aparece quando procuram o seu nome no Google, não depende do algoritmo e reúne num lugar só o que o cliente precisa para comprar: serviços, preços, horário, endereço e o botão do WhatsApp."}},{"@type":"Question","name":"Não entendo nada de site. Vou ter que mexer em alguma coisa?","acceptedAnswer":{"@type":"Answer","text":"Não. A gente cria, publica e cuida de tudo. Você só manda mensagem quando quiser mudar algo."}}]}
     </script>
     <header
       data-h="header"
@@ -3113,7 +3202,7 @@
           </ul>
         </nav>
         <a
-          href="https://ig.me/m/ol_systemss"
+          href="https://wa.me/5562999291420?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20site%20para%20o%20meu%20neg%C3%B3cio."
           target="_blank"
           rel="noopener noreferrer"
           data-cta="header"
@@ -3157,7 +3246,7 @@
           </p>
           <div class="fade-up mt-9 flex flex-wrap items-center gap-4" style="--d:800ms">
             <a
-              href="https://ig.me/m/ol_systemss"
+              href="https://wa.me/5562999291420?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20site%20para%20o%20meu%20neg%C3%B3cio."
               target="_blank"
               rel="noopener noreferrer"
               data-cta="hero"
@@ -3177,13 +3266,9 @@
               >Ver sites que já fizemos</a
             >
           </div>
-          <p class="fade-up mt-6 text-sm text-dim" style="--d:950ms">
-            <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-              >a confirmar: ex.: sem taxa de adesão · sem fidelidade · no ar em X dias</mark
-            >
-          </p>
+          <p class="fade-up mt-6 text-sm text-dim" style="--d:950ms">Sem taxa de adesão · Sem fidelidade · No ar em 1 dia</p>
         </div>
-        <div class="relative lg:col-span-5 lg:-mr-6 xl:-mr-12">
+        <div class="relative lg:col-span-5 lg:-mr-6 xl:-mr-10">
           <div data-h="hero-visual" class="relative mx-auto aspect-square w-full max-w-[640px] lg:max-w-none">
             <div data-h="hero-globe" class="absolute left-[5%] top-[-3%] aspect-square w-[90%]">
               <svg
@@ -4520,11 +4605,9 @@
                     <line x1="6" x2="6.01" y1="18" y2="18"></line></svg
                 ></span>
                 <div>
-                  <h3 class="font-display text-lg font-bold tracking-tight">Hospedagem e domínio</h3>
-                  <p class="mt-1.5 leading-relaxed ">
-                    <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                      >a confirmar: domínio .com.br e hospedagem inclusos?</mark
-                    >
+                  <h3 class="font-display text-lg font-bold tracking-tight">Hospedagem inclusa</h3>
+                  <p class="mt-1.5 leading-relaxed text-muted">
+                    Seu site no ar sem você contratar servidor. O domínio (.com.br) é à parte.
                   </p>
                 </div>
               </div>
@@ -4553,11 +4636,7 @@
                 ></span>
                 <div>
                   <h3 class="font-display text-lg font-bold tracking-tight">Certificado SSL</h3>
-                  <p class="mt-1.5 leading-relaxed ">
-                    <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                      >a confirmar: certificado SSL incluso?</mark
-                    >
-                  </p>
+                  <p class="mt-1.5 leading-relaxed text-muted">Cadeado de conexão segura no navegador, incluso.</p>
                 </div>
               </div>
             </div>
@@ -4588,8 +4667,8 @@
                     <path d="M8 16H3v5"></path></svg
                 ></span>
                 <div>
-                  <h3 class="font-display text-lg font-bold tracking-tight">Atualizações sempre que pedir</h3>
-                  <p class="mt-1.5 leading-relaxed text-muted">Mudou algo? Manda no WhatsApp e a gente atualiza.</p>
+                  <h3 class="font-display text-lg font-bold tracking-tight">Atualizações sem limite</h3>
+                  <p class="mt-1.5 leading-relaxed text-muted">Mudou algo? Manda no WhatsApp e a gente atualiza em até 3 horas.</p>
                 </div>
               </div>
             </div>
@@ -4613,7 +4692,7 @@
               </div>
               <div class="mt-10 hidden lg:block">
                 <a
-                  href="https://ig.me/m/ol_systemss"
+                  href="https://wa.me/5562999291420?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20site%20para%20o%20meu%20neg%C3%B3cio."
                   target="_blank"
                   rel="noopener noreferrer"
                   data-cta="como-funciona"
@@ -4664,10 +4743,7 @@
               <div class="translate-x-3 pt-2 transition-transform duration-700 ease-out group-[.is-on]:translate-x-0">
                 <h3 class="font-display text-2xl font-bold tracking-tight sm:text-3xl">Você aprova e vai ao ar</h3>
                 <p class="mt-3 max-w-md text-lg leading-relaxed text-muted">
-                  Ajustamos o que precisar até ficar do seu jeito. Prazo:
-                  <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                    >a confirmar: prazo de entrega do site</mark
-                  >.
+                  Ajustamos o que precisar até ficar do seu jeito. Prazo de entrega: 1 dia.
                 </p>
               </div>
             </li>
@@ -4741,12 +4817,7 @@
                       aria-label="sim"
                       ><svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
                         <path d="m3.5 8.5 3 3 6-7" stroke-linecap="round" stroke-linejoin="round"></path></svg></span
-                    ><span class="pt-0.5"
-                      >R$ 250/mês ·
-                      <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                        >a confirmar: tem taxa de criação ou começa só com a 1ª mensalidade?</mark
-                      ></span
-                    ></span
+                    ><span class="pt-0.5">R$ 250/mês, sem taxa de adesão</span></span
                   >
                 </td>
               </tr>
@@ -4776,7 +4847,7 @@
                       aria-label="sim"
                       ><svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
                         <path d="m3.5 8.5 3 3 6-7" stroke-linecap="round" stroke-linejoin="round"></path></svg></span
-                    ><span class="pt-0.5">Inclusas. É só pedir</span></span
+                    ><span class="pt-0.5">Inclusas e sem limite, em até 3 horas</span></span
                   >
                 </td>
               </tr>
@@ -4813,11 +4884,9 @@
                 </td>
               </tr>
               <tr data-row="true" class="border-b border-line last:border-0 align-top">
-                <th scope="row" class="hidden p-5 font-display text-lg font-bold tracking-tight md:table-cell lg:p-7">
-                  Hospedagem e domínio
-                </th>
+                <th scope="row" class="hidden p-5 font-display text-lg font-bold tracking-tight md:table-cell lg:p-7">Hospedagem</th>
                 <td class="p-4 sm:p-5 lg:p-7">
-                  <span class="mb-2 block text-xs font-semibold uppercase tracking-wider text-dim md:hidden">Hospedagem e domínio</span
+                  <span class="mb-2 block text-xs font-semibold uppercase tracking-wider text-dim md:hidden">Hospedagem</span
                   ><span class="flex items-start gap-3 text-muted"
                     ><span
                       data-mark="true"
@@ -4840,11 +4909,7 @@
                       aria-label="sim"
                       ><svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
                         <path d="m3.5 8.5 3 3 6-7" stroke-linecap="round" stroke-linejoin="round"></path></svg></span
-                    ><span class="pt-0.5"
-                      ><mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                        >a confirmar: domínio .com.br e hospedagem inclusos?</mark
-                      ></span
-                    ></span
+                    ><span class="pt-0.5">Inclusa, com certificado SSL</span></span
                   >
                 </td>
               </tr>
@@ -5784,7 +5849,7 @@
                 <p class="mt-3 inline-flex rounded-full bg-white/[0.06] px-3 py-1 text-sm text-fg">menos de R$ 9 por dia</p>
                 <div class="mt-9">
                   <a
-                    href="https://ig.me/m/ol_systemss"
+                    href="https://wa.me/5562999291420?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20site%20para%20o%20meu%20neg%C3%B3cio."
                     target="_blank"
                     rel="noopener noreferrer"
                     data-cta="preco"
@@ -5862,12 +5927,7 @@
                       aria-hidden="true"
                     >
                       <path d="m3.5 8.5 3 3 6-7" stroke-linecap="round" stroke-linejoin="round"></path></svg
-                    ><span
-                      >Hospedagem e domínio:
-                      <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                        >a confirmar: domínio .com.br e hospedagem inclusos?</mark
-                      ></span
-                    >
+                    ><span>Hospedagem e certificado SSL inclusos</span>
                   </li>
                   <li class="flex gap-3 leading-snug text-muted">
                     <svg
@@ -5879,7 +5939,7 @@
                       aria-hidden="true"
                     >
                       <path d="m3.5 8.5 3 3 6-7" stroke-linecap="round" stroke-linejoin="round"></path></svg
-                    ><span>Atualizações sempre que você pedir</span>
+                    ><span>Atualizações sem limite, em até 3 horas</span>
                   </li>
                   <li class="flex gap-3 leading-snug text-muted">
                     <svg
@@ -5897,24 +5957,7 @@
               </div>
             </div>
             <ul class="relative mt-10 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-6 text-sm text-dim">
-              <li>
-                Pagamento:
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: formas de pagamento: Pix, cartão, boleto, recorrência</mark
-                >
-              </li>
-              <li>
-                Adesão:
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: tem taxa de criação ou começa só com a 1ª mensalidade?</mark
-                >
-              </li>
-              <li>
-                Fidelidade:
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: tem fidelidade mínima? multa para cancelar?</mark
-                >
-              </li>
+              <li>Pagamento via Pix</li>
             </ul>
           </div>
         </div>
@@ -5949,9 +5992,7 @@
                 ></span>
               </summary>
               <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: tem taxa de criação ou começa só com a 1ª mensalidade?</mark
-                >
+                Não. Sem taxa de adesão: você começa pagando só a primeira mensalidade.
               </p>
             </details>
             <details class="group">
@@ -5967,11 +6008,37 @@
                   ></span
                 ></span>
               </summary>
-              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: tem fidelidade mínima? multa para cancelar?</mark
-                >
-              </p>
+              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">Não. O plano não tem fidelidade.</p>
+            </details>
+            <details class="group">
+              <summary
+                class="flex cursor-pointer items-center justify-between gap-6 py-6 text-left font-display text-lg font-bold tracking-tight transition-colors hover:text-white sm:text-xl"
+              >
+                Como é o pagamento?<span
+                  class="relative grid h-9 w-9 flex-none place-items-center rounded-full border border-line-strong transition-colors group-open:border-white group-open:bg-white group-open:text-ink"
+                  aria-hidden="true"
+                  ><span class="absolute h-px w-3.5 bg-current"></span
+                  ><span
+                    class="absolute h-3.5 w-px bg-current transition-transform duration-300 group-open:rotate-90 group-open:scale-0"
+                  ></span
+                ></span>
+              </summary>
+              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">Via Pix, todo mês.</p>
+            </details>
+            <details class="group">
+              <summary
+                class="flex cursor-pointer items-center justify-between gap-6 py-6 text-left font-display text-lg font-bold tracking-tight transition-colors hover:text-white sm:text-xl"
+              >
+                Vocês atendem a minha cidade?<span
+                  class="relative grid h-9 w-9 flex-none place-items-center rounded-full border border-line-strong transition-colors group-open:border-white group-open:bg-white group-open:text-ink"
+                  aria-hidden="true"
+                  ><span class="absolute h-px w-3.5 bg-current"></span
+                  ><span
+                    class="absolute h-3.5 w-px bg-current transition-transform duration-300 group-open:rotate-90 group-open:scale-0"
+                  ></span
+                ></span>
+              </summary>
+              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">Atendemos todo o Centro-Oeste.</p>
             </details>
             <details class="group">
               <summary
@@ -5986,11 +6053,7 @@
                   ></span
                 ></span>
               </summary>
-              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: prazo de entrega do site</mark
-                >
-              </p>
+              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">Em 1 dia.</p>
             </details>
             <details class="group">
               <summary
@@ -6006,14 +6069,7 @@
                 ></span>
               </summary>
               <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                Trocas de texto, preço, horário e foto entram na mensalidade.
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: o que conta como atualização: texto, foto, preço, nova seção, nova página?</mark
-                >
-                Prazo:
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: prazo de cada atualização, ex.: até 24 h úteis</mark
-                >.
+                Trocas de texto, preço, horário e foto entram na mensalidade, sem limite. Prazo: até 3 horas.
               </p>
             </details>
             <details class="group">
@@ -6029,17 +6085,13 @@
                   ></span
                 ></span>
               </summary>
-              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: atualizações ilimitadas ou com limite por mês?</mark
-                >
-              </p>
+              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">Sim. Não tem limite: peça quantas atualizações quiser.</p>
             </details>
             <details class="group">
               <summary
                 class="flex cursor-pointer items-center justify-between gap-6 py-6 text-left font-display text-lg font-bold tracking-tight transition-colors hover:text-white sm:text-xl"
               >
-                Quantas páginas o site tem?<span
+                O domínio está incluso?<span
                   class="relative grid h-9 w-9 flex-none place-items-center rounded-full border border-line-strong transition-colors group-open:border-white group-open:bg-white group-open:text-ink"
                   aria-hidden="true"
                   ><span class="absolute h-px w-3.5 bg-current"></span
@@ -6049,47 +6101,7 @@
                 ></span>
               </summary>
               <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: quantas páginas ou seções o site tem</mark
-                >
-              </p>
-            </details>
-            <details class="group">
-              <summary
-                class="flex cursor-pointer items-center justify-between gap-6 py-6 text-left font-display text-lg font-bold tracking-tight transition-colors hover:text-white sm:text-xl"
-              >
-                Inclui e-mail profissional e Google Meu Negócio?<span
-                  class="relative grid h-9 w-9 flex-none place-items-center rounded-full border border-line-strong transition-colors group-open:border-white group-open:bg-white group-open:text-ink"
-                  aria-hidden="true"
-                  ><span class="absolute h-px w-3.5 bg-current"></span
-                  ><span
-                    class="absolute h-3.5 w-px bg-current transition-transform duration-300 group-open:rotate-90 group-open:scale-0"
-                  ></span
-                ></span>
-              </summary>
-              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: e-mail profissional e Google Meu Negócio inclusos?</mark
-                >
-              </p>
-            </details>
-            <details class="group">
-              <summary
-                class="flex cursor-pointer items-center justify-between gap-6 py-6 text-left font-display text-lg font-bold tracking-tight transition-colors hover:text-white sm:text-xl"
-              >
-                O domínio fica no meu nome?<span
-                  class="relative grid h-9 w-9 flex-none place-items-center rounded-full border border-line-strong transition-colors group-open:border-white group-open:bg-white group-open:text-ink"
-                  aria-hidden="true"
-                  ><span class="absolute h-px w-3.5 bg-current"></span
-                  ><span
-                    class="absolute h-3.5 w-px bg-current transition-transform duration-300 group-open:rotate-90 group-open:scale-0"
-                  ></span
-                ></span>
-              </summary>
-              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: o domínio fica registrado no nome de quem?</mark
-                >
+                Não. A mensalidade inclui a hospedagem e o certificado SSL; o domínio (.com.br) é contratado à parte.
               </p>
             </details>
             <details class="group">
@@ -6106,9 +6118,7 @@
                 ></span>
               </summary>
               <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: o que acontece com o site e o domínio se cancelar</mark
-                >
+                O site é excluído e sai do ar. Como não tem fidelidade, você pode cancelar quando quiser.
               </p>
             </details>
             <details class="group">
@@ -6124,11 +6134,7 @@
                   ></span
                 ></span>
               </summary>
-              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">
-                <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-                  >a confirmar: precisa ter CNPJ para contratar?</mark
-                >
-              </p>
+              <p class="max-w-2xl pb-7 pr-12 text-lg leading-relaxed text-muted">Não. Você não precisa ter CNPJ para contratar.</p>
             </details>
             <details class="group">
               <summary
@@ -6272,7 +6278,7 @@
           <p class="mx-auto mt-6 max-w-xl text-lg text-muted">Chama no WhatsApp, conta sobre o seu negócio e a gente cuida do resto.</p>
           <div class="mt-10 flex flex-col items-center justify-center gap-5 sm:flex-row">
             <a
-              href="https://ig.me/m/ol_systemss"
+              href="https://wa.me/5562999291420?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20site%20para%20o%20meu%20neg%C3%B3cio."
               target="_blank"
               rel="noopener noreferrer"
               data-cta="final"
@@ -6463,16 +6469,11 @@
           <p class="mt-4 text-sm leading-relaxed text-muted">
             Sites profissionais para empresas e perfis do Instagram, com atualizações sempre que você pedir.
           </p>
-          <p class="mt-3 text-sm text-dim">
-            Atendimento:
-            <mark class="pending" title="Informação a confirmar com o dono antes de publicar"
-              >a confirmar: só a cidade/região ou o Brasil todo, online</mark
-            >
-          </p>
+          <p class="mt-3 text-sm text-dim">Atendimento: todo o Centro-Oeste</p>
         </div>
         <div class="flex flex-col gap-3 text-sm">
           <a
-            href="https://ig.me/m/ol_systemss"
+            href="https://wa.me/5562999291420?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20um%20site%20para%20o%20meu%20neg%C3%B3cio."
             target="_blank"
             rel="noopener noreferrer"
             data-cta="footer"
@@ -6500,27 +6501,70 @@
       <div
         class="mx-auto mt-12 flex max-w-[1320px] flex-col gap-2 border-t border-line pt-6 text-xs text-dim sm:flex-row sm:justify-between"
       >
-        <span
-          >© 2026 OL Systems · CNPJ
-          <mark class="pending" title="Informação a confirmar com o dono antes de publicar">a confirmar: CNPJ</mark></span
-        ><span>Feito com cuidado pela própria OL Systems.</span>
+        <span>© 2026 OL Systems</span><span>Feito com cuidado pela própria OL Systems.</span>
       </div>
     </footer>
+    <!-- Contato fixo (StickyContact): barra no celular e botão flutuante no desktop.
+     Começam escondidos; o initChrome mostra depois do topo e esconde perto do fim. -->
+    <div
+      data-h="sticky-bar"
+      data-state="hidden"
+      inert
+      aria-hidden="true"
+      class="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-ink/85 px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl lg:hidden"
+    >
+      <div class="mx-auto flex max-w-md items-center justify-between gap-3">
+        <div class="leading-tight">
+          <div class="font-display text-xl font-bold">
+            <span data-h="sticky-price">R$&nbsp;250</span><span class="text-sm font-normal text-muted">/mês</span>
+          </div>
+          <div class="text-xs text-muted">atualizações inclusas</div>
+        </div>
+        <a
+          href="https://ig.me/m/ol_systemss"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cta="barra-mobile"
+          class="inline-flex h-12 items-center gap-2 rounded-full bg-wa px-5 font-semibold text-wa-ink"
+          ><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-5 w-5">
+            <path
+              d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.22 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"
+            ></path></svg
+          >Quero meu site</a
+        >
+      </div>
+    </div>
+    <a
+      data-h="sticky-float"
+      data-state="hidden"
+      inert
+      aria-hidden="true"
+      href="https://ig.me/m/ol_systemss"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-cta="flutuante"
+      aria-label="Falar no WhatsApp"
+      class="fixed bottom-6 right-6 z-50 hidden h-16 w-16 place-items-center rounded-full bg-wa text-wa-ink shadow-[0_12px_40px_-8px_rgb(37_211_102/0.7)] transition-transform hover:scale-110 lg:grid"
+      ><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-8 w-8">
+        <path
+          d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.22 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"
+        ></path></svg
+    ></a>
+
     <script type="module">
       /* ===== 00-config.js ===== */
       /**
        * CONFIGURAÇÃO — edite aqui.
        *
-       * whatsapp: só dígitos, 55 + DDD + número. Ex.: "5561999998888".
-       *   {{CONFIRMAR: DDD e número}}. Enquanto estiver vazio, todos os botões de
-       *   contato abrem o Direct do Instagram, para ninguém cair num número errado.
-       * ga4Id / metaPixelId: {{CONFIRMAR: IDs do GA4 e do Pixel}}. Vazio = não carrega.
+       * whatsapp: só dígitos, 55 + DDD + número. (62) 99929-1420.
+       *   Se ficar vazio, todos os botões de contato abrem o Direct do Instagram.
+       * ga4Id / metaPixelId: opcionais (Google Analytics 4 e Meta Pixel). Vazio = não carrega.
        * heroTitles: títulos do topo para teste A/B (?titulo=2 ou ?titulo=3 no link).
        *   *texto* = destaque; _texto_ = sublinhado verde.
        * demo: a conversa de exemplo da seção "Pediu, atualizou".
        */
       const CONFIG = {
-        whatsapp: "",
+        whatsapp: "5562999291420",
         whatsappMessage: "Olá! Vim pelo site e quero um site para o meu negócio.",
         instagramHandle: "ol_systemss",
         ga4Id: "",
@@ -6530,7 +6574,6 @@
           "Site pronto, no ar e sempre _atualizado_. Você só manda *mensagem*.",
           "O Instagram mostra. O site *vende*. Tenha os dois por *R$ 250/mês*.",
         ],
-        price: 250,
         demo: {
           scenarios: [
             { tab: "Horário", ask: "Oi! Muda o horário de sábado para 8h às 14h, por favor", reply: "Feito! ✓ Já está no site.", update: { saturday: "Sábado: 8h às 14h" } },
@@ -6822,6 +6865,1464 @@
           });
         },
       };
+
+      /* ===== 10-globe.js ===== */
+      /**
+       * Globo do logo (SvgGlobe + GlobeCanvas + parte do HeroVisual).
+       * - Todo globo em SVG com data-animate gira a 30 fps e pausa fora da tela.
+       * - Em telas com mouse, o globo do hero vira 3D (three.js do CDN) na primeira
+       *   interação, com o mesmo enquadramento e o mesmo relógio do SVG: a troca
+       *   não dá salto. Se o CDN falhar, fica no SVG sem avisar ninguém.
+       */
+      function initGlobe() {
+        const reduce = prefersReducedMotion();
+
+        /* ---------- SVG girando ---------- */
+
+        // Recalcula os meridianos a 30 fps enquanto o SVG está na tela. Devolve o "parar".
+        function spinSvg(svg) {
+          const nodes = $$("[data-lon]", svg);
+          let raf = 0;
+          let last = 0;
+          let visible = true;
+          const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
+          io.observe(svg);
+          const tick = (t) => {
+            raf = requestAnimationFrame(tick);
+            // 30 fps é suficiente para um giro lento e poupa bateria.
+            if (!visible || t - last < 33) return;
+            last = t;
+            const spin = GLOBE.spinAt(t);
+            for (const n of nodes) {
+              const e = GLOBE.meridianEllipse(Number(n.dataset.lon), spin);
+              n.setAttribute("ry", e.ry.toFixed(4));
+              n.setAttribute("transform", `rotate(${e.rot.toFixed(2)})`);
+            }
+          };
+          raf = requestAnimationFrame(tick);
+          return () => {
+            cancelAnimationFrame(raf);
+            io.disconnect();
+          };
+        }
+
+        const svgStops = new Map();
+        const startSvg = (svg) => {
+          svg.setAttribute("data-animate", "");
+          if (reduce || svgStops.has(svg)) return;
+          svgStops.set(svg, spinSvg(svg));
+        };
+        const stopSvg = (svg) => {
+          svgStops.get(svg)?.();
+          svgStops.delete(svg);
+          svg.removeAttribute("data-animate");
+        };
+
+        for (const svg of $$('svg[data-h="globe-svg"][data-animate]')) startSvg(svg);
+
+        /* ---------- Hero: SVG → 3D na primeira interação ---------- */
+
+        /**
+         * Só em telas com mouse, largas, com WebGL e sem aparelho fraco. Celular fica
+         * no SVG: a maior parte das visitas vem do navegador do Instagram.
+         */
+        function canUpgrade() {
+          if (isCoarsePointer() || window.innerWidth < 1024) return false;
+          try {
+            const c = document.createElement("canvas");
+            const gl = c.getContext("webgl2") ?? c.getContext("webgl");
+            if (!gl) return false;
+            // Solta o contexto de teste (o navegador limita quantos ficam abertos).
+            gl.getExtension("WEBGL_lose_context")?.loseContext();
+          } catch {
+            return false;
+          }
+          return !((navigator.deviceMemory ?? 8) <= 2 || (navigator.hardwareConcurrency ?? 8) <= 2);
+        }
+
+        const heroGlobe = $('[data-h="hero-globe"]');
+        const heroSvg = heroGlobe && $(':scope > svg[data-h="globe-svg"]', heroGlobe);
+        if (!heroSvg || !canUpgrade()) return;
+
+        // Troca para o 3D na primeira interação (não disputa com o carregamento).
+        const events = ["pointermove", "wheel", "scroll", "keydown"];
+        const go = (e) => {
+          if (e.type === "pointermove" && e.pointerType !== "mouse") return;
+          events.forEach((n) => window.removeEventListener(n, go));
+          upgrade(window.innerWidth < 1280).catch((err) => console.warn("[globe] 3D indisponível, seguindo no SVG", err));
+        };
+        events.forEach((n) => window.addEventListener(n, go, { passive: true }));
+
+        /* ---------- Cena 3D (port do GlobeCanvas, em three.js puro) ---------- */
+
+        const lineVert = /* glsl */ `
+        attribute float aOrder;
+        varying float vFacing;
+        varying float vOrder;
+        void main() {
+          vec3 n = normalize(normalMatrix * position);
+          vFacing = n.z;
+          vOrder = aOrder;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `;
+        const lineFrag = /* glsl */ `
+        uniform float uReveal;
+        varying float vFacing;
+        varying float vOrder;
+        void main() {
+          if (vOrder > uReveal) discard;
+          float a = mix(0.16, 0.95, smoothstep(-0.35, 0.55, vFacing));
+          gl_FragColor = vec4(vec3(1.0), a);
+        }
+      `;
+        const pointVert = /* glsl */ `
+        attribute float aPhase;
+        uniform float uTime;
+        uniform float uPx;
+        varying float vFacing;
+        varying float vFlash;
+        void main() {
+          vec3 n = normalize(normalMatrix * position);
+          vFacing = n.z;
+          float t = fract(uTime * 0.11 + aPhase);
+          vFlash = smoothstep(0.0, 0.03, t) * (1.0 - smoothstep(0.03, 0.22, t));
+          gl_PointSize = uPx * (3.0 + 9.0 * vFlash);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `;
+        const pointFrag = /* glsl */ `
+        varying float vFacing;
+        varying float vFlash;
+        void main() {
+          vec2 c = gl_PointCoord - 0.5;
+          float d = length(c);
+          float core = smoothstep(0.5, 0.1, d);
+          float ring = smoothstep(0.5, 0.42, d) * smoothstep(0.3, 0.42, d) * vFlash;
+          float vis = smoothstep(-0.05, 0.25, vFacing);
+          vec3 col = mix(vec3(1.0), vec3(0.145, 0.827, 0.4), vFlash);
+          float a = (core * (0.75 + vFlash) + ring) * vis;
+          if (a < 0.01) discard;
+          gl_FragColor = vec4(col, a);
+        }
+      `;
+        const arcVert = /* glsl */ `
+        attribute float aT;
+        varying float vT;
+        varying float vFacing;
+        void main() {
+          vT = aT;
+          vFacing = normalize(normalMatrix * position).z;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `;
+        const arcFrag = /* glsl */ `
+        uniform float uTime;
+        uniform float uOffset;
+        varying float vT;
+        varying float vFacing;
+        void main() {
+          float head = fract(uTime * 0.16 + uOffset) * 1.6 - 0.3;
+          float trail = smoothstep(head - 0.3, head, vT) * step(vT, head);
+          float vis = smoothstep(-0.2, 0.3, vFacing);
+          float a = (0.08 + trail * 0.9) * vis;
+          vec3 col = mix(vec3(1.0), vec3(0.145, 0.827, 0.4), trail * 0.65);
+          gl_FragColor = vec4(col, a);
+        }
+      `;
+
+        // Pós-processamento (bloom) do CDN. Se falhar, o globo sai sem brilho.
+        const loadPost = () =>
+          Promise.all(
+            [CONFIG.cdn.effectComposer, CONFIG.cdn.renderPass, CONFIG.cdn.unrealBloomPass, CONFIG.cdn.outputPass].map((u) => import(u)),
+          ).then(([a, b, c, d]) => ({
+            EffectComposer: a.EffectComposer,
+            RenderPass: b.RenderPass,
+            UnrealBloomPass: c.UnrealBloomPass,
+            OutputPass: d.OutputPass,
+          }));
+
+        /** lite = tela menor que 1280: sem pós-processamento. */
+        async function upgrade(lite) {
+          const wantBloom = !lite && !reduce;
+          const [THREE, post] = await Promise.all([
+            import(CONFIG.cdn.three),
+            wantBloom ? loadPost().catch(() => null) : null,
+          ]).catch(() => []);
+          if (!THREE) return; // three não carregou: fica no SVG
+
+          let renderer;
+          try {
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+          } catch {
+            return;
+          }
+          const maxPx = () => Math.max(1, Math.min(window.devicePixelRatio || 1, 1.75));
+          renderer.setPixelRatio(maxPx());
+          const canvas = renderer.domElement;
+          canvas.setAttribute("aria-hidden", "true");
+          canvas.style.display = "block";
+          canvas.style.width = "100%";
+          canvas.style.height = "100%";
+
+          // Mesmo lugar do React: logo depois do SVG, antes do brilho suave.
+          const wrap = document.createElement("div");
+          wrap.className = "absolute inset-0 transition-opacity duration-[1200ms] opacity-0";
+          wrap.appendChild(canvas);
+          heroSvg.after(wrap);
+
+          /* Geometria (100% procedural, sem modelo para baixar) */
+          const SEG = 120;
+          const deg = (d) => (d * Math.PI) / 180;
+          const onSphere = (lat, lon, r = 1) =>
+            new THREE.Vector3(r * Math.cos(lat) * Math.sin(lon), r * Math.sin(lat), r * Math.cos(lat) * Math.cos(lon));
+
+          function buildWireframe() {
+            const pos = [];
+            const order = [];
+            const lines = [];
+            for (const lon of GLOBE.MERIDIANS) {
+              const pts = [];
+              for (let i = 0; i <= SEG; i++) pts.push(onSphere(-Math.PI + (i / SEG) * Math.PI * 2, deg(lon)));
+              lines.push(pts);
+            }
+            for (const lat of GLOBE.PARALLELS) {
+              const pts = [];
+              for (let i = 0; i <= SEG; i++) pts.push(onSphere(deg(lat), (i / SEG) * Math.PI * 2));
+              lines.push(pts);
+            }
+            lines.forEach((pts, li) => {
+              for (let i = 0; i < pts.length - 1; i++) {
+                const a = pts[i];
+                const b = pts[i + 1];
+                pos.push(a.x, a.y, a.z, b.x, b.y, b.z);
+                // Ordem de desenho (só usada na entrada animada, aqui desligada).
+                const o = li / lines.length + (i / pts.length) * 0.35;
+                order.push(o, o);
+              }
+            });
+            const g = new THREE.BufferGeometry();
+            g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+            g.setAttribute("aOrder", new THREE.Float32BufferAttribute(order.map((o) => o / 1.35), 1));
+            return g;
+          }
+
+          // Linhas: substitui o SVG, então sem desenho de entrada (uReveal = 1).
+          const wire = new THREE.LineSegments(
+            buildWireframe(),
+            new THREE.ShaderMaterial({
+              vertexShader: lineVert,
+              fragmentShader: lineFrag,
+              uniforms: { uReveal: { value: 1 } },
+              transparent: true,
+              depthWrite: false,
+            }),
+          );
+
+          // Pontos que acendem em verde ("site atualizado").
+          const pts = GLOBE.surfacePoints(16);
+          const pointMat = new THREE.ShaderMaterial({
+            vertexShader: pointVert,
+            fragmentShader: pointFrag,
+            uniforms: { uTime: { value: 0 }, uPx: { value: renderer.getPixelRatio() } },
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+          });
+          const pointGeo = new THREE.BufferGeometry();
+          {
+            const pos = [];
+            const phase = [];
+            for (const p of pts) {
+              const v = onSphere(p.lat, p.lon, 1.004);
+              pos.push(v.x, v.y, v.z);
+              phase.push(p.phase);
+            }
+            pointGeo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+            pointGeo.setAttribute("aPhase", new THREE.Float32BufferAttribute(phase, 1));
+          }
+          const points = new THREE.Points(pointGeo, pointMat);
+
+          // Arcos de dados entre os pontos, com um rastro tipo cometa.
+          const arcMats = [];
+          function buildArc(a, b, offset) {
+            const pos = [];
+            const ts = [];
+            const N = 80;
+            const angle = a.angleTo(b);
+            for (let i = 0; i <= N; i++) {
+              const t = i / N;
+              // Interpolação esférica + altura em arco acima da superfície.
+              const v = a.clone().multiplyScalar(Math.sin((1 - t) * angle)).add(b.clone().multiplyScalar(Math.sin(t * angle)));
+              v.divideScalar(Math.sin(angle)).normalize().multiplyScalar(1 + Math.sin(Math.PI * t) * 0.18 * angle);
+              pos.push(v.x, v.y, v.z);
+              ts.push(t);
+            }
+            const g = new THREE.BufferGeometry();
+            g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+            g.setAttribute("aT", new THREE.Float32BufferAttribute(ts, 1));
+            const m = new THREE.ShaderMaterial({
+              vertexShader: arcVert,
+              fragmentShader: arcFrag,
+              uniforms: { uTime: { value: 0 }, uOffset: { value: offset } },
+              transparent: true,
+              depthWrite: false,
+              blending: THREE.AdditiveBlending,
+            });
+            arcMats.push(m);
+            return new THREE.Line(g, m);
+          }
+          const pairs = [
+            [0, 5],
+            [3, 9],
+            [7, 12],
+            [10, 2],
+          ];
+          const arcs = pairs.map(([i, j], k) =>
+            buildArc(onSphere(pts[i].lat, pts[i].lon), onSphere(pts[j].lat, pts[j].lon), k * 0.27),
+          );
+
+          // Grupo de fora: inclinação do eixo (+ mouse). Grupo de dentro: giro.
+          const scene = new THREE.Scene();
+          const tiltGroup = new THREE.Group();
+          tiltGroup.rotation.x = GLOBE.TILT;
+          const spinGroup = new THREE.Group();
+          spinGroup.add(wire, points, ...arcs);
+          tiltGroup.add(spinGroup);
+          scene.add(tiltGroup);
+
+          // Câmera ortográfica com o mesmo enquadramento do SVG (raio = lado / 2,24).
+          const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 50);
+          camera.position.set(0, 0, 10);
+
+          /* Bloom (só em tela grande e sem movimento reduzido) */
+          let composer = null;
+          let degraded = false;
+          let size = { w: wrap.clientWidth || 1, h: wrap.clientHeight || 1 };
+          if (post) {
+            try {
+              composer = new post.EffectComposer(renderer);
+              composer.addPass(new post.RenderPass(scene, camera));
+              // O React usa o Bloom do pmndrs (intensity 0.85, radius 0.7, threshold 0.15).
+              // O UnrealBloomPass soma 5 níveis de desfoque bem mais largos (x3 no shader),
+              // então os números abaixo foram calibrados lado a lado para o mesmo visual:
+              // brilho justo nas linhas e um halo fraco em volta.
+              const bloom = new post.UnrealBloomPass(new THREE.Vector2(size.w, size.h), 0.17, 0, 0.15);
+              bloom.compositeMaterial.uniforms.bloomFactors.value = [1, 0.55, 0.3, 0.18, 0.12];
+              // Transição suave do limiar, como o luminanceSmoothing 0.3 do React.
+              bloom.highPassUniforms.smoothWidth.value = 0.3;
+              composer.addPass(bloom);
+              composer.addPass(new post.OutputPass());
+            } catch {
+              composer = null;
+            }
+          }
+          const dropComposer = () => {
+            if (!composer) return;
+            for (const p of composer.passes) p.dispose?.();
+            composer.dispose?.();
+            composer = null;
+          };
+
+          function resize(w, h) {
+            if (!w || !h) return;
+            size = { w, h };
+            const px = degraded ? 1 : maxPx();
+            camera.left = -w / 2;
+            camera.right = w / 2;
+            camera.top = h / 2;
+            camera.bottom = -h / 2;
+            camera.zoom = Math.min(w, h) / (GLOBE.VIEW * 2);
+            camera.updateProjectionMatrix();
+            if (renderer.getPixelRatio() !== px) renderer.setPixelRatio(px);
+            renderer.setSize(w, h, false);
+            if (composer) {
+              composer.setPixelRatio(px);
+              composer.setSize(w, h);
+            }
+            invalidate();
+          }
+
+          /* Mouse: inclina o globo de leve (posição na janela, -1..1) */
+          const pointer = { x: 0, y: 0 };
+          window.addEventListener(
+            "pointermove",
+            (e) => {
+              pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+              pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
+            },
+            { passive: true },
+          );
+
+          /* Laço de render: contínuo; fora da tela para; com movimento reduzido só sob demanda */
+          let raf = 0;
+          let visible = true;
+          let lost = false;
+          let ready = false;
+          let t0 = -1;
+          let prev = 0;
+          let perfMs = 0;
+          let perfFrames = 0;
+
+          function invalidate() {
+            if (!raf && !lost) raf = requestAnimationFrame(tick);
+          }
+
+          function tick(now) {
+            raf = 0;
+            if (!visible || lost) return;
+            frame(now);
+            if (!reduce) invalidate();
+            if (!ready) {
+              ready = true;
+              requestAnimationFrame(() => requestAnimationFrame(showCanvas));
+            }
+          }
+
+          function frame(now) {
+            if (t0 < 0) t0 = prev = now;
+            const t = (now - t0) / 1000;
+            const dtMs = now - prev;
+            prev = now;
+            if (!reduce) {
+              // Mesmo relógio do globo em SVG: a troca entre os dois não dá salto.
+              spinGroup.rotation.y = GLOBE.spinAt(now);
+              const k = 1 - Math.exp(-Math.min(dtMs / 1000, 0.1) * 3);
+              tiltGroup.rotation.x += (GLOBE.TILT + pointer.y * 0.12 - tiltGroup.rotation.x) * k;
+              tiltGroup.rotation.z += (-pointer.x * 0.08 - tiltGroup.rotation.z) * k;
+              watchPerf(dtMs, t);
+            }
+            pointMat.uniforms.uTime.value = t;
+            pointMat.uniforms.uPx.value = renderer.getPixelRatio();
+            for (const m of arcMats) m.uniforms.uTime.value = t;
+            if (composer) composer.render();
+            else renderer.render(scene, camera);
+          }
+
+          // Aparelho sofrendo (média > 34 ms por ~2 s): tira o bloom e baixa a resolução.
+          function watchPerf(dtMs, t) {
+            if (degraded || t < 1) return;
+            if (dtMs > 250) {
+              // Voltou de pausa (fora da tela / aba escondida): recomeça a medir.
+              perfMs = perfFrames = 0;
+              return;
+            }
+            perfMs += dtMs;
+            perfFrames++;
+            if (perfMs < 2000) return;
+            if (perfMs / perfFrames > 34) {
+              degraded = true;
+              dropComposer();
+              resize(size.w, size.h);
+            }
+            perfMs = perfFrames = 0;
+          }
+
+          // Primeiro quadro na tela: o 3D aparece e o SVG some (e para de girar).
+          function showCanvas() {
+            if (lost) return;
+            wrap.classList.remove("opacity-0");
+            wrap.classList.add("opacity-100");
+            heroSvg.classList.remove("opacity-80");
+            heroSvg.classList.add("opacity-0");
+            stopSvg(heroSvg);
+          }
+
+          const io = new IntersectionObserver(
+            ([e]) => {
+              visible = e.isIntersecting;
+              if (visible) invalidate();
+            },
+            { rootMargin: "100px" },
+          );
+          io.observe(wrap);
+          const ro = new ResizeObserver(([e]) => resize(e.contentRect.width, e.contentRect.height));
+          ro.observe(wrap);
+
+          // GPU perdeu o contexto: volta para o SVG em vez de deixar um buraco.
+          canvas.addEventListener("webglcontextlost", () => {
+            lost = true;
+            cancelAnimationFrame(raf);
+            io.disconnect();
+            ro.disconnect();
+            wrap.remove();
+            heroSvg.classList.remove("opacity-0");
+            heroSvg.classList.add("opacity-80");
+            startSvg(heroSvg);
+          });
+
+          resize(size.w, size.h);
+        }
+      }
+
+      /* ===== 20-hero.js ===== */
+      /**
+       * Topo da página: título com teste A/B (?titulo=2 ou ?titulo=3), a
+       * mini-história em loop (pedido no WhatsApp → "Feito!" → site muda) e a
+       * inclinação dos aparelhos com o mouse. O globo fica em initGlobe.
+       */
+      function initHero() {
+        const reduce = prefersReducedMotion();
+
+        /* ---------- Título (teste A/B) ---------- */
+
+        // Mesma marcação do HeroTitle: destaque não quebra, sublinhado verde com atraso.
+        const titleHtml = (text) =>
+          parseMarks(text)
+            .map((t) =>
+              t.underline
+                ? underlineHtml(`<span class="text-white">${escapeHtml(t.text)}</span>`, { delayMs: 1100 })
+                : t.strong
+                  ? `<span class="whitespace-nowrap text-white">${escapeHtml(t.text)}</span>`
+                  : `<span>${escapeHtml(t.text)}</span>`,
+            )
+            .join("");
+
+        const title = $('h1[data-h="hero-title"]');
+        const titles = CONFIG.heroTitles ?? [];
+        const n = Number(new URLSearchParams(window.location.search).get("titulo"));
+        if (title && Number.isInteger(n) && n > 1 && n <= titles.length) {
+          title.innerHTML = titleHtml(titles[n - 1]);
+          // Equivale ao key={variant} do React: a varredura recomeça com o título novo.
+          restartClass(title, "hero-wipe");
+        } else if (title && titles[0]) {
+          // Título 1: se alguém editou CONFIG.heroTitles[0], a página segue o CONFIG.
+          const plain = (s) => s.replace(/[*_]/g, "").replace(/\s+/g, " ").trim();
+          if (plain(title.textContent) !== plain(titles[0])) title.innerHTML = titleHtml(titles[0]);
+        }
+
+        /* ---------- Mini-história em loop ---------- */
+
+        const visual = $('[data-h="hero-visual"]');
+        const phone = $('[data-h="hero-phone"]');
+        const chat = phone && $('[data-h="chat"]', phone);
+        const site = visual && $('[data-h="minisite"]', visual);
+        const badge = $('[data-h="hero-badge"]');
+
+        if (chat || site) {
+          const ask = CONFIG.demo.scenarios[0];
+          const saturday = ask.update?.saturday ?? "Sábado: 8h às 14h";
+          const done = [
+            { id: "a", from: "client", text: ask.ask },
+            { id: "b", from: "us", text: ask.reply },
+          ];
+          const showMsgs = (msgs) => chat && renderChat(chat, msgs);
+          // O selo "atualizado agora" acende junto com o brilho no site.
+          const showSite = (state) => {
+            if (site) setMiniSite(site, state);
+            setBadge(badge, Boolean(state.flash));
+          };
+
+          if (reduce) {
+            // Sem movimento: só o estado final, sem brilho.
+            showMsgs(done);
+            showSite({ saturday });
+          } else {
+            let timers = [];
+            let key = 0;
+            const stop = () => {
+              timers.forEach(clearTimeout);
+              timers = [];
+            };
+            const run = () => {
+              stop();
+              showMsgs([]);
+              showSite({});
+              const at = (ms, fn) => timers.push(setTimeout(fn, ms));
+              at(2200, () => showMsgs([done[0]]));
+              at(3300, () => showMsgs([done[0], { id: "t", from: "us", text: "", typing: true }]));
+              at(4700, () => showMsgs(done));
+              at(5100, () => showSite({ saturday, flash: "hours", flashKey: ++key }));
+              at(11000, run);
+            };
+
+            // Fora da tela o loop para; ao voltar, a história recomeça do início.
+            const watched = visual ?? phone ?? site;
+            if (watched && "IntersectionObserver" in window) {
+              let running = false;
+              new IntersectionObserver(([e]) => {
+                if (e.isIntersecting && !running) {
+                  running = true;
+                  run();
+                } else if (!e.isIntersecting && running) {
+                  running = false;
+                  stop();
+                }
+              }).observe(watched);
+            } else {
+              run();
+            }
+          }
+        }
+
+        /* ---------- Inclinação dos aparelhos com o mouse ---------- */
+
+        const tilt = $('[data-h="hero-tilt"]');
+        if (tilt && !reduce) {
+          let raf = 0;
+          window.addEventListener(
+            "pointermove",
+            (e) => {
+              if (e.pointerType !== "mouse") return;
+              cancelAnimationFrame(raf);
+              raf = requestAnimationFrame(() => {
+                const x = e.clientX / window.innerWidth - 0.5;
+                const y = e.clientY / window.innerHeight - 0.5;
+                tilt.style.setProperty("--ry", `${x * 10}deg`);
+                tilt.style.setProperty("--rx", `${-y * 8}deg`);
+              });
+            },
+            { passive: true },
+          );
+        }
+      }
+
+      /* ===== 30-demo.js ===== */
+      /**
+       * "Pediu, atualizou" (UpdateDemo): três pedidos no WhatsApp (horário, preço,
+       * foto da vitrine) viram, na hora, mudanças no site de exemplo.
+       * - Desktop: o scroll dirige a cena (seção fixa com pin do ScrollTrigger).
+       * - Celular, "reduzir movimento" ou sem GSAP: avança sozinha enquanto a seção
+       *   está na tela, com abas para escolher o exemplo.
+       */
+      function initDemo() {
+        const section = $('section[data-h="demo"]');
+        const S = CONFIG.demo?.scenarios ?? [];
+        if (!section || !S.length) return;
+
+        // Cada cena tem 3 fases: 0 = pedido enviado, 1 = digitando, 2 = feito + site atualizado.
+        const PHASES = 3;
+        const TOTAL = S.length * PHASES;
+
+        const stage = $('[data-h="demo-stage"]', section);
+        const chatDesk = $('[data-h="demo-chat-desktop"] [data-h="chat"]', section);
+        const chatMob = $('[data-h="demo-chat-mobile"] [data-h="chat"]', section);
+        const site = $('[data-h="minisite"]', section);
+        const badge = $('[data-h="demo-badge"]', section);
+        const tabs = $$('button[data-h="demo-tab"][data-step]', section);
+        const bars = $$('[data-h="demo-progress"]', section);
+
+        // Mesmas classes do React para a aba escolhida e as outras.
+        const TAB_ON = ["border-white", "bg-white", "text-ink"];
+        const TAB_OFF = ["border-line-strong", "text-muted", "hover:text-fg"];
+
+        // Qual parte do site brilha em cada tipo de mudança (pela chave de "update").
+        const FLASH_OF = { saturday: "hours", cakePrice: "price", showcase: "showcase" };
+        const flashFor = (s) => FLASH_OF[Object.keys(S[s].update ?? {})[0]] ?? ["hours", "price", "showcase"][s] ?? null;
+
+        /** Conversa e site para uma cena/fase (igual ao stateFor do React). */
+        function stateFor(step, phase) {
+          const msgs = [];
+          const state = {};
+          for (let s = 0; s <= step; s++) {
+            const p = s < step ? 2 : phase;
+            msgs.push({ id: `a${s}`, from: "client", text: S[s].ask, attachment: S[s].attachment });
+            if (p === 1) msgs.push({ id: `t${s}`, from: "us", text: "", typing: true });
+            if (p >= 2) {
+              msgs.push({ id: `b${s}`, from: "us", text: S[s].reply });
+              Object.assign(state, S[s].update);
+            }
+          }
+          if (phase === 2) {
+            state.flash = flashFor(step);
+            state.flashKey = step + 1;
+          }
+          // No celular cabem ~4 balões: mostra só os últimos.
+          return { msgs: msgs.slice(-4), site: state };
+        }
+
+        /* ---------- Estado e desenho ---------- */
+
+        // O HTML já vem no estado { step: 0, phase: 0 }.
+        let pos = { step: 0, phase: 0 };
+
+        function render() {
+          const { msgs, site: state } = stateFor(pos.step, pos.phase);
+          if (chatDesk) renderChat(chatDesk, msgs);
+          if (chatMob) renderChat(chatMob, msgs.slice(-2));
+          if (site) setMiniSite(site, state);
+          setBadge(badge, Boolean(state.flash));
+          for (const tab of tabs) {
+            const on = Number(tab.dataset.step) === pos.step;
+            tab.setAttribute("aria-selected", String(on));
+            tab.classList.remove(...(on ? TAB_OFF : TAB_ON));
+            tab.classList.add(...(on ? TAB_ON : TAB_OFF));
+          }
+          bars.forEach((bar, i) => {
+            const x = i < pos.step ? 1 : i > pos.step ? 0 : (pos.phase + 1) / PHASES;
+            bar.style.transform = `scaleX(${x})`;
+          });
+        }
+
+        // Só redesenha quando a cena ou a fase muda.
+        function setPos(step, phase) {
+          if (pos.step === step && pos.phase === phase) return;
+          pos = { step, phase };
+          render();
+        }
+
+        /* ---------- HTML pronto × CONFIG ---------- */
+
+        const norm = (s) => s.replace(/\s+/g, " ").trim();
+
+        // Marca os balões que vieram no HTML para o renderChat reaproveitá-los (como
+        // a hidratação do React: sem repetir a entrada). Se o texto do CONFIG mudou,
+        // troca os balões já.
+        function adoptChat(chat, msgs) {
+          const box = $('[data-h="chat-msgs"]', chat);
+          if (!box) return;
+          const kids = Array.from(box.children);
+          const tpl = document.createElement("template");
+          const same =
+            kids.length === msgs.length &&
+            msgs.every((m, i) => {
+              tpl.innerHTML = bubbleHtml(m);
+              return norm(tpl.content.textContent) === norm(kids[i].textContent);
+            });
+          if (same) msgs.forEach((m, i) => (kids[i].dataset.id = m.id));
+          else {
+            kids.forEach((k) => k.remove());
+            renderChat(chat, msgs);
+          }
+        }
+
+        const initial = stateFor(0, 0).msgs;
+        if (chatDesk) adoptChat(chatDesk, initial);
+        if (chatMob) adoptChat(chatMob, initial.slice(-2));
+
+        // Rótulos das abas vêm do CONFIG; abas/barras sem cena somem.
+        for (const tab of tabs) {
+          const sc = S[Number(tab.dataset.step)];
+          if (!sc) {
+            tab.hidden = true;
+            continue;
+          }
+          const label = Array.from(tab.childNodes).filter((n) => n.nodeType === Node.TEXT_NODE);
+          if (norm(label.map((n) => n.textContent).join("")) !== norm(sc.tab)) {
+            label.forEach((n) => n.remove());
+            tab.append(sc.tab);
+          }
+        }
+        bars.forEach((bar, i) => {
+          if (i >= S.length && bar.parentElement) bar.parentElement.hidden = true;
+        });
+
+        /* ---------- Modo automático (celular / reduzir movimento / sem GSAP) ---------- */
+
+        let auto = true;
+        // Quem toca numa aba assume o controle: a cena para de avançar sozinha.
+        let userPaused = false;
+        let stopAuto = null;
+        // Pin do desktop ({ start, end } do ScrollTrigger) enquanto existir.
+        let pin = null;
+
+        // Equivale ao useEffect([auto, userPaused]) do React.
+        function syncAuto() {
+          stopAuto?.();
+          stopAuto = null;
+          if (!auto || userPaused) return;
+          if (prefersReducedMotion()) {
+            setPos(0, 2);
+            return;
+          }
+          let timer;
+          // Avança sozinha enquanto a seção está na tela.
+          const io = new IntersectionObserver(
+            ([e]) => {
+              clearInterval(timer);
+              if (!e.isIntersecting) return;
+              timer = setInterval(() => {
+                const i = (pos.step * PHASES + pos.phase + 1) % TOTAL;
+                setPos(Math.floor(i / PHASES), i % PHASES);
+              }, 1500);
+            },
+            { threshold: 0.35 },
+          );
+          io.observe(section);
+          stopAuto = () => {
+            io.disconnect();
+            clearInterval(timer);
+          };
+        }
+
+        function setAuto(on) {
+          if (auto === on) return;
+          auto = on;
+          syncAuto();
+        }
+
+        for (const tab of tabs) {
+          tab.addEventListener("click", () => {
+            const i = Number(tab.dataset.step);
+            if (!auto) {
+              // No desktop, rola até o ponto da cena correspondente.
+              if (pin) window.scrollTo({ top: pin.start + ((i * PHASES + 2.5) / TOTAL) * (pin.end - pin.start), behavior: "smooth" });
+              return;
+            }
+            if (!userPaused) {
+              userPaused = true;
+              syncAuto();
+            }
+            setPos(i, 2);
+          });
+        }
+
+        syncAuto();
+
+        /* ---------- Desktop: o scroll dirige a cena ---------- */
+
+        if (prefersReducedMotion() || !stage) return;
+        loadGsap().then(
+          ({ gsap, ScrollTrigger }) => {
+            const fromProgress = (p) => {
+              const i = Math.min(TOTAL - 1, Math.floor(p * TOTAL));
+              setPos(Math.floor(i / PHASES), i % PHASES);
+            };
+            const mm = gsap.matchMedia();
+            mm.add("(min-width: 1024px)", () => {
+              setAuto(false);
+              const st = ScrollTrigger.create({
+                trigger: stage,
+                start: "top top+=72",
+                end: "+=1800",
+                pin: true,
+                anticipatePin: 1,
+                onUpdate: (self) => fromProgress(self.progress),
+              });
+              pin = st;
+              // Ao voltar de uma tela estreita, a cena acompanha o scroll de cara.
+              fromProgress(st.progress);
+              return () => {
+                st.kill();
+                pin = null;
+                setAuto(true);
+              };
+            });
+            // O pin acrescenta espaço na página: recalcula as posições dos outros
+            // ScrollTriggers no quadro seguinte (o SmoothScroll fazia isso no React).
+            if (pin) requestAnimationFrame(() => ScrollTrigger.refresh());
+          },
+          // Sem GSAP (CDN fora): fica no modo automático, que já está rodando.
+          () => {},
+        );
+      }
+
+      /* ===== 40-portfolio.js ===== */
+      /**
+       * Portfólio (Portfolio): carrossel 3D curvo. Os sites ficam num arco;
+       * arrastar, usar as setas ou o teclado gira o carrossel. Clicar num site
+       * real abre em nova aba; clicar num site de lado traz ele para o centro.
+       * As contas são as mesmas do React (largura vinda do ResizeObserver).
+       */
+      function initPortfolio() {
+        const wrap = $('[data-h="carousel"]');
+        if (!wrap) return;
+        const cards = $$('[data-h="carousel-card"][data-index]', wrap).sort((a, b) => a.dataset.index - b.dataset.index);
+        if (!cards.length) return;
+        const section = wrap.closest("section") ?? document;
+        const prev = $('[data-h="carousel-prev"]', section);
+        const next = $('[data-h="carousel-next"]', section);
+        const parts = cards.map((card) => {
+          const link = $(":scope > a", card);
+          const href = link?.getAttribute("href") ?? "#";
+          // Item sem URL de verdade aponta para "#portfolio" (só exemplo).
+          return { card, shade: $('[data-h="carousel-shade"]', card), link, real: !href.startsWith("#") };
+        });
+        const last = cards.length - 1;
+        const EASE = "transform 0.8s cubic-bezier(0.16,1,0.3,1), opacity 0.8s";
+
+        // Estado (igual aos useState/useRef do React). O HTML vem calculado com largura 1200.
+        let index = 0;
+        let drag = 0;
+        let width = 1200;
+        let start = null; // { x, id } do ponteiro que começou o arraste
+        let moved = false;
+
+        const clamp = (i) => Math.max(0, Math.min(last, i));
+        /** Largura do card e distância entre cards para a largura atual. */
+        const geometry = () => {
+          const cardW = Math.min(width * (width < 640 ? 0.82 : 0.52), 680);
+          return { cardW, step: cardW * 0.78 };
+        };
+
+        /** Posiciona os cards. instant = sem transição (primeiro desenho). */
+        function render(instant = false) {
+          const { cardW, step } = geometry();
+          const offset = index - drag / step;
+          const current = Math.round(offset);
+          parts.forEach(({ card, shade, link }, i) => {
+            const d = i - offset;
+            const abs = Math.abs(d);
+            const s = card.style;
+            s.transition = instant || drag ? "none" : EASE;
+            s.width = `${cardW}px`;
+            s.marginLeft = `${-cardW / 2}px`;
+            s.transform = `translateX(${d * step}px) translateZ(${-abs * 160}px) rotateY(${-d * 18}deg)`;
+            s.visibility = abs > 2.2 ? "hidden" : "visible";
+            s.zIndex = String(10 - Math.round(abs));
+            card.setAttribute("aria-hidden", current !== i ? "true" : "false");
+            if (shade) {
+              if (instant) shade.style.transition = "none";
+              shade.style.opacity = String(Math.min(abs * 0.32, 0.85));
+            }
+            link?.setAttribute("tabindex", current === i ? "0" : "-1");
+          });
+          if (prev) prev.disabled = index === 0;
+          if (next) next.disabled = index === last;
+          if (instant) {
+            // Devolve as transições no quadro seguinte, depois do primeiro desenho.
+            requestAnimationFrame(() =>
+              requestAnimationFrame(() => {
+                for (const { card, shade } of parts) {
+                  if (!drag) card.style.transition = EASE;
+                  if (shade) shade.style.transition = "";
+                }
+              }),
+            );
+          }
+        }
+
+        const go = (d) => {
+          index = clamp(index + d);
+          render();
+        };
+
+        /* ---------- Botões e teclado ---------- */
+
+        prev?.addEventListener("click", () => go(-1));
+        next?.addEventListener("click", () => go(1));
+        wrap.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight") go(1);
+          if (e.key === "ArrowLeft") go(-1);
+        });
+
+        /* ---------- Arraste (mouse e toque) ---------- */
+
+        wrap.addEventListener("pointerdown", (e) => {
+          start = { x: e.clientX, id: e.pointerId };
+          moved = false;
+        });
+        wrap.addEventListener("pointermove", (e) => {
+          if (!start || start.id !== e.pointerId) return;
+          // Mouse solto fora do carrossel (sem captura): não segue arrastando no hover.
+          if (e.pointerType === "mouse" && !e.buttons) {
+            start = null;
+            if (drag) {
+              drag = 0;
+              render();
+            }
+            return;
+          }
+          const dx = e.clientX - start.x;
+          if (Math.abs(dx) > 6 && !moved) {
+            moved = true;
+            // Só captura depois que virou arraste, para o clique no link continuar funcionando.
+            try {
+              wrap.setPointerCapture(e.pointerId);
+            } catch {}
+          }
+          drag = dx;
+          render();
+        });
+        wrap.addEventListener("pointerup", () => {
+          if (!start) return;
+          const n = Math.round(-drag / geometry().step);
+          index = clamp(index + n);
+          drag = 0;
+          start = null;
+          render();
+        });
+        wrap.addEventListener("pointercancel", () => {
+          drag = 0;
+          start = null;
+          render();
+        });
+
+        /* ---------- Clique nos sites ---------- */
+
+        parts.forEach(({ link, real }, i) => {
+          if (!link) return;
+          link.addEventListener("click", (e) => {
+            // Clique de teclado (Enter) nunca conta como arraste.
+            const dragged = moved && e.detail !== 0;
+            if (dragged || !real) e.preventDefault();
+            if (!dragged && i !== index) {
+              index = i;
+              render();
+            }
+          });
+        });
+
+        /* ---------- Largura (ResizeObserver, como no React) ---------- */
+
+        let first = true;
+        const setWidth = (w) => {
+          if (!w) return;
+          if (!first && w === width) return;
+          width = w;
+          render(first);
+          first = false;
+        };
+        if ("ResizeObserver" in window) {
+          new ResizeObserver(([e]) => setWidth(e.contentRect.width)).observe(wrap);
+        } else {
+          setWidth(wrap.clientWidth);
+          window.addEventListener("resize", () => setWidth(wrap.clientWidth));
+        }
+      }
+
+      /* ===== 50-scroll-fx.js ===== */
+      /**
+       * Rolagem e entradas (SmoothScroll, Reveal, SectionTitle, Comparison,
+       * Pricing e HowItWorks):
+       * - Lenis (rolagem suave) sincronizado com o ScrollTrigger e a posição do
+       *   cursor em --mx/--my para a grade de pontos do fundo;
+       * - blocos que sobem e aparecem, títulos que entram palavra por palavra,
+       *   linhas do comparativo, contador do preço e a linha do tempo dos passos.
+       * Com "reduzir movimento" nada se mexe. Se o CDN falhar, a rolagem é a
+       * nativa e tudo aparece sem animação (nada fica escondido).
+       */
+      function initScrollFx() {
+        const reduce = prefersReducedMotion();
+        const root = document.documentElement;
+
+        /* ---------- Grade de pontos: o brilho segue o cursor ---------- */
+
+        window.addEventListener(
+          "pointermove",
+          (e) => {
+            root.style.setProperty("--mx", `${e.clientX}px`);
+            root.style.setProperty("--my", `${e.clientY}px`);
+          },
+          { passive: true },
+        );
+
+        /* ---------- Lenis (rolagem suave) ---------- */
+
+        // Links "#secao" ficam com o Lenis (desliza, descontando o cabeçalho);
+        // sem ele, o navegador rola sozinho (scroll-behavior: smooth do CSS e
+        // scroll-margin-top em css/50-scrollfx.css).
+        // Quem abre a página com #secao (ex.: index.html#preco) precisa cair na
+        // seção mesmo depois que o pin da demo e o Lenis mudam as posições. Só vale
+        // até a pessoa mexer na página por conta própria.
+        let lenis = null;
+        let userMoved = false;
+        for (const n of ["wheel", "touchstart", "keydown", "pointerdown"]) {
+          window.addEventListener(n, () => (userMoved = true), { once: true, passive: true });
+        }
+        const goToHash = () => {
+          if (userMoved || location.hash.length < 2) return;
+          let el = null;
+          try {
+            el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+          } catch {}
+          if (!el) return;
+          const top = el.getBoundingClientRect().top + window.scrollY - 72;
+          if (lenis) lenis.scrollTo(top, { immediate: true, force: true });
+          else window.scrollTo({ top, behavior: "instant" });
+        };
+
+        if (!reduce) {
+          // Lenis e GSAP baixam em paralelo; sem Lenis, a rolagem segue nativa.
+          const lenisReady = loadScript(CONFIG.cdn.lenis).then(
+            () => window.Lenis,
+            () => null,
+          );
+          loadGsap().then(
+            async ({ gsap, ScrollTrigger }) => {
+              const Lenis = await lenisReady;
+              if (typeof Lenis === "function") {
+                lenis = new Lenis({ duration: 1.1, anchors: { offset: -72 } });
+                lenis.on("scroll", ScrollTrigger.update);
+                gsap.ticker.add((time) => lenis.raf(time * 1000));
+                gsap.ticker.lagSmoothing(0);
+              }
+              // As seções criam seus ScrollTriggers antes; um refresh no quadro
+              // seguinte recalcula as posições já com o espaço do pin.
+              requestAnimationFrame(() => {
+                ScrollTrigger.refresh();
+                goToHash();
+              });
+            },
+            // Sem CDN: rolagem nativa (o navegador já cuida do #secao).
+            () => {},
+          );
+        }
+
+        // A página pode mudar de altura quando tudo termina de carregar (imagens,
+        // fontes): recalcula os ScrollTriggers, se o GSAP já estiver na página.
+        const refresh = () => {
+          if (window.ScrollTrigger)
+            loadGsap().then(({ ScrollTrigger }) => {
+              ScrollTrigger.refresh();
+              goToHash();
+            }, () => {});
+        };
+        if (document.readyState !== "complete") window.addEventListener("load", refresh, { once: true });
+        document.fonts?.ready.then(refresh, () => {});
+
+        /* ---------- Reveal: sobe e aparece ao entrar na tela (só CSS) ---------- */
+
+        if (!reduce) {
+          for (const el of $$('[data-h="reveal"]')) {
+            observeEnter(el, () => el.setAttribute("data-reveal", "in"), {
+              onBelowAtStart: () => el.setAttribute("data-reveal", "hidden"),
+            });
+          }
+        }
+
+        /* ---------- Títulos de seção: palavra por palavra (SplitText) ---------- */
+
+        // Cada título só é dividido quando chega na tela (o trabalho fica
+        // espalhado pela rolagem em vez de pesar no carregamento).
+        for (const el of $$('h2[data-h="section-title"]')) {
+          const underline = $(".draw-underline", el);
+          const drawUnderline = () => underline?.style.setProperty("--draw-state", "running");
+          if (reduce) {
+            drawUnderline();
+            continue;
+          }
+          const show = () => el.removeAttribute("data-title");
+          observeEnter(
+            el,
+            (animate) => {
+              if (!animate) return drawUnderline();
+              let shown = false;
+              // Plano B: GSAP demorou ou falhou → o título aparece parado.
+              const fallback = () => {
+                clearTimeout(timer);
+                if (shown) return;
+                shown = true;
+                show();
+                drawUnderline();
+              };
+              const timer = setTimeout(fallback, 2000);
+              loadGsap()
+                .then(({ gsap, SplitText }) => {
+                  clearTimeout(timer);
+                  // Já apareceu pelo plano B: não esconde de novo para animar.
+                  if (shown) return;
+                  const split = SplitText.create(el, {
+                    type: "words",
+                    mask: "words",
+                    wordsClass: "sw",
+                    // O sublinhado fica inteiro (não quebra a palavra destacada).
+                    ignore: ".draw-underline svg",
+                  });
+                  gsap.from(split.words, { yPercent: 110, duration: 1, ease: "expo.out", stagger: 0.035, onStart: show });
+                  shown = true;
+                  drawUnderline();
+                })
+                .catch(fallback);
+            },
+            { rootMargin: "0px 0px -12% 0px", onBelowAtStart: () => el.setAttribute("data-title", "hidden") },
+          );
+        }
+
+        /* ---------- Comparativo: linhas entram em sequência ---------- */
+
+        const table = $('[data-h="comparison"]');
+        if (table && !reduce) {
+          const rows = $$("[data-row]", table);
+          const showRows = () =>
+            rows.forEach((r) => {
+              r.style.opacity = "";
+              r.style.visibility = "";
+              r.style.transform = "";
+            });
+          observeEnter(
+            table,
+            (animate) => {
+              if (!animate) return;
+              let done = false;
+              // Plano B: sem GSAP as linhas aparecem paradas.
+              const fallback = () => {
+                clearTimeout(timer);
+                if (done) return;
+                done = true;
+                showRows();
+              };
+              const timer = setTimeout(fallback, 2500);
+              loadGsap()
+                .then(({ gsap }) => {
+                  clearTimeout(timer);
+                  if (done) return;
+                  gsap
+                    .timeline()
+                    .fromTo(rows, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "expo.out", stagger: 0.09 })
+                    .from($$("[data-mark]", table), { scale: 0, duration: 0.6, ease: "back.out(3)", stagger: 0.05 }, 0.25);
+                  done = true;
+                })
+                .catch(fallback);
+            },
+            { rootMargin: "0px 0px -20% 0px", onBelowAtStart: () => rows.forEach((r) => (r.style.opacity = "0")) },
+          );
+        }
+
+        /* ---------- Preço: contador R$ 0 → R$ 250, depois entra o "/mês" ---------- */
+
+        const num = $('[data-h="price-num"]');
+        const per = $('[data-h="price-per"]');
+        if (num) {
+          // O valor é o que está escrito na página (troque o preço direto no HTML).
+          const final = num.textContent.trim();
+          const target = Number(final.replace(/\D/g, "")) || 0;
+          if (!reduce) {
+            const restore = () => {
+              num.textContent = final;
+              if (per) for (const p of ["opacity", "visibility", "transform"]) per.style[p] = "";
+            };
+            observeEnter(
+              num,
+              (animate) => {
+                if (!animate) return;
+                loadGsap()
+                  .then(({ gsap }) => {
+                    const o = { v: 0 };
+                    num.textContent = "0";
+                    const tl = gsap.timeline();
+                    tl.to(o, {
+                      v: target,
+                      duration: 1.6,
+                      ease: "expo.out",
+                      onUpdate: () => {
+                        num.textContent = String(Math.round(o.v));
+                      },
+                      onComplete: () => {
+                        num.textContent = final;
+                      },
+                    });
+                    if (per) tl.from(per, { x: -12, autoAlpha: 0, duration: 0.6, ease: "expo.out" }, "-=0.7");
+                  })
+                  .catch(restore);
+              },
+              { rootMargin: "0px 0px -20% 0px" },
+            );
+          }
+        }
+
+        /* ---------- Como funciona: a linha se desenha e acende cada passo ---------- */
+
+        const list = $('ol[data-h="steps"]');
+        if (list) {
+          const steps = $$(":scope > li[data-step]", list);
+          const line = $(":scope > [data-line]", list);
+          const allOn = () => {
+            steps.forEach((s) => s.classList.add("is-on"));
+            if (line) line.style.transform = "";
+          };
+          if (reduce) allOn();
+          else {
+            loadGsap()
+              .then(({ gsap, ScrollTrigger }) => {
+                if (line) {
+                  gsap.fromTo(
+                    line,
+                    { scaleY: 0 },
+                    { scaleY: 1, ease: "none", scrollTrigger: { trigger: list, start: "top 70%", end: "bottom 60%", scrub: 0.6 } },
+                  );
+                }
+                for (const step of steps) {
+                  ScrollTrigger.create({ trigger: step, start: "top 68%", toggleClass: { targets: step, className: "is-on" } });
+                }
+              })
+              // Sem GSAP: todos os passos acesos e a linha inteira.
+              .catch(allOn);
+          }
+        }
+      }
+
+      /* ===== 60-chrome.js ===== */
+      /**
+       * Moldura da página (Header, StickyContact, ContactButton e Analytics):
+       * - todos os links [data-cta] abrem contactHref() (WhatsApp, ou o Direct do
+       *   Instagram enquanto o número não estiver no CONFIG);
+       * - o cabeçalho ganha fundo de vidro depois de 24px de rolagem;
+       * - barra do celular / botão flutuante do desktop aparecem depois do topo e
+       *   somem perto do fim da página (animações no css/60-chrome.css);
+       * - botões principais seguem o mouse, afundam ao apertar e param de pulsar
+       *   no primeiro contato;
+       * - GA4 e Meta Pixel só carregam se os IDs estiverem no CONFIG; todo clique
+       *   em [data-cta] vira evento com as UTMs da visita.
+       */
+      function initChrome() {
+        // Cada parte roda isolada: um erro numa não derruba as outras.
+        const run = (name, fn) => {
+          try {
+            fn();
+          } catch (err) {
+            console.error(`[chrome:${name}]`, err);
+          }
+        };
+
+        /* ---------- Links de contato ---------- */
+
+        run("links", () => {
+          const href = contactHref();
+          for (const a of $$("a[data-cta]")) {
+            a.href = href;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+          }
+        });
+
+        /* ---------- Cabeçalho: vidro depois de 24px ---------- */
+
+        run("header", () => {
+          const header = $('[data-h="header"]');
+          if (!header) return;
+          let scrolled = null;
+          const on = () => {
+            const next = window.scrollY > 24;
+            if (next === scrolled) return;
+            scrolled = next;
+            // Mesmas classes do Header.tsx ("border-b" fica sempre).
+            for (const c of ["border-line", "bg-ink/70", "backdrop-blur-xl"]) header.classList.toggle(c, next);
+            header.classList.toggle("border-transparent", !next);
+          };
+          on();
+          window.addEventListener("scroll", on, { passive: true });
+        });
+
+        /* ---------- Contato fixo (barra do celular e botão flutuante) ---------- */
+
+        run("sticky", () => {
+          const els = [$('[data-h="sticky-bar"]'), $('[data-h="sticky-float"]')].filter(Boolean);
+          if (!els.length) return;
+
+          let shown = null;
+          const on = () => {
+            const past = window.scrollY > window.innerHeight * 0.85;
+            const nearEnd = window.innerHeight + window.scrollY > document.documentElement.scrollHeight - 160;
+            const show = past && !nearEnd;
+            if (show === shown) return;
+            shown = show;
+            for (const el of els) {
+              el.dataset.state = show ? "shown" : "hidden";
+              // Escondido não recebe foco nem clique (o React tirava do DOM).
+              el.toggleAttribute("inert", !show);
+              if (show) el.removeAttribute("aria-hidden");
+              else el.setAttribute("aria-hidden", "true");
+            }
+          };
+          on();
+          window.addEventListener("scroll", on, { passive: true });
+          window.addEventListener("resize", on);
+        });
+
+        /* ---------- Botões principais: magnético, aperto e pulso ---------- */
+
+        run("magnetic", () => {
+          for (const el of $$('a[data-h="cta-magnetic"]')) {
+            // Segue o mouse (toque e caneta ficam parados, como no React).
+            el.addEventListener("pointermove", (e) => {
+              if (e.pointerType !== "mouse") return;
+              const r = el.getBoundingClientRect();
+              const x = (e.clientX - (r.left + r.width / 2)) * 0.28;
+              const y = (e.clientY - (r.top + r.height / 2)) * 0.4;
+              el.style.translate = `${x.toFixed(2)}px ${y.toFixed(2)}px`;
+            });
+            el.addEventListener("pointerleave", () => {
+              el.style.translate = "0px 0px";
+            });
+
+            // whileTap do Motion: afunda (scale .97) enquanto estiver apertado,
+            // pelo ponteiro principal ou pela tecla Enter.
+            const release = () => {
+              el.removeAttribute("data-pressed");
+              window.removeEventListener("pointerup", release, true);
+              window.removeEventListener("pointercancel", release, true);
+            };
+            el.addEventListener("pointerdown", (e) => {
+              if (e.pointerType === "mouse" ? e.button > 0 : e.isPrimary === false) return;
+              el.setAttribute("data-pressed", "");
+              window.addEventListener("pointerup", release, true);
+              window.addEventListener("pointercancel", release, true);
+            });
+            el.addEventListener("keydown", (e) => {
+              if (e.key === "Enter" && !e.repeat) el.setAttribute("data-pressed", "");
+            });
+            el.addEventListener("keyup", (e) => {
+              if (e.key === "Enter") release();
+            });
+            el.addEventListener("blur", release);
+
+            // Pulso: para de vez no primeiro contato (ponteiro em cima ou foco).
+            if (el.classList.contains("cta-pulse")) {
+              const stop = () => el.classList.remove("cta-pulse");
+              el.addEventListener("pointerenter", stop, { once: true });
+              el.addEventListener("focus", stop, { once: true });
+            }
+          }
+        });
+
+        /* ---------- Medição: UTMs, GA4, Meta Pixel e cliques de contato ---------- */
+
+        run("analytics", () => {
+          const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+
+          // Guarda as UTMs da primeira visita (bio ou anúncio) para a sessão toda.
+          const utms = {};
+          try {
+            const params = new URLSearchParams(window.location.search);
+            const saved = JSON.parse(sessionStorage.getItem("ol_utm") ?? "{}") ?? {};
+            for (const k of UTM_KEYS) {
+              const v = params.get(k) ?? saved[k];
+              if (v) utms[k] = String(v);
+            }
+            sessionStorage.setItem("ol_utm", JSON.stringify(utms));
+          } catch {
+            // Navegação privada pode bloquear o sessionStorage: segue sem salvar.
+          }
+
+          const { ga4Id, metaPixelId } = CONFIG;
+
+          // GA4 (gtag.js): a fila do dataLayer guarda os eventos até o script chegar.
+          if (ga4Id) {
+            window.dataLayer = window.dataLayer || [];
+            if (typeof window.gtag !== "function") {
+              window.gtag = function gtag() {
+                window.dataLayer.push(arguments);
+              };
+            }
+            window.gtag("js", new Date());
+            window.gtag("config", ga4Id);
+            loadScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ga4Id)}`).catch(() => {});
+          }
+
+          // Meta Pixel: o snippet padrão do Facebook, sem eval.
+          if (metaPixelId) {
+            if (!window.fbq) {
+              const n = function fbq() {
+                if (n.callMethod) n.callMethod.apply(n, arguments);
+                else n.queue.push(arguments);
+              };
+              window.fbq = n;
+              if (!window._fbq) window._fbq = n;
+              n.push = n;
+              n.loaded = true;
+              n.version = "2.0";
+              n.queue = [];
+              loadScript("https://connect.facebook.net/en_US/fbevents.js").catch(() => {});
+            }
+            window.fbq("init", metaPixelId);
+            window.fbq("track", "PageView");
+          }
+
+          // Clique em qualquer botão de contato (captura: roda antes de abrir a aba).
+          document.addEventListener(
+            "click",
+            (e) => {
+              const el = e.target instanceof Element ? e.target.closest("[data-cta]") : null;
+              if (!el) return;
+              const params = { cta: el.getAttribute("data-cta") ?? "", channel: contactChannel(), ...utms };
+              window.gtag?.("event", "whatsapp_click", params);
+              window.fbq?.("track", "Contact", params);
+            },
+            { capture: true },
+          );
+        });
+      }
 
       /* ===== 99-main.js ===== */
       /* Inicialização: cada módulo roda isolado; um erro num não derruba os outros. */
