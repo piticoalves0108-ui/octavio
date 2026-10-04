@@ -37,7 +37,7 @@ STATIC_EXPORT=1 npm run build
 
 ### WhatsApp
 
-Em `src/config/site.ts`, preencha `whatsapp` só com dígitos: `55` + DDD + número (ex.: `"5561999998888"`). Todos os botões da página passam a abrir o WhatsApp com a mensagem pronta *"Olá! Vim pelo site e quero um site para o meu negócio."*. **Enquanto estiver vazio, os botões abrem o Direct do Instagram** (`ig.me/m/ol_systemss`), para ninguém cair num número errado.
+O número fica em `src/config/site.ts` → `whatsapp`, só com dígitos: `55` + DDD + número (hoje `"5562999291420"`). Todos os botões da página abrem o WhatsApp com a mensagem pronta *"Olá! Vim pelo site e quero um site para o meu negócio."*. Se o campo ficar vazio, os botões abrem o Direct do Instagram (`ig.me/m/ol_systemss`).
 
 ### Preço
 
@@ -70,20 +70,14 @@ Não há fotos do Instagram no projeto (não deu para baixá-las daqui). O logo 
 Tudo que ainda depende do dono está marcado com `{{CONFIRMAR: ...}}` no código e **aparece destacado em amarelo na página**, para nada ir ao ar com informação inventada. Antes de publicar, confirme e troque:
 
 - [ ] Grafia exata do nome e logo oficial (`site.ts`)
-- [ ] WhatsApp: DDD e número (`site.ts` → `whatsapp`)
-- [ ] O que acontece com o site se o cliente cancelar (`terms.cancel`)
-- [ ] Prazo de entrega do site (`terms.deliveryTime`)
-- [ ] Prazo de cada atualização (`terms.updateTime`)
 - [ ] O que conta como atualização (`terms.updateScope`)
-- [ ] Atualizações ilimitadas ou com limite por mês (`terms.updateLimit`)
-- [ ] Quantas páginas ou seções o site tem (`terms.pages`)
 - [ ] E-mail profissional e Google Meu Negócio inclusos? (`terms.extras`)
 - [ ] IDs do GA4 e do Meta Pixel (variáveis de ambiente, ver abaixo)
 - [ ] Domínio de produção (`NEXT_PUBLIC_SITE_URL`)
 - [ ] Texto da política de privacidade, data e canal para pedidos de privacidade (`politica-de-privacidade/page.tsx`)
 - [ ] Sites reais para o portfólio e depoimentos reais
 
-Já confirmados: sem taxa de adesão (começa com a 1ª mensalidade), sem fidelidade, pagamento via Pix, hospedagem e certificado SSL inclusos, domínio não incluso, atendimento em todo o Centro-Oeste, sem CNPJ (a linha do CNPJ não aparece) e o cliente não precisa de CNPJ para contratar.
+Já confirmados: WhatsApp (62) 99929-1420; sem taxa de adesão (começa com a 1ª mensalidade); sem fidelidade; pagamento via Pix; hospedagem e certificado SSL inclusos; domínio não incluso; site entregue em 1 dia; atualizações sem limite, feitas em até 3 horas; se o cliente cancelar, o site é excluído e sai do ar; atendimento em todo o Centro-Oeste; sem CNPJ (a linha do CNPJ não aparece) e o cliente não precisa de CNPJ para contratar.
 
 Quando uma resposta do FAQ ainda tem marcador, ela fica fora dos dados estruturados (FAQPage) que vão para o Google.
 

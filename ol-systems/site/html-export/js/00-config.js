@@ -1,16 +1,15 @@
 /**
  * CONFIGURAÇÃO — edite aqui.
  *
- * whatsapp: só dígitos, 55 + DDD + número. Ex.: "5561999998888".
- *   {{CONFIRMAR: DDD e número}}. Enquanto estiver vazio, todos os botões de
- *   contato abrem o Direct do Instagram, para ninguém cair num número errado.
+ * whatsapp: só dígitos, 55 + DDD + número. (62) 99929-1420.
+ *   Se ficar vazio, todos os botões de contato abrem o Direct do Instagram.
  * ga4Id / metaPixelId: {{CONFIRMAR: IDs do GA4 e do Pixel}}. Vazio = não carrega.
  * heroTitles: títulos do topo para teste A/B (?titulo=2 ou ?titulo=3 no link).
  *   *texto* = destaque; _texto_ = sublinhado verde.
  * demo: a conversa de exemplo da seção "Pediu, atualizou".
  */
 const CONFIG = {
-  whatsapp: "",
+  whatsapp: "5562999291420",
   whatsappMessage: "Olá! Vim pelo site e quero um site para o meu negócio.",
   instagramHandle: "ol_systemss",
   ga4Id: "",

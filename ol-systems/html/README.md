@@ -26,7 +26,7 @@ No fim do `index.html`, dentro do `<script type="module">`, fica o objeto `CONFI
 
 ```js
 const CONFIG = {
-  whatsapp: "",            // só dígitos: 55 + DDD + número, ex.: "5561999998888"
+  whatsapp: "5562999291420", // só dígitos: 55 + DDD + número
   whatsappMessage: "Olá! Vim pelo site e quero um site para o meu negócio.",
   ga4Id: "",               // ID do Google Analytics 4 (G-XXXXXXX)
   metaPixelId: "",         // ID do Meta Pixel
@@ -34,7 +34,7 @@ const CONFIG = {
 };
 ```
 
-Enquanto `whatsapp` estiver vazio, todos os botões abrem o Direct do Instagram @ol_systemss, para ninguém cair num número errado. Preencheu, todos passam a abrir o WhatsApp com a mensagem pronta.
+Todos os botões abrem o WhatsApp (62) 99929-1420 com a mensagem pronta. Para trocar o número, mude só esse campo. Se ele ficar vazio, os botões abrem o Direct do Instagram @ol_systemss.
 
 ### Domínio
 

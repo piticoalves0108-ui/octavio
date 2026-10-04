@@ -17,12 +17,10 @@ export const site = {
   },
 
   /**
-   * WhatsApp só com dígitos: 55 + DDD + número. Ex.: "5561999998888".
-   * {{CONFIRMAR: DDD e número}}
-   * Enquanto estiver vazio, os botões abrem o Direct do Instagram para não
-   * levar o cliente a um número errado.
+   * WhatsApp só com dígitos: 55 + DDD + número. (62) 99929-1420.
+   * Se ficar vazio, os botões abrem o Direct do Instagram.
    */
-  whatsapp: "",
+  whatsapp: "5562999291420",
   whatsappMessage: "Olá! Vim pelo site e quero um site para o meu negócio.",
 
   price: 250,
@@ -56,21 +54,20 @@ export const site = {
 export const terms = {
   setupFee: "Sem taxa de adesão: você começa pagando só a 1ª mensalidade.",
   loyalty: "Sem fidelidade.",
-  cancel: confirmar("o que acontece com o site se cancelar"),
-  deliveryTime: confirmar("prazo de entrega do site"),
-  updateTime: confirmar("prazo de cada atualização, ex.: até 24 h úteis"),
+  cancel: "O site é excluído e sai do ar.",
+  deliveryTime: "1 dia",
+  updateTime: "até 3 horas",
   updateScope: confirmar(
     "o que conta como atualização: texto, foto, preço, nova seção, nova página?",
   ),
-  updateLimit: confirmar("atualizações ilimitadas ou com limite por mês?"),
-  pages: confirmar("quantas páginas ou seções o site tem"),
+  updateLimit: "Sim. Não tem limite: peça quantas atualizações quiser.",
   hosting: "Hospedagem inclusa.",
   domain: "O domínio (.com.br) não está incluso: é contratado à parte.",
   ssl: "Certificado SSL incluso: o site abre com o cadeado de conexão segura.",
   extras: confirmar("e-mail profissional e Google Meu Negócio inclusos?"),
   payment: "Pix",
   cnpjRequired: "Não. Você não precisa ter CNPJ para contratar.",
-  trustLine: "Sem taxa de adesão · Sem fidelidade · Pagamento via Pix",
+  trustLine: "Sem taxa de adesão · Sem fidelidade · No ar em 1 dia",
 } as const;
 
 export const PENDING_RE = /\{\{CONFIRMAR:[^}]*\}\}/g;
