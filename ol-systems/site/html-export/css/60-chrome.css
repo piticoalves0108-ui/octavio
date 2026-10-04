@@ -1,0 +1,70 @@
+/* Contato fixo (StickyContact): entrada e saída como as molas do Motion.
+   Escondido = fora da tela e visibility: hidden quando a saída termina
+   (some do Tab e do leitor de tela mesmo sem suporte a "inert"). */
+
+/* Barra do celular: sobe de 100px (mola stiffness 260 / damping 28). */
+[data-h="sticky-bar"] {
+  transition:
+    transform 450ms cubic-bezier(0.22, 1.2, 0.36, 1),
+    visibility 0s linear 0s;
+}
+[data-h="sticky-bar"][data-state="hidden"] {
+  transform: translateY(100px);
+  visibility: hidden;
+  transition:
+    transform 450ms cubic-bezier(0.22, 1.2, 0.36, 1),
+    visibility 0s linear 450ms;
+}
+
+/* Botão flutuante do desktop: cresce do zero com um leve passo além
+   (mola stiffness 300 / damping 20). "scale" fica com o hover:scale-110. */
+[data-h="sticky-float"] {
+  transition:
+    transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 200ms ease-out,
+    scale 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 0s;
+}
+[data-h="sticky-float"][data-state="hidden"] {
+  transform: scale(0);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 200ms ease-out,
+    scale 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 300ms;
+}
+
+/* Botões principais (ContactButton): seguem o cursor com uma mola curta
+   (stiffness 220 / damping 16 / mass 0.4) e afundam um pouco ao apertar.
+   Usa "translate" e "scale" (não "transform") para não brigar com outras animações. */
+[data-h="cta-magnetic"] {
+  translate: 0px 0px;
+  transition-property: background-color, box-shadow, translate, scale;
+  transition-duration: 150ms, 150ms, 350ms, 200ms;
+  transition-timing-function:
+    cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.22, 1, 0.36, 1),
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-h="cta-magnetic"][data-pressed] {
+  scale: 0.97;
+}
+
+/* Reduzir movimento: a barra e o botão só aparecem e somem (sem deslizar/crescer). */
+@media (prefers-reduced-motion: reduce) {
+  [data-h="sticky-bar"],
+  [data-h="sticky-float"] {
+    transition:
+      opacity 200ms ease,
+      visibility 0s linear 0s;
+  }
+  [data-h="sticky-bar"][data-state="hidden"],
+  [data-h="sticky-float"][data-state="hidden"] {
+    transform: none;
+    opacity: 0;
+    transition:
+      opacity 200ms ease,
+      visibility 0s linear 200ms;
+  }
+}

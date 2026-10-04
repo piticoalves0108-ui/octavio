@@ -1,0 +1,5 @@
+/* Sem o Lenis (CDN fora ou "reduzir movimento"), os links "#secao" do
+   navegador param abaixo do cabeçalho fixo, como o Lenis faz (offset 72px). */
+html:not(.lenis) section[id] {
+  scroll-margin-top: 72px;
+}
