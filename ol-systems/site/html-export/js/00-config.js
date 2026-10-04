@@ -3,7 +3,7 @@
  *
  * whatsapp: só dígitos, 55 + DDD + número. (62) 99929-1420.
  *   Se ficar vazio, todos os botões de contato abrem o Direct do Instagram.
- * ga4Id / metaPixelId: {{CONFIRMAR: IDs do GA4 e do Pixel}}. Vazio = não carrega.
+ * ga4Id / metaPixelId: opcionais (Google Analytics 4 e Meta Pixel). Vazio = não carrega.
  * heroTitles: títulos do topo para teste A/B (?titulo=2 ou ?titulo=3 no link).
  *   *texto* = destaque; _texto_ = sublinhado verde.
  * demo: a conversa de exemplo da seção "Pediu, atualizou".

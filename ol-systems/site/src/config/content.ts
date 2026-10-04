@@ -1,6 +1,6 @@
 /**
  * Textos da página. Para trocar qualquer frase, edite aqui.
- * Marcadores {{CONFIRMAR: ...}} aparecem destacados na página até serem trocados.
+ * Um texto com confirmar("...") aparece destacado na página até ser trocado.
  */
 import { site, terms } from "./site";
 
@@ -199,10 +199,9 @@ export const faq = {
     { q: "Em quanto tempo o site fica pronto?", a: `Em ${terms.deliveryTime}.` },
     {
       q: "O que conta como atualização e em quanto tempo ela é feita?",
-      a: `Trocas de texto, preço, horário e foto entram na mensalidade. ${terms.updateScope} Prazo: ${terms.updateTime}.`,
+      a: `Trocas de texto, preço, horário e foto entram na mensalidade, sem limite. Prazo: ${terms.updateTime}.`,
     },
     { q: "Posso pedir quantas atualizações quiser?", a: terms.updateLimit },
-    { q: "Inclui e-mail profissional e Google Meu Negócio?", a: terms.extras },
     {
       q: "O domínio está incluso?",
       a: "Não. A mensalidade inclui a hospedagem e o certificado SSL; o domínio (.com.br) é contratado à parte.",

@@ -1,16 +1,15 @@
 /**
  * Dados do negócio: tudo o que é informação real da OL Systems fica aqui.
  *
- * Regra: não invente nada. Onde a informação ainda não foi confirmada com o
- * dono, o texto leva o marcador {{CONFIRMAR: ...}}. A página mostra esses
- * marcadores destacados em amarelo para ninguém publicar com dado errado.
- * A lista completa está no README.
+ * Regra: não invente nada. Hoje tudo o que aparece na página está confirmado.
+ * Se no futuro entrar um dado ainda sem confirmação, use confirmar("...") no
+ * texto: a página mostra o marcador destacado em amarelo até ele ser trocado.
  */
 
 export const confirmar = (oQue: string) => `{{CONFIRMAR: ${oQue}}}`;
 
 export const site = {
-  name: "OL Systems", // {{CONFIRMAR: grafia exata do nome e logo}}
+  name: "OL Systems",
   instagram: {
     handle: "ol_systemss",
     url: "https://www.instagram.com/ol_systemss/",
@@ -21,6 +20,7 @@ export const site = {
    * Se ficar vazio, os botões abrem o Direct do Instagram.
    */
   whatsapp: "5562999291420",
+  whatsappDisplay: "(62) 99929-1420",
   whatsappMessage: "Olá! Vim pelo site e quero um site para o meu negócio.",
 
   price: 250,
@@ -44,7 +44,7 @@ export const site = {
       : "http://localhost:3000"),
 
   analytics: {
-    // {{CONFIRMAR: IDs do GA4 e do Pixel}}. Vazio = script não é carregado.
+    // Opcional. Vazio = script não é carregado.
     ga4Id: process.env.NEXT_PUBLIC_GA4_ID ?? "",
     metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "",
   },
@@ -57,14 +57,10 @@ export const terms = {
   cancel: "O site é excluído e sai do ar.",
   deliveryTime: "1 dia",
   updateTime: "até 3 horas",
-  updateScope: confirmar(
-    "o que conta como atualização: texto, foto, preço, nova seção, nova página?",
-  ),
   updateLimit: "Sim. Não tem limite: peça quantas atualizações quiser.",
   hosting: "Hospedagem inclusa.",
   domain: "O domínio (.com.br) não está incluso: é contratado à parte.",
   ssl: "Certificado SSL incluso: o site abre com o cadeado de conexão segura.",
-  extras: confirmar("e-mail profissional e Google Meu Negócio inclusos?"),
   payment: "Pix",
   cnpjRequired: "Não. Você não precisa ter CNPJ para contratar.",
   trustLine: "Sem taxa de adesão · Sem fidelidade · No ar em 1 dia",

@@ -65,21 +65,13 @@ Só reais, com nome, empresa e autorização. Enquanto `testimonials` estiver va
 
 Não há fotos do Instagram no projeto (não deu para baixá-las daqui). O logo e os ícones são o globo redesenhado em SVG (`src/components/SvgGlobe.tsx`, `src/app/icon.svg`). Se o logo oficial for diferente, troque esses dois arquivos. Fotos novas vão em `public/images/`, com autorização.
 
-## Marcadores CONFIRMAR
+## Informações do negócio
 
-Tudo que ainda depende do dono está marcado com `{{CONFIRMAR: ...}}` no código e **aparece destacado em amarelo na página**, para nada ir ao ar com informação inventada. Antes de publicar, confirme e troque:
+Tudo o que aparece na página está confirmado com o dono: WhatsApp (62) 99929-1420; sem taxa de adesão (começa com a 1ª mensalidade); sem fidelidade; pagamento via Pix; hospedagem e certificado SSL inclusos; domínio não incluso; site entregue em 1 dia; atualizações sem limite, feitas em até 3 horas; se o cliente cancelar, o site é excluído e sai do ar; atendimento em todo o Centro-Oeste; sem CNPJ (a linha do CNPJ não aparece) e o cliente não precisa de CNPJ para contratar.
 
-- [ ] Grafia exata do nome e logo oficial (`site.ts`)
-- [ ] O que conta como atualização (`terms.updateScope`)
-- [ ] E-mail profissional e Google Meu Negócio inclusos? (`terms.extras`)
-- [ ] IDs do GA4 e do Meta Pixel (variáveis de ambiente, ver abaixo)
-- [ ] Domínio de produção (`NEXT_PUBLIC_SITE_URL`)
-- [ ] Texto da política de privacidade, data e canal para pedidos de privacidade (`politica-de-privacidade/page.tsx`)
-- [ ] Sites reais para o portfólio e depoimentos reais
+Se no futuro entrar um dado ainda sem confirmação, use `confirmar("...")` no texto (`src/config/site.ts`): ele aparece destacado em amarelo na página até ser trocado, para nada ir ao ar com informação inventada.
 
-Já confirmados: WhatsApp (62) 99929-1420; sem taxa de adesão (começa com a 1ª mensalidade); sem fidelidade; pagamento via Pix; hospedagem e certificado SSL inclusos; domínio não incluso; site entregue em 1 dia; atualizações sem limite, feitas em até 3 horas; se o cliente cancelar, o site é excluído e sai do ar; atendimento em todo o Centro-Oeste; sem CNPJ (a linha do CNPJ não aparece) e o cliente não precisa de CNPJ para contratar.
-
-Quando uma resposta do FAQ ainda tem marcador, ela fica fora dos dados estruturados (FAQPage) que vão para o Google.
+Opcionais, quando houver: domínio próprio (`NEXT_PUBLIC_SITE_URL`), IDs do GA4 e do Meta Pixel, sites reais no portfólio e depoimentos reais.
 
 ## Medição (analytics)
 
@@ -106,7 +98,7 @@ src/
     sitemap.ts / robots.ts
     politica-de-privacidade/
   config/
-    site.ts                  dados do negócio e regras comerciais (CONFIRMAR)
+    site.ts                  dados do negócio e regras comerciais
     content.ts               todos os textos
   components/
     sections/                uma seção da página por arquivo
@@ -164,4 +156,4 @@ Medido com Lighthouse 12 no build de produção, rodando local:
 2. **Mostrar, não prometer:** o topo e a seção "Pediu, atualizou" mostram um pedido no WhatsApp virando mudança no site. É o diferencial (atualização inclusa) virando cena.
 3. **Copy:** frases curtas, em "você". O preço aparece cedo e várias vezes (título, card, barra fixa), ancorado em "menos de R$ 9 por dia", e cada objeção tem resposta no FAQ.
 4. **Celular primeiro:** a maior parte das visitas vem do navegador do Instagram. Por isso o botão do WhatsApp está sempre a um toque, o globo é SVG no celular e o 3D só carrega quando faz sentido.
-5. **Nada inventado:** preços de mercado, números, clientes e depoimentos ficaram de fora. Onde falta informação, o marcador amarelo aparece na própria página.
+5. **Nada inventado:** preços de mercado, números, clientes e depoimentos ficaram de fora; tudo o que a página promete foi confirmado pelo dono.

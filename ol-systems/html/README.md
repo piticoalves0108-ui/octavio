@@ -16,9 +16,9 @@ Dê dois cliques em `index.html`. Abre no navegador como qualquer site.
 
 Suba os três arquivos juntos, na mesma pasta, em qualquer hospedagem de site estático: Hostinger, HostGator, Locaweb (via gerenciador de arquivos ou FTP), Netlify (arraste a pasta), Vercel, GitHub Pages ou Cloudflare Pages. O `index.html` vira a página inicial do domínio.
 
-## O que trocar antes de publicar
+## O que dá para trocar
 
-Tudo que falta confirmar aparece **destacado em amarelo** na própria página. No código, procure por `a confirmar` (texto da página) e por `CONFIRMAR` (comentários).
+Todas as informações da página já estão confirmadas: nada fica destacado em amarelo.
 
 ### WhatsApp, medição e conversa de exemplo
 
@@ -36,9 +36,9 @@ const CONFIG = {
 
 Todos os botões abrem o WhatsApp (62) 99929-1420 com a mensagem pronta. Para trocar o número, mude só esse campo. Se ele ficar vazio, os botões abrem o Direct do Instagram @ol_systemss.
 
-### Domínio
+### Domínio (quando tiver)
 
-Troque `https://www.seudominio.com.br` pelo endereço final do site (usar "Localizar e substituir" no editor). Ele aparece no `<head>` (canonical e imagem de compartilhamento) e nos dados para o Google.
+A página não traz nenhum endereço inventado. Quando o site tiver domínio próprio, gere de novo com ele (veja o fim deste guia), assim: `SITE_URL=https://seudominio.com.br npm run export:html`. Isso preenche o endereço oficial da página (canonical) e o link completo da imagem de compartilhamento, que o WhatsApp e o Facebook precisam para mostrar a prévia do link.
 
 ### Textos e preço
 

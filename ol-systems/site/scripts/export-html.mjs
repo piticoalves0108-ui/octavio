@@ -16,7 +16,8 @@
  *
  * Variáveis de ambiente:
  *  OUT_DIR   pasta de saída (padrão: ../html, ou seja, ol-systems/html)
- *  SITE_URL  domínio para canonical/Open Graph (padrão: https://www.seudominio.com.br)
+ *  SITE_URL  domínio final (ex.: https://olsystems.com.br). Opcional: sem ele, a página
+ *            sai sem canonical/og:url e a imagem de compartilhamento usa caminho relativo.
  */
 import { readFile, writeFile, mkdir, readdir, copyFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
@@ -28,7 +29,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "out");
 const SRC = path.join(ROOT, "html-export");
 const DEST = path.resolve(process.env.OUT_DIR ?? path.join(ROOT, "..", "html"));
-const SITE_URL = (process.env.SITE_URL ?? "https://www.seudominio.com.br").replace(/\/$/, "");
+const SITE_URL = (process.env.SITE_URL ?? "").replace(/\/$/, "");
 
 if (!existsSync(path.join(OUT, "index.html"))) {
   console.error("Não achei out/index.html. Rode antes: STATIC_EXPORT=1 npx next build");
@@ -112,8 +113,15 @@ function cleanHtml(html, { title }) {
   h = h.replace(/<!--\/?\$-->/g, "").replace(/<!-- -->/g, "").replace(/<!--[A-Za-z0-9_-]{15,}-->/g, "");
   // Ícone e imagem de compartilhamento.
   h = h.replace(/<link rel="icon"[^>]*\/?>/g, "<!--ICON-->");
-  h = h.replace(/http:\/\/localhost:3000\/opengraph-image\?[a-z0-9]+/g, `${SITE_URL}/og-image.png`);
-  h = h.replace(/http:\/\/localhost:3000/g, SITE_URL);
+  h = h.replace(/http:\/\/localhost:3000\/opengraph-image\?[a-z0-9]+/g, SITE_URL ? `${SITE_URL}/og-image.png` : "og-image.png");
+  if (SITE_URL) {
+    h = h.replace(/http:\/\/localhost:3000/g, SITE_URL);
+  } else {
+    // Sem domínio definido: nada de endereço inventado na página.
+    h = h.replace(/<link rel="canonical"[^>]*\/?>/g, "").replace(/<meta property="og:url"[^>]*\/?>/g, "");
+    h = h.replace(/"url":"http:\/\/localhost:3000\/?",?/g, "");
+    if (/localhost:3000/.test(h)) throw new Error(`Sobrou localhost em ${title}`);
+  }
   // Links entre as páginas.
   h = h.replace(/href="\/politica-de-privacidade\/"/g, 'href="politica-de-privacidade.html"');
   h = h.replace(/href="\/"/g, 'href="index.html"');
@@ -126,8 +134,11 @@ async function buildPage(srcFile, destName, { css, fonts, js, bodyEnd, icon }) {
   const head = [
     `<!--\n  ${destName} — versão em HTML puro, gerada a partir do projeto Next.js (ol-systems/site).\n` +
       `  Para trocar WhatsApp, IDs de medição e textos da conversa de exemplo, edite o objeto CONFIG\n` +
-      `  no começo do <script> no fim da página. Procure por "a confirmar" para achar o que falta.\n` +
-      `  Domínio: troque ${SITE_URL} pelo endereço final do site.\n-->`,
+      `  no começo do <script> no fim da página.\n` +
+      (SITE_URL
+        ? `  Domínio: ${SITE_URL}.\n-->`
+        : `  Quando tiver domínio, gere de novo com SITE_URL=https://seudominio.com.br npm run export:html\n` +
+          `  (ou adicione <link rel="canonical"> e use o endereço completo em og:image).\n-->`),
     `<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,${Buffer.from(icon).toString("base64")}" />`,
     `<style>\n/* Fontes (subset latino embutido) */\n${fonts}\n</style>`,
     `<style>\n${css}\n</style>`,
