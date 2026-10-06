@@ -12,7 +12,9 @@ import numpy as np
 import cv2
 from PIL import Image, ImageDraw, ImageFont
 
+import os
 IN, FONTS, OUT, MODE = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+HOOK = os.environ.get('HOOK', 'A')
 
 FPS = 30
 W, H = 1080, 1920
@@ -519,16 +521,22 @@ def cam_push(c0, c1, dur, py=1000):
 # ===== CENA 1: gancho (0 – 2.8) ================================================
 T = 0.0
 sc = Scene(T, 2.8, cam=cam_push(1.0, 1.035, 2.8))
-tl1 = title_lines([('Seu cliente te procurou', WHITE), ('no Google…', WHITE)], size=88)
-tl1b = title_lines([('e achou o concorrente.', GREY)], size=88, top=TITLE_Y + 176)[0]
+HOOKS = {
+    'A': (('Seu cliente te procurou', 'no Google…'), ('e achou o ', 'concorrente', '.')),
+    'B': (('Pesquisa “barbearia', 'perto de mim”.'), ('Você ', 'aparece', '?')),
+    'C': (('Site para barbearia', 'por R$ 250/mês,'), ('', 'sem fidelidade', '.')),
+}
+(h1, h2), (pre, word, post) = HOOKS[HOOK]
+tl1 = title_lines([(h1, WHITE), (h2, WHITE)], size=88)
+tl1b = title_lines([(pre + word + post, GREY)], size=88, top=TITLE_Y + 176)[0]
 sc.add(tl1[0], 'settle', 0.0, 0.6)
 sc.add(tl1[1], 'settle', 0.0, 0.6)
-sc.add(tl1b, 'up', 0.5, 0.4)
-# sublinhado verde sob "concorrente"
-pre_w = text_width('e achou o ', SG_BOLD, 88) - 0.055 * 88
-word_w = text_width('concorrente', SG_BOLD, 88)
+sc.add(tl1b, 'up', 0.3, 0.4)
+# sublinhado verde sob a palavra-chave da 3a linha
+pre_w = (text_width(pre, SG_BOLD, 88) - 0.055 * 88) if pre else -0.055 * 88
+word_w = text_width(word, SG_BOLD, 88)
 und = L(solid(int(word_w), 9, GREEN, 2), TX + pre_w + 2, TITLE_Y + 176 + ImageFont.truetype(SG_BOLD, 88).getmetrics()[0] + 8)
-sc.add(und, 'none', 0.8, 0.4, wipe='x')
+sc.add(und, 'none', 0.6, 0.4, wipe='x')
 sc.add(search_bar, 'none', 0.0)
 sc.add(None, dyn=blink_cursor(0.0, 2.8))
 sc.add(comp_glow, 'flash', 1.0, 1.0)
@@ -571,7 +579,7 @@ sfx(T, 'whoosh', 0.7)
 
 # ===== CENA 4: WhatsApp (6.4 – 11.2) ===========================================
 T = sc.start + sc.dur - OVL
-D4 = 4.8
+D4 = 4.4
 sc = Scene(T, D4, cam=cam_push(1.0, 1.02, D4))
 for i, l in enumerate(title_lines([('Mudou preço ou horário?', WHITE), ('Manda no WhatsApp.', GREY)], size=88)):
     sc.add(l, 'up', -0.04 + i * 0.06, 0.38, D=40)
@@ -634,7 +642,7 @@ sfx(T + 2.8, 'pop', 0.5)
 
 # ===== CENA 5: preço (11.2 – 14.6) =============================================
 T = sc.start + sc.dur - OVL
-D5 = 3.4
+D5 = 3.1
 sc = Scene(T, D5, cam=cam_push(1.0, 1.02, D5))
 sc.add(title_lines([('Quanto custa?', WHITE)], size=104)[0], 'up', -0.04, 0.38, D=40)
 G7 = Group(r7, 78, 398, TX - 8, 492, 1.15)
@@ -667,14 +675,15 @@ def globe_dyn(stage, sc_, el, tl, ex, cam):
     draw(stage, glayer, s=0.6 + 0.4 * eoq(p), alpha=eoc(p * 1.4) * ex, img=img, cam=cam)
 
 
-sc.add(None, dyn=globe_dyn)
-G8 = centered_group(r8, (90, 648, 990, 1169), 1.0, 705)
-sc.add(G8.piece(90, 648, 990, 722), 'up', -0.04, 0.38, D=40)
-sc.add(G8.piece(90, 734, 990, 826), 'up', 0.06, 0.38, D=40)
+for i, l in enumerate(title_lines([('Conhece alguém com', WHITE), ('barbearia, padaria ou', WHITE), ('pet shop sem site?', GREEN)], size=66)):
+    sc.add(l, 'up', -0.04 + i * 0.06, 0.38, D=36)
+G8 = centered_group(r8, (90, 648, 990, 1169), 1.0, 610)
+sc.add(G8.piece(90, 648, 990, 722), 'up', 0.3, 0.38, D=40)
+sc.add(G8.piece(90, 734, 990, 826), 'up', 0.38, 0.38, D=40)
 btn = L(btn_img, *G8.pos(BTN[0], BTN[2]))
 GP = 70
 btn_glow = L(glow_of(bmask, GREEN, GP, 24, 0.9), btn.x - GP, btn.y - GP)
-BT = 0.55
+BT = 0.65
 
 
 def btn_dyn(stage, sc_, el, tl, ex, cam):
@@ -689,8 +698,8 @@ def btn_dyn(stage, sc_, el, tl, ex, cam):
 
 
 sc.add(None, dyn=btn_dyn)
-sc.add(G8.piece(120, 1028, 960, 1080), 'fade', 0.85, 0.4)
-sc.add(G8.piece(230, 1086, 850, 1169), 'up', 1.0, 0.4, D=26)
+sc.add(G8.piece(120, 1028, 960, 1080), 'fade', 0.95, 0.4)
+sc.add(G8.piece(230, 1086, 850, 1169), 'up', 1.05, 0.4, D=26)
 scenes.append(sc)
 sfx(T, 'whoosh', 0.7)
 sfx(T + BT, 'pop', 0.8)
@@ -739,8 +748,32 @@ glow += 0.045 * np.exp(-(((xx - 120) / 600) ** 2 + ((yy + 80) / 380) ** 2))
 BGIMG = (base[None, None, :] + glow[..., None] * (GREEN - base)[None, None, :]).astype(np.float32)
 
 
+BG_GR, BG_GC, BG_STEP = 600, (W / 2, 2010), 15
+BG_SPEED = 8.0                                   # graus por segundo
+BG_N = int(round(BG_STEP / BG_SPEED * FPS))      # quadros por ciclo (simetria de 15 graus)
+BG_Y0 = int(BG_GC[1] - BG_GR - 5)
+_bg_cache = {}
+
+
+def bg_globe(t):
+    k = int(round(t * FPS)) % BG_N
+    if k not in _bg_cache:
+        img = globe_img(BG_GR, math.radians(BG_STEP * k / BG_N), tilt=0.42, front=0.20, back=0.07, ss=2)
+        a = img[..., 3]
+        x0 = int(BG_GC[0] - BG_GR - 5)
+        out = np.zeros((H - BG_Y0, W), np.float32)
+        src = a[:H - BG_Y0, max(0, -x0):max(0, -x0) + W]
+        out[:, :src.shape[1]] = src
+        _bg_cache[k] = out
+    return _bg_cache[k]
+
+
 def render(t):
     stage = BGIMG.copy()
+    ga = bg_globe(t)[..., None]
+    reg = stage[BG_Y0:]
+    reg *= (1 - ga)
+    reg += ga * np.array([0.75, 1.0, 0.85], np.float32)
     draw(stage, header)
     for sc in scenes:
         tl = t - sc.start
