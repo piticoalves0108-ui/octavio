@@ -336,7 +336,7 @@ def src_col(x):
     return 120
 
 
-ty0, ty1 = 905, 1036
+ty0, ty1 = 918, 1036
 tag_layers = []
 for (nx0, nx1) in [(345, 569), (740, 980)]:
     for x in range(nx0, nx1):
