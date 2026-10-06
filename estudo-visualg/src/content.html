@@ -1,0 +1,2358 @@
+<div class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#topo">VisuAlg <span>em 4h</span></a>
+    <nav class="nav" aria-label="Blocos de estudo">
+      <a class="nav-chip" data-sec="b1" href="#b1"><b>1</b> Variáveis</a>
+      <a class="nav-chip" data-sec="b2" href="#b2"><b>2</b> Contas</a>
+      <a class="nav-chip" data-sec="b3" href="#b3"><b>3</b> se e escolha</a>
+      <a class="nav-chip" data-sec="b4" href="#b4"><b>4</b> e / ou / nao</a>
+      <a class="nav-chip" data-sec="b5" href="#b5"><b>5</b> Repetição</a>
+      <a class="nav-chip" data-sec="b6" href="#b6"><b>6</b> Lista N1</a>
+      <a class="nav-chip" data-sec="b7" href="#b7"><b>7</b> Simulado</a>
+      <a class="nav-chip" data-sec="cola" href="#cola">Cola</a>
+    </nav>
+    <span class="bar-prog"><span class="lbl">Exercícios </span><b id="prog-count">0/0</b></span>
+  </div>
+</div>
+
+<main class="wrap">
+
+<header class="hero" id="topo">
+  <p class="eyebrow">Revisão para a N1 · Algoritmos em Portugol</p>
+  <h1>VisuAlg em 4 horas</h1>
+  <p class="lead">Do zero até a prova: variáveis, contas, <b>se/senao</b>, <b>escolha</b>, <b>e/ou/nao</b> e repetição com <b>enquanto</b>, <b>repita</b> e <b>para</b>. Todo código desta página roda aqui mesmo: aperte <b>Executar</b>, mude o que quiser e veja o que acontece.</p>
+  <p class="hand">Ninguém nasce sabendo isso. São poucas regras, repetidas muitas vezes.</p>
+</header>
+
+<section id="plano">
+  <div class="box">
+    <p class="box-title">Como usar esta página</p>
+    <ol>
+      <li>Siga os blocos na ordem. Cada um tem um tempo sugerido.</li>
+      <li>Leia a explicação e <b>rode os exemplos</b>. Depois mude um número e rode de novo: é assim que entra na cabeça.</li>
+      <li>Faça os exercícios. O botão <b>Testar</b> corrige na hora. Travou de verdade? <b>Ver resposta</b>.</li>
+      <li>Deu erro? Leia a mensagem vermelha: ela diz a linha e o que fazer.</li>
+      <li>Não entendeu um código? Aperte <b>Passo a passo</b>: ele mostra linha por linha o que o computador faz e o que tem em cada variável.</li>
+    </ol>
+  </div>
+  <h3>Plano das 4 horas</h3>
+  <div class="tbl">
+    <div class="tbl-wrap">
+      <table id="plano-tabela">
+        <thead><tr><th class="num">Hora</th><th>Bloco</th><th>Aula</th></tr></thead>
+        <tbody>
+          <tr><td class="num">0:00</td><td><a href="#b1">1. Variáveis, escreva e leia</a></td><td>Aulas 1 e 2</td></tr>
+          <tr><td class="num">0:25</td><td><a href="#b2">2. Contas e precedência</a></td><td>Aula 3</td></tr>
+          <tr class="pause"><td class="num">0:50</td><td>Pausa de 10 min</td><td></td></tr>
+          <tr><td class="num">1:00</td><td><a href="#b3">3. se, senao, se aninhado e escolha</a></td><td>Aula 4</td></tr>
+          <tr><td class="num">1:40</td><td><a href="#b4">4. e, ou, nao</a></td><td>Aula 5</td></tr>
+          <tr class="pause"><td class="num">2:05</td><td>Pausa de 10 min</td><td></td></tr>
+          <tr><td class="num">2:15</td><td><a href="#b5">5. Repetição: enquanto, repita, para</a></td><td>Aula 6</td></tr>
+          <tr class="pause"><td class="num">3:05</td><td>Pausa de 5 min</td><td></td></tr>
+          <tr><td class="num">3:10</td><td><a href="#b6">6. Lista de revisão N1</a></td><td>Tudo junto</td></tr>
+          <tr><td class="num">3:45</td><td><a href="#b7">7. Simulado e cola final</a></td><td>Tudo junto</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="timer">
+      <button type="button" class="btn btn-run" id="timer-btn"><span>Iniciar 4h</span></button>
+      <button type="button" class="btn btn-ghost btn-sm" id="timer-reset" hidden><span>Zerar</span></button>
+      <span class="timer-label" id="timer-label"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== BLOCO 1 -->
+<section class="block" id="b1">
+  <header>
+    <p class="eyebrow">Bloco 1 · Aulas 1 e 2 · 25 min</p>
+    <h2>O programa conversa com você</h2>
+    <p>O que é algoritmo, o esqueleto de um programa no VisuAlg, variáveis, e os comandos para mostrar coisas na tela e ler o que a pessoa digita.</p>
+  </header>
+
+  <h3>Algoritmo é uma receita</h3>
+  <p>Algoritmo é uma lista de passos, em ordem, para resolver um problema. Igual a uma receita de bolo: tem os ingredientes, o modo de preparo e o bolo pronto. Todo programa da N1 segue o mesmo caminho:</p>
+  <div class="ips">
+    <div><h4>Entrada</h4><p>O que o programa recebe. No VisuAlg: <code>leia</code>.</p></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div><h4>Processamento</h4><p>As contas e as decisões. No VisuAlg: <code>&lt;-</code>, <code>se</code>, laços.</p></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div><h4>Saída</h4><p>O que o programa mostra. No VisuAlg: <code>escreval</code>.</p></div>
+  </div>
+  <p>Exemplo, média de duas notas: a <b>entrada</b> são as duas notas, o <b>processamento</b> é somar e dividir por 2, a <b>saída</b> é mostrar a média.</p>
+  <p><b>Portugol</b> é esse jeito de escrever algoritmo em português. O <b>VisuAlg</b> é o programa que entende Portugol e executa. Esta página tem um simulador do VisuAlg, então tudo roda aqui no navegador.</p>
+
+  <h3>O esqueleto de todo programa</h3>
+  <p>Todo programa no VisuAlg tem estas partes, sempre nesta ordem. Aperte <b>Executar</b>:</p>
+<script type="text/x-visualg" data-title="ola.alg">
+algoritmo "ola"
+var
+   // aqui ficam as variáveis (este programa não usa nenhuma)
+inicio
+   escreval("Olá, mundo!")
+fimalgoritmo
+</script>
+  <div class="tbl">
+    <div class="tbl-wrap"><table>
+      <tbody>
+        <tr><td><code>algoritmo "ola"</code></td><td>O nome do programa, entre aspas.</td></tr>
+        <tr><td><code>var</code></td><td>Aqui você cria as variáveis (as caixinhas). Pode ficar vazio.</td></tr>
+        <tr><td><code>inicio</code></td><td>Daqui para baixo vêm os comandos. O computador executa <b>de cima para baixo, uma linha por vez</b>.</td></tr>
+        <tr><td><code>// texto</code></td><td>Comentário. O computador ignora; serve para você anotar.</td></tr>
+        <tr><td><code>fimalgoritmo</code></td><td>Fim do programa.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="box tip">
+    <p class="box-title">Dica</p>
+    <p>Para o VisuAlg, <code>Escreval</code>, <code>ESCREVAL</code> e <code>escreval</code> são a mesma coisa. Mas escreva as palavras do VisuAlg <b>sem acento</b>: <code>entao</code>, <code>senao</code>, <code>faca</code>, <code>ate</code>, <code>logico</code>. Acento só dentro de texto entre aspas.</p>
+  </div>
+
+  <h3>Variável é uma caixinha</h3>
+  <p>Variável é um espaço na memória do computador que tem nome. Pense numa caixinha com etiqueta: o <b>nome</b> é a etiqueta, o <b>tipo</b> diz o que cabe dentro e o <b>valor</b> é o que está lá agora.</p>
+  <p class="key-line"><span class="key">Uma variável guarda um valor por vez. Guardou outro, o anterior some.</span></p>
+  <div class="tbl wide">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Tipo</th><th>Guarda</th><th>Exemplos</th></tr></thead>
+      <tbody>
+        <tr><td><code>inteiro</code></td><td>número sem vírgula</td><td><code>10</code> <code>-3</code> <code>0</code> <code>2026</code></td></tr>
+        <tr><td><code>real</code></td><td>número com vírgula (no código, use ponto)</td><td><code>7.5</code> <code>3.14</code> <code>-0.5</code></td></tr>
+        <tr><td><code>caractere</code></td><td>texto, sempre entre aspas</td><td><code>"Ana"</code> <code>"SP"</code> <code>"123"</code></td></tr>
+        <tr><td><code>logico</code></td><td>só <code>VERDADEIRO</code> ou <code>FALSO</code></td><td><code>VERDADEIRO</code></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <p>As variáveis são criadas (declaradas) na seção <code>var</code>: nome, dois-pontos, tipo. Várias do mesmo tipo vão separadas por vírgula.</p>
+<pre class="snip">var
+   idade: inteiro
+   altura, peso: real
+   nome: caractere
+   aprovado: logico</pre>
+  <p>Regras para o nome:</p>
+  <ul>
+    <li>começa com letra: <code>nota1</code> <span class="ok-txt">certo</span>, <code>1nota</code> <span class="bad-txt">errado</span></li>
+    <li>sem espaço: <code>nota_final</code> ou <code>notaFinal</code> <span class="ok-txt">certo</span>, <code>nota final</code> <span class="bad-txt">errado</span></li>
+    <li>sem acento e sem símbolos: <code>media</code> <span class="ok-txt">certo</span>, <code>média</code> e <code>valor$</code> <span class="bad-txt">errado</span></li>
+    <li>não pode ser palavra do VisuAlg: <code>se</code>, <code>para</code>, <code>inicio</code>... <span class="bad-txt">errado</span></li>
+  </ul>
+  <div class="pega">
+    <span class="pega-title">Pegadinha de prova</span>
+    <p><code>"123"</code> com aspas é <b>texto</b>. <code>123</code> sem aspas é <b>número</b>. Com números, <code>5 + 5</code> dá <code>10</code>. Com textos, <code>"5" + "5"</code> junta e dá <code>"55"</code>.</p>
+  </div>
+
+  <h3>Guardar um valor: <code>&lt;-</code> (lê-se "recebe")</h3>
+  <p class="key-line"><span class="key">A seta aponta para onde o valor vai: <code>x &lt;- 5</code> guarda 5 em x.</span></p>
+<script type="text/x-visualg" data-title="atribuicao.alg" data-hint="Aperte Passo a passo e clique em Próximo passo várias vezes: veja o valor de x mudando na memória.">
+algoritmo "atribuicao"
+var
+   x: inteiro
+inicio
+   x <- 5
+   escreval("x vale", x)
+   x <- x + 1
+   escreval("agora x vale", x)
+   x <- x * 10
+   escreval("e agora vale", x)
+fimalgoritmo
+</script>
+  <p><code>x &lt;- x + 1</code> parece estranho, mas se lê assim: <b>pegue o valor de x (5), some 1 e guarde de volta em x</b>. O lado direito é calculado primeiro; depois o resultado vai para a caixinha da esquerda. Essa linha vai aparecer muito nos laços do bloco 5.</p>
+
+  <h3>Mostrar na tela: <code>escreva</code> e <code>escreval</code></h3>
+<script type="text/x-visualg" data-title="saida.alg">
+algoritmo "saida"
+var
+   idade: inteiro
+inicio
+   idade <- 19
+   escreva("Isto fica ")
+   escreva("na mesma linha. ")
+   escreval("O escreval pula linha no fim.")
+   escreval("Idade:", idade)
+   escreval("Ano que vem:", idade + 1)
+fimalgoritmo
+</script>
+  <ul>
+    <li><code>escreva</code> mostra e continua na mesma linha. <code>escreval</code> mostra e pula para a linha de baixo (o <b>L</b> é de <b>linha</b>).</li>
+    <li>A vírgula junta pedaços: <code>escreval("Idade:", idade)</code>.</li>
+    <li>Texto entre aspas aparece igualzinho. Variável sem aspas mostra o <b>valor</b>. Conta mostra o <b>resultado</b>.</li>
+  </ul>
+  <div class="box tip">
+    <p class="box-title">Dica</p>
+    <p>O VisuAlg coloca sozinho um espaço antes de cada número. Por isso escrevemos <code>"Idade:"</code> sem espaço no fim. Com texto ele não faz isso: <code>escreval("Oi, ", nome)</code> precisa do espaço depois da vírgula.</p>
+  </div>
+
+  <h3>Ler do teclado: <code>leia</code></h3>
+  <p><code>leia(variavel)</code> faz o programa parar e esperar a pessoa digitar e apertar Enter. O que ela digitar vai para a variável. Sempre mostre uma mensagem antes do <code>leia</code>, senão a pessoa não sabe o que digitar.</p>
+<script type="text/x-visualg" data-title="boas_vindas.alg" data-hint="Ao executar, digite seu nome e aperte Enter; depois a sua idade." data-test-in="Ana|19">
+algoritmo "boas_vindas"
+var
+   nome: caractere
+   idade: inteiro
+inicio
+   escreva("Qual é o seu nome? ")
+   leia(nome)
+   escreva("Quantos anos você tem? ")
+   leia(idade)
+   escreval("Prazer, ", nome, "! Daqui a 10 anos você terá", idade + 10, " anos.")
+fimalgoritmo
+</script>
+
+  <h3>Números com vírgula e formatação</h3>
+  <p>No código, número com vírgula se escreve com <b>ponto</b>: <code>7.5</code>. Para mostrar com um número certo de casas, use <code>variavel:tamanho:casas</code>. Exemplo: <code>media:6:2</code> usa 6 espaços e 2 casas depois do ponto.</p>
+<script type="text/x-visualg" data-title="media_formatada.alg" data-hint="Teste com 7 e 8, depois com 6.5 e 9." data-test-in="7|8">
+algoritmo "media_formatada"
+var
+   n1, n2, media: real
+inicio
+   escreva("Primeira nota: ")
+   leia(n1)
+   escreva("Segunda nota: ")
+   leia(n2)
+   media <- (n1 + n2) / 2
+   escreval("Média:", media)
+   escreval("Média com 2 casas:", media:6:2)
+fimalgoritmo
+</script>
+
+  <h3>Teste rápido</h3>
+  <div class="quiz">
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Qual tipo usar para guardar o preço de um produto, como 19.90?</p></div>
+      <ol class="q-opts"><li><code>inteiro</code></li><li><code>real</code></li><li><code>caractere</code></li><li><code>logico</code></li></ol>
+      <div class="q-why">Tem centavos (vírgula), então é <code>real</code>. O <code>inteiro</code> não guarda casas decimais.</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>Depois destas linhas, quanto vale x?</p><pre class="snip">x &lt;- 3
+x &lt;- x * 2
+x &lt;- x + 1</pre></div>
+      <ol class="q-opts"><li>3</li><li>6</li><li>7</li><li>10</li></ol>
+      <div class="q-why">Começa com 3. Depois 3 * 2 = 6. Depois 6 + 1 = 7. Cada linha usa o valor que estava na caixinha naquela hora.</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>Qual nome de variável é válido?</p></div>
+      <ol class="q-opts"><li><code>2nota</code></li><li><code>nota final</code></li><li><code>nota_final</code></li><li><code>senao</code></li></ol>
+      <div class="q-why"><code>2nota</code> começa com número, <code>nota final</code> tem espaço e <code>senao</code> é palavra do VisuAlg. Sobra <code>nota_final</code>.</div>
+    </div>
+    <div class="q" data-answer="0">
+      <div class="q-text"><p>Qual a diferença entre <code>escreva</code> e <code>escreval</code>?</p></div>
+      <ol class="q-opts"><li>O <code>escreval</code> pula para a linha de baixo depois de mostrar</li><li>O <code>escreva</code> só mostra números</li><li>O <code>escreval</code> lê do teclado</li><li>Nenhuma</li></ol>
+      <div class="q-why">Os dois mostram na tela. O <code>escreval</code> pula linha no final; o <code>escreva</code> continua na mesma linha.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Qual comando faz o programa parar e esperar a pessoa digitar?</p></div>
+      <ol class="q-opts"><li><code>escreva</code></li><li><code>leia</code></li><li><code>var</code></li><li><code>&lt;-</code></li></ol>
+      <div class="q-why"><code>leia(x)</code> espera a pessoa digitar e guarda o valor em x.</div>
+    </div>
+  </div>
+
+  <h3>Exercícios</h3>
+  <div class="ex" data-id="1.1">
+    <div class="ex-head"><span class="ex-num">Exercício 1.1</span><h4>Olá com nome</h4></div>
+    <div class="ex-prompt"><p>Leia o nome da pessoa e mostre <code>Olá, NOME!</code> (com o nome que ela digitou).</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "ola_nome"
+var
+   nome: caractere
+inicio
+   // 1. mostre uma mensagem pedindo o nome
+   // 2. leia o nome
+   // 3. mostre "Olá, " junto com o nome
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "ola_nome"
+var
+   nome: caractere
+inicio
+   escreva("Digite seu nome: ")
+   leia(nome)
+   escreval("Olá, ", nome, "!")
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":["Ana"],"has":["ola","Ana"]},{"in":["Carlos Eduardo"],"has":["ola","Carlos Eduardo"]}]</script>
+  </div>
+
+  <div class="ex" data-id="1.2">
+    <div class="ex-head"><span class="ex-num">Exercício 1.2</span><h4>Soma de dois números</h4></div>
+    <div class="ex-prompt"><p>Leia dois números inteiros e mostre a soma deles.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "soma"
+var
+   a, b, soma: inteiro
+inicio
+   // leia a e b, calcule a soma e mostre
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "soma"
+var
+   a, b, soma: inteiro
+inicio
+   escreva("Primeiro número: ")
+   leia(a)
+   escreva("Segundo número: ")
+   leia(b)
+   soma <- a + b
+   escreval("Soma:", soma)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[17,25],"has":[42]},{"in":[10,-3],"has":[7]},{"in":[0,0],"has":[0]}]</script>
+  </div>
+
+  <div class="ex" data-id="1.3">
+    <div class="ex-head"><span class="ex-num">Exercício 1.3</span><h4>Quantos anos em 2026</h4></div>
+    <div class="ex-prompt"><p>Leia o ano em que a pessoa nasceu e mostre quantos anos ela faz em 2026.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "idade"
+var
+   ano, idade: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "idade"
+var
+   ano, idade: inteiro
+inicio
+   escreva("Em que ano você nasceu? ")
+   leia(ano)
+   idade <- 2026 - ano
+   escreval("Em 2026 você faz", idade, " anos.")
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[2000],"has":[26]},{"in":[2007],"has":[19]},{"in":[1990],"has":[36]}]</script>
+  </div>
+</section>
+
+<!-- ===================================================== BLOCO 2 -->
+<section class="block" id="b2">
+  <header>
+    <p class="eyebrow">Bloco 2 · Aula 3 · 25 min</p>
+    <h2>Contas e precedência</h2>
+    <p>Os operadores de conta e de comparação, e a ordem em que o computador resolve uma expressão. Cai muito em prova.</p>
+  </header>
+
+  <h3>Os operadores de conta</h3>
+  <div class="tbl wide">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Operador</th><th>O que faz</th><th>Exemplo</th><th>Resultado</th></tr></thead>
+      <tbody>
+        <tr><td><code>+</code></td><td>soma</td><td><code>7 + 2</code></td><td><code>9</code></td></tr>
+        <tr><td><code>-</code></td><td>subtração</td><td><code>7 - 2</code></td><td><code>5</code></td></tr>
+        <tr><td><code>*</code></td><td>multiplicação</td><td><code>7 * 2</code></td><td><code>14</code></td></tr>
+        <tr><td><code>/</code></td><td>divisão (o resultado é sempre <b>real</b>)</td><td><code>7 / 2</code></td><td><code>3.5</code></td></tr>
+        <tr><td><code>\</code></td><td>divisão inteira (só a parte inteira)</td><td><code>7 \ 2</code></td><td><code>3</code></td></tr>
+        <tr><td><code>mod</code> ou <code>%</code></td><td>resto da divisão</td><td><code>7 mod 2</code></td><td><code>1</code></td></tr>
+        <tr><td><code>^</code></td><td>potência</td><td><code>2 ^ 3</code></td><td><code>8</code></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <h3>Divisão inteira e resto: a conta armada da escola</h3>
+  <p>Lembra da conta de dividir armada? 17 dividido por 5: o 5 cabe 3 vezes no 17 (5 × 3 = 15) e sobram 2.</p>
+<pre class="plain" aria-label="Conta armada: 17 dividido por 5 dá 3 e sobra 2">   17 |_5___
+  -15   <span class="b">3</span>     ← 17 \ 5 = 3     (quantas vezes cabe)
+  ---
+    <span class="r">2</span>         ← 17 mod 5 = 2   (o que sobra)</pre>
+  <p>Para que serve o resto na prática:</p>
+  <ul>
+    <li><b>Par ou ímpar:</b> <code>n mod 2 = 0</code> quer dizer par (dividindo por 2 não sobra nada).</li>
+    <li><b>Divisível por 3:</b> <code>n mod 3 = 0</code>.</li>
+    <li><b>Último dígito:</b> <code>n mod 10</code> (de 472 sobra 2).</li>
+    <li><b>Tirar o último dígito:</b> <code>n \ 10</code> (472 vira 47).</li>
+  </ul>
+<script type="text/x-visualg" data-title="div_mod.alg" data-hint="Teste com 17, depois com 472." data-test-in="17">
+algoritmo "div_mod"
+var
+   n: inteiro
+inicio
+   escreva("Digite um número inteiro: ")
+   leia(n)
+   escreval(n, " dividido por 5 dá", n \ 5, " e sobra", n mod 5)
+   escreval("Resto da divisão por 2:", n mod 2)
+   escreval("Último dígito:", n mod 10)
+   escreval("Sem o último dígito:", n \ 10)
+fimalgoritmo
+</script>
+
+  <h3>Precedência: quem vai primeiro</h3>
+  <p>Quando há várias operações juntas, o computador não vai simplesmente da esquerda para a direita. Ele segue esta ordem:</p>
+  <ol>
+    <li><code>( )</code> parênteses</li>
+    <li><code>^</code> potência</li>
+    <li><code>*</code> <code>/</code> <code>\</code> <code>mod</code> (entre eles, da esquerda para a direita)</li>
+    <li><code>+</code> <code>-</code> (entre eles, da esquerda para a direita)</li>
+    <li>comparações: <code>=</code> <code>&lt;&gt;</code> <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code></li>
+    <li><code>nao</code></li>
+    <li><code>e</code></li>
+    <li><code>ou</code></li>
+  </ol>
+  <p class="key-line"><span class="key">É a mesma ordem da matemática da escola. Na dúvida, coloque parênteses: eles nunca atrapalham.</span></p>
+  <p>Digite qualquer conta e veja a ordem de resolução, passo a passo. Use para conferir as questões de "resolva a expressão":</p>
+  <div class="xp" id="xp1" data-expr="2 + 3 * 4" data-presets='[{"e":"2 + 3 * 4"},{"e":"(2 + 3) * 4"},{"e":"10 - 4 / 2"},{"e":"2 ^ 3 * 2"},{"e":"10 / 4 * 2"},{"e":"17 mod 5 + 17 \\ 5"},{"e":"10 - 2 * 3 + 1"},{"e":"5 + 3 > 2 * 4"}]'></div>
+
+  <div class="pega">
+    <span class="pega-title">Pegadinha de prova: a média sem parênteses</span>
+    <p><code>n1 + n2 / 2</code> divide só o <code>n2</code>! Com notas 8 e 6 dá 8 + 3 = <b>11</b>. O certo é <code>(n1 + n2) / 2</code>, que dá <b>7</b>.</p>
+  </div>
+<script type="text/x-visualg" data-title="media_errada.alg">
+algoritmo "media_errada"
+var
+   n1, n2: real
+inicio
+   n1 <- 8
+   n2 <- 6
+   escreval("Sem parênteses:", n1 + n2 / 2)
+   escreval("Com parênteses:", (n1 + n2) / 2)
+fimalgoritmo
+</script>
+
+  <h3>Comparações: a resposta é VERDADEIRO ou FALSO</h3>
+  <div class="tbl">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Sinal</th><th>Significa</th><th>Exemplo</th></tr></thead>
+      <tbody>
+        <tr><td><code>=</code></td><td>igual</td><td><code>3 = 3</code> dá VERDADEIRO</td></tr>
+        <tr><td><code>&lt;&gt;</code></td><td>diferente</td><td><code>3 &lt;&gt; 4</code> dá VERDADEIRO</td></tr>
+        <tr><td><code>&gt;</code></td><td>maior que</td><td><code>7 &gt; 7</code> dá FALSO</td></tr>
+        <tr><td><code>&lt;</code></td><td>menor que</td><td><code>2 &lt; 9</code> dá VERDADEIRO</td></tr>
+        <tr><td><code>&gt;=</code></td><td>maior ou igual</td><td><code>7 &gt;= 7</code> dá VERDADEIRO</td></tr>
+        <tr><td><code>&lt;=</code></td><td>menor ou igual</td><td><code>8 &lt;= 5</code> dá FALSO</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+<script type="text/x-visualg" data-title="comparacoes.alg">
+algoritmo "comparacoes"
+var
+   a, b: inteiro
+inicio
+   a <- 7
+   b <- 3
+   escreval("a = b ?", a = b)
+   escreval("a <> b ?", a <> b)
+   escreval("a > b ?", a > b)
+   escreval("a <= b ?", a <= b)
+   escreval("a + b >= 10 ?", a + b >= 10)
+fimalgoritmo
+</script>
+  <div class="pega">
+    <span class="pega-title">Pegadinha de prova</span>
+    <p><code>=</code> só <b>compara</b>. Para <b>guardar</b> é <code>&lt;-</code>. Diferente é <code>&lt;&gt;</code> (não existe <code>!=</code> nem <code>==</code> no VisuAlg). E é <code>&gt;=</code>, com o sinal de maior primeiro.</p>
+  </div>
+  <div class="box">
+    <p class="box-title">Funções prontas (bônus)</p>
+    <p><code>raizq(16)</code> dá 4 (raiz quadrada) · <code>abs(-7)</code> dá 7 (valor sem sinal) · <code>int(7.9)</code> dá 7 (só a parte inteira) · <code>x ^ 2</code> é x ao quadrado.</p>
+  </div>
+
+  <h3>Teste rápido</h3>
+  <div class="quiz">
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Quanto vale <code>2 + 3 * 4</code>?</p></div>
+      <ol class="q-opts"><li>20</li><li>14</li><li>24</li><li>9</li></ol>
+      <div class="q-why">Multiplicação primeiro: 3 * 4 = 12. Depois 2 + 12 = 14.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Quanto vale <code>17 mod 5</code>?</p></div>
+      <ol class="q-opts"><li>3</li><li>2</li><li>3.4</li><li>85</li></ol>
+      <div class="q-why">17 dividido por 5 dá 3 e sobram 2. O <code>mod</code> é o que sobra.</div>
+    </div>
+    <div class="q" data-answer="0">
+      <div class="q-text"><p>Quanto vale <code>17 \ 5</code>?</p></div>
+      <ol class="q-opts"><li>3</li><li>2</li><li>3.4</li><li>12</li></ol>
+      <div class="q-why">Divisão inteira: quantas vezes o 5 cabe no 17, que é 3. O que vem depois da vírgula é jogado fora.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Quanto vale <code>(8 + 4) / 2 ^ 2</code>?</p></div>
+      <ol class="q-opts"><li>36</li><li>3</li><li>6</li><li>10</li></ol>
+      <div class="q-why">Parênteses: 8 + 4 = 12. Potência: 2 ^ 2 = 4. Divisão: 12 / 4 = 3.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Quanto vale <code>10 - 2 * 3 + 1</code>?</p></div>
+      <ol class="q-opts"><li>3</li><li>5</li><li>25</li><li>4</li></ol>
+      <div class="q-why">2 * 3 = 6. Depois, da esquerda para a direita: 10 - 6 = 4 e 4 + 1 = 5. Quem faz 6 + 1 antes chega em 3, que está errado.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Qual expressão calcula certo a média de <code>a</code> e <code>b</code>?</p></div>
+      <ol class="q-opts"><li><code>a + b / 2</code></li><li><code>(a + b) / 2</code></li><li><code>a + (b / 2)</code></li><li><code>(a + b / 2)</code></li></ol>
+      <div class="q-why">Sem os parênteses em volta da soma, só o <code>b</code> é dividido por 2.</div>
+    </div>
+  </div>
+
+  <h3>Exercícios</h3>
+  <div class="ex" data-id="2.1">
+    <div class="ex-head"><span class="ex-num">Exercício 2.1</span><h4>Média de duas notas</h4></div>
+    <div class="ex-prompt"><p>Leia duas notas (podem ter vírgula, então use <code>real</code>) e mostre a média.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "media"
+var
+   n1, n2, media: real
+inicio
+   // leia as duas notas
+   // calcule a média (cuidado com os parênteses!)
+   // mostre a média
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "media"
+var
+   n1, n2, media: real
+inicio
+   escreva("Primeira nota: ")
+   leia(n1)
+   escreva("Segunda nota: ")
+   leia(n2)
+   media <- (n1 + n2) / 2
+   escreval("Média:", media)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[8,6],"has":[7]},{"in":[7,8],"has":[7.5]},{"in":[9.5,6],"has":[7.75]}]</script>
+  </div>
+
+  <div class="ex" data-id="2.2">
+    <div class="ex-head"><span class="ex-num">Exercício 2.2</span><h4>Minutos em horas</h4></div>
+    <div class="ex-prompt"><p>Leia uma quantidade de minutos (inteiro) e mostre quantas horas e quantos minutos isso dá. Exemplo: 135 minutos = 2 h e 15 min. Dica: uma hora tem 60 minutos; use <code>\</code> e <code>mod</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "minutos"
+var
+   total, horas, minutos: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "minutos"
+var
+   total, horas, minutos: inteiro
+inicio
+   escreva("Quantos minutos? ")
+   leia(total)
+   horas <- total \ 60
+   minutos <- total mod 60
+   escreval(total, " minutos =", horas, " h e", minutos, " min")
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[135],"has":[2,15]},{"in":[60],"has":[1,0]},{"in":[59],"has":[0,59]},{"in":[200],"has":[3,20]}]</script>
+  </div>
+
+  <div class="ex" data-id="2.3">
+    <div class="ex-head"><span class="ex-num">Exercício 2.3</span><h4>Separar os dígitos</h4></div>
+    <div class="ex-prompt"><p>Leia um número inteiro de 3 dígitos e mostre a centena, a dezena e a unidade separadas. Exemplo: 472 → centena 4, dezena 7, unidade 2.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "digitos"
+var
+   n, c, d, u: inteiro
+inicio
+   // dica: n \ 100 dá a centena e n mod 10 dá a unidade
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "digitos"
+var
+   n, c, d, u: inteiro
+inicio
+   escreva("Número de 3 dígitos: ")
+   leia(n)
+   c <- n \ 100
+   d <- (n \ 10) mod 10
+   u <- n mod 10
+   escreval("Centena:", c)
+   escreval("Dezena:", d)
+   escreval("Unidade:", u)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[472],"has":[4,7,2]},{"in":[905],"has":[9,0,5]},{"in":[318],"has":[3,1,8]}]</script>
+  </div>
+
+  <div class="ex" data-id="2.4">
+    <div class="ex-head"><span class="ex-num">Exercício 2.4</span><h4>Celsius para Fahrenheit</h4></div>
+    <div class="ex-prompt"><p>Leia uma temperatura em graus Celsius e mostre em Fahrenheit. A fórmula é <code>F = C × 9 / 5 + 32</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "temperatura"
+var
+   c, f: real
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "temperatura"
+var
+   c, f: real
+inicio
+   escreva("Temperatura em Celsius: ")
+   leia(c)
+   f <- c * 9 / 5 + 32
+   escreval("Em Fahrenheit:", f)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[100],"has":[212]},{"in":[0],"has":[32]},{"in":[37],"has":[98.6]}]</script>
+  </div>
+</section>
+
+<!-- ===================================================== BLOCO 3 -->
+<section class="block" id="b3">
+  <header>
+    <p class="eyebrow">Bloco 3 · Aula 4 · 40 min</p>
+    <h2>O programa toma decisões</h2>
+    <p>Comparações dentro do <code>se</code>, o <code>senao</code>, o se aninhado e o comando <code>escolha</code>.</p>
+  </header>
+
+  <p>Até agora o programa fazia sempre a mesma coisa. Com o <code>se</code> ele decide: olha uma <b>condição</b> (uma pergunta cuja resposta é VERDADEIRO ou FALSO) e escolhe o caminho.</p>
+
+  <h3><code>se ... entao ... fimse</code></h3>
+<script type="text/x-visualg" data-title="maioridade.alg" data-hint="Rode duas vezes: uma digitando 20, outra digitando 15." data-test-in="20">
+algoritmo "maioridade"
+var
+   idade: inteiro
+inicio
+   escreva("Idade: ")
+   leia(idade)
+   se idade >= 18 entao
+      escreval("Pode tirar carteira de motorista.")
+   fimse
+   escreval("Fim do programa.")
+fimalgoritmo
+</script>
+  <p>Leia em voz alta: "<b>se</b> a idade for maior ou igual a 18, <b>então</b> mostre a frase; <b>fim do se</b>". Se a condição der FALSO, o programa pula tudo até o <code>fimse</code> e continua dali.</p>
+
+  <h3><code>se ... senao</code>: um caminho ou o outro</h3>
+  <div class="flow">
+    <figure>
+      <svg viewBox="0 0 320 252" role="img" aria-labelledby="fc1t">
+        <title id="fc1t">Fluxograma do se senao: a pergunta nota maior ou igual a 6; se verdadeiro mostra Aprovado, se falso mostra Reprovado; depois os dois caminhos se juntam.</title>
+        <defs><marker id="fc-ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="fc-arrow"/></marker></defs>
+        <line class="fc-line" x1="160" y1="4" x2="160" y2="26" marker-end="url(#fc-ar1)"/>
+        <polygon class="fc-cond" points="160,28 250,68 160,108 70,68"/>
+        <text class="fc-t" x="160" y="72" text-anchor="middle">nota &gt;= 6 ?</text>
+        <polyline class="fc-line" points="70,68 50,68 50,138" marker-end="url(#fc-ar1)"/>
+        <text class="fc-l fc-v" x="56" y="61">V</text>
+        <rect class="fc-box" x="2" y="140" width="96" height="38" rx="6"/>
+        <text class="fc-t" x="50" y="164" text-anchor="middle">Aprovado</text>
+        <polyline class="fc-line" points="250,68 270,68 270,138" marker-end="url(#fc-ar1)"/>
+        <text class="fc-l fc-f" x="257" y="61">F</text>
+        <rect class="fc-box" x="222" y="140" width="96" height="38" rx="6"/>
+        <text class="fc-t" x="270" y="164" text-anchor="middle">Reprovado</text>
+        <polyline class="fc-line" points="50,178 50,204 270,204 270,178"/>
+        <line class="fc-line" x1="160" y1="204" x2="160" y2="226" marker-end="url(#fc-ar1)"/>
+        <text class="fc-l" x="160" y="244" text-anchor="middle">continua depois do fimse</text>
+      </svg>
+      <figcaption>O losango é a pergunta. V (VERDADEIRO) vai para o bloco do <code>entao</code>; F (FALSO) vai para o <code>senao</code>.</figcaption>
+    </figure>
+  </div>
+<script type="text/x-visualg" data-title="aprovado.alg" data-test-in="6.5">
+algoritmo "aprovado"
+var
+   nota: real
+inicio
+   escreva("Nota: ")
+   leia(nota)
+   se nota >= 6 entao
+      escreval("Aprovado")
+   senao
+      escreval("Reprovado")
+   fimse
+fimalgoritmo
+</script>
+  <p class="key-line"><span class="key">Com senao, roda exatamente um dos dois blocos. Nunca os dois, nunca nenhum.</span></p>
+  <div class="box tip">
+    <p class="box-title">Dica: indente</p>
+    <p>Empurre para a direita (3 espaços) o que está dentro do <code>se</code>. O VisuAlg não obriga, mas fica muito mais fácil ver onde cada bloco começa e termina. Aqui no editor, a tecla Tab coloca os 3 espaços.</p>
+  </div>
+  <p>O clássico par ou ímpar usa o resto da divisão por 2:</p>
+<script type="text/x-visualg" data-title="par_impar.alg" data-test-in="7">
+algoritmo "par_impar"
+var
+   n: inteiro
+inicio
+   escreva("Digite um número: ")
+   leia(n)
+   se n mod 2 = 0 entao
+      escreval(n, " é par")
+   senao
+      escreval(n, " é ímpar")
+   fimse
+fimalgoritmo
+</script>
+
+  <h3>se aninhado: mais de dois caminhos</h3>
+  <p>Quando existem três ou mais respostas possíveis, coloca-se um <code>se</code> dentro do <code>senao</code> de outro.</p>
+<script type="text/x-visualg" data-title="classifica_nota.alg" data-hint="Aperte Passo a passo e digite 5.5: siga a linha amarela e veja por onde o programa passa." data-test-in="5.5">
+algoritmo "classifica_nota"
+var
+   media: real
+inicio
+   escreva("Média: ")
+   leia(media)
+   se media >= 7 entao
+      escreval("Aprovado")
+   senao
+      se media >= 4 entao
+         escreval("Recuperação")
+      senao
+         escreval("Reprovado")
+      fimse
+   fimse
+fimalgoritmo
+</script>
+  <p>Raciocínio: se chegou no <code>senao</code> do primeiro <code>se</code>, já sabemos que a média é menor que 7. Lá dentro, outro <code>se</code> separa recuperação de reprovado.</p>
+  <div class="pega">
+    <span class="pega-title">Pegadinha de prova</span>
+    <p><b>Conte: 2 se, 2 fimse.</b> Cada <code>se</code> tem o seu <code>fimse</code>, inclusive o que está dentro do <code>senao</code>.</p>
+    <p><b>A ordem das perguntas importa.</b> Teste da maior nota para a menor. Se perguntar primeiro <code>media &gt;= 4</code>, quem tirou 9 cai em Recuperação, porque 9 também é maior que 4.</p>
+  </div>
+<script type="text/x-visualg" data-title="sinal.alg" data-hint="Teste com 5, -2 e 0." data-test-in="0">
+algoritmo "sinal"
+var
+   n: inteiro
+inicio
+   escreva("Número: ")
+   leia(n)
+   se n > 0 entao
+      escreval("Positivo")
+   senao
+      se n < 0 entao
+         escreval("Negativo")
+      senao
+         escreval("Zero")
+      fimse
+   fimse
+fimalgoritmo
+</script>
+
+  <h3><code>escolha</code>: vários valores exatos</h3>
+  <p>Quando a mesma variável é comparada com vários valores certinhos (1, 2, 3...), o <code>escolha</code> fica mais limpo que um monte de <code>se</code>.</p>
+<script type="text/x-visualg" data-title="lanchonete.alg" data-hint="Teste com 2, depois com 9." data-test-in="2">
+algoritmo "lanchonete"
+var
+   opcao: inteiro
+inicio
+   escreval("1 - X-burguer   R$ 18")
+   escreval("2 - X-salada    R$ 20")
+   escreval("3 - Suco        R$ 8")
+   escreva("Escolha: ")
+   leia(opcao)
+   escolha opcao
+   caso 1
+      escreval("Saindo um X-burguer!")
+   caso 2
+      escreval("Saindo um X-salada!")
+   caso 3
+      escreval("Saindo um suco!")
+   outrocaso
+      escreval("Opção inválida.")
+   fimescolha
+fimalgoritmo
+</script>
+  <ul>
+    <li>O <code>escolha</code> olha o valor da variável e pula direto para o <code>caso</code> igual.</li>
+    <li><code>outrocaso</code> é o "nenhum dos anteriores" (igual ao último <code>senao</code>). É opcional.</li>
+    <li>Um caso pode ter vários valores: <code>caso 6, 7</code>.</li>
+    <li>Funciona com texto também, entre aspas: <code>caso "+"</code>.</li>
+  </ul>
+<script type="text/x-visualg" data-title="calculadora.alg" data-hint="Digite 6, depois *, depois 7." data-test-in="6|*|7">
+algoritmo "calculadora"
+var
+   a, b: real
+   op: caractere
+inicio
+   escreva("Primeiro número: ")
+   leia(a)
+   escreva("Operação (+ - * /): ")
+   leia(op)
+   escreva("Segundo número: ")
+   leia(b)
+   escolha op
+   caso "+"
+      escreval("Resultado:", a + b)
+   caso "-"
+      escreval("Resultado:", a - b)
+   caso "*", "x"
+      escreval("Resultado:", a * b)
+   caso "/"
+      se b = 0 entao
+         escreval("Não existe divisão por zero.")
+      senao
+         escreval("Resultado:", a / b)
+      fimse
+   outrocaso
+      escreval("Operação inválida.")
+   fimescolha
+fimalgoritmo
+</script>
+  <div class="pega">
+    <span class="pega-title">Pegadinha de prova</span>
+    <p>O <code>escolha</code> só testa <b>igualdade</b>. Para faixas, como <code>nota &gt;= 7</code>, use <code>se</code>.</p>
+  </div>
+  <div class="tbl">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Use <code>se</code> quando...</th><th>Use <code>escolha</code> quando...</th></tr></thead>
+      <tbody>
+        <tr><td>compara faixas (<code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>)</td><td>compara a mesma variável com valores exatos</td></tr>
+        <tr><td>junta condições com <code>e</code> / <code>ou</code></td><td>é um menu de opções (1, 2, 3...)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <h3>Teste rápido</h3>
+  <div class="quiz">
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Com <code>nota = 6</code>, o que aparece?</p><pre class="snip">se nota &gt; 6 entao
+   escreval("A")
+senao
+   escreval("B")
+fimse</pre></div>
+      <ol class="q-opts"><li>A</li><li>B</li><li>A e B</li><li>Nada</li></ol>
+      <div class="q-why"><code>6 &gt; 6</code> é FALSO (6 não é maior que 6), então vai para o senao. Cuidado com <code>&gt;</code> e <code>&gt;=</code>: é o tipo de detalhe que a prova cobra.</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>Um código tem 3 <code>se</code> (um dentro do outro). Quantos <code>fimse</code> ele precisa?</p></div>
+      <ol class="q-opts"><li>1</li><li>2</li><li>3</li><li>Depende do senao</li></ol>
+      <div class="q-why">Cada <code>se</code> tem o seu <code>fimse</code>. 3 se, 3 fimse.</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>No programa <code>sinal.alg</code> acima, o que aparece quando a pessoa digita 0?</p></div>
+      <ol class="q-opts"><li>Positivo</li><li>Negativo</li><li>Zero</li><li>Nada</li></ol>
+      <div class="q-why"><code>0 &gt; 0</code> é FALSO, vai para o senao. Lá, <code>0 &lt; 0</code> também é FALSO, vai para o senao de dentro: Zero.</div>
+    </div>
+    <div class="q" data-answer="0">
+      <div class="q-text"><p>Quando o <code>escolha</code> é melhor que o <code>se</code>?</p></div>
+      <ol class="q-opts"><li>Quando compara a mesma variável com valores exatos, como num menu</li><li>Quando testa faixas, como <code>idade &gt;= 18</code></li><li>Quando precisa repetir comandos</li><li>Nunca</li></ol>
+      <div class="q-why">O escolha só compara igualdade. Menu de opções é o caso típico.</div>
+    </div>
+    <div class="q" data-answer="0">
+      <div class="q-text"><p>Qual linha está escrita certo no VisuAlg?</p></div>
+      <ol class="q-opts"><li><code>se x = 5 entao</code></li><li><code>se x == 5 entao</code></li><li><code>se x &lt;- 5 entao</code></li><li><code>se x = 5 faca</code></li></ol>
+      <div class="q-why">Comparação usa um <code>=</code> só, e o <code>se</code> termina com <code>entao</code>. O <code>faca</code> é do enquanto e do para.</div>
+    </div>
+  </div>
+
+  <h3>Exercícios</h3>
+  <div class="ex" data-id="3.1">
+    <div class="ex-head"><span class="ex-num">Exercício 3.1</span><h4>Par ou ímpar</h4></div>
+    <div class="ex-prompt"><p>Leia um número inteiro e mostre <code>Par</code> ou <code>Ímpar</code>. Tente sem olhar o exemplo lá de cima.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "par_ou_impar"
+var
+   n: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "par_ou_impar"
+var
+   n: inteiro
+inicio
+   escreva("Número: ")
+   leia(n)
+   se n mod 2 = 0 entao
+      escreval("Par")
+   senao
+      escreval("Ímpar")
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[8],"has":["par"],"not":["impar"]},{"in":[7],"has":["impar"],"not":["par"]},{"in":[0],"has":["par"],"not":["impar"]}]</script>
+  </div>
+
+  <div class="ex" data-id="3.2">
+    <div class="ex-head"><span class="ex-num">Exercício 3.2</span><h4>O maior de dois</h4></div>
+    <div class="ex-prompt"><p>Leia dois números inteiros e mostre o maior. Se forem iguais, mostre <code>Iguais</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "maior_de_dois"
+var
+   a, b: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "maior_de_dois"
+var
+   a, b: inteiro
+inicio
+   escreva("Primeiro número: ")
+   leia(a)
+   escreva("Segundo número: ")
+   leia(b)
+   se a > b entao
+      escreval("O maior é", a)
+   senao
+      se b > a entao
+         escreval("O maior é", b)
+      senao
+         escreval("Iguais")
+      fimse
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[3,9],"has":[9],"not":["iguais"]},{"in":[12,5],"has":[12],"not":["iguais"]},{"in":[4,4],"has":["iguais"]}]</script>
+  </div>
+
+  <div class="ex" data-id="3.3">
+    <div class="ex-head"><span class="ex-num">Exercício 3.3</span><h4>Situação do aluno</h4></div>
+    <div class="ex-prompt"><p>Leia duas notas, calcule a média e mostre: <code>Aprovado</code> se a média for 7 ou mais; <code>Recuperação</code> se for 4 ou mais (e menor que 7); <code>Reprovado</code> se for menor que 4.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "situacao"
+var
+   n1, n2, media: real
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "situacao"
+var
+   n1, n2, media: real
+inicio
+   escreva("Nota 1: ")
+   leia(n1)
+   escreva("Nota 2: ")
+   leia(n2)
+   media <- (n1 + n2) / 2
+   escreval("Média:", media)
+   se media >= 7 entao
+      escreval("Aprovado")
+   senao
+      se media >= 4 entao
+         escreval("Recuperação")
+      senao
+         escreval("Reprovado")
+      fimse
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[8,9],"has":["aprovado"],"not":["reprovado","recuperacao"]},{"in":[5,4],"has":["recuperacao"],"not":["aprovado","reprovado"]},{"in":[2,3],"has":["reprovado"],"not":["aprovado","recuperacao"]},{"in":[7,7],"has":["aprovado"],"not":["recuperacao","reprovado"]}]</script>
+  </div>
+
+  <div class="ex" data-id="3.4">
+    <div class="ex-head"><span class="ex-num">Exercício 3.4</span><h4>Dia da semana com escolha</h4></div>
+    <div class="ex-prompt"><p>Leia um número de 1 a 7 e mostre o dia da semana (1 = Domingo, 2 = Segunda-feira, ..., 7 = Sábado). Para qualquer outro número, mostre <code>Inválido</code>. Use <code>escolha</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "dia_semana"
+var
+   dia: inteiro
+inicio
+   escreva("Número do dia (1 a 7): ")
+   leia(dia)
+   escolha dia
+   caso 1
+      escreval("Domingo")
+   // continue daqui: caso 2, caso 3... e o outrocaso
+   fimescolha
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "dia_semana"
+var
+   dia: inteiro
+inicio
+   escreva("Número do dia (1 a 7): ")
+   leia(dia)
+   escolha dia
+   caso 1
+      escreval("Domingo")
+   caso 2
+      escreval("Segunda-feira")
+   caso 3
+      escreval("Terça-feira")
+   caso 4
+      escreval("Quarta-feira")
+   caso 5
+      escreval("Quinta-feira")
+   caso 6
+      escreval("Sexta-feira")
+   caso 7
+      escreval("Sábado")
+   outrocaso
+      escreval("Inválido")
+   fimescolha
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[1],"has":["domingo"]},{"in":[4],"has":["quarta"]},{"in":[7],"has":["sabado"]},{"in":[9],"has":["invalido"]}]</script>
+  </div>
+</section>
+
+<!-- ===================================================== BLOCO 4 -->
+<section class="block" id="b4">
+  <header>
+    <p class="eyebrow">Bloco 4 · Aula 5 · 25 min</p>
+    <h2>Juntando condições: e, ou, nao</h2>
+    <p>Condições compostas, a tabela-verdade e como resolver expressões lógicas na prova.</p>
+  </header>
+
+  <h3>Quando uma pergunta só não basta</h3>
+  <p>Para andar na montanha-russa precisa ter 12 anos ou mais <b>e</b> pelo menos 1,40 m. São duas perguntas, e as duas precisam dar VERDADEIRO. Para juntar perguntas existem três palavras:</p>
+  <ul>
+    <li><code>e</code> é exigente: só dá VERDADEIRO se <b>as duas</b> forem VERDADEIRO.</li>
+    <li><code>ou</code> é bonzinho: basta <b>uma</b> ser VERDADEIRO.</li>
+    <li><code>nao</code> é do contra: <b>inverte</b>. VERDADEIRO vira FALSO e FALSO vira VERDADEIRO.</li>
+  </ul>
+  <p>Clique em A e em B para trocar os valores e veja os resultados:</p>
+  <div class="tt">
+    <div class="tt-switches">
+      <button type="button" class="tt-sw" data-var="A">A = <b></b></button>
+      <button type="button" class="tt-sw" data-var="B">B = <b></b></button>
+    </div>
+    <div class="tt-res">
+      <div><code>A e B</code><span data-out="and"></span></div>
+      <div><code>A ou B</code><span data-out="or"></span></div>
+      <div><code>nao A</code><span data-out="notA"></span></div>
+      <div><code>A xou B</code><span data-out="xor"></span></div>
+    </div>
+  </div>
+  <div class="tbl">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>A</th><th>B</th><th>A e B</th><th>A ou B</th><th>nao A</th></tr></thead>
+      <tbody>
+        <tr><td>V</td><td>V</td><td><b>V</b></td><td><b>V</b></td><td>F</td></tr>
+        <tr><td>V</td><td>F</td><td>F</td><td><b>V</b></td><td>F</td></tr>
+        <tr><td>F</td><td>V</td><td>F</td><td><b>V</b></td><td><b>V</b></td></tr>
+        <tr><td>F</td><td>F</td><td>F</td><td>F</td><td><b>V</b></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <p class="muted small">V = VERDADEIRO, F = FALSO. Bônus: <code>xou</code> dá VERDADEIRO quando os dois lados são diferentes.</p>
+
+  <h3>Como escrever no VisuAlg</h3>
+  <p class="key-line"><span class="key">Coloque cada comparação entre parênteses e repita a variável em cada uma.</span></p>
+<script type="text/x-visualg" data-title="montanha_russa.alg" data-hint="Teste 13 anos com 1.50, depois 13 anos com 1.30." data-test-in="13|1.50">
+algoritmo "montanha_russa"
+var
+   idade: inteiro
+   altura: real
+inicio
+   escreva("Idade: ")
+   leia(idade)
+   escreva("Altura em metros (ex.: 1.45): ")
+   leia(altura)
+   se (idade >= 12) e (altura >= 1.40) entao
+      escreval("Pode entrar no brinquedo!")
+   senao
+      escreval("Não pode entrar.")
+   fimse
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-title="meia_entrada.alg" data-hint="Teste com 8, 30 e 65." data-test-in="65">
+algoritmo "meia_entrada"
+var
+   idade: inteiro
+inicio
+   escreva("Idade: ")
+   leia(idade)
+   se (idade < 12) ou (idade >= 60) entao
+      escreval("Paga meia-entrada.")
+   senao
+      escreval("Paga inteira.")
+   fimse
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-title="senha.alg" data-hint="Teste com 0000, depois com 1234." data-test-in="0000">
+algoritmo "senha"
+var
+   senha: caractere
+inicio
+   escreva("Senha: ")
+   leia(senha)
+   se nao (senha = "1234") entao
+      escreval("Senha errada!")
+   senao
+      escreval("Bem-vindo!")
+   fimse
+fimalgoritmo
+</script>
+  <div class="pega">
+    <span class="pega-title">Pegadinhas de prova</span>
+    <ol>
+      <li><code>se idade &gt;= 18 e &lt;= 65 entao</code> <span class="bad-txt">errado</span>. Repita a variável: <code>se (idade &gt;= 18) e (idade &lt;= 65) entao</code> <span class="ok-txt">certo</span>.</li>
+      <li><code>se x = 1 ou 2 entao</code> <span class="bad-txt">errado</span>. O certo é <code>se (x = 1) ou (x = 2) entao</code>.</li>
+      <li><b>Dentro</b> de uma faixa usa <code>e</code>: <code>(x &gt;= 1) e (x &lt;= 10)</code>. <b>Fora</b> da faixa usa <code>ou</code>: <code>(x &lt; 1) ou (x &gt; 10)</code>.</li>
+      <li>O <code>e</code> vem antes do <code>ou</code>: <code>VERDADEIRO ou FALSO e FALSO</code> dá VERDADEIRO, porque resolve <code>FALSO e FALSO</code> primeiro. Na dúvida, parênteses.</li>
+    </ol>
+  </div>
+
+  <h3>Resolvendo expressão lógica na prova</h3>
+  <p>A prova costuma dar os valores e pedir o resultado. O caminho: troque as variáveis pelos valores, resolva cada parêntese até virar VERDADEIRO ou FALSO, depois o <code>nao</code>, depois o <code>e</code> e por último o <code>ou</code>. Com <code>a = 5</code>, <code>b = 3</code> e <code>c = 8</code>:</p>
+  <div class="xp" id="xp2" data-expr="(a + b = c) e nao (b > c)" data-vars="a = 5, b = 3, c = 8" data-presets='[{"e":"(a > b) e (c < a)","v":"a = 5, b = 3, c = 8"},{"e":"(a > b) ou (c < a)","v":"a = 5, b = 3, c = 8"},{"e":"nao (a = 5) ou (b > c)","v":"a = 5, b = 3, c = 8"},{"e":"(a + b = c) e nao (b > c)","v":"a = 5, b = 3, c = 8"},{"e":"(a < b) ou (b < c) e (c < a)","v":"a = 5, b = 3, c = 8"},{"e":"(ano mod 4 = 0) e (ano mod 100 <> 0) ou (ano mod 400 = 0)","v":"ano = 1900"}]'></div>
+  <p>O último exemplo da lista é a regra do ano bissexto: divisível por 4 e não por 100, ou então divisível por 400. Em programa:</p>
+<script type="text/x-visualg" data-title="bissexto.alg" data-hint="Teste com 2024, 1900 e 2000." data-test-in="1900">
+algoritmo "bissexto"
+var
+   ano: inteiro
+inicio
+   escreva("Ano: ")
+   leia(ano)
+   se ((ano mod 4 = 0) e (ano mod 100 <> 0)) ou (ano mod 400 = 0) entao
+      escreval(ano, " é bissexto")
+   senao
+      escreval(ano, " não é bissexto")
+   fimse
+fimalgoritmo
+</script>
+
+  <h3>Teste rápido</h3>
+  <div class="quiz">
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Com <code>idade = 70</code>, quanto dá <code>(idade &gt;= 18) e (idade &lt;= 65)</code>?</p></div>
+      <ol class="q-opts"><li>VERDADEIRO</li><li>FALSO</li></ol>
+      <div class="q-why"><code>70 &gt;= 18</code> é VERDADEIRO, mas <code>70 &lt;= 65</code> é FALSO. Com <code>e</code>, basta um FALSO para dar FALSO.</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>Qual condição testa se x está entre 1 e 10, incluindo o 1 e o 10?</p></div>
+      <ol class="q-opts"><li><code>x &gt;= 1 e &lt;= 10</code></li><li><code>(x &gt;= 1) ou (x &lt;= 10)</code></li><li><code>(x &gt;= 1) e (x &lt;= 10)</code></li><li><code>(x &gt; 1) e (x &lt; 10)</code></li></ol>
+      <div class="q-why">A primeira não repete a variável (erro). A segunda, com <code>ou</code>, dá VERDADEIRO para qualquer número. A quarta deixa o 1 e o 10 de fora.</div>
+    </div>
+    <div class="q" data-answer="0">
+      <div class="q-text"><p>Quanto dá <code>VERDADEIRO ou FALSO e FALSO</code>?</p></div>
+      <ol class="q-opts"><li>VERDADEIRO</li><li>FALSO</li></ol>
+      <div class="q-why">O <code>e</code> vem antes: <code>FALSO e FALSO</code> = FALSO. Depois <code>VERDADEIRO ou FALSO</code> = VERDADEIRO. Quem resolve da esquerda para a direita erra essa.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Quanto dá <code>nao (5 &gt; 3)</code>?</p></div>
+      <ol class="q-opts"><li>VERDADEIRO</li><li>FALSO</li></ol>
+      <div class="q-why"><code>5 &gt; 3</code> é VERDADEIRO, e o <code>nao</code> inverte: FALSO.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>O cliente ganha desconto se tiver cartão fidelidade <b>ou</b> gastar mais de 100 reais. Qual condição?</p></div>
+      <ol class="q-opts"><li><code>(cartao = "sim") e (gasto &gt; 100)</code></li><li><code>(cartao = "sim") ou (gasto &gt; 100)</code></li><li><code>nao (gasto &gt; 100)</code></li><li><code>(gasto &gt; 100) e (gasto &lt; 100)</code></li></ol>
+      <div class="q-why">Basta uma das duas coisas: é <code>ou</code>. Com <code>e</code>, só ganharia quem tivesse cartão E gastasse mais de 100.</div>
+    </div>
+  </div>
+
+  <h3>Exercícios</h3>
+  <div class="ex" data-id="4.1">
+    <div class="ex-head"><span class="ex-num">Exercício 4.1</span><h4>Dentro ou fora</h4></div>
+    <div class="ex-prompt"><p>Leia um número inteiro e mostre <code>Dentro</code> se ele estiver entre 1 e 100 (incluindo 1 e 100) ou <code>Fora</code> se não estiver. Use um <code>se</code> só, com <code>e</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "faixa"
+var
+   n: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "faixa"
+var
+   n: inteiro
+inicio
+   escreva("Número: ")
+   leia(n)
+   se (n >= 1) e (n <= 100) entao
+      escreval("Dentro")
+   senao
+      escreval("Fora")
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[50],"has":["dentro"],"not":["fora"]},{"in":[1],"has":["dentro"],"not":["fora"]},{"in":[100],"has":["dentro"],"not":["fora"]},{"in":[0],"has":["fora"],"not":["dentro"]},{"in":[101],"has":["fora"],"not":["dentro"]}]</script>
+  </div>
+
+  <div class="ex" data-id="4.2">
+    <div class="ex-head"><span class="ex-num">Exercício 4.2</span><h4>Precisa votar?</h4></div>
+    <div class="ex-prompt"><p>No Brasil: quem tem menos de 16 anos não vota; quem tem 16 ou 17 anos, ou mais de 70, vota se quiser; de 18 a 70 é obrigatório. Leia a idade e mostre <code>Não vota</code>, <code>Facultativo</code> ou <code>Obrigatório</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "voto"
+var
+   idade: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "voto"
+var
+   idade: inteiro
+inicio
+   escreva("Idade: ")
+   leia(idade)
+   se idade < 16 entao
+      escreval("Não vota")
+   senao
+      se (idade >= 18) e (idade <= 70) entao
+         escreval("Obrigatório")
+      senao
+         escreval("Facultativo")
+      fimse
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[15],"has":["nao vota"],"not":["facultativo","obrigatorio"]},{"in":[16],"has":["facultativo"],"not":["obrigatorio"]},{"in":[17],"has":["facultativo"],"not":["obrigatorio"]},{"in":[18],"has":["obrigatorio"],"not":["facultativo"]},{"in":[70],"has":["obrigatorio"],"not":["facultativo"]},{"in":[71],"has":["facultativo"],"not":["obrigatorio"]}]</script>
+  </div>
+
+  <div class="ex" data-id="4.3">
+    <div class="ex-head"><span class="ex-num">Exercício 4.3</span><h4>Forma triângulo?</h4></div>
+    <div class="ex-prompt"><p>Leia três lados (inteiros). Eles formam um triângulo se <b>cada</b> lado for menor que a soma dos outros dois. Mostre <code>É triângulo</code> ou <code>Não é triângulo</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "triangulo"
+var
+   a, b, c: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "triangulo"
+var
+   a, b, c: inteiro
+inicio
+   escreva("Lado 1: ")
+   leia(a)
+   escreva("Lado 2: ")
+   leia(b)
+   escreva("Lado 3: ")
+   leia(c)
+   se (a < b + c) e (b < a + c) e (c < a + b) entao
+      escreval("É triângulo")
+   senao
+      escreval("Não é triângulo")
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[3,4,5],"has":["triangulo"],"not":["nao"]},{"in":[1,2,10],"has":["nao"]},{"in":[5,5,5],"has":["triangulo"],"not":["nao"]},{"in":[2,3,5],"has":["nao"]}]</script>
+  </div>
+
+  <div class="ex" data-id="4.4">
+    <div class="ex-head"><span class="ex-num">Exercício 4.4</span><h4>Login</h4></div>
+    <div class="ex-prompt"><p>Leia um usuário e uma senha (textos). Se o usuário for <code>admin</code> e a senha for <code>1234</code>, mostre <code>Acesso liberado</code>; senão, <code>Acesso negado</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "login"
+var
+   usuario, senha: caractere
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "login"
+var
+   usuario, senha: caractere
+inicio
+   escreva("Usuário: ")
+   leia(usuario)
+   escreva("Senha: ")
+   leia(senha)
+   se (usuario = "admin") e (senha = "1234") entao
+      escreval("Acesso liberado")
+   senao
+      escreval("Acesso negado")
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":["admin","1234"],"has":["liberado"],"not":["negado"]},{"in":["admin","0000"],"has":["negado"],"not":["liberado"]},{"in":["joao","1234"],"has":["negado"],"not":["liberado"]}]</script>
+  </div>
+</section>
+
+<!-- ===================================================== BLOCO 5 -->
+<section class="block" id="b5">
+  <header>
+    <p class="eyebrow">Bloco 5 · Aula 6 · 50 min</p>
+    <h2>Repetição: o programa aprende a repetir</h2>
+    <p><code>enquanto</code>, <code>repita ... ate</code> e <code>para</code>. Contador, acumulador e os padrões que mais caem.</p>
+  </header>
+
+  <p>Mostrar os números de 1 a 1000 com <code>escreval</code> daria 1000 linhas. Um <b>laço</b> (ou <i>loop</i>) repete um bloco de comandos quantas vezes for preciso. Duas ideias aparecem em quase todo laço:</p>
+  <ul>
+    <li><b>Contador</b> conta quantas vezes algo aconteceu: <code>cont &lt;- cont + 1</code></li>
+    <li><b>Acumulador</b> vai somando valores: <code>soma &lt;- soma + num</code> (começa em 0)</li>
+  </ul>
+  <p class="key-line"><span class="key">Todo laço tem 3 partes: onde começa, até quando vai, e o que muda a cada volta. Esquecer a terceira dá loop infinito.</span></p>
+
+  <h3><code>enquanto ... faca ... fimenquanto</code></h3>
+  <p>"Enquanto a condição for VERDADEIRO, repete." Ele testa a condição <b>antes</b> de cada volta.</p>
+<script type="text/x-visualg" data-title="conta_enquanto.alg" data-hint="Depois de executar, clique em Ver teste de mesa (embaixo da memória).">
+algoritmo "conta_enquanto"
+var
+   cont: inteiro
+inicio
+   cont <- 1
+   enquanto cont <= 5 faca
+      escreval(cont)
+      cont <- cont + 1
+   fimenquanto
+   escreval("Saiu do laço com cont =", cont)
+fimalgoritmo
+</script>
+  <p>O <b>teste de mesa</b> é fazer no papel o que o computador faz. É assim que se resolve "o que aparece na tela?" na prova:</p>
+  <div class="tbl">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Volta</th><th>cont</th><th><code>cont &lt;= 5</code>?</th><th>Mostra</th></tr></thead>
+      <tbody>
+        <tr><td>1ª</td><td>1</td><td>VERDADEIRO</td><td>1</td></tr>
+        <tr><td>2ª</td><td>2</td><td>VERDADEIRO</td><td>2</td></tr>
+        <tr><td>3ª</td><td>3</td><td>VERDADEIRO</td><td>3</td></tr>
+        <tr><td>4ª</td><td>4</td><td>VERDADEIRO</td><td>4</td></tr>
+        <tr><td>5ª</td><td>5</td><td>VERDADEIRO</td><td>5</td></tr>
+        <tr><td>fim</td><td>6</td><td>FALSO</td><td>sai do laço</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <p>Se a condição já começar FALSO, o <code>enquanto</code> não roda nenhuma vez.</p>
+  <div class="pega">
+    <span class="pega-title">Pegadinha de prova: loop infinito</span>
+    <p>Sem a linha <code>cont &lt;- cont + 1</code>, o cont fica 1 para sempre, a condição nunca fica FALSO e o programa não termina. Apague essa linha no exemplo acima e execute: o simulador para sozinho e avisa (o VisuAlg de verdade fica travado).</p>
+  </div>
+
+  <h3><code>repita ... ate</code></h3>
+  <p>"Repete <b>até</b> a condição ficar VERDADEIRO." Ele testa no <b>fim</b> de cada volta.</p>
+<script type="text/x-visualg" data-title="conta_repita.alg">
+algoritmo "conta_repita"
+var
+   cont: inteiro
+inicio
+   cont <- 1
+   repita
+      escreval(cont)
+      cont <- cont + 1
+   ate cont > 5
+fimalgoritmo
+</script>
+  <div class="flow">
+    <figure>
+      <svg viewBox="0 0 300 278" role="img" aria-labelledby="fc2t">
+        <title id="fc2t">Fluxograma do enquanto: primeiro a pergunta cont menor ou igual a 5; se verdadeiro executa o corpo e volta para a pergunta; se falso sai do laço.</title>
+        <defs><marker id="fc-ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="fc-arrow"/></marker></defs>
+        <line class="fc-line" x1="150" y1="4" x2="150" y2="30" marker-end="url(#fc-ar2)"/>
+        <polygon class="fc-cond" points="150,32 240,72 150,112 60,72"/>
+        <text class="fc-t" x="150" y="76" text-anchor="middle">cont &lt;= 5 ?</text>
+        <line class="fc-line" x1="150" y1="112" x2="150" y2="140" marker-end="url(#fc-ar2)"/>
+        <text class="fc-l fc-v" x="158" y="131">V</text>
+        <rect class="fc-box" x="85" y="142" width="130" height="40" rx="6"/>
+        <text class="fc-t" x="150" y="166" text-anchor="middle">corpo do laço</text>
+        <polyline class="fc-line" points="150,182 150,204 24,204 24,72 58,72" marker-end="url(#fc-ar2)"/>
+        <text class="fc-l" x="30" y="222">volta e testa de novo</text>
+        <polyline class="fc-line" points="240,72 258,72 258,240" marker-end="url(#fc-ar2)"/>
+        <text class="fc-l fc-f" x="245" y="65">F</text>
+        <text class="fc-l" x="258" y="258" text-anchor="middle">sai do laço</text>
+      </svg>
+      <figcaption><code>enquanto</code>: testa antes de cada volta. Pode rodar 0 vezes.</figcaption>
+    </figure>
+    <figure>
+      <svg viewBox="0 0 300 278" role="img" aria-labelledby="fc3t">
+        <title id="fc3t">Fluxograma do repita: primeiro executa o corpo, depois pergunta cont maior que 5; se falso volta para o corpo; se verdadeiro sai do laço.</title>
+        <defs><marker id="fc-ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="fc-arrow"/></marker></defs>
+        <line class="fc-line" x1="150" y1="4" x2="150" y2="30" marker-end="url(#fc-ar3)"/>
+        <rect class="fc-box" x="85" y="32" width="130" height="40" rx="6"/>
+        <text class="fc-t" x="150" y="56" text-anchor="middle">corpo do laço</text>
+        <line class="fc-line" x1="150" y1="72" x2="150" y2="100" marker-end="url(#fc-ar3)"/>
+        <polygon class="fc-cond" points="150,102 240,142 150,182 60,142"/>
+        <text class="fc-t" x="150" y="146" text-anchor="middle">cont &gt; 5 ?</text>
+        <polyline class="fc-line" points="60,142 24,142 24,52 83,52" marker-end="url(#fc-ar3)"/>
+        <text class="fc-l fc-f" x="34" y="135">F</text>
+        <text class="fc-l" x="30" y="98">volta</text>
+        <line class="fc-line" x1="150" y1="182" x2="150" y2="240" marker-end="url(#fc-ar3)"/>
+        <text class="fc-l fc-v" x="158" y="206">V</text>
+        <text class="fc-l" x="150" y="258" text-anchor="middle">sai do laço</text>
+      </svg>
+      <figcaption><code>repita</code>: testa no fim de cada volta. Roda pelo menos 1 vez.</figcaption>
+    </figure>
+  </div>
+  <div class="pega">
+    <span class="pega-title">A pegadinha mais cobrada do bloco</span>
+    <p>O <code>enquanto</code> <b>continua</b> quando a condição é VERDADEIRO. O <code>repita</code> <b>para</b> quando a condição é VERDADEIRO. Por isso as condições são opostas: <code>enquanto cont &lt;= 5</code> faz o mesmo que <code>ate cont &gt; 5</code>.</p>
+    <p>E o <code>repita</code> sempre roda pelo menos uma vez, porque só testa no fim.</p>
+  </div>
+  <p>Por rodar pelo menos uma vez, o <code>repita</code> é perfeito para <b>pedir de novo até a pessoa digitar certo</b>:</p>
+<script type="text/x-visualg" data-title="valida_nota.alg" data-hint="Digite -3, depois 15, depois 8." data-test-in="-3|15|8">
+algoritmo "valida_nota"
+var
+   nota: real
+inicio
+   repita
+      escreva("Digite uma nota de 0 a 10: ")
+      leia(nota)
+      se (nota < 0) ou (nota > 10) entao
+         escreval("Nota inválida, tente de novo.")
+      fimse
+   ate (nota >= 0) e (nota <= 10)
+   escreval("Nota aceita:", nota)
+fimalgoritmo
+</script>
+
+  <h3><code>para ... de ... ate ... faca</code></h3>
+  <p>Use quando você <b>sabe quantas vezes</b> vai repetir.</p>
+<script type="text/x-visualg" data-title="conta_para.alg">
+algoritmo "conta_para"
+var
+   i: inteiro
+inicio
+   para i de 1 ate 5 faca
+      escreval(i)
+   fimpara
+fimalgoritmo
+</script>
+  <p>O <code>para</code> faz as 3 partes sozinho: começa o <code>i</code> em 1, testa se ele passou de 5 e soma 1 no <code>i</code> no fim de cada volta. <b>Não escreva <code>i &lt;- i + 1</code> dentro do para.</b> Com <code>passo</code> dá para pular de 2 em 2 ou contar para trás:</p>
+<script type="text/x-visualg" data-title="passo.alg">
+algoritmo "passo"
+var
+   i: inteiro
+inicio
+   escreval("De 2 em 2:")
+   para i de 0 ate 10 passo 2 faca
+      escreva(i)
+   fimpara
+   escreval("")
+   escreval("Contagem regressiva:")
+   para i de 5 ate 1 passo -1 faca
+      escreva(i)
+   fimpara
+   escreval("")
+   escreval("Fogo!")
+fimalgoritmo
+</script>
+  <div class="box tip">
+    <p class="box-title">Dica</p>
+    <p>A variável do <code>para</code> tem que ser <code>inteiro</code>. Para contar para trás, o passo é negativo: <code>passo -1</code>.</p>
+  </div>
+
+  <h3>Qual laço usar?</h3>
+  <div class="tbl">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Situação</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td>Sei quantas vezes (de 1 a 10, N vezes)</td><td><code>para</code></td></tr>
+        <tr><td>Não sei quantas vezes, e talvez não rode nenhuma</td><td><code>enquanto</code></td></tr>
+        <tr><td>Tem que rodar pelo menos uma vez (menu, pedir até acertar)</td><td><code>repita</code></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <p>Os três conseguem fazer a mesma coisa. Mostrar de 1 a 3:</p>
+  <div class="cola">
+    <div><h4>para</h4><pre class="snip">para i de 1 ate 3 faca
+   escreval(i)
+fimpara</pre></div>
+    <div><h4>enquanto</h4><pre class="snip">i &lt;- 1
+enquanto i &lt;= 3 faca
+   escreval(i)
+   i &lt;- i + 1
+fimenquanto</pre></div>
+    <div><h4>repita</h4><pre class="snip">i &lt;- 1
+repita
+   escreval(i)
+   i &lt;- i + 1
+ate i &gt; 3</pre></div>
+  </div>
+
+  <h3>Padrões que caem em prova</h3>
+  <p>Quase todo exercício de laço é um destes padrões, ou uma mistura deles. Rode cada um.</p>
+
+  <h4>Somar e tirar a média</h4>
+<script type="text/x-visualg" data-title="soma_media.alg" data-hint="Digite 4 números, um de cada vez." data-test-in="7|8|5|10">
+algoritmo "soma_media"
+var
+   i: inteiro
+   num, soma: real
+inicio
+   soma <- 0
+   para i de 1 ate 4 faca
+      escreva("Digite o", i, "º número: ")
+      leia(num)
+      soma <- soma + num
+   fimpara
+   escreval("Soma:", soma)
+   escreval("Média:", soma / 4)
+fimalgoritmo
+</script>
+
+  <h4>Tabuada</h4>
+<script type="text/x-visualg" data-title="tabuada.alg" data-test-in="7">
+algoritmo "tabuada"
+var
+   n, i: inteiro
+inicio
+   escreva("Tabuada de qual número? ")
+   leia(n)
+   para i de 1 ate 10 faca
+      escreval(n, " x", i, " =", n * i)
+   fimpara
+fimalgoritmo
+</script>
+
+  <h4>Contar quantos</h4>
+<script type="text/x-visualg" data-title="conta_pares.alg" data-hint="Digite 5 números; o programa conta quantos são pares." data-test-in="2|7|4|9|10">
+algoritmo "conta_pares"
+var
+   i, num, pares: inteiro
+inicio
+   pares <- 0
+   para i de 1 ate 5 faca
+      escreva("Número: ")
+      leia(num)
+      se num mod 2 = 0 entao
+         pares <- pares + 1
+      fimse
+   fimpara
+   escreval("Você digitou", pares, " números pares.")
+fimalgoritmo
+</script>
+
+  <h4>Repetir até digitar 0</h4>
+  <p>Quando não se sabe quantos números a pessoa vai digitar, combina-se um valor que faz parar (aqui, o 0). Repare: o programa lê uma vez <b>antes</b> do laço e de novo no <b>fim</b> de cada volta.</p>
+<script type="text/x-visualg" data-title="ate_zero.alg" data-hint="Digite alguns números e termine com 0." data-test-in="5|10|3|0">
+algoritmo "ate_zero"
+var
+   num, soma, qtd: inteiro
+inicio
+   soma <- 0
+   qtd <- 0
+   escreva("Número (0 para parar): ")
+   leia(num)
+   enquanto num <> 0 faca
+      soma <- soma + num
+      qtd <- qtd + 1
+      escreva("Número (0 para parar): ")
+      leia(num)
+   fimenquanto
+   escreval("Você digitou", qtd, " números. Soma:", soma)
+fimalgoritmo
+</script>
+
+  <h4>Maior valor</h4>
+  <p>Truque: o primeiro número (quando <code>i = 1</code>) já vira o maior. Depois, só troca se aparecer um maior.</p>
+<script type="text/x-visualg" data-title="maior.alg" data-test-in="4|12|7|3|9">
+algoritmo "maior"
+var
+   i, num, maior: inteiro
+inicio
+   para i de 1 ate 5 faca
+      escreva("Número: ")
+      leia(num)
+      se (i = 1) ou (num > maior) entao
+         maior <- num
+      fimse
+   fimpara
+   escreval("O maior foi", maior)
+fimalgoritmo
+</script>
+
+  <h4>Fatorial (acumulador de multiplicação)</h4>
+  <p>Acumulador de multiplicação começa em <b>1</b>. Se começar em 0, tudo vira 0.</p>
+<script type="text/x-visualg" data-title="fatorial.alg" data-hint="5! = 5 × 4 × 3 × 2 × 1 = 120" data-test-in="5">
+algoritmo "fatorial"
+var
+   n, i, fat: inteiro
+inicio
+   escreva("Número: ")
+   leia(n)
+   fat <- 1
+   para i de 1 ate n faca
+      fat <- fat * i
+   fimpara
+   escreval(n, "! =", fat)
+fimalgoritmo
+</script>
+
+  <h4>Menu que repete até sair</h4>
+<script type="text/x-visualg" data-title="menu.alg" data-hint="Escolha 1, digite dois números, depois escolha 0 para sair." data-test-in="1|3|4|2|5|6|0">
+algoritmo "menu"
+var
+   opcao: inteiro
+   a, b: real
+inicio
+   repita
+      escreval("")
+      escreval("1 - Somar")
+      escreval("2 - Multiplicar")
+      escreval("0 - Sair")
+      escreva("Opção: ")
+      leia(opcao)
+      escolha opcao
+      caso 1
+         escreva("Dois números: ")
+         leia(a, b)
+         escreval("Resultado:", a + b)
+      caso 2
+         escreva("Dois números: ")
+         leia(a, b)
+         escreval("Resultado:", a * b)
+      caso 0
+         escreval("Tchau!")
+      outrocaso
+         escreval("Opção inválida.")
+      fimescolha
+   ate opcao = 0
+fimalgoritmo
+</script>
+
+  <h3>Teste rápido</h3>
+  <div class="quiz">
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Quantas vezes aparece "Oi"?</p><pre class="snip">para i de 1 ate 4 faca
+   escreval("Oi")
+fimpara</pre></div>
+      <ol class="q-opts"><li>3</li><li>4</li><li>5</li><li>Infinitas</li></ol>
+      <div class="q-why">i vale 1, 2, 3 e 4: são 4 voltas.</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>Qual laço sempre executa pelo menos uma vez?</p></div>
+      <ol class="q-opts"><li><code>enquanto</code></li><li><code>para</code></li><li><code>repita</code></li><li>Nenhum</li></ol>
+      <div class="q-why">O <code>repita</code> só testa no fim, então a primeira volta sempre acontece.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>O que aparece na tela?</p><pre class="snip">cont &lt;- 1
+enquanto cont &lt; 5 faca
+   cont &lt;- cont + 2
+fimenquanto
+escreval(cont)</pre></div>
+      <ol class="q-opts"><li>4</li><li>5</li><li>6</li><li>7</li></ol>
+      <div class="q-why">Teste de mesa: cont = 1 (1 &lt; 5, entra) → 3 (3 &lt; 5, entra) → 5 (5 &lt; 5 é FALSO, sai). Mostra 5.</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>O que acontece?</p><pre class="snip">x &lt;- 3
+enquanto x &gt; 0 faca
+   escreval(x)
+fimenquanto</pre></div>
+      <ol class="q-opts"><li>Mostra 3, 2, 1</li><li>Mostra 3 uma vez</li><li>Loop infinito</li><li>Não mostra nada</li></ol>
+      <div class="q-why">Nada muda o x dentro do laço. Ele fica 3 para sempre e a condição nunca fica FALSO.</div>
+    </div>
+    <div class="q" data-answer="0">
+      <div class="q-text"><p>Quais números aparecem?</p><pre class="snip">para i de 10 ate 1 passo -3 faca
+   escreva(i)
+fimpara</pre></div>
+      <ol class="q-opts"><li>10 7 4 1</li><li>10 7 4</li><li>1 4 7 10</li><li>10 9 8 7 6 5 4 3 2 1</li></ol>
+      <div class="q-why">Começa em 10 e tira 3 a cada volta: 10, 7, 4, 1. O próximo seria -2, que já passou do limite 1.</div>
+    </div>
+    <div class="q" data-answer="0">
+      <div class="q-text"><p>O que aparece?</p><pre class="snip">cont &lt;- 1
+repita
+   escreva(cont)
+   cont &lt;- cont + 1
+ate cont &gt; 3</pre></div>
+      <ol class="q-opts"><li>1 2 3</li><li>1 2 3 4</li><li>1 2</li><li>Nada</li></ol>
+      <div class="q-why">Mostra 1 (cont vira 2), mostra 2 (vira 3), mostra 3 (vira 4). Agora <code>4 &gt; 3</code> é VERDADEIRO e o repita para.</div>
+    </div>
+  </div>
+
+  <h3>Exercícios</h3>
+  <div class="ex" data-id="5.1">
+    <div class="ex-head"><span class="ex-num">Exercício 5.1</span><h4>De 1 a 10</h4></div>
+    <div class="ex-prompt"><p>Mostre os números de 1 a 10, um por linha, usando <code>para</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "um_a_dez"
+var
+   i: inteiro
+inicio
+   // use: para i de 1 ate 10 faca ... fimpara
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "um_a_dez"
+var
+   i: inteiro
+inicio
+   para i de 1 ate 10 faca
+      escreval(i)
+   fimpara
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[],"has":[1,2,3,4,5,6,7,8,9,10]}]</script>
+  </div>
+
+  <div class="ex" data-id="5.2">
+    <div class="ex-head"><span class="ex-num">Exercício 5.2</span><h4>Soma de 1 até N</h4></div>
+    <div class="ex-prompt"><p>Leia um número N e mostre a soma de todos os números de 1 até N. Exemplo: N = 5 → 1 + 2 + 3 + 4 + 5 = 15.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "soma_ate_n"
+var
+   n, i, soma: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "soma_ate_n"
+var
+   n, i, soma: inteiro
+inicio
+   escreva("N: ")
+   leia(n)
+   soma <- 0
+   para i de 1 ate n faca
+      soma <- soma + i
+   fimpara
+   escreval("Soma de 1 até", n, ":", soma)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[5],"has":[15]},{"in":[10],"has":[55]},{"in":[100],"has":[5050]}]</script>
+  </div>
+
+  <div class="ex" data-id="5.3">
+    <div class="ex-head"><span class="ex-num">Exercício 5.3</span><h4>O menor de cinco</h4></div>
+    <div class="ex-prompt"><p>Leia 5 números inteiros e mostre o menor deles. É o padrão do maior valor, ao contrário.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "menor"
+var
+   i, num, menor: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "menor"
+var
+   i, num, menor: inteiro
+inicio
+   para i de 1 ate 5 faca
+      escreva("Número: ")
+      leia(num)
+      se (i = 1) ou (num < menor) entao
+         menor <- num
+      fimse
+   fimpara
+   escreval("O menor foi", menor)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[3,9,2,7,5],"has":[2]},{"in":[-1,-5,-3,-2,-4],"has":[-5]},{"in":[10,10,1,2,3],"has":[1]},{"in":[8,6,7,9,4],"has":[4]}]</script>
+  </div>
+
+  <div class="ex" data-id="5.4">
+    <div class="ex-head"><span class="ex-num">Exercício 5.4</span><h4>Média até digitar 0</h4></div>
+    <div class="ex-prompt"><p>Leia números inteiros até a pessoa digitar 0. No fim, mostre a média dos números digitados (sem contar o 0). Se o primeiro número já for 0, mostre <code>Nenhum número</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "media_ate_zero"
+var
+   num, soma, qtd: inteiro
+   media: real
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "media_ate_zero"
+var
+   num, soma, qtd: inteiro
+   media: real
+inicio
+   soma <- 0
+   qtd <- 0
+   escreva("Número (0 para parar): ")
+   leia(num)
+   enquanto num <> 0 faca
+      soma <- soma + num
+      qtd <- qtd + 1
+      escreva("Número (0 para parar): ")
+      leia(num)
+   fimenquanto
+   se qtd = 0 entao
+      escreval("Nenhum número")
+   senao
+      media <- soma / qtd
+      escreval("Média:", media)
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[5,3,4,0],"has":[4]},{"in":[10,0],"has":[10]},{"in":[7,8,0],"has":[7.5]},{"in":[0],"has":["nenhum"]}]</script>
+  </div>
+
+  <div class="ex" data-id="5.5">
+    <div class="ex-head"><span class="ex-num">Exercício 5.5</span><h4>Senha com repita</h4></div>
+    <div class="ex-prompt"><p>Use <code>repita</code> para pedir a senha até a pessoa digitar <code>1234</code>. Cada vez que errar, mostre <code>Senha errada</code>. Quando acertar, mostre <code>Acesso liberado</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "senha_repita"
+var
+   senha: caractere
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "senha_repita"
+var
+   senha: caractere
+inicio
+   repita
+      escreva("Senha: ")
+      leia(senha)
+      se senha <> "1234" entao
+         escreval("Senha errada")
+      fimse
+   ate senha = "1234"
+   escreval("Acesso liberado")
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":["1111","abcd","1234"],"has":["liberado"]},{"in":["0000","1234"],"scope":"all","has":["errada","liberado"]},{"in":["1234"],"scope":"all","has":["liberado"],"not":["errada"]}]</script>
+  </div>
+
+  <div class="ex" data-id="5.6">
+    <div class="ex-head"><span class="ex-num">Exercício 5.6</span><h4>Potência com laço</h4></div>
+    <div class="ex-prompt"><p>Leia a base e o expoente (inteiros, expoente 0 ou mais) e calcule a potência multiplicando a base várias vezes com um laço, sem usar <code>^</code>. Exemplo: base 2 e expoente 10 → 1024.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "potencia"
+var
+   base, expoente, resultado, i: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "potencia"
+var
+   base, expoente, resultado, i: inteiro
+inicio
+   escreva("Base: ")
+   leia(base)
+   escreva("Expoente: ")
+   leia(expoente)
+   resultado <- 1
+   para i de 1 ate expoente faca
+      resultado <- resultado * base
+   fimpara
+   escreval(base, " elevado a", expoente, " =", resultado)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[2,10],"has":[1024]},{"in":[3,4],"has":[81]},{"in":[5,0],"has":[1]}]</script>
+  </div>
+</section>
+
+<!-- ===================================================== BLOCO 6 -->
+<section class="block" id="b6">
+  <header>
+    <p class="eyebrow">Bloco 6 · Revisão · 35 min</p>
+    <h2>Lista de revisão N1</h2>
+    <p>Exercícios no estilo da prova, misturando tudo. Faça na ordem até o tempo do bloco acabar; não precisa terminar todos.</p>
+  </header>
+  <div class="box tip">
+    <p class="box-title">Receita para qualquer exercício</p>
+    <ol>
+      <li>Sublinhe no enunciado: o que <b>entra</b> (vira <code>leia</code>), o que <b>sai</b> (vira <code>escreval</code>) e a <b>regra</b> (vira conta, <code>se</code> ou laço).</li>
+      <li>Crie uma variável para cada coisa que entra e para cada resultado.</li>
+      <li>Escreva nesta ordem: pedir → ler → calcular → decidir ou repetir → mostrar.</li>
+      <li>Teste com números fáceis, fazendo a conta de cabeça antes, para saber o que deveria aparecer.</li>
+    </ol>
+  </div>
+
+  <div class="ex" data-id="R1">
+    <div class="ex-head"><span class="ex-num">Revisão 1</span><h4>Aumento de salário</h4></div>
+    <div class="ex-prompt"><p>Leia o salário de um funcionário. Quem ganha até R$ 1500,00 recebe 15% de aumento; quem ganha mais recebe 10%. Mostre o novo salário.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "aumento"
+var
+   salario, novo: real
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "aumento"
+var
+   salario, novo: real
+inicio
+   escreva("Salário: ")
+   leia(salario)
+   se salario <= 1500 entao
+      novo <- salario * 1.15
+   senao
+      novo <- salario * 1.10
+   fimse
+   escreval("Novo salário:", novo:8:2)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[1000],"has":[1150]},{"in":[1500],"has":[1725]},{"in":[2000],"has":[2200]}]</script>
+  </div>
+
+  <div class="ex" data-id="R2">
+    <div class="ex-head"><span class="ex-num">Revisão 2</span><h4>IMC</h4></div>
+    <div class="ex-prompt"><p>Leia o peso (kg) e a altura (m) e calcule o IMC = peso / (altura × altura). Mostre o IMC e a classificação: abaixo de 18.5, <code>Abaixo do peso</code>; abaixo de 25, <code>Peso normal</code>; abaixo de 30, <code>Sobrepeso</code>; 30 ou mais, <code>Obesidade</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "imc"
+var
+   peso, altura, imc: real
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "imc"
+var
+   peso, altura, imc: real
+inicio
+   escreva("Peso (kg): ")
+   leia(peso)
+   escreva("Altura (m, ex.: 1.75): ")
+   leia(altura)
+   imc <- peso / (altura * altura)
+   escreval("IMC:", imc:5:2)
+   se imc < 18.5 entao
+      escreval("Abaixo do peso")
+   senao
+      se imc < 25 entao
+         escreval("Peso normal")
+      senao
+         se imc < 30 entao
+            escreval("Sobrepeso")
+         senao
+            escreval("Obesidade")
+         fimse
+      fimse
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[50,1.8],"has":["abaixo"],"not":["normal","sobrepeso","obesidade"]},{"in":[70,1.75],"has":["normal"],"not":["abaixo","sobrepeso","obesidade"]},{"in":[85,1.75],"has":["sobrepeso"],"not":["normal","obesidade"]},{"in":[100,1.7],"has":["obesidade"],"not":["normal","sobrepeso"]}]</script>
+  </div>
+
+  <div class="ex" data-id="R3">
+    <div class="ex-head"><span class="ex-num">Revisão 3</span><h4>O maior de três</h4></div>
+    <div class="ex-prompt"><p>Leia três números inteiros e mostre o maior.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "maior_de_tres"
+var
+   a, b, c, maior: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "maior_de_tres"
+var
+   a, b, c, maior: inteiro
+inicio
+   escreva("Primeiro: ")
+   leia(a)
+   escreva("Segundo: ")
+   leia(b)
+   escreva("Terceiro: ")
+   leia(c)
+   // começa achando que o maior é o a; depois compara com os outros
+   maior <- a
+   se b > maior entao
+      maior <- b
+   fimse
+   se c > maior entao
+      maior <- c
+   fimse
+   escreval("O maior é", maior)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[3,9,5],"has":[9]},{"in":[10,2,7],"has":[10]},{"in":[1,4,8],"has":[8]},{"in":[6,6,2],"has":[6]}]</script>
+  </div>
+
+  <div class="ex" data-id="R4">
+    <div class="ex-head"><span class="ex-num">Revisão 4</span><h4>Conceito com escolha</h4></div>
+    <div class="ex-prompt"><p>Leia uma nota inteira de 0 a 10 e mostre o conceito usando <code>escolha</code>: 9 ou 10, <code>Conceito A</code>; 7 ou 8, <code>Conceito B</code>; 5 ou 6, <code>Conceito C</code>; de 0 a 4, <code>Conceito D</code>; qualquer outro número, <code>Nota inválida</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "conceito"
+var
+   nota: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "conceito"
+var
+   nota: inteiro
+inicio
+   escreva("Nota (0 a 10): ")
+   leia(nota)
+   escolha nota
+   caso 9, 10
+      escreval("Conceito A")
+   caso 7, 8
+      escreval("Conceito B")
+   caso 5, 6
+      escreval("Conceito C")
+   caso 0, 1, 2, 3, 4
+      escreval("Conceito D")
+   outrocaso
+      escreval("Nota inválida")
+   fimescolha
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[10],"has":["conceito a"]},{"in":[8],"has":["conceito b"]},{"in":[5],"has":["conceito c"]},{"in":[3],"has":["conceito d"]},{"in":[11],"has":["invalida"],"not":["conceito"]}]</script>
+  </div>
+
+  <div class="ex" data-id="R5">
+    <div class="ex-head"><span class="ex-num">Revisão 5</span><h4>Pares e ímpares</h4></div>
+    <div class="ex-prompt"><p>Leia 6 números inteiros e mostre quantos são pares e quantos são ímpares.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "pares_impares"
+var
+   i, num, pares, impares: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "pares_impares"
+var
+   i, num, pares, impares: inteiro
+inicio
+   pares <- 0
+   impares <- 0
+   para i de 1 ate 6 faca
+      escreva("Número: ")
+      leia(num)
+      se num mod 2 = 0 entao
+         pares <- pares + 1
+      senao
+         impares <- impares + 1
+      fimse
+   fimpara
+   escreval("Pares:", pares)
+   escreval("Ímpares:", impares)
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[2,4,6,8,1,3],"has":[4,2]},{"in":[1,3,5,7,9,10],"has":[1,5]}]</script>
+  </div>
+
+  <div class="ex" data-id="R6">
+    <div class="ex-head"><span class="ex-num">Revisão 6</span><h4>Múltiplos de 7</h4></div>
+    <div class="ex-prompt"><p>Mostre todos os números de 1 a 50 que são múltiplos de 7 (divisíveis por 7). Use <code>para</code> e <code>mod</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "multiplos_de_7"
+var
+   i: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "multiplos_de_7"
+var
+   i: inteiro
+inicio
+   para i de 1 ate 50 faca
+      se i mod 7 = 0 entao
+         escreval(i)
+      fimse
+   fimpara
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[],"has":[7,14,21,28,35,42,49],"not":[8,13,15,48]}]</script>
+  </div>
+
+  <div class="ex" data-id="R7">
+    <div class="ex-head"><span class="ex-num">Revisão 7</span><h4>Notas da turma</h4></div>
+    <div class="ex-prompt"><p>Leia as notas de uma turma até digitar -1. No fim mostre a média da turma, a maior nota e quantos alunos tiraram 6 ou mais.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "turma"
+var
+   nota, soma, maior, media: real
+   qtd, aprovados: inteiro
+inicio
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "turma"
+var
+   nota, soma, maior, media: real
+   qtd, aprovados: inteiro
+inicio
+   soma <- 0
+   qtd <- 0
+   aprovados <- 0
+   maior <- 0
+   escreva("Nota (-1 para parar): ")
+   leia(nota)
+   enquanto nota <> -1 faca
+      soma <- soma + nota
+      qtd <- qtd + 1
+      se nota > maior entao
+         maior <- nota
+      fimse
+      se nota >= 6 entao
+         aprovados <- aprovados + 1
+      fimse
+      escreva("Nota (-1 para parar): ")
+      leia(nota)
+   fimenquanto
+   se qtd > 0 entao
+      media <- soma / qtd
+      escreval("Média da turma:", media:5:2)
+      escreval("Maior nota:", maior)
+      escreval("Alunos com 6 ou mais:", aprovados)
+   senao
+      escreval("Nenhuma nota digitada.")
+   fimse
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[8,5,7,-1],"has":[6.666666666666667,8,2]},{"in":[10,-1],"has":[10,1]},{"in":[3,4,9,6,-1],"has":[5.5,9,2]}]</script>
+  </div>
+
+  <div class="ex" data-id="R8">
+    <div class="ex-head"><span class="ex-num">Revisão 8</span><h4>Caixa eletrônico</h4></div>
+    <div class="ex-prompt"><p>O saldo começa em R$ 100. Mostre um menu e repita até a pessoa escolher 0: <code>1</code> Depositar (lê o valor e soma no saldo); <code>2</code> Sacar (lê o valor; se for maior que o saldo, mostre <code>Saldo insuficiente</code>, senão desconta); <code>3</code> Ver saldo; <code>0</code> Sair. Use <code>repita</code> e <code>escolha</code>.</p></div>
+<script type="text/x-visualg" data-role="starter">
+algoritmo "caixa"
+var
+   opcao: inteiro
+   saldo, valor: real
+inicio
+   saldo <- 100
+
+fimalgoritmo
+</script>
+<script type="text/x-visualg" data-role="solution">
+algoritmo "caixa"
+var
+   opcao: inteiro
+   saldo, valor: real
+inicio
+   saldo <- 100
+   repita
+      escreval("")
+      escreval("1 - Depositar")
+      escreval("2 - Sacar")
+      escreval("3 - Ver saldo")
+      escreval("0 - Sair")
+      escreva("Opção: ")
+      leia(opcao)
+      escolha opcao
+      caso 1
+         escreva("Valor do depósito: ")
+         leia(valor)
+         saldo <- saldo + valor
+      caso 2
+         escreva("Valor do saque: ")
+         leia(valor)
+         se valor > saldo entao
+            escreval("Saldo insuficiente")
+         senao
+            saldo <- saldo - valor
+         fimse
+      caso 3
+         escreval("Saldo: R$", saldo:8:2)
+      caso 0
+         escreval("Até logo!")
+      outrocaso
+         escreval("Opção inválida")
+      fimescolha
+   ate opcao = 0
+fimalgoritmo
+</script>
+<script type="application/json" data-role="tests">[{"in":[1,50,3,0],"scope":"all","has":[150]},{"in":[2,30,3,0],"scope":"all","has":[70]},{"in":[2,500,3,0],"scope":"all","has":["insuficiente",100]}]</script>
+  </div>
+</section>
+
+<!-- ===================================================== BLOCO 7 -->
+<section class="block" id="b7">
+  <header>
+    <p class="eyebrow">Bloco 7 · 15 min</p>
+    <h2>Simulado final</h2>
+    <p>15 questões no estilo da prova. Responda sem rodar nada, como vai ser na prova; faça o teste de mesa num papel quando precisar. A explicação aparece depois de cada resposta.</p>
+  </header>
+  <div class="quiz" data-sim>
+    <div class="q" data-answer="0">
+      <div class="q-text"><p>Quanto vale <code>10 + 2 * 3 ^ 2</code>?</p></div>
+      <ol class="q-opts"><li>28</li><li>108</li><li>46</li><li>144</li></ol>
+      <div class="q-why">Potência primeiro: 3 ^ 2 = 9. Depois 2 * 9 = 18. Por último 10 + 18 = 28.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Quanto vale <code>25 mod 7</code>?</p></div>
+      <ol class="q-opts"><li>3</li><li>4</li><li>3.57</li><li>18</li></ol>
+      <div class="q-why">O 7 cabe 3 vezes no 25 (dá 21) e sobram 4.</div>
+    </div>
+    <div class="q" data-answer="0">
+      <div class="q-text"><p>Quanto vale <code>25 \ 7</code>?</p></div>
+      <ol class="q-opts"><li>3</li><li>4</li><li>3.57</li><li>18</li></ol>
+      <div class="q-why">Divisão inteira: quantas vezes o 7 cabe no 25, que é 3.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>O que aparece na tela?</p><pre class="snip">x &lt;- 4
+y &lt;- x * 2
+x &lt;- y - 1
+escreval(x, " e", y)</pre></div>
+      <ol class="q-opts"><li>4 e 8</li><li>7 e 8</li><li>7 e 7</li><li>4 e 7</li></ol>
+      <div class="q-why">x = 4; y = 4 * 2 = 8; x = 8 - 1 = 7. O y continua 8.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Com <code>a = 2</code> e <code>b = 5</code>, quanto dá <code>(a &gt; b) ou (b = 5) e nao (a = 2)</code>?</p></div>
+      <ol class="q-opts"><li>VERDADEIRO</li><li>FALSO</li></ol>
+      <div class="q-why">Os parênteses dão FALSO ou VERDADEIRO e nao VERDADEIRO. O nao primeiro: nao VERDADEIRO = FALSO. Depois o e: VERDADEIRO e FALSO = FALSO. Por último o ou: FALSO ou FALSO = FALSO.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Qual condição testa se x está entre 10 e 20, incluindo os dois?</p></div>
+      <ol class="q-opts"><li><code>(x &gt; 10) e (x &lt; 20)</code></li><li><code>(x &gt;= 10) e (x &lt;= 20)</code></li><li><code>(x &gt;= 10) ou (x &lt;= 20)</code></li><li><code>x &gt;= 10 e &lt;= 20</code></li></ol>
+      <div class="q-why">"Incluindo" pede <code>&gt;=</code> e <code>&lt;=</code>. "Entre" pede <code>e</code>. E a variável aparece nas duas comparações.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Com <code>n = 15</code>, o que aparece?</p><pre class="snip">se n &gt; 20 entao
+   escreval("A")
+senao
+   se n &gt; 10 entao
+      escreval("B")
+   senao
+      escreval("C")
+   fimse
+fimse</pre></div>
+      <ol class="q-opts"><li>A</li><li>B</li><li>C</li><li>B e C</li></ol>
+      <div class="q-why">15 &gt; 20 é FALSO, vai para o senao. 15 &gt; 10 é VERDADEIRO: mostra B.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Com <code>x = 5</code>, o que aparece?</p><pre class="snip">escolha x
+caso 1, 2
+   escreval("pouco")
+caso 3, 4, 5
+   escreval("médio")
+outrocaso
+   escreval("muito")
+fimescolha</pre></div>
+      <ol class="q-opts"><li>pouco</li><li>médio</li><li>muito</li><li>nada</li></ol>
+      <div class="q-why">O 5 está na lista do segundo caso.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>Quantas vezes o laço roda?</p><pre class="snip">para i de 2 ate 10 passo 2 faca
+   escreval(i)
+fimpara</pre></div>
+      <ol class="q-opts"><li>4</li><li>5</li><li>9</li><li>10</li></ol>
+      <div class="q-why">i vale 2, 4, 6, 8 e 10: cinco voltas.</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>O que aparece?</p><pre class="snip">cont &lt;- 10
+enquanto cont &gt; 0 faca
+   cont &lt;- cont - 3
+fimenquanto
+escreval(cont)</pre></div>
+      <ol class="q-opts"><li>0</li><li>1</li><li>-2</li><li>-3</li></ol>
+      <div class="q-why">10 → 7 → 4 → 1 → -2. Com -2, <code>cont &gt; 0</code> é FALSO e o laço para.</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>O que aparece?</p><pre class="snip">x &lt;- 1
+repita
+   x &lt;- x * 2
+ate x &gt; 20
+escreval(x)</pre></div>
+      <ol class="q-opts"><li>16</li><li>20</li><li>32</li><li>64</li></ol>
+      <div class="q-why">2, 4, 8, 16 (16 &gt; 20 é FALSO, continua), 32 (32 &gt; 20 é VERDADEIRO, para).</div>
+    </div>
+    <div class="q" data-answer="2">
+      <div class="q-text"><p>Em qual linha está o erro?</p><pre class="snip">1  algoritmo "teste"
+2  var
+3     n: inteiro
+4  inicio
+5     leia(n)
+6     se n &gt; 0
+7        escreval("positivo")
+8     fimse
+9  fimalgoritmo</pre></div>
+      <ol class="q-opts"><li>Linha 3</li><li>Linha 5</li><li>Linha 6</li><li>Linha 8</li></ol>
+      <div class="q-why">Faltou o <code>entao</code>: <code>se n &gt; 0 entao</code>.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>O que aparece?</p><pre class="snip">soma &lt;- 0
+para i de 1 ate 4 faca
+   soma &lt;- soma + i
+fimpara
+escreval(soma)</pre></div>
+      <ol class="q-opts"><li>4</li><li>10</li><li>11</li><li>24</li></ol>
+      <div class="q-why">0 + 1 + 2 + 3 + 4 = 10.</div>
+    </div>
+    <div class="q" data-answer="3">
+      <div class="q-text"><p>Qual o tipo feito para guardar se o aluno foi aprovado ou não?</p></div>
+      <ol class="q-opts"><li><code>inteiro</code></li><li><code>real</code></li><li><code>caractere</code></li><li><code>logico</code></li></ol>
+      <div class="q-why">O <code>logico</code> guarda só VERDADEIRO ou FALSO, que é exatamente sim ou não.</div>
+    </div>
+    <div class="q" data-answer="1">
+      <div class="q-text"><p>O que aparece?</p><pre class="snip">escreval("5" + "5")</pre></div>
+      <ol class="q-opts"><li>10</li><li>55</li><li>5 + 5</li><li>Dá erro</li></ol>
+      <div class="q-why">Com aspas é texto, e <code>+</code> entre textos junta: "5" + "5" = "55".</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== COLA -->
+<section class="block" id="cola">
+  <header>
+    <p class="eyebrow">Para revisar antes da prova</p>
+    <h2>Cola: tudo numa tela</h2>
+    <p>Tire um print desta parte e revise no caminho da prova.</p>
+  </header>
+  <div class="cola">
+    <div><h4>Estrutura</h4><pre class="snip">algoritmo "nome"
+var
+   x: inteiro
+inicio
+   // comandos
+fimalgoritmo</pre></div>
+    <div><h4>Tipos</h4>
+      <p><code>inteiro</code> sem vírgula</p>
+      <p><code>real</code> com vírgula (use ponto: <code>7.5</code>)</p>
+      <p><code>caractere</code> texto entre aspas</p>
+      <p><code>logico</code> VERDADEIRO ou FALSO</p></div>
+    <div><h4>Entrada e saída</h4><pre class="snip">escreva("não pula linha ")
+escreval("pula linha")
+escreval("Total:", x)
+escreval(media:6:2)
+leia(x)
+x &lt;- 5   // x recebe 5</pre></div>
+    <div><h4>Ordem das operações</h4><pre class="snip">( )
+^
+*  /  \  mod
++  -
+=  &lt;&gt;  &gt;  &lt;  &gt;=  &lt;=
+nao
+e
+ou</pre>
+      <p><code>/</code> dá real · <code>\</code> divisão inteira · <code>mod</code> resto</p></div>
+    <div><h4>se</h4><pre class="snip">se nota &gt;= 7 entao
+   escreval("Aprovado")
+senao
+   se nota &gt;= 4 entao
+      escreval("Recuperação")
+   senao
+      escreval("Reprovado")
+   fimse
+fimse</pre></div>
+    <div><h4>escolha</h4><pre class="snip">escolha opcao
+caso 1
+   escreval("um")
+caso 2, 3
+   escreval("dois ou três")
+outrocaso
+   escreval("outro")
+fimescolha</pre></div>
+    <div><h4>e / ou / nao</h4>
+      <p><code>e</code>: as duas VERDADEIRO</p>
+      <p><code>ou</code>: pelo menos uma VERDADEIRO</p>
+      <p><code>nao</code>: inverte</p>
+      <pre class="snip">(x &gt;= 1) e (x &lt;= 10)   // dentro
+(x &lt; 1) ou (x &gt; 10)    // fora</pre></div>
+    <div><h4>enquanto</h4><pre class="snip">cont &lt;- 1
+enquanto cont &lt;= 5 faca
+   escreval(cont)
+   cont &lt;- cont + 1
+fimenquanto</pre>
+      <p>Testa antes. Continua enquanto for VERDADEIRO.</p></div>
+    <div><h4>repita</h4><pre class="snip">cont &lt;- 1
+repita
+   escreval(cont)
+   cont &lt;- cont + 1
+ate cont &gt; 5</pre>
+      <p>Testa no fim. Para quando for VERDADEIRO. Roda pelo menos 1 vez.</p></div>
+    <div><h4>para</h4><pre class="snip">para i de 1 ate 10 faca
+   escreval(i)
+fimpara
+para i de 10 ate 1 passo -1 faca</pre>
+      <p>Não mexa no i lá dentro: o para soma sozinho.</p></div>
+    <div><h4>Padrões</h4><pre class="snip">cont &lt;- cont + 1    // contador
+soma &lt;- soma + num  // acumulador, começa 0
+fat &lt;- fat * i      // produto, começa 1
+se n mod 2 = 0      // par</pre></div>
+  </div>
+
+  <h3>Erros comuns e o que fazer</h3>
+  <div class="tbl wide">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Mensagem ou sintoma</th><th>O que fazer</th></tr></thead>
+      <tbody>
+        <tr><td>Faltou fimse / fimpara / fimenquanto</td><td>Todo bloco aberto precisa ser fechado. Conte os <code>se</code> e os <code>fimse</code>.</td></tr>
+        <tr><td>Faltou o entao / faca</td><td><code>se ... entao</code> · <code>enquanto ... faca</code> · <code>para ... faca</code></td></tr>
+        <tr><td>Variável não declarada</td><td>Crie ela no <code>var</code>, com o tipo. Confira se o nome está escrito igual.</td></tr>
+        <tr><td>Tipos incompatíveis</td><td>Resultado de <code>/</code> é real: a variável precisa ser <code>real</code>. Texto vai entre aspas.</td></tr>
+        <tr><td>Usou <code>=</code> para guardar</td><td>Guardar é <code>&lt;-</code>. O <code>=</code> só compara.</td></tr>
+        <tr><td>Loop infinito</td><td>A variável da condição precisa mudar dentro do laço.</td></tr>
+        <tr><td>O repita não para (ou para cedo)</td><td>A condição do <code>ate</code> é a de <b>parar</b>, o contrário da condição do enquanto.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="end-note">
+    <p>Na prova: leia o enunciado duas vezes, faça o teste de mesa no rascunho e confira se cada <code>se</code>, <code>para</code> e <code>enquanto</code> tem o seu fim.</p>
+    <p class="hand">Boa prova!</p>
+  </div>
+  <p class="muted small">Sobre o simulador: ele cobre o conteúdo da N1 (não tem vetores, procedimentos e funções). As mensagens de erro foram escritas para ajudar quem está começando, então são diferentes das do VisuAlg de verdade.</p>
+</section>
+
+</main>
