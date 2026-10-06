@@ -1,40 +1,58 @@
 # Reels / TikTok: OL Systems
 
-Vídeo vertical de divulgação montado a partir do carrossel `slides/` (8 artes de 1080×1350).
+Vídeos verticais de divulgação feitos a partir do carrossel em `slides/` (8 artes de 1080×1350).
+
+**Para postar, use a versão 2 e siga o [`POSTAGEM.md`](POSTAGEM.md)**: legenda, hashtags, checklist e impulsionamento.
 
 | Arquivo | O que é |
 |---|---|
-| `reels-ol-systems.mp4` | Vídeo final: 1080×1920 (9:16), 30 fps, 40 s, H.264. Sai sem música, para escolher o áudio dentro do Instagram ou do TikTok. |
-| `capa-reels.png` | Quadro de capa (1080×1920) para subir como capa do Reels. |
-| `slides/` | Artes originais e a legenda do post (`legenda.txt`). |
-| `render.py` | Script que gera o vídeo a partir das artes. |
+| `v2/reels-ol-systems-v2-ganchoA.mp4` | **Versão recomendada.** 19,9 s, 1080×1920, 30 fps, com efeitos sonoros e final em loop. Gancho "Seu cliente te procurou no Google… e achou o concorrente." |
+| `v2/reels-ol-systems-v2-ganchoB.mp4` | Igual ao A, com o gancho "Pesquisa 'barbearia perto de mim'. Você aparece?" |
+| `v2/reels-ol-systems-v2-ganchoC.mp4` | Igual ao A, com o gancho "Site para barbearia por R$ 250/mês, sem fidelidade." |
+| `v2/capa-ganchoA.png` … `capa-ganchoC.png` | Capas de cada versão |
+| `reels-ol-systems.mp4` / `capa-reels.png` | Versão 1 (40 s, carrossel animado completo, sem som) |
+| `POSTAGEM.md` | Plano de postagem com a pesquisa de alcance e de hashtags (06/10/2026) |
+| `slides/` | Artes originais e a legenda original do post |
+| `render.py`, `v2/render_v2.py` | Scripts que geram os vídeos a partir das artes |
+| `fontes/SpaceGrotesk-Bold.ttf` | Fonte dos títulos (licença OFL) |
 
-## Roteiro (tempo em segundos)
+## Roteiro da versão 2
 
-| Tempo | Cena | Animação |
-|---|---|---|
-| 0–5 | Capa: "Seu cliente te procurou no Google" | Busca "barbearia perto de mim" sendo digitada, resultados entrando e o cartão "nenhum site encontrado" tremendo |
-| 5–9,5 | Link da bio improvisado | Celular sobe e os links entram um a um |
-| 9,5–14 | Site parado | Etiquetas "preço antigo" e "horário errado" carimbando o site |
-| 14–19 | O site acompanha você | Linha do tempo se desenhando e globo girando |
-| 19–24,5 | Atualização pelo WhatsApp | Mensagem, "digitando…", resposta e o horário atualizado piscando |
-| 24,5–29 | O que vem incluso | Os 8 cartões aparecendo em sequência |
-| 29–33,5 | Preço | "250" em zoom e os itens marcados um a um |
-| 33,5–40 | Chamada final | Globo girando e botão do WhatsApp pulsando |
+| Tempo | Cena |
+|---|---|
+| 0–2,8 s | Gancho: a busca "barbearia perto de mim" já na tela, o concorrente com site e o cartão vermelho "Sua barbearia: nenhum site encontrado" tremendo |
+| 2,8–4,6 s | "Link da bio improvisado?": celular com os links bagunçados |
+| 4,6–6,5 s | "Site com preço de 2 anos atrás?": carimbos "preço antigo" e "horário errado" |
+| 6,5–10,9 s | "Mudou preço ou horário? Manda no WhatsApp.": mensagem, digitando, "Feito! Já está no site." e horário atualizado |
+| 10,9–14 s | "Quanto custa?": R$ 250/mês e 3 vantagens |
+| 14–18 s | Pergunta aberta ("Conhece alguém com barbearia, padaria ou pet shop sem site?") e botão do WhatsApp |
+| 18–19,9 s | Loop: a mesma busca, agora com "Sua barbearia ✓ Site oficial" em verde |
 
-Os textos ficam fora das áreas cobertas pelos botões e pela legenda do Instagram e do TikTok. Uma barra de progresso de 8 segmentos no rodapé substitui o "Arrasta para o lado".
+Escolhas de edição tiradas da pesquisa (detalhes no `POSTAGEM.md`):
+- O gancho aparece já no primeiro quadro.
+- Nenhum trecho fica parado por mais de 0,5 s.
+- Menos texto por cena.
+- Nada importante fica nos 14% de cima nem nos 35% de baixo da tela (área segura de anúncios).
+- Não há pedido explícito de compartilhar, comentar ou marcar.
+- A faixa de áudio traz efeitos sonoros (vídeo mudo é menos recomendado).
 
 ## Como gerar de novo
 
 Requer Python 3 com `numpy`, `opencv-python-headless` e `Pillow`, além do `ffmpeg`.
 
 ```bash
-# quadros de teste em segundos específicos
-python3 render.py slides previas stills 0,4.4,12.5,38
-
-# vídeo em 4 partes paralelas (300 quadros cada) e junção com faixa de áudio muda
-for i in 0 1 2 3; do python3 render.py slides parte$i.mp4 chunk $((i*300)) $(((i+1)*300)) & done; wait
+cd marketing/reels-ol-systems
+# quadros de teste
+HOOK=A python3 v2/render_v2.py slides fontes previas stills 0,1.4,8,16
+# trilha de efeitos sonoros
+python3 v2/render_v2.py slides fontes sfx.wav audio
+# vídeo (597 quadros) em 4 partes paralelas, juntando com a trilha
+for i in 0 1 2 3; do HOOK=A python3 v2/render_v2.py slides fontes parte$i.mp4 chunk $((i*150)) $(((i+1)*150)) & done; wait
 printf "file 'parte%d.mp4'\n" 0 1 2 3 > partes.txt
-ffmpeg -f concat -safe 0 -i partes.txt -f lavfi -i anullsrc=r=48000:cl=stereo \
-  -map 0:v -map 1:a -c:v copy -c:a aac -b:a 128k -shortest -movflags +faststart reels-ol-systems.mp4
+ffmpeg -f concat -safe 0 -i partes.txt -i sfx.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 192k \
+  -shortest -movflags +faststart reels-ol-systems-v2-ganchoA.mp4
+# capa
+HOOK=A python3 v2/render_v2.py slides fontes capa-ganchoA.png cover
 ```
+
+A versão 1 usa `python3 render.py slides <saída> stills|chunk ...` (ver o cabeçalho do script).
