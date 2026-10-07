@@ -9,6 +9,7 @@ import {
   PMREMGenerator, DirectionalLight, AmbientLight, CylinderGeometry, CircleGeometry, BoxGeometry, Color, MathUtils
 } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { BOREL, CELL, LOCKUP } from '../js/brand.js';
 
 const W = 0.76;
 const H = 1.6;
@@ -52,7 +53,9 @@ function createScreen(width, height) {
   canvas.height = height;
   const ctx = canvas.getContext('2d');
   const sx = width / 600;
-  const state = { mode: 'home', color: '#c8ff2e', t: 0 };
+  const state = { mode: 'home', color: '#d9dadd', t: 0 };
+  const borelPath = typeof Path2D === 'function' ? new Path2D(BOREL.d) : null;
+  const cellPath = typeof Path2D === 'function' ? new Path2D(CELL.d) : null;
   const display = 'Unbounded, "Arial Black", sans-serif';
   const body = 'Manrope, system-ui, sans-serif';
 
@@ -105,13 +108,13 @@ function createScreen(width, height) {
     const c = state.color;
     const bg = ctx.createLinearGradient(0, 0, 200, 1300);
     bg.addColorStop(0, mixHex(c, '#000000', 0.15));
-    bg.addColorStop(0.45, '#2a1d7a');
+    bg.addColorStop(0.45, '#17233f');
     bg.addColorStop(1, '#07070b');
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, 600, 1300);
     blob(480, 260, 420, c, 0.85);
-    blob(80, 820, 480, '#7c5cff', 0.7);
-    blob(520, 1150, 380, '#33e1ff', 0.35);
+    blob(80, 820, 480, '#3d5afe', 0.55);
+    blob(520, 1150, 380, '#ffffff', 0.12);
 
     const d = new Date();
     let date = '';
@@ -124,29 +127,20 @@ function createScreen(width, height) {
     ctx.font = `800 138px ${display}`;
     ctx.fillText(clock(), 300, 360);
 
-    // marca
-    ctx.globalAlpha = 0.95;
-    ctx.fillStyle = '#c8ff2e';
-    rr(210, 1090, 62, 62, 18); ctx.fill();
-    ctx.strokeStyle = '#0b0b0f';
-    ctx.lineWidth = 6;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    ctx.moveTo(231, 1104); ctx.lineTo(231, 1138); ctx.lineTo(245, 1138);
-    ctx.arc(245, 1129, 9, Math.PI / 2, -Math.PI / 2, true);
-    ctx.lineTo(231, 1120); ctx.moveTo(231, 1120); ctx.lineTo(243, 1120);
-    ctx.arc(243, 1112, 8, Math.PI / 2, -Math.PI / 2, true);
-    ctx.lineTo(231, 1104);
-    ctx.stroke();
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'left';
-    ctx.font = `800 30px ${display}`;
-    ctx.fillText('BOREL', 286, 1118);
-    ctx.font = `300 30px ${display}`;
-    ctx.fillStyle = '#c8ff2e';
-    ctx.fillText('CELL', 286, 1150);
-    ctx.globalAlpha = 1;
+    // letreiro da loja
+    if (borelPath) {
+      const k = 230 / LOCKUP.w;
+      ctx.save();
+      ctx.globalAlpha = 0.95;
+      ctx.fillStyle = '#ffffff';
+      ctx.translate(300 - 115, 1062);
+      ctx.scale(k, k);
+      ctx.fill(borelPath, 'evenodd');
+      ctx.translate(LOCKUP.cellX, LOCKUP.cellY);
+      ctx.scale(LOCKUP.cellScale, LOCKUP.cellScale);
+      ctx.fill(cellPath, 'evenodd');
+      ctx.restore();
+    }
     statusBar();
   }
 
@@ -154,7 +148,7 @@ function createScreen(width, height) {
     const t = state.t;
     ctx.fillStyle = '#05050a';
     ctx.fillRect(0, 0, 600, 1300);
-    const colors = [state.color, '#7c5cff', '#33e1ff', '#ff6a2b'];
+    const colors = [state.color, '#3d5afe', '#9fb4ff', '#ff6a2b'];
     for (let i = 0; i < 4; i++) {
       const x = 300 + Math.sin(t * 0.6 + i * 1.7) * 220;
       const y = 650 + Math.cos(t * 0.5 + i * 2.1) * 420;
@@ -173,15 +167,15 @@ function createScreen(width, height) {
     const t = state.t;
     ctx.fillStyle = '#08080d';
     ctx.fillRect(0, 0, 600, 1300);
-    blob(300, 300, 520, '#7c5cff', 0.35);
+    blob(300, 300, 520, '#3d5afe', 0.35);
     ctx.textAlign = 'left';
     ctx.fillStyle = '#fff';
     ctx.font = `800 54px ${display}`;
     ctx.fillText('Desempenho', 50, 210);
     const gauges = [
       { label: 'CPU', v: 0.72 + Math.sin(t * 2.1) * 0.18, c: state.color },
-      { label: 'GPU', v: 0.6 + Math.sin(t * 1.6 + 1) * 0.25, c: '#7c5cff' },
-      { label: 'RAM', v: 0.5 + Math.sin(t * 1.2 + 2) * 0.15, c: '#33e1ff' }
+      { label: 'GPU', v: 0.6 + Math.sin(t * 1.6 + 1) * 0.25, c: '#8fa3ff' },
+      { label: 'RAM', v: 0.5 + Math.sin(t * 1.2 + 2) * 0.15, c: '#ffffff' }
     ];
     gauges.forEach((g, i) => {
       const cx = 115 + i * 185;
@@ -206,7 +200,7 @@ function createScreen(width, height) {
       const h = 330 * v;
       const g = ctx.createLinearGradient(0, 1150 - h, 0, 1150);
       g.addColorStop(0, state.color);
-      g.addColorStop(1, '#7c5cff');
+      g.addColorStop(1, '#3d5afe');
       ctx.fillStyle = g;
       rr(50 + i * 36, 1150 - h, 24, h, 10); ctx.fill();
     }
@@ -232,7 +226,7 @@ function createScreen(width, height) {
     rr(bx, by, bw, bh, 48); ctx.stroke();
     const fh = (bh - 36) * level;
     const g = ctx.createLinearGradient(0, by + bh, 0, by);
-    g.addColorStop(0, '#7c5cff');
+    g.addColorStop(0, '#3d5afe');
     g.addColorStop(1, state.color);
     ctx.fillStyle = g;
     if (fh > 4) { rr(bx + 18, by + bh - 18 - fh, bw - 36, fh, Math.min(32, fh / 2)); ctx.fill(); }
@@ -313,15 +307,15 @@ function create(canvas, opts = {}) {
   const key = new DirectionalLight(0xffffff, 1.7);
   key.position.set(2.5, 3, 4);
   scene.add(key);
-  const rimA = new DirectionalLight(new Color(opts.color || '#c8ff2e'), 2.4);
+  const rimA = new DirectionalLight(new Color(opts.color || '#d9dadd'), 2.4);
   rimA.position.set(-4, 1.5, -2.5);
   scene.add(rimA);
-  const rimB = new DirectionalLight(0x7c5cff, 2.8);
+  const rimB = new DirectionalLight(0x8fa3ff, 2.6);
   rimB.position.set(4, -1.2, -2);
   scene.add(rimB);
 
   // Materiais
-  const color = new Color(opts.color || '#c8ff2e');
+  const color = new Color(opts.color || '#d9dadd');
   const targetColor = color.clone();
   const frameMat = new MeshPhysicalMaterial({ color, metalness: 1, roughness: 0.24, clearcoat: 0.35, clearcoatRoughness: 0.2 });
   const capMat = new MeshStandardMaterial({ color: 0x050507, roughness: 0.35, metalness: 0.3 });

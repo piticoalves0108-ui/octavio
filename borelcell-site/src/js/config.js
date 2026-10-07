@@ -10,7 +10,7 @@ const defaults = {
   fuso: 'America/Sao_Paulo',
   pagamento: '',
   marcas: ['Apple', 'Samsung', 'Xiaomi', 'Motorola'],
-  coresDestaque: [{ nome: 'Lima', hex: '#C8FF2E' }],
+  coresDestaque: [{ nome: 'Prateado', hex: '#D9DADD' }],
   instagramFotos: []
 };
 

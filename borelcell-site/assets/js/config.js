@@ -45,11 +45,11 @@ window.BOREL_CONFIG = {
 
   // Cores do celular 3D do topo (nome + cor).
   coresDestaque: [
-    { nome: "Lima", hex: "#C8FF2E" },
-    { nome: "Grafite", hex: "#2E3036" },
-    { nome: "Violeta", hex: "#6F58E8" },
-    { nome: "Laranja", hex: "#F0682A" },
-    { nome: "Titânio", hex: "#C9CBD0" }
+    { nome: "Prateado", hex: "#D9DADD" },
+    { nome: "Preto", hex: "#2A2B2F" },
+    { nome: "Azul-intenso", hex: "#2D3B58" },
+    { nome: "Laranja-cósmico", hex: "#E0702F" },
+    { nome: "Dourado", hex: "#E3CBA8" }
   ],
 
   // Fotos do Instagram para a grade da seção "Instagram".

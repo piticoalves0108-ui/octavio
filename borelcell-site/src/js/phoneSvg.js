@@ -1,4 +1,5 @@
 import { mix, luminance, escapeHTML } from './utils.js';
+import { GLYPH_B } from './brand.js';
 
 let uid = 0;
 
@@ -36,7 +37,7 @@ export function phoneSVG(hex = '#8a8a94', style = 'float3', { title = '', view =
       </linearGradient>
       <clipPath id="${id}c"><rect x="24" y="20" width="172" height="400" rx="33"/></clipPath>
       <linearGradient id="${id}w" x1="0" y1="0" x2=".6" y2="1">
-        <stop offset="0" stop-color="${mix(hex, '#ffffff', 0.1)}"/><stop offset=".45" stop-color="#5b45d6"/><stop offset="1" stop-color="#07070b"/>
+        <stop offset="0" stop-color="${mix(hex, '#ffffff', 0.1)}"/><stop offset=".45" stop-color="#24345f"/><stop offset="1" stop-color="#07070b"/>
       </linearGradient>
     </defs>`;
 
@@ -78,7 +79,7 @@ export function phoneSVG(hex = '#8a8a94', style = 'float3', { title = '', view =
       <rect x="24" y="20" width="172" height="400" rx="33" fill="url(#${id}w)"/>
       <g clip-path="url(#${id}c)">
         <circle cx="160" cy="120" r="70" fill="${hex}" opacity=".55"/>
-        <circle cx="60" cy="300" r="90" fill="#7c5cff" opacity=".35"/>
+        <circle cx="60" cy="300" r="90" fill="#3d5afe" opacity=".35"/>
       </g>
       <rect x="24" y="20" width="172" height="400" rx="33" fill="url(#${id}s)" opacity=".8"/>
       <rect x="82" y="32" width="56" height="17" rx="8.5" fill="#000"/>
@@ -88,7 +89,7 @@ export function phoneSVG(hex = '#8a8a94', style = 'float3', { title = '', view =
     body = `
       <rect x="18" y="14" width="184" height="412" rx="38" fill="url(#${id}b)"/>
       <rect x="18" y="14" width="184" height="412" rx="38" fill="url(#${id}s)" opacity=".85"/>
-      ${logo ? `<path d="M102 252v36h14a9.6 9.6 0 0 0 0-19.2h-14m0 0h12a8.4 8.4 0 0 0 0-16.8h-12" fill="none" stroke="${lum > 0.6 ? 'rgba(0,0,0,.25)' : 'rgba(255,255,255,.3)'}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+      ${logo ? `<path fill-rule="evenodd" transform="translate(91 254) scale(.32)" fill="${lum > 0.6 ? 'rgba(0,0,0,.22)' : 'rgba(255,255,255,.28)'}" d="${GLYPH_B.d}"/>` : ''}
       ${(cameras[style] || cameras.float3)()}`;
   }
 

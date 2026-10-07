@@ -106,7 +106,7 @@ export function initQuiz({ bag }) {
     return `
       <div class="quiz__result">
         <div class="quiz__meta"><span>Seu resultado</span><button class="quiz__back" type="button" data-restart>${icon('i-rotate')} Refazer</button></div>
-        <h3>Seu match é o <em style="font-style:normal;color:var(--accent)">${escapeHTML(top.nome)}</em></h3>
+        <h3>Seu match é o <em style="font-style:normal;font-weight:300;color:var(--silver)">${escapeHTML(top.nome)}</em></h3>
         <p>Com base nas suas respostas, estes são os modelos que mais combinam com você. Preço e disponibilidade a Borel Cell confirma no atendimento.</p>
         <ul class="recs">
           ${ranked.map(({ p, s }) => `

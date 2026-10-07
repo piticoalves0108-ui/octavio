@@ -8,7 +8,7 @@ Funciona em celular, tablet e computador. Não precisa de servidor nem banco de 
 
 | Seção | O que faz |
 |---|---|
-| Abertura | Logo desenhado em traço, contador de 0 a 100% e cortina subindo. |
+| Abertura | Letreiro BOREL CELL desenhado em traço e depois preenchido, contador de 0 a 100% e cortina subindo. |
 | Topo | Celular 3D (Three.js) que segue o mouse, gira ao arrastar e troca de cor nas bolinhas. No Android, também responde à inclinação do aparelho. A tela do celular mostra data e hora reais. |
 | Faixas | Duas faixas inclinadas com as marcas, que aceleram e invertem o sentido conforme a rolagem. |
 | Destaques | O celular 3D gira e muda de tela (câmera, tela de 120 Hz, desempenho, bateria carregando) enquanto você rola. No computador ele cruza de um lado para o outro. No celular a cena fica presa e os cartões trocam embaixo. |
@@ -17,7 +17,7 @@ Funciona em celular, tablet e computador. Não precisa de servidor nem banco de 
 | Match | Teste de 4 perguntas que recomenda os 3 modelos que mais combinam, com porcentagem animada. |
 | Como funciona | Rolagem horizontal presa no computador (4 passos). No celular vira lista vertical. |
 | Compra segura | Checklist interativo (IMEI, bloqueio, bateria, conta anterior, nota fiscal) com anel de progresso. |
-| Instagram | O @ gigante se preenche de verde com a rolagem e uma grade leva para o perfil. |
+| Instagram | O @ gigante se preenche de branco com a rolagem e uma grade leva para o perfil. |
 | Dúvidas | Perguntas frequentes em sanfona. |
 | Contato | Título com letras animadas, botão circular com texto girando e cartões de contato. |
 | Em todo o site | Rolagem suave (Lenis), cursor personalizado e botões magnéticos no computador, barra de progresso, cabeçalho que some ao descer, botão flutuante e avisos. |
@@ -70,11 +70,16 @@ Enquanto a lista estiver vazia, a grade mostra artes de celulares geradas no có
 
 ## Logo e cores
 
-O "B" verde do logo foi criado para este site, porque não consegui ver o logo real (veja "O que pesquisei"). Para trocar:
+O letreiro BOREL CELL foi redesenhado em vetor a partir do logo da loja: letras largas e quadradas, com o miolo em fenda e o "CELL" menor alinhado à direita. Em vetor ele fica nítido em qualquer tamanho; a imagem original tem só 147 x 139 px. Ele aparece no cabeçalho, na abertura, na tela do celular 3D, no rodapé e no ícone da aba (o "B"). A paleta do site segue o logo: preto, branco e prata.
 
-- logo do cabeçalho e da abertura: os dois `<svg>` com `logo__mark` e `loader__logo` em `index.html`;
+A maçã da Apple que aparece em cima do letreiro original ficou de fora de propósito: é marca registrada da Apple, e revendas só podem usá-la com autorização. Se a loja tiver essa autorização, dá para colocar a imagem oficial ao lado do letreiro.
+
+Para mexer no logo e nas cores:
+
+- formato das letras: parâmetros em `tools/wordmark.py`. Rode `python3 tools/wordmark.py` para gerar `src/js/brand.js` e depois atualize os `<svg>` com `logo__svg`, `loader__logo` e `footer__big` em `index.html`;
 - ícone da aba: `assets/img/favicon.svg`;
-- cores do site: variáveis `--accent`, `--violet` e companhia no topo de `src/styles/style.css` (depois rode `npm run build`).
+- cores do site: variáveis `--accent`, `--silver`, `--chrome` e companhia no topo de `src/styles/style.css` (depois rode `npm run build`);
+- cores do celular 3D do topo: `coresDestaque` em `assets/js/config.js`.
 
 ## Para quem for mexer no código
 
@@ -98,9 +103,10 @@ borelcell-site/
 │   ├── fonts/              Unbounded, Manrope e JetBrains Mono (licença OFL)
 │   └── img/                favicon, imagem de compartilhamento e fotos
 ├── src/
-│   ├── js/                 módulos do site (contato, catálogo, lista, match, animações…)
+│   ├── js/                 módulos do site (contato, catálogo, lista, match, animações, letreiro…)
 │   ├── phone3d/index.js    celular 3D feito no código (Three.js)
 │   └── styles/style.css    estilos
+├── tools/wordmark.py       gera o letreiro BOREL CELL em vetor (src/js/brand.js)
 └── build.mjs               build com esbuild
 ```
 
@@ -128,7 +134,7 @@ Antes de publicar, confirme com a loja:
 - [ ] Endereço, se tiver loja física, e horário de funcionamento
 - [ ] Formas de pagamento
 - [ ] Marcas e modelos que a loja realmente vende, com cores e memórias, e se vende seminovos
-- [ ] Logo e cores da marca
+- [x] Logo (recebido e redesenhado em vetor; confirmar se a loja aprova a versão sem a maçã)
 - [ ] Fotos do Instagram com autorização para usar no site
 - [ ] Se a loja quer o texto do guia "Compra segura" (cita o site Consulta Aparelho Impedido, da ABR Telecom)
 - [ ] Endereço completo da imagem de compartilhamento (`og:image`) depois de publicar

@@ -19,12 +19,11 @@ export function runLoader() {
 
     if (!reducedMotion) {
       gsap.timeline()
-        .to('.loader__logo-box', { strokeDashoffset: 0, duration: 1, ease: 'power2.inOut' }, 0)
-        .to('.loader__logo-b', { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut' }, 0.25)
-        .from('.loader__word span', { yPercent: 110, duration: 0.9, stagger: 0.08, ease: 'expo.out' }, 0.15);
+        .to('.loader__path', { strokeDashoffset: 0, duration: 1.1, stagger: 0.25, ease: 'power2.inOut' }, 0)
+        .to('.loader__path', { fillOpacity: 1, duration: 0.5, stagger: 0.12, ease: 'power1.out' }, 0.75);
       gsap.to(counter, { v: 88, duration: 1.1, ease: 'power2.out', onUpdate: paint });
     } else {
-      gsap.set(['.loader__logo-box', '.loader__logo-b'], { strokeDashoffset: 0 });
+      gsap.set('.loader__path', { strokeDashoffset: 0, fillOpacity: 1 });
     }
 
     Promise.all([fontsOrTimeout, minTime]).then(() => {

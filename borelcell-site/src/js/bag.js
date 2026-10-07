@@ -61,7 +61,7 @@ export function initBag() {
     const a = source.getBoundingClientRect();
     const b = target.getBoundingClientRect();
     const dotEl = document.createElement('div');
-    dotEl.style.cssText = `position:fixed;z-index:160;left:${a.left + a.width / 2 - 9}px;top:${a.top + a.height / 2 - 9}px;width:18px;height:18px;border-radius:50%;background:var(--accent);pointer-events:none;box-shadow:0 0 24px rgba(200,255,46,.8)`;
+    dotEl.style.cssText = `position:fixed;z-index:160;left:${a.left + a.width / 2 - 9}px;top:${a.top + a.height / 2 - 9}px;width:18px;height:18px;border-radius:50%;background:var(--accent);pointer-events:none;box-shadow:0 0 24px rgba(255,255,255,.8)`;
     document.body.appendChild(dotEl);
     const dx = b.left + b.width / 2 - (a.left + a.width / 2);
     const dy = b.top + b.height / 2 - (a.top + a.height / 2);

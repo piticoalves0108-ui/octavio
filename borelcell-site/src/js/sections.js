@@ -132,11 +132,11 @@ export function initFaq() {
 
 /* ---------- Grade do Instagram ---------- */
 const ART = [
-  { hex: '#c8ff2e', style: 'plateau3', view: 'back', r: -10, t1: '#1b2410', t2: '#0b0d07', cap: 'Lançamentos' },
-  { hex: '#6f58e8', style: 'float5', view: 'front', r: 8, t1: '#1d1640', t2: '#0b0a18', cap: 'Vitrine' },
+  { hex: '#d9dadd', style: 'plateau3', view: 'back', r: -10, t1: '#22242a', t2: '#0b0b0e', cap: 'Lançamentos' },
+  { hex: '#2d3b58', style: 'float5', view: 'front', r: 8, t1: '#141c30', t2: '#08090f', cap: 'Vitrine' },
   { hex: '#f0682a', style: 'pill2', view: 'back', r: -6, t1: '#2a140b', t2: '#100806', cap: 'Cores' },
   { hex: '#c9cbd0', style: 'square3', view: 'back', r: 10, t1: '#1d1e22', t2: '#0b0b0d', cap: 'Novidades' },
-  { hex: '#33e1ff', style: 'bar1', view: 'front', r: -8, t1: '#0b2329', t2: '#060d10', cap: 'Bastidores' },
+  { hex: '#e3cba8', style: 'bar1', view: 'front', r: -8, t1: '#2a2219', t2: '#0e0b08', cap: 'Bastidores' },
   { hex: '#2e3036', style: 'float3', view: 'back', r: 6, t1: '#202128', t2: '#0a0a0d', cap: 'Chegou' }
 ];
 
