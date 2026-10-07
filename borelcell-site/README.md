@@ -26,7 +26,9 @@ Também respeita a opção "reduzir movimento" do sistema e mostra um celular de
 
 ## Como ver o site
 
-O jeito mais simples é publicar a pasta `borelcell-site/` em qualquer hospedagem estática (veja abaixo). Para ver no próprio computador:
+**Arquivo único:** `borelcell.html` é o site inteiro num arquivo só, com estilos, scripts, 3D, fontes e ícone embutidos. Abre direto no navegador, no PC ou no celular, sem servidor e sem internet. Também dá para subir só ele em qualquer hospedagem. Para trocar os dados da loja nessa versão, procure `window.BOREL_CONFIG` perto do fim do arquivo, ou edite `assets/js/config.js` e rode `npm run build` para gerar o arquivo de novo.
+
+**Versão em pastas:** publique a pasta `borelcell-site/` em qualquer hospedagem estática (veja abaixo). Para ver no próprio computador:
 
 ```bash
 cd borelcell-site
@@ -79,12 +81,13 @@ O "B" verde do logo foi criado para este site, porque não consegui ver o logo r
 ```bash
 cd borelcell-site
 npm install
-npm run build   # gera assets/js/app.js, assets/js/phone3d.js e assets/css/style.css
+npm run build   # gera assets/js/app.js, assets/js/phone3d.js, assets/css/style.css e borelcell.html
 npm run dev     # recompila sozinho ao salvar
 ```
 
 ```
 borelcell-site/
+├── borelcell.html          o site inteiro num arquivo só (gerado pelo build)
 ├── index.html              estrutura da página
 ├── assets/                 o que vai para o ar (já compilado)
 │   ├── js/config.js        dados da loja (editável)

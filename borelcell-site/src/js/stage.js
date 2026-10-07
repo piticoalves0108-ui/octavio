@@ -26,6 +26,20 @@ const INTRO = { py: -0.75, ry: -2.6, rx: 0.5, s: 0.5 };
 const SCREENS = { camera: 'camera', display: 'display', perf: 'perf', battery: 'battery' };
 
 function loadScript(src) {
+  // Versão em arquivo único: o código do 3D vem embutido na própria página
+  const inline = document.getElementById('phone3d-src');
+  if (inline) {
+    return new Promise((resolve, reject) => {
+      try {
+        const s = document.createElement('script');
+        s.text = inline.textContent;
+        document.head.appendChild(s);
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
   return new Promise((resolve, reject) => {
     const s = document.createElement('script');
     s.src = src;
