@@ -2,6 +2,8 @@
 
 Varredura feita em 01/10/2026 a partir de **Top Life Miami Beach, QI 24, Setor Industrial, Taguatinga Norte - DF (CEP 72135-240)**.
 
+Plano de negócio para vender site + Google a esses comércios por R$250/mês: [PLANO-SITE-E-GOOGLE-R250.md](PLANO-SITE-E-GOOGLE-R250.md).
+
 Entraram só comércios que têm **Instagram e telefone públicos** e **nenhum site próprio** encontrado (perfis no iFood, Facebook, diretórios ou cardápio de pedidos não contam como site). Cada um tem um prompt pronto para gerar o site com efeitos 3D e motion em `prompts/`.
 
 | Quadra | Comércio | Ramo | Instagram | Contato | O que existe hoje |
