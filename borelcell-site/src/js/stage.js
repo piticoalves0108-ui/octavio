@@ -123,7 +123,11 @@ function setupPhone(phone, canvas) {
   let introPlayed = false;
   const mm = gsap.matchMedia();
   mm.add({ desktop: '(min-width: 901px)', mobile: '(max-width: 900px)' }, (ctx) => {
-    const P = ctx.conditions.desktop ? POSES.desktop : POSES.mobile;
+    let P = ctx.conditions.desktop ? POSES.desktop : POSES.mobile;
+    if (!ctx.conditions.desktop && window.innerHeight < 780) {
+      // telas baixas: celular um pouco menor e mais alto, para não passar por trás do cartão
+      P = Object.fromEntries(Object.entries(P).map(([k, v]) => [k, k === 'hero' ? v : { ...v, s: v.s * (k === 'camera' ? 0.78 : 0.86), py: v.py + (k === 'camera' ? 0 : 0.025) }]));
+    }
     const startedAtTop = window.scrollY < 40;
     Object.assign(pose, P.hero);
 
@@ -292,5 +296,7 @@ function setupPhone(phone, canvas) {
 
   canvas.classList.add('is-ready');
   updateActive();
+  // A cena presa dos destaques nasce depois dos gatilhos de baixo: reordena antes de recalcular
+  ScrollTrigger.sort();
   ScrollTrigger.refresh();
 }

@@ -79,7 +79,8 @@ export function initBag() {
     drawer.setAttribute('aria-hidden', 'false');
     lockScroll(true);
     setTimeout(() => $('[data-bag-close]', drawer)?.focus(), 350);
-    if (!reducedMotion) gsap.fromTo($$('.bag-item', list), { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, stagger: 0.05, ease: 'expo.out', delay: 0.25 });
+    const rows = $$('.bag-item', list);
+    if (rows.length && !reducedMotion) gsap.fromTo(rows, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, stagger: 0.05, ease: 'expo.out', delay: 0.25 });
   }
 
   function close() {

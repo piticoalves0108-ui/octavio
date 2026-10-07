@@ -76,8 +76,7 @@ A maçã da Apple que aparece em cima do letreiro original ficou de fora de prop
 
 Para mexer no logo e nas cores:
 
-- formato das letras: parâmetros em `tools/wordmark.py`. Rode `python3 tools/wordmark.py` para gerar `src/js/brand.js` e depois atualize os `<svg>` com `logo__svg`, `loader__logo` e `footer__big` em `index.html`;
-- ícone da aba: `assets/img/favicon.svg`;
+- formato das letras: medidas em `tools/wordmark.py`. Rode `python3 tools/wordmark.py`: ele atualiza sozinho o letreiro do cabeçalho, da abertura e do rodapé em `index.html`, o ícone da aba e `src/js/brand.js` (tela do celular 3D e desenhos). Depois rode `npm run build`;
 - cores do site: variáveis `--accent`, `--silver`, `--chrome` e companhia no topo de `src/styles/style.css` (depois rode `npm run build`);
 - cores do celular 3D do topo: `coresDestaque` em `assets/js/config.js`.
 

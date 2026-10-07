@@ -46,7 +46,7 @@ export function phoneSVG(hex = '#8a8a94', style = 'float3', { title = '', view =
     <circle cx="${cx}" cy="${cy}" r="${r + 5.5}" fill="url(#${id}s)"/>
     <circle cx="${cx}" cy="${cy}" r="${r + 1.2}" fill="#050507"/>
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#${id}l)"/>
-    <circle cx="${cx}" cy="${cy}" r="${(r * 0.46).toFixed(1)}" fill="none" stroke="#7a68ff" stroke-opacity=".38" stroke-width="1.4"/>
+    <circle cx="${cx}" cy="${cy}" r="${(r * 0.46).toFixed(1)}" fill="none" stroke="#9ea3ad" stroke-opacity=".38" stroke-width="1.4"/>
     <circle cx="${(cx - r * 0.34).toFixed(1)}" cy="${(cy - r * 0.36).toFixed(1)}" r="${(r * 0.17).toFixed(1)}" fill="#fff" opacity=".6"/>`;
   const flash = (cx, cy, r = 6) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#e9e1c8"/><circle cx="${cx}" cy="${cy}" r="${(r * 0.6).toFixed(1)}" fill="#fffbea"/>`;
   const dot = (cx, cy, r = 3) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#0b0b0f" opacity=".75"/>`;

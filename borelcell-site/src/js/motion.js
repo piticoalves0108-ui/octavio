@@ -53,18 +53,23 @@ export function initHeader() {
   const header = $('[data-header]');
   const bar = $('.progress i');
   const setBar = bar ? gsap.quickSetter(bar, 'scaleX') : () => {};
+  // Posição real da página (o refresh do ScrollTrigger mede com a rolagem zerada por um instante)
+  const currentY = () => (lenis ? lenis.scroll : window.scrollY);
+  const sync = () => header.classList.toggle('is-scrolled', currentY() > 30);
   ScrollTrigger.create({
     start: 0,
     end: 'max',
     onUpdate(self) {
-      const y = self.scroll();
+      const y = currentY();
       header.classList.toggle('is-scrolled', y > 30);
       const menuOpen = document.documentElement.classList.contains('menu-open');
       if (self.direction === 1 && y > 500 && !menuOpen) header.classList.add('is-hidden');
       else if (self.direction === -1 || y < 500) header.classList.remove('is-hidden');
       setBar(self.progress);
-    }
+    },
+    onRefresh: sync
   });
+  ScrollTrigger.addEventListener('refresh', sync);
 
   // link ativo no menu
   $$('.nav a[href^="#"]').forEach((a) => {
@@ -171,8 +176,8 @@ export function initReveals() {
     gsap.from(el, { y: 40, opacity: 0, duration: 1, ease: 'expo.out', delay: i * 0.07, scrollTrigger: { trigger: el, start: 'top 94%', once: true } });
   });
 
-  gsap.from('.footer__big span', {
-    yPercent: 60,
+  gsap.from(['.footer__borel', '.footer__cell'], {
+    y: 40,
     opacity: 0,
     duration: 1.4,
     stagger: 0.1,

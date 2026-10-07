@@ -60,6 +60,13 @@ async function boot() {
       end: 'max',
       onToggle: (self) => fab.classList.toggle('is-visible', self.isActive)
     });
+    // versão escura do botão enquanto ele passa pela seção clara
+    ScrollTrigger.create({
+      trigger: '.safe',
+      start: 'top bottom-=46',
+      end: 'bottom bottom-=46',
+      toggleClass: { targets: fab, className: 'is-on-light' }
+    });
   }
 
   document.documentElement.classList.add('is-ready');

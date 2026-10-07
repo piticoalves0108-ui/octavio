@@ -112,7 +112,8 @@ function createScreen(width, height) {
     bg.addColorStop(1, '#07070b');
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, 600, 1300);
-    blob(480, 260, 420, c, 0.85);
+    const light = new Color(c).getHSL({ h: 0, s: 0, l: 0 }).l > 0.6;
+    blob(480, 260, 420, light ? mixHex(c, '#1b2a52', 0.55) : c, light ? 0.7 : 0.85);
     blob(80, 820, 480, '#3d5afe', 0.55);
     blob(520, 1150, 380, '#ffffff', 0.12);
 
@@ -120,12 +121,16 @@ function createScreen(width, height) {
     let date = '';
     try { date = new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }).format(d); } catch (e) { date = ''; }
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(255,255,255,.9)';
+    ctx.shadowColor = 'rgba(0,0,0,.35)';
+    ctx.shadowBlur = 18;
+    ctx.fillStyle = 'rgba(255,255,255,.92)';
     ctx.font = `600 34px ${body}`;
     ctx.fillText(date, 300, 205);
     ctx.fillStyle = '#fff';
     ctx.font = `800 138px ${display}`;
     ctx.fillText(clock(), 300, 360);
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
 
     // letreiro da loja
     if (borelPath) {
@@ -322,7 +327,7 @@ function create(canvas, opts = {}) {
   const backMat = new MeshPhysicalMaterial({ color, roughness: 0.4, metalness: 0.08, clearcoat: 1, clearcoatRoughness: 0.3 });
   const moduleMat = new MeshPhysicalMaterial({ color, roughness: 0.14, metalness: 0.15, clearcoat: 1, clearcoatRoughness: 0.05 });
   const lensMat = new MeshPhysicalMaterial({ color: 0x020205, roughness: 0.04, metalness: 0, clearcoat: 1, clearcoatRoughness: 0, iridescence: 1, iridescenceIOR: 1.7, iridescenceThicknessRange: [180, 520] });
-  const lensInnerMat = new MeshStandardMaterial({ color: 0x090920, emissive: 0x2a1e78, emissiveIntensity: 0.7, roughness: 0.2 });
+  const lensInnerMat = new MeshStandardMaterial({ color: 0x090920, emissive: 0x1c2233, emissiveIntensity: 0.7, roughness: 0.2 });
   const flashMat = new MeshStandardMaterial({ color: 0xeee6cc, emissive: 0x2c281c, roughness: 0.4 });
   const dotMat = new MeshStandardMaterial({ color: 0x060608, roughness: 0.6 });
 
@@ -332,7 +337,8 @@ function create(canvas, opts = {}) {
   const screenTex = new CanvasTexture(screen.canvas);
   screenTex.colorSpace = SRGBColorSpace;
   screenTex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-  const screenMat = new MeshPhysicalMaterial({ color: 0x000000, emissive: 0xffffff, emissiveMap: screenTex, emissiveIntensity: 1, roughness: 0.06, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.03 });
+  const screenMat = new MeshPhysicalMaterial({ color: 0x000000, emissive: 0xffffff, emissiveMap: screenTex, emissiveIntensity: 1, roughness: 0.1, metalness: 0, clearcoat: 0.35, clearcoatRoughness: 0.08 });
+  screenMat.envMapIntensity = 0.35;
 
   // Corpo
   const rig = new Group();

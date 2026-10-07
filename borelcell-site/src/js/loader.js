@@ -20,10 +20,11 @@ export function runLoader() {
     if (!reducedMotion) {
       gsap.timeline()
         .to('.loader__path', { strokeDashoffset: 0, duration: 1.1, stagger: 0.25, ease: 'power2.inOut' }, 0)
-        .to('.loader__path', { fillOpacity: 1, duration: 0.5, stagger: 0.12, ease: 'power1.out' }, 0.75);
+        .to('.loader__path', { fillOpacity: 1, duration: 0.5, stagger: 0.12, ease: 'power1.out' }, 0.75)
+        .to('.loader__path', { strokeOpacity: 0, duration: 0.4 }, 1.25);
       gsap.to(counter, { v: 88, duration: 1.1, ease: 'power2.out', onUpdate: paint });
     } else {
-      gsap.set('.loader__path', { strokeDashoffset: 0, fillOpacity: 1 });
+      gsap.set('.loader__path', { strokeDashoffset: 0, fillOpacity: 1, strokeOpacity: 0 });
     }
 
     Promise.all([fontsOrTimeout, minTime]).then(() => {
