@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>Anúncio OL Systems</title>
 <!--
-  Anúncio em vídeo 9:16 (1080x1920), 21,8 s, sem narração (texto na tela).
+  Anúncio em vídeo 9:16 (1080x1920), 23,5 s, sem narração (texto na tela).
   A animação é calculada por renderAt(t): o render.mjs chama quadro a quadro
   (30 fps) e grava o MP4. Abrir no navegador mostra a prévia em tempo real.
 -->
@@ -36,9 +36,9 @@ html,body{background:#111;font-family:Inter,system-ui,sans-serif;color:var(--fg)
 .pills span{border:2px solid rgba(255,255,255,.85);border-radius:999px;padding:12px 28px;font-size:30px;font-weight:600}
 .pills span.g{background:var(--wa);border-color:var(--wa);color:var(--wa-ink)}
 #shine{position:absolute;top:0;bottom:0;width:220px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:skewX(-20deg)}
-#ghost{top:1000px;height:240px;border:3px dashed #5a5a5f;display:flex;align-items:center;gap:26px}
-#ghost .nm{font-size:46px;color:#9a9aa2;font-weight:600}
-#ghost .sub{font-size:28px;color:#ff6b6b;margin-top:6px;font-weight:600}
+#ghost{top:1000px;height:240px;border:3px dashed #4a4a50;display:flex;align-items:center;gap:26px;background:rgba(255,107,107,.05)}
+#ghost .nm{font-size:48px;color:#e6e6ea;font-weight:600}
+#ghost .sub{font-size:36px;color:#ff6b6b;margin-top:6px;font-weight:700}
 #dot{left:530px;top:950px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 0 30px 6px rgba(255,255,255,.5)}
 
 /* cena 2: marca */
@@ -61,14 +61,14 @@ html,body{background:#111;font-family:Inter,system-ui,sans-serif;color:var(--fg)
 .row b{font-weight:700}
 .odo{display:inline-flex;overflow:hidden;height:1.2em;vertical-align:bottom}
 .odo .col{display:flex;flex-direction:column;line-height:1.2em}
-.badge{position:absolute;right:-6px;top:-30px;background:var(--wa);color:#03170a;border-radius:999px;padding:8px 18px 8px 14px;font-size:24px;font-weight:800;display:flex;align-items:center;gap:8px;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.badge{position:absolute;right:-6px;top:-30px;background:var(--wa);color:#03170a;border-radius:999px;padding:8px 18px 8px 14px;font-size:28px;font-weight:800;display:flex;align-items:center;gap:8px;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.45)}
 #map{margin:22px 34px 0;height:200px;border-radius:20px;background:#1b2a22;position:relative;overflow:hidden;
   background-image:linear-gradient(90deg,rgba(255,255,255,.07) 2px,transparent 2px),linear-gradient(rgba(255,255,255,.07) 2px,transparent 2px);background-size:46px 46px}
 #pin{position:absolute;left:46%;top:40px}
-#go{position:absolute;right:18px;bottom:16px;border:2px solid #fff;border-radius:999px;padding:8px 20px;font-size:24px;font-weight:600;background:rgba(0,0,0,.45)}
+#go{position:absolute;left:18px;bottom:16px;border:2px solid #fff;border-radius:999px;padding:8px 20px;font-size:24px;font-weight:600;background:rgba(0,0,0,.45)}
 #strip{display:flex;gap:12px;margin:22px 34px 0}
 #strip i{flex:1;height:140px;border-radius:16px;display:block}
-#ig{display:flex;align-items:center;gap:10px;margin:14px 34px 40px;font-size:24px;color:#bbb}
+#ig{display:inline-flex;align-items:center;gap:12px;margin:18px 34px 40px;font-size:32px;font-weight:600;color:#fff;border:2px solid #fff;border-radius:999px;padding:10px 24px}
 #fab{position:absolute;right:26px;bottom:30px;width:96px;height:96px;border-radius:50%;background:var(--wa);display:grid;place-items:center;color:#03170a;box-shadow:0 10px 30px rgba(37,211,102,.5);z-index:6}
 #draft{position:absolute;inset:0;background:#2a2b2f;z-index:4}
 
@@ -78,11 +78,11 @@ html,body{background:#111;font-family:Inter,system-ui,sans-serif;color:var(--fg)
 #chead small{display:block;font-size:24px;color:var(--dim);font-weight:500}
 .av{width:76px;height:76px;border-radius:50%;background:#000;display:grid;place-items:center}
 .bub{position:absolute;max-width:640px;border-radius:30px;padding:20px 28px 16px;font-size:44px;line-height:1.15}
-.bub .meta{display:block;text-align:right;font-size:24px;margin-top:6px}
+.bub .meta{display:block;text-align:right;font-size:32px;margin-top:6px;font-weight:600}
 #b1{right:30px;top:150px;background:#fff;color:#111;font-weight:500;border-top-right-radius:8px}
-#b1 .meta{color:#777}
+#b1 .meta{color:#555}
 #b2{left:30px;top:300px;background:#222428;color:#fff;font-weight:700;font-size:52px;border-top-left-radius:8px}
-#b2 .meta{color:#8b8c96;font-weight:500}
+#b2 .meta{color:#b0b1b8}
 #typing{left:30px;top:300px;background:#222428;border-radius:30px;padding:26px 30px;display:flex;gap:12px}
 #typing i{width:16px;height:16px;border-radius:50%;background:#bbb;display:block}
 #input{position:absolute;left:24px;right:24px;bottom:22px;height:86px;border-radius:999px;background:#1c1d21;display:flex;align-items:center;padding:0 12px 0 32px;font-size:34px;color:#ddd}
@@ -96,7 +96,7 @@ html,body{background:#111;font-family:Inter,system-ui,sans-serif;color:var(--fg)
 .ck{width:86px;height:86px;flex:none}
 #k1{top:770px}#k2{top:920px}
 #m1,#m3{left:0;right:0;text-align:center;font-size:58px;color:#bdbdbd;font-weight:500}
-#m1{top:700px}#m3{top:1090px}
+#m1{top:660px}#m3{top:1030px}
 #m2{left:0;right:0;top:770px;text-align:center;font-family:'Space Grotesk';font-weight:700;font-size:240px;line-height:1;letter-spacing:-.05em}
 
 /* cena 8: chamada */
@@ -106,9 +106,9 @@ html,body{background:#111;font-family:Inter,system-ui,sans-serif;color:var(--fg)
 #price8 small{font-size:60px;color:var(--muted);letter-spacing:-.02em}
 #call8{left:0;right:0;top:830px;text-align:center;font-weight:600;font-size:56px}
 #btn8{left:110px;width:860px;top:950px;height:150px;border-radius:999px;background:var(--wa);color:var(--wa-ink);display:flex;align-items:center;justify-content:center;gap:24px;font-weight:800;font-size:66px;letter-spacing:-.01em;box-shadow:0 30px 90px -20px rgba(37,211,102,.75)}
-#ring8{left:110px;width:860px;top:950px;height:150px;border-radius:999px;border:4px solid var(--wa);opacity:0}
-#bio8{left:0;right:0;top:1170px;text-align:center;font-weight:500;font-size:48px;color:rgba(255,255,255,.8)}
-#area8{left:0;right:0;top:1250px;text-align:center;font-size:34px;color:var(--dim)}
+#bio8{left:0;right:0;top:1135px;text-align:center;font-weight:500;font-size:46px;color:rgba(255,255,255,.85)}
+#bio8 b{color:#fff;font-weight:700}
+#area8{left:0;right:0;top:1200px;text-align:center;font-size:40px;color:rgba(255,255,255,.7)}
 </style>
 </head>
 <body>
@@ -151,7 +151,7 @@ html,body{background:#111;font-family:Inter,system-ui,sans-serif;color:var(--fg)
         <div class="row" id="rowHour"><span style="display:flex;align-items:center;gap:12px"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Seg a Sáb</span><b>9h às 2<span class="odo"><span class="col" id="odoH"><span>0</span><span>1</span></span></span>h</b><span class="badge" id="bdg2">✓ atualizado agora</span></div>
         <div id="map"><svg id="pin" width="56" height="70" viewBox="0 0 24 30"><path d="M12 29s-10-9-10-17a10 10 0 0 1 20 0c0 8-10 17-10 17z" fill="#ff5a5f"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg><span id="go">Como chegar</span></div>
         <div id="strip"><i style="background:linear-gradient(135deg,#c9a15b,#6b5532)"></i><i style="background:linear-gradient(135deg,#3a3f4b,#1c1f26)"></i><i style="background:linear-gradient(135deg,#b33a2e,#5a1d17)"></i></div>
-        <div id="ig"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>@suabarbearia</div>
+        <div id="ig"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>@suabarbearia</div>
       </div>
       <span class="badge" id="bdg3" style="left:auto;right:40px;top:auto;bottom:-100px">✓ atualizado agora</span>
       <div id="fab"><svg viewBox="0 0 24 24" width="52" height="52" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm4.52 11.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg></div>
@@ -188,9 +188,8 @@ html,body{background:#111;font-family:Inter,system-ui,sans-serif;color:var(--fg)
     <div class="abs" id="brand8">OL Systems</div>
     <div class="abs" id="price8">R$ 250<small>/mês</small></div>
     <div class="abs" id="call8">Chama no WhatsApp</div>
-    <div class="abs" id="ring8"></div>
     <div class="abs" id="btn8"><svg viewBox="0 0 24 24" width="70" height="70" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.22 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>(62) 99929-1420</div>
-    <div class="abs" id="bio8">ou toque no link da bio</div>
+    <div class="abs" id="bio8">ou no Instagram <b>@ol_systemss</b></div>
     <div class="abs" id="area8">Atendemos todo o Centro-Oeste</div>
   </div>
 
@@ -201,7 +200,7 @@ html,body{background:#111;font-family:Inter,system-ui,sans-serif;color:var(--fg)
 </div>
 
 <script>
-const DURATION = 21.8;
+const DURATION = 23.5;
 window.DURATION = DURATION;
 const $ = (id) => document.getElementById(id);
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -249,7 +248,7 @@ const spinOf = (id) => globes.find((g) => g.host.id === id)?.spin;
 
 /* ---------- legenda ---------- */
 const CAPS = [
-  [0.15, 2.55, "Seu concorrente aparece.", 1.1, 2.55, "Sua barbearia, <span class=soft>não.</span>"],
+  [-1, 2.55, "Seu concorrente tem site.", 1.1, 2.55, "Sua barbearia, <span class=soft>não.</span>"],
   [5.15, 7.95, "Sob medida, com WhatsApp,", 6.1, 7.95, "mapa e Instagram."],
   [8.05, 10.25, "Mudou algo?", 8.45, 10.25, "Manda no WhatsApp."],
   [10.4, 13.2, "Atualizações sem limite,", 11.3, 13.2, "feitas em até 3 horas."],
@@ -268,6 +267,16 @@ function captions(t) {
 }
 
 /* ---------- cenas ---------- */
+// Depois que o odômetro gira, troca por texto fixo (a coluna do dígito tinha largura de "0").
+function fixText(el, done, text) {
+  if (!el.dataset.orig) el.dataset.orig = el.innerHTML;
+  const want = done ? text : el.dataset.orig;
+  if (el.dataset.state !== String(done)) {
+    el.innerHTML = want;
+    el.dataset.state = String(done);
+
+  }
+}
 const show = (id, o) => { $(id).style.opacity = o; $(id).style.visibility = o > 0.001 ? "visible" : "hidden"; };
 
 function scene1(t) {
@@ -277,18 +286,20 @@ function scene1(t) {
   const z = lerp(1, 1.05, prog(t, 0, 2.8));
   $("s1").style.transform = `scale(${z * (1 - 0.25 * E.in(prog(t, 2.45, 0.35)))})`;
   const full = "barbearia perto de mim";
-  const n = Math.round(lerp(4, full.length, E.out(prog(t, 0, 0.4))));
+  const n = Math.round(lerp(18, full.length, E.out(prog(t, 0, 0.3))));
   $("q").textContent = full.slice(0, n);
   $("caret").style.opacity = Math.floor(t * 2.5) % 2 ? 0.15 : 1;
-  const dk = E.spring(prog(t, 0.35, 0.6));
-  tf($("comp"), { o: clamp(prog(t, 0.35, 0.12)), y: (1 - dk) * -90 });
+  // O cartão do concorrente já está na tela no primeiro quadro (só assenta com mola).
+  const dk = E.spring(prog(t, 0, 0.5));
+  tf($("comp"), { o: 1, y: (1 - dk) * -40 });
   $("shine").style.transform = `translateX(${lerp(-300, 1150, E.inOut(prog(t, 0.55, 0.6)))}px) skewX(-20deg)`;
   const pulse = Math.sin(prog(t, 0.95, 0.4) * Math.PI);
   $("wapill").style.transform = `scale(${1 + 0.1 * pulse})`;
   // Cartão fantasma: aparece, treme e se desfaz.
-  const ga = prog(t, 1.1, 0.15) * 0.4 * (1 - prog(t, 1.75, 0.35));
-  const shake = t > 1.25 && t < 1.75 ? Math.round(Math.sin(t * 90)) * 6 : 0;
-  tf($("ghost"), { o: ga, x: shake, blur: prog(t, 1.75, 0.35) * 10, s: 1 - 0.04 * prog(t, 1.75, 0.35) });
+  // "Sua barbearia": entra nítida, dá um sacolejo curto e só depois se desfaz.
+  const ga = clamp(prog(t, 1.1, 0.15)) * (1 - prog(t, 2.15, 0.3));
+  const shake = t > 1.3 && t < 1.5 ? Math.round(Math.sin(t * 90)) * 8 : 0;
+  tf($("ghost"), { o: ga, x: shake, blur: prog(t, 2.15, 0.3) * 10, s: 1 - 0.04 * prog(t, 2.15, 0.3) });
 }
 function scene1dot(t) {
   const d = prog(t, 2.55, 0.2);
@@ -313,14 +324,14 @@ function phoneAndChat(t) {
   if (!on) return;
   // Celular sobe com mola; recua na conversa; volta; zoom no preço; sai voando.
   const up = E.spring(prog(t, 5.0, 0.55));
-  const recede = E.inOut(prog(t, 8.0, 0.3)) * (1 - E.inOut(prog(t, 10.25, 0.25)));
-  const zoom = E.inOut(prog(t, 10.4, 0.45));
-  const fly = E.in(prog(t, 13.15, 0.18));
+  const recede = E.inOut(prog(t, 8.0, 0.3)) * (1 - E.inOut(prog(t, 10.35, 0.25)));
+  const zoom = 0;
+  const fly = E.in(prog(t, 13.1, 0.22));
   const tilt = Math.sin(t * 1.3) * 1.5;
   const ph = $("phone");
   ph.style.opacity = clamp(prog(t, 5.0, 0.1)) * (1 - 0.5 * recede) * (1 - fly);
   const s = (1 - 0.15 * recede) * (1 + 0.12 * zoom);
-  ph.style.transform = `translateY(${(1 - up) * 900 + recede * 40 + zoom * 60 - fly * 1400}px) scale(${s}) perspective(1600px) rotateY(${tilt}deg)`;
+  ph.style.transform = `translateY(${(1 - up) * 900 + recede * 40 + fly * 900}px) scale(${s * (1 - 0.15 * fly)}) perspective(1600px) rotateY(${tilt}deg)`;
   ph.style.filter = fly > 0.05 ? `blur(${fly * 14}px)` : "none";
   // Rascunho cinza some numa cortina e o site ganha cor.
   const wipe = E.inOut(prog(t, 5.15, 0.45));
@@ -338,11 +349,13 @@ function phoneAndChat(t) {
   const scroll = 200 * E.inOut(prog(t, 5.6, 2.2)) * (1 - E.inOut(prog(t, 10.4, 0.45))) + 60 * E.inOut(prog(t, 11.4, 0.4)) * 0;
   $("page").style.transform = `translateY(${-scroll}px)`;
   // Odômetros: R$ 40 -> 45 e 20h -> 21h.
-  const lh = parseFloat(getComputedStyle($("odoP").firstElementChild).lineHeight) || 40.8;
+  const lh = 40.8; // 34px x 1.2
   const op = E.out(prog(t, 10.5, 0.33)) * 5;
-  $("odoP").style.transform = `translateY(${-op * lh}px)`;
+  if ($("odoP")) $("odoP").style.transform = `translateY(${-op * lh}px)`;
   const oh = E.out(prog(t, 11.4, 0.33));
-  $("odoH").style.transform = `translateY(${-oh * lh}px)`;
+  if ($("odoH")) $("odoH").style.transform = `translateY(${-oh * lh}px)`;
+  fixText($("rowPrice").querySelector("b"), t > 10.85, "R$ 45");
+  fixText($("rowHour").querySelector("b"), t > 11.75, "9h às 21h");
   // Selos "atualizado agora": um por vez.
   const stamp = (el, s0, s1) => { const a = prog(t, s0, 0.2); const k = a <= 0 ? 0 : E.back(a); const out = s1 ? prog(t, s1, 0.2) : 0; el.style.opacity = clamp(a * 3) * (1 - out); el.style.transform = `scale(${lerp(1.3, 1, k) || 1}) rotate(${Math.sin(a * 20) * (1 - a) * 4}deg)`; };
   stamp($("bdg1"), 10.55, 11.4);
@@ -350,11 +363,11 @@ function phoneAndChat(t) {
   // Troca da foto (crossfade) e terceiro selo, posicionado sobre a foto.
   $("chair2").style.opacity = E.inOut(prog(t, 12.3, 0.35));
   const b3 = $("bdg3");
-  b3.style.top = "330px"; b3.style.bottom = "auto"; b3.style.right = "60px";
+  b3.style.top = "440px"; b3.style.bottom = "auto"; b3.style.right = "auto"; b3.style.left = "50px";
   stamp(b3, 12.4, 13.1);
   // Conversa.
   const chatIn = E.out(prog(t, 8.05, 0.4)), chatOut = E.in(prog(t, 10.25, 0.2));
-  tf($("chat"), { o: clamp(prog(t, 8.05, 0.1)) * (1 - chatOut), y: (1 - chatIn) * 700 + chatOut * 700 });
+  tf($("chat"), { o: clamp(prog(t, 8.05, 0.1)), y: (1 - chatIn) * 700 + chatOut * 1100 });
   const msg = "Muda o corte pra R$ 45";
   const sent = t >= 8.85;
   $("typed").textContent = sent ? "" : msg.slice(0, Math.round(msg.length * prog(t, 8.35, 0.45)));
@@ -364,10 +377,10 @@ function phoneAndChat(t) {
   $("send").style.transform = `scale(${1 - 0.12 * Math.sin(prog(t, 8.8, 0.2) * Math.PI)})`;
   const b1 = E.out(prog(t, 8.85, 0.22));
   tf($("b1"), { o: b1, y: (1 - b1) * 80, s: lerp(0.9, 1, b1) });
-  const typing = t >= 9.0 && t < 9.3;
+  const typing = t >= 8.95 && t < 9.15;
   $("typing").style.opacity = typing ? 1 : 0;
   $("typing").querySelectorAll("i").forEach((d, i) => (d.style.transform = `translateY(${Math.sin(t * 18 - i) * 5}px)`));
-  const b2 = prog(t, 9.3, 0.3);
+  const b2 = prog(t, 9.15, 0.3);
   tf($("b2"), { o: clamp(b2 * 4), y: (1 - (b2 <= 0 ? 0 : E.back(b2))) * 30 });
 }
 function scene6(t) {
@@ -387,8 +400,8 @@ function scene6(t) {
   row("k1", 13.3); row("k2", 13.85);
 }
 function scene7(t) {
-  const on = t >= 15.75 && t < 18.3;
-  show("s7", on ? 1 : 0);
+  const on = t >= 15.75 && t < 18.25;
+  show("s7", on ? 1 - E.inOut(prog(t, 17.95, 0.25)) : 0);
   if (!on) return;
   globes.filter((g) => g.host.closest("#s7")).forEach((g) => g.spin(t * 0.25));
   const out = E.inOut(prog(t, 17.95, 0.25));
@@ -401,28 +414,25 @@ function scene7(t) {
   $("stage").style.transform = shake ? `translate(${shake}px,${-shake}px)` : "none";
 }
 function scene8(t) {
-  const on = t >= 17.95;
+  const on = t >= 18.15;
   show("s8", on ? 1 : 0);
   if (!on) return;
   spinOf("g8")(t * 0.6);
-  const g = E.out(prog(t, 18.25, 0.35));
+  const g = E.out(prog(t, 18.4, 0.35));
   tf($("g8"), { o: g, s: lerp(0.3, 1, g) });
-  tf($("brand8"), enter(t, 18.3, 0.25, 20));
-  const p = E.out(prog(t, 17.95, 0.35));
+  tf($("brand8"), enter(t, 18.45, 0.25, 20));
+  const p = E.out(prog(t, 18.2, 0.35));
   tf($("price8"), { o: p, y: (1 - p) * 140, s: lerp(1.25, 1, p) });
-  tf($("call8"), enter(t, 18.35, 0.25, 20));
-  const b = prog(t, 18.45, 0.35);
-  const pulse = t > 19 ? Math.max(0, Math.sin(((t - 19) % 1) * Math.PI)) * 0.03 : 0;
+  tf($("call8"), enter(t, 18.5, 0.25, 20));
+  const b = prog(t, 18.6, 0.35);
+  const pulse = t > 19.2 ? Math.max(0, Math.sin(((t - 19.2) % 1.2) / 1.2 * Math.PI)) * 0.025 : 0;
   tf($("btn8"), { o: clamp(b * 3), y: (1 - (b <= 0 ? 0 : E.spring(b))) * 60, s: 1 + pulse });
-  const r = t > 19 ? ((t - 19) % 1) : -1;
-  $("ring8").style.opacity = r >= 0 && r < 0.6 ? 0.8 * (1 - r / 0.6) : 0;
-  $("ring8").style.transform = `scale(${1 + Math.max(r, 0) * 0.12}, ${1 + Math.max(r, 0) * 0.35})`;
-  tf($("bio8"), enter(t, 18.55, 0.25, 20));
-  tf($("area8"), enter(t, 18.7, 0.25, 20));
+  tf($("bio8"), enter(t, 18.7, 0.25, 20));
+  tf($("area8"), enter(t, 18.85, 0.25, 20));
 }
 function watermark(t) {
   // Marca d'água discreta (some na cena da marca e no cartão final, que já mostram o logo).
-  const hide = (t > 2.7 && t < 5.2) || t > 17.9;
+  const hide = (t > 2.7 && t < 5.2) || t > 18.1;
   $("wm").style.opacity = hide ? 0 : 0.9;
   globes.find((g) => g.host.parentElement === $("wm"))?.spin(t * 0.8);
 }
