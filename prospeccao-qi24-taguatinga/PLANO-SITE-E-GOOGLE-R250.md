@@ -8,13 +8,13 @@ Pesquisa feita em 07/10/2026. Pensado para quem tem notebook e internet, 2 horas
 - **Para quem:** comércios de bairro que só têm Instagram. Esta pasta já tem 10 em Taguatinga Norte, com telefone, Instagram e prompt de site.
 - **Como vender sem aparecer:** pelo WhatsApp Business, com logo e nome de marca, mandando uma prévia pronta do site do próprio comércio.
 - **Quanto gasta para começar:** R$0. O domínio (R$40/ano) fica no nome do cliente e é pago por ele direto ao Registro.br, depois que ele fecha.
-- **Lucro em 2 dias:** dá para conseguir, mas não tem garantia. Depende do volume, e o WhatsApp limita conversas novas (veja o [passo a passo](PASSO-A-PASSO.md)). A meta é de 5 a 7 conversas novas por dia no WhatsApp, mais mensagens diretas no Instagram da marca.
+- **Lucro em 2 dias:** dá para conseguir, mas não tem garantia. Depende do volume, e o WhatsApp limita conversas novas (veja o [passo a passo](PASSO-A-PASSO.md)). Com número novo, a meta é de até 5 conversas novas por dia útil no WhatsApp nas 2 primeiras semanas, mais diretas no Instagram da marca e, se você topar usar a voz, ligações para o telefone dos comércios.
 
 ## Por que esta ideia e não outras
 
 | Ideia | Sem rosto | Cabe em 2h/dia | Dinheiro em 48h | Mensalidade de R$250 faz sentido | Veredito |
 |---|---|---|---|---|---|
-| **Site + Google por assinatura para comércio local** | Sim | Sim (cerca de 1h por cliente por mês depois de pronto) | Possível: o cliente vê a prévia e paga por Pix | Sim. Sai mais barato que o mercado e o serviço é contínuo (hospedagem, domínio, atualizações) | **Escolhida** |
+| **Site + Google por assinatura para comércio local** | Sim | Sim (cerca de 1h por cliente por mês depois de pronto) | Possível: o cliente vê a prévia e paga por Pix | Sim. Sai mais barato que o mercado e o serviço é contínuo (site no ar, Perfil no Google e atualizações; o domínio é pago pelo cliente) | **Escolhida** |
 | Gestão de Instagram (posts e stories) | Sim | Pouco: 12 posts por cliente toma muito tempo | Possível | Não. Social media iniciante cobra R$800 a R$1.500/mês; por R$250 o trabalho não fecha a conta | Vender depois, como adicional |
 | Robô de atendimento no WhatsApp | Sim | Sim | Difícil: configuração mais técnica | Sim | Vender depois, como adicional |
 | Freelancer em plataformas (Workana, 99Freelas) | Sim | Sim | Difícil: sem avaliações, o primeiro trabalho demora | Não, cobra-se por projeto | Não atende |
@@ -35,7 +35,7 @@ Pesquisa feita em 07/10/2026. Pensado para quem tem notebook e internet, 2 horas
 
 **Custos**
 - Domínio .com.br: R$40/ano no Registro.br.
-- Hospedagem: R$0 no Cloudflare Pages, cujo plano grátis permite uso comercial e tem banda ilimitada.
+- Hospedagem: R$0 no Cloudflare Pages, com banda ilimitada. Os termos do plano grátis não proíbem uso comercial, e a comunidade oficial do Cloudflare diz que hospedar site de cliente é aceito, embora não haja uma permissão explícita por escrito. Cobre pelo seu serviço de criação e manutenção, e não por "hospedagem Cloudflare".
 - **Não use o plano Hobby da Vercel para site de cliente.** Os termos dele proíbem uso comercial, e site feito para cliente pagante conta como comercial. O plano pago custa US$20/mês.
 
 **Formalização e impostos** (isto não é consultoria contábil)
@@ -65,8 +65,8 @@ Pesquisa feita em 07/10/2026. Pensado para quem tem notebook e internet, 2 horas
 ## A oferta: o que entra nos R$250/mês
 
 1. Site de 1 página feito para celular: o que vende, fotos, horário, mapa e botão de WhatsApp.
-2. Hospedagem incluída. O domínio .com.br fica no CPF ou CNPJ do cliente, que paga R$40/ano direto ao Registro.br.
-3. Perfil da Empresa no Google completo: categorias, horário, fotos, link do site e WhatsApp.
+2. Site publicado e mantido no ar por você (os R$250 são pelo seu serviço de criação e manutenção). O domínio .com.br fica no CPF ou CNPJ do cliente, que paga R$40/ano direto ao Registro.br.
+3. Perfil da Empresa no Google completo: categorias, horário, fotos, link do site e, se o Google liberar o recurso para o perfil, o botão de WhatsApp.
 4. 4 postagens por mês no Perfil do Google (promoções, novidades).
 5. Respostas às avaliações do Google.
 6. Até 2 alterações por mês no site (preço, cardápio, horário, promoção).
@@ -80,14 +80,15 @@ Pesquisa feita em 07/10/2026. Pensado para quem tem notebook e internet, 2 horas
 
 O roteiro clique a clique, as mensagens personalizadas para os 10 comércios e o termo de serviço estão no **[PASSO-A-PASSO.md](PASSO-A-PASSO.md)**. Resumo:
 
-- **Dia 1:** marca e logo, WhatsApp Business num chip separado, publicar as 3 prévias prontas em `previas/` no Cloudflare Pages, e mandar 7 mensagens no WhatsApp e 2 no Instagram.
-- **Dia 2:** mandar o link para quem respondeu, fazer prévias novas para quem pediu, abordar de 5 a 7 comércios novos e fechar com termo + Pix.
+- **Véspera (fora das 2h):** chip pré-pago, marca, logo, Gmail, chave Pix e, se quiser, Instagram da marca.
+- **Dia 1:** WhatsApp Business no chip novo, publicar as 3 prévias prontas de `previas/` no Cloudflare Pages e mandar 5 mensagens no WhatsApp (mais 2 diretas no Instagram).
+- **Dia 2:** mandar o link para quem respondeu, fazer no máximo 1 prévia nova, mandar mais 3 mensagens da lista e 2 para comércios novos, e fechar com termo + Pix. No fim do dia, oferecer o Plano B para quem achou caro.
 
 **Como abordar sem ser bloqueado:** uma mensagem só, personalizada, pedindo permissão para mandar o link da prévia. O link vai só depois da resposta. Faça um único lembrete, 3 a 5 dias depois. A Meta testa desde 2025 um limite para mensagens sem resposta, e em setembro de 2026 saíram relatos, ainda sem confirmação oficial, de um teto de 150 conversas novas por mês.
 
-**Plano B (se ninguém fechar a mensalidade em 48h):** ofereça uma configuração avulsa do Perfil da Empresa no Google por R$150, paga antes, deixando claro que o Perfil é gratuito e que você cobra pelo serviço. Depois ofereça a mensalidade para manter tudo atualizado.
+**Plano B (no fim do Dia 2, para quem achou caro ou ficou de pensar):** ofereça uma configuração avulsa do Perfil da Empresa no Google por R$150, paga antes, deixando claro que o Perfil é gratuito e que você cobra pelo serviço. Use o termo curto do [Passo 8](PASSO-A-PASSO.md#passo-8-fechar-a-venda): ao terminar, você sai do perfil, a não ser que o cliente contrate a mensalidade. Depois ofereça a mensalidade para manter tudo atualizado.
 
-**Conta de volume (é uma hipótese, não um dado de pesquisa):** com umas 20 abordagens em 2 dias, entre WhatsApp e Instagram, 1 cliente já paga o primeiro mês (R$250, sem custo seu). Com 7 abordagens por dia útil, são cerca de 150 por mês. Se 1 em cada 20 fechar, isso dá uns 7 clientes novos por mês.
+**Conta de volume (é uma hipótese, não um dado de pesquisa):** nos 2 primeiros dias são umas 12 abordagens (10 da lista e 2 novas, entre WhatsApp e Instagram). Fechar 1 cliente no prazo já paga o primeiro mês (R$250, sem custo seu), mas com esse volume é bem possível que não feche. Por isso existe o Plano B, e as ligações ajudam. Depois das 2 primeiras semanas, com até 7 conversas novas por dia útil, são cerca de 150 por mês. Se 1 em cada 20 fechar, isso dá uns 7 clientes novos por mês.
 
 ### Respostas para objeções
 - **"Tá caro."** São menos de R$9 por dia. Um cliente a mais por mês já paga, e não tem taxa de criação.
@@ -107,7 +108,7 @@ Os prompts que já estão em `prompts/` pedem 3D e animações pesadas (React Th
 ```
 Crie um site de UMA página, em um único arquivo index.html (HTML, CSS e o mínimo de JavaScript, sem frameworks), para [NOME], [RAMO], em [ENDEREÇO], Taguatinga - DF.
 
-Use SÓ estes dados reais: [telefone/WhatsApp, Instagram, horário, produtos ou serviços]. Não invente preços, prêmios, depoimentos nem horários. Onde faltar informação, escreva {{CONFIRMAR}}.
+Use SÓ estes dados reais: [telefone/WhatsApp, Instagram, horário, produtos ou serviços]. Não invente preços, prêmios, depoimentos nem horários. Onde faltar informação, não mostre o trecho no site (ou escreva "Consulte pelo WhatsApp") e, no fim da resposta, liste o que falta confirmar com o dono.
 
 Seções:
 1. Topo com o nome, uma frase curta e o botão "Chamar no WhatsApp" (link https://wa.me/55DDDNUMERO?text=Oi,%20vim%20pelo%20site).
@@ -115,6 +116,7 @@ Seções:
 3. Galeria com 6 fotos (use espaços com imagem de exemplo).
 4. Horário e endereço, com o mapa do Google incorporado.
 5. Rodapé com o link do Instagram.
+6. Uma faixa fina no topo e uma frase no rodapé dizendo: "Prévia de site criada para apresentação. Não é o site oficial de [NOME]."
 
 Requisitos: feito primeiro para celular; carregar rápido em 4G; botão de WhatsApp fixo no canto da tela; paleta [cores do Instagram do negócio]; uma fonte do Google Fonts; title, meta description e Open Graph; schema.org LocalBusiness com nome, endereço, telefone e horário; e <meta name="robots" content="noindex"> porque é uma prévia.
 ```
@@ -137,7 +139,7 @@ O domínio é pago pelo cliente e a hospedagem no Cloudflare é grátis. Sua des
 
 ## Riscos e cuidados
 
-- **Bloqueio no WhatsApp:** mande mensagens uma a uma, personalizadas e num balão só, com no máximo 5 a 7 conversas novas por dia, e sem programa de disparo em massa. Peça permissão antes de mandar o link. Se alguém pedir para parar, pare.
+- **Bloqueio no WhatsApp:** mande mensagens uma a uma, personalizadas e num balão só, com no máximo 5 conversas novas por dia útil nas 2 primeiras semanas (depois, até 7), e sem programa de disparo em massa. Peça permissão antes de mandar o link. Se alguém pedir para parar, pare. A Política do WhatsApp Business só permite chamar quem passou o número e aceitou receber mensagens. Não é certo que um número publicado no Google ou no Instagram conte como permissão, então trate como zona cinzenta: denúncias e bloqueios podem restringir ou banir o número.
 - **Prévia sem autorização:** deixe a prévia com `noindex` num endereço `*.pages.dev`, mande só para o dono e tire do ar se ele recusar. Nunca registre domínio com o nome de um negócio sem o dono pedir.
 - **Hospedagem:** use o Cloudflare Pages, porque o Hobby da Vercel proíbe site de cliente.
 - **Cliente que para de pagar:** o site fica pausado depois de 7 dias de atraso. Como o custo é quase zero, você não perde dinheiro.
