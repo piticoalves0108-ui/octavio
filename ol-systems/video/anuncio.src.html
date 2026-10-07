@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Anúncio OL Systems</title>
+<!--
+  Anúncio em vídeo 9:16 (1080x1920), 21,8 s, sem narração (texto na tela).
+  A animação é calculada por renderAt(t): o render.mjs chama quadro a quadro
+  (30 fps) e grava o MP4. Abrir no navegador mostra a prévia em tempo real.
+-->
+<style>/*FONTS*/</style>
+<style>
+:root{--ink:#050506;--fg:#f5f5f4;--muted:#a3a3ad;--dim:#8b8c96;--wa:#25d366;--wa-ink:#03170a;--line:#2a2a2a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#111;font-family:Inter,system-ui,sans-serif;color:var(--fg);-webkit-font-smoothing:antialiased}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--ink)}
+.abs{position:absolute}
+.scene{position:absolute;inset:0;opacity:0}
+.dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1.6px,transparent 2px);background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(90% 60% at 50% 40%,#000,transparent 80%);mask-image:radial-gradient(90% 60% at 50% 40%,#000,transparent 80%)}
+
+/* marca d'água e legenda */
+#wm{left:0;right:0;top:258px;display:flex;justify-content:center;align-items:center;gap:12px;font-family:'Space Grotesk';font-weight:700;font-size:30px;color:rgba(255,255,255,.85)}
+.cap{left:80px;right:80px;text-align:center;font-family:'Space Grotesk';font-weight:700;font-size:68px;line-height:1.04;letter-spacing:-.035em;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.6)}
+.cap.l1{top:318px}.cap.l2{top:392px}
+.cap .soft{color:#c7c7cd}
+
+/* cena 1: busca */
+#sbar{left:90px;width:900px;top:500px;height:120px;border-radius:60px;background:#1a1a1c;border:2px solid rgba(255,255,255,.75);display:flex;align-items:center;gap:22px;padding:0 40px;font-size:44px;color:#fff}
+#caret{display:inline-block;width:4px;height:52px;background:#fff;margin-left:4px;vertical-align:middle}
+.rcard{left:90px;width:900px;border-radius:32px;padding:30px 36px;overflow:hidden}
+#comp{top:680px;height:280px;background:#111214;border:2px solid var(--line)}
+#comp .nm{font-weight:600;font-size:46px}
+#comp .sub{font-size:28px;color:var(--dim);margin-top:6px}
+.pills{display:flex;gap:16px;margin-top:30px}
+.pills span{border:2px solid rgba(255,255,255,.85);border-radius:999px;padding:12px 28px;font-size:30px;font-weight:600}
+.pills span.g{background:var(--wa);border-color:var(--wa);color:var(--wa-ink)}
+#shine{position:absolute;top:0;bottom:0;width:220px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:skewX(-20deg)}
+#ghost{top:1000px;height:240px;border:3px dashed #5a5a5f;display:flex;align-items:center;gap:26px}
+#ghost .nm{font-size:46px;color:#9a9aa2;font-weight:600}
+#ghost .sub{font-size:28px;color:#ff6b6b;margin-top:6px;font-weight:600}
+#dot{left:530px;top:950px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 0 30px 6px rgba(255,255,255,.5)}
+
+/* cena 2: marca */
+#g2{left:350px;top:530px;width:380px;height:380px}
+#brand2{left:0;right:0;top:950px;text-align:center;font-family:'Space Grotesk';font-weight:700;font-size:80px;letter-spacing:-.03em}
+#tag2{left:0;right:0;top:1070px;text-align:center;font-weight:600;font-size:54px;color:rgba(255,255,255,.92)}
+
+/* celular + site de exemplo */
+#phone{left:240px;top:480px;width:600px;height:1000px;border:4px solid rgba(255,255,255,.9);border-radius:70px;background:#0b0c0f;padding:18px;transform-origin:50% 40%}
+#screen{position:relative;width:100%;height:100%;border-radius:54px;overflow:hidden;background:#141416}
+#notch{position:absolute;left:50%;top:14px;width:150px;height:32px;margin-left:-75px;border-radius:999px;background:#000;z-index:5}
+#page{position:absolute;left:0;right:0;top:0}
+.ss{padding:0 34px}
+#urlbar{margin:62px 30px 0;height:54px;border-radius:999px;background:#202124;display:flex;align-items:center;justify-content:center;gap:10px;font-size:22px;color:#9aa0a6}
+#shead{display:flex;align-items:center;gap:14px;margin-top:26px;font-family:'Space Grotesk';font-weight:700;font-size:40px}
+#accent{height:6px;margin:18px 34px 0;border-radius:3px;background:#c9a15b}
+#chair{margin:24px 34px 0;height:250px;border-radius:24px;background:#1e1c19;position:relative;overflow:hidden}
+#chair2{position:absolute;inset:0;opacity:0}
+.row{display:flex;align-items:center;justify-content:space-between;margin:22px 34px 0;background:#1c1d21;border-radius:18px;padding:20px 22px;font-size:34px;position:relative}
+.row b{font-weight:700}
+.odo{display:inline-flex;overflow:hidden;height:1.2em;vertical-align:bottom}
+.odo .col{display:flex;flex-direction:column;line-height:1.2em}
+.badge{position:absolute;right:-6px;top:-30px;background:var(--wa);color:#03170a;border-radius:999px;padding:8px 18px 8px 14px;font-size:24px;font-weight:800;display:flex;align-items:center;gap:8px;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#map{margin:22px 34px 0;height:200px;border-radius:20px;background:#1b2a22;position:relative;overflow:hidden;
+  background-image:linear-gradient(90deg,rgba(255,255,255,.07) 2px,transparent 2px),linear-gradient(rgba(255,255,255,.07) 2px,transparent 2px);background-size:46px 46px}
+#pin{position:absolute;left:46%;top:40px}
+#go{position:absolute;right:18px;bottom:16px;border:2px solid #fff;border-radius:999px;padding:8px 20px;font-size:24px;font-weight:600;background:rgba(0,0,0,.45)}
+#strip{display:flex;gap:12px;margin:22px 34px 0}
+#strip i{flex:1;height:140px;border-radius:16px;display:block}
+#ig{display:flex;align-items:center;gap:10px;margin:14px 34px 40px;font-size:24px;color:#bbb}
+#fab{position:absolute;right:26px;bottom:30px;width:96px;height:96px;border-radius:50%;background:var(--wa);display:grid;place-items:center;color:#03170a;box-shadow:0 10px 30px rgba(37,211,102,.5);z-index:6}
+#draft{position:absolute;inset:0;background:#2a2b2f;z-index:4}
+
+/* cena 4: conversa */
+#chat{left:90px;width:900px;top:860px;height:560px;border-radius:40px;background:#111214;border:2px solid var(--line);overflow:hidden}
+#chead{display:flex;align-items:center;gap:20px;padding:26px 30px;border-bottom:2px solid #1d1e21;font-weight:600;font-size:40px}
+#chead small{display:block;font-size:24px;color:var(--dim);font-weight:500}
+.av{width:76px;height:76px;border-radius:50%;background:#000;display:grid;place-items:center}
+.bub{position:absolute;max-width:640px;border-radius:30px;padding:20px 28px 16px;font-size:44px;line-height:1.15}
+.bub .meta{display:block;text-align:right;font-size:24px;margin-top:6px}
+#b1{right:30px;top:150px;background:#fff;color:#111;font-weight:500;border-top-right-radius:8px}
+#b1 .meta{color:#777}
+#b2{left:30px;top:300px;background:#222428;color:#fff;font-weight:700;font-size:52px;border-top-left-radius:8px}
+#b2 .meta{color:#8b8c96;font-weight:500}
+#typing{left:30px;top:300px;background:#222428;border-radius:30px;padding:26px 30px;display:flex;gap:12px}
+#typing i{width:16px;height:16px;border-radius:50%;background:#bbb;display:block}
+#input{position:absolute;left:24px;right:24px;bottom:22px;height:86px;border-radius:999px;background:#1c1d21;display:flex;align-items:center;padding:0 12px 0 32px;font-size:34px;color:#ddd}
+#input span{flex:1;white-space:nowrap;overflow:hidden}
+#send{width:66px;height:66px;border-radius:50%;background:var(--wa);display:grid;place-items:center;color:#03170a;position:relative}
+#ring{position:absolute;inset:0;border-radius:50%;border:4px solid #fff;opacity:0}
+
+/* cena 6 e 7: oferta */
+.bigglobe{left:-260px;top:300px;width:1600px;height:1600px}
+.chk{left:120px;display:flex;align-items:center;gap:34px;font-family:'Space Grotesk';font-weight:700;font-size:74px;letter-spacing:-.03em}
+.ck{width:86px;height:86px;flex:none}
+#k1{top:770px}#k2{top:920px}
+#m1,#m3{left:0;right:0;text-align:center;font-size:58px;color:#bdbdbd;font-weight:500}
+#m1{top:700px}#m3{top:1090px}
+#m2{left:0;right:0;top:770px;text-align:center;font-family:'Space Grotesk';font-weight:700;font-size:240px;line-height:1;letter-spacing:-.05em}
+
+/* cena 8: chamada */
+#g8{left:460px;top:300px;width:160px;height:160px}
+#brand8{left:0;right:0;top:478px;text-align:center;font-family:'Space Grotesk';font-weight:700;font-size:56px}
+#price8{left:0;right:0;top:640px;text-align:center;font-family:'Space Grotesk';font-weight:700;font-size:136px;letter-spacing:-.05em;line-height:1}
+#price8 small{font-size:60px;color:var(--muted);letter-spacing:-.02em}
+#call8{left:0;right:0;top:830px;text-align:center;font-weight:600;font-size:56px}
+#btn8{left:110px;width:860px;top:950px;height:150px;border-radius:999px;background:var(--wa);color:var(--wa-ink);display:flex;align-items:center;justify-content:center;gap:24px;font-weight:800;font-size:66px;letter-spacing:-.01em;box-shadow:0 30px 90px -20px rgba(37,211,102,.75)}
+#ring8{left:110px;width:860px;top:950px;height:150px;border-radius:999px;border:4px solid var(--wa);opacity:0}
+#bio8{left:0;right:0;top:1170px;text-align:center;font-weight:500;font-size:48px;color:rgba(255,255,255,.8)}
+#area8{left:0;right:0;top:1250px;text-align:center;font-size:34px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="dots"></div>
+
+  <!-- CENA 1: a busca -->
+  <div class="scene" id="s1">
+    <div class="abs" id="sbar"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><span id="q"></span><i id="caret"></i></span></div>
+    <div class="abs rcard" id="comp"><div id="shine"></div>
+      <div class="nm">Barbearia do concorrente</div><div class="sub">Site oficial · Aberta agora</div>
+      <div class="pills"><span>Site</span><span>Como chegar</span><span class="g" id="wapill">WhatsApp</span></div>
+    </div>
+    <div class="abs rcard" id="ghost">
+      <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 8l8 8M16 8l-8 8"/></svg>
+      <div><div class="nm">Sua barbearia</div><div class="sub">nenhum site encontrado</div></div>
+    </div>
+  </div>
+  <div class="abs" id="dot" style="opacity:0"></div>
+
+  <!-- CENA 2: marca -->
+  <div class="scene" id="s2">
+    <div class="abs" id="g2" data-globe="380"></div>
+    <div class="abs" id="brand2">OL Systems</div>
+    <div class="abs" id="tag2">Site profissional em 1 dia.</div>
+  </div>
+
+  <!-- CENAS 3 a 5: celular com o site de exemplo + conversa -->
+  <div class="scene" id="s3">
+    <div class="abs" id="phone"><div id="screen"><div id="notch"></div>
+      <div id="page">
+        <div id="urlbar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9aa0a6" stroke-width="2.2"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>site seguro</div>
+        <div class="ss" id="shead"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#c9a15b" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></svg>Sua Barbearia</div>
+        <div id="accent"></div>
+        <div id="chair">
+          <svg width="100%" height="100%" viewBox="0 0 300 150" preserveAspectRatio="xMidYMid slice"><rect width="300" height="150" fill="#1e1c19"/><rect x="0" y="118" width="300" height="32" fill="#2a2622"/><g fill="#c9a15b"><rect x="118" y="44" width="64" height="44" rx="10"/><rect x="108" y="84" width="84" height="16" rx="6"/><rect x="146" y="100" width="8" height="22"/><rect x="122" y="120" width="56" height="6" rx="3"/><rect x="128" y="26" width="44" height="22" rx="8" fill="#8f7a52"/></g><rect x="232" y="20" width="10" height="90" rx="5" fill="#efe7d6"/><g fill="#b33a2e"><rect x="232" y="30" width="10" height="6"/><rect x="232" y="50" width="10" height="6"/><rect x="232" y="70" width="10" height="6"/><rect x="232" y="90" width="10" height="6"/></g></svg>
+          <div id="chair2"><svg width="100%" height="100%" viewBox="0 0 300 150" preserveAspectRatio="xMidYMid slice"><rect width="300" height="150" fill="#13202a"/><rect x="0" y="118" width="300" height="32" fill="#1b2b36"/><g fill="#7cc6d9"><rect x="70" y="44" width="64" height="44" rx="10"/><rect x="60" y="84" width="84" height="16" rx="6"/><rect x="98" y="100" width="8" height="22"/></g><g fill="#c9a15b"><rect x="176" y="44" width="64" height="44" rx="10"/><rect x="166" y="84" width="84" height="16" rx="6"/><rect x="204" y="100" width="8" height="22"/></g><circle cx="150" cy="30" r="10" fill="#f2c14e"/></svg></div>
+        </div>
+        <div class="row" id="rowPrice"><span>Corte</span><b>R$ 4<span class="odo"><span class="col" id="odoP"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></span></span></b><span class="badge" id="bdg1">✓ atualizado agora</span></div>
+        <div class="row" id="rowHour"><span style="display:flex;align-items:center;gap:12px"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Seg a Sáb</span><b>9h às 2<span class="odo"><span class="col" id="odoH"><span>0</span><span>1</span></span></span>h</b><span class="badge" id="bdg2">✓ atualizado agora</span></div>
+        <div id="map"><svg id="pin" width="56" height="70" viewBox="0 0 24 30"><path d="M12 29s-10-9-10-17a10 10 0 0 1 20 0c0 8-10 17-10 17z" fill="#ff5a5f"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg><span id="go">Como chegar</span></div>
+        <div id="strip"><i style="background:linear-gradient(135deg,#c9a15b,#6b5532)"></i><i style="background:linear-gradient(135deg,#3a3f4b,#1c1f26)"></i><i style="background:linear-gradient(135deg,#b33a2e,#5a1d17)"></i></div>
+        <div id="ig"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>@suabarbearia</div>
+      </div>
+      <span class="badge" id="bdg3" style="left:auto;right:40px;top:auto;bottom:-100px">✓ atualizado agora</span>
+      <div id="fab"><svg viewBox="0 0 24 24" width="52" height="52" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm4.52 11.99c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg></div>
+      <div id="draft"></div>
+    </div></div>
+
+    <div class="abs" id="chat">
+      <div id="chead"><span class="av" data-globe="56"></span><div>OL Systems<small>online</small></div></div>
+      <div class="bub abs" id="b1">Muda o corte pra R$ 45<span class="meta">14:02 ✓✓</span></div>
+      <div class="abs" id="typing"><i></i><i></i><i></i></div>
+      <div class="bub abs" id="b2">Feito!<span class="meta">15:20</span></div>
+      <div id="input"><span id="typed"></span><div id="send"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5 21 12 3 3.5l2.5 7.5L15 12l-9.5 1z"/></svg><i id="ring"></i></div></div>
+    </div>
+  </div>
+
+  <!-- CENA 6: sem adesão, sem fidelidade -->
+  <div class="scene" id="s6">
+    <div class="abs bigglobe" data-globe="1600" data-op=".08"></div>
+    <div class="abs chk" id="k1"><svg class="ck" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="21"/><path class="ckp" d="m14 25 7 7 14-15" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg><span class="tx">Sem taxa de adesão.</span></div>
+    <div class="abs chk" id="k2"><svg class="ck" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="21"/><path class="ckp" d="m14 25 7 7 14-15" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg><span class="tx">Sem fidelidade.</span></div>
+  </div>
+
+  <!-- CENA 7: menos de R$ 9 por dia -->
+  <div class="scene" id="s7">
+    <div class="abs bigglobe" data-globe="1600" data-op=".08"></div>
+    <div class="abs" id="m1">Menos de</div>
+    <div class="abs" id="m2">R$ 9</div>
+    <div class="abs" id="m3">por dia.</div>
+  </div>
+
+  <!-- CENA 8: chamada para ação -->
+  <div class="scene" id="s8">
+    <div class="abs" id="g8" data-globe="160"></div>
+    <div class="abs" id="brand8">OL Systems</div>
+    <div class="abs" id="price8">R$ 250<small>/mês</small></div>
+    <div class="abs" id="call8">Chama no WhatsApp</div>
+    <div class="abs" id="ring8"></div>
+    <div class="abs" id="btn8"><svg viewBox="0 0 24 24" width="70" height="70" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.22 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>(62) 99929-1420</div>
+    <div class="abs" id="bio8">ou toque no link da bio</div>
+    <div class="abs" id="area8">Atendemos todo o Centro-Oeste</div>
+  </div>
+
+  <!-- legenda e marca d'água (por cima de tudo) -->
+  <div class="abs" id="wm"><span data-globe="40"></span>OL Systems</div>
+  <div class="abs cap l1" id="c1"></div>
+  <div class="abs cap l2" id="c2"></div>
+</div>
+
+<script>
+const DURATION = 21.8;
+window.DURATION = DURATION;
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, s, d) => clamp((t - s) / d);
+const lerp = (a, b, k) => a + (b - a) * k;
+const E = {
+  out: (x) => 1 - Math.pow(1 - x, 3),
+  in: (x) => x * x * x,
+  inOut: (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+  back: (x) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+  spring: (x) => (x >= 1 ? 1 : 1 - Math.cos(x * Math.PI * 3.2) * Math.exp(-x * 5.5)),
+};
+function tf(el, { o = 1, x = 0, y = 0, s = 1, r = 0, blur = 0 } = {}) {
+  el.style.opacity = o;
+  el.style.transform = `translate(${x}px,${y}px) scale(${s}) rotate(${r}deg)`;
+  el.style.filter = blur > 0.05 ? `blur(${blur}px)` : "none";
+}
+// Entrada padrão: sobe com fade e leve desfoque.
+const enter = (t, s, d = 0.22, dy = 30) => { const k = E.out(prog(t, s, d)); return { o: k, y: (1 - k) * dy, blur: (1 - k) * 8 }; };
+
+/* ---------- globo do logo (mesma geometria do site) ---------- */
+const TILT = 0.42, PAR = [-75, -60, -45, -30, -15, 0, 15, 30, 45, 60, 75], MER = Array.from({ length: 12 }, (_, i) => i * 15);
+const globes = [];
+function makeGlobe(host) {
+  const size = Number(host.dataset.globe);
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", "-1.12 -1.12 2.24 2.24");
+  svg.setAttribute("width", size); svg.setAttribute("height", size);
+  if (host.dataset.op) svg.style.opacity = host.dataset.op;
+  const g = document.createElementNS(ns, "g");
+  g.setAttribute("fill", "none"); g.setAttribute("stroke", "#fff"); g.setAttribute("stroke-width", size > 300 ? 1.3 : 1.1);
+  const add = (attrs) => { const e = document.createElementNS(ns, "ellipse"); for (const k in attrs) e.setAttribute(k, attrs[k]); e.setAttribute("vector-effect", "non-scaling-stroke"); g.appendChild(e); return e; };
+  for (const lat of PAR) { const p = lat * Math.PI / 180; add({ cx: 0, cy: -Math.sin(p) * Math.cos(TILT), rx: Math.cos(p), ry: Math.cos(p) * Math.sin(TILT) }); }
+  const mer = MER.map((lon) => ({ lon, el: add({ rx: 1, ry: 1 }) }));
+  add({ rx: 1, ry: 1 });
+  svg.appendChild(g); host.prepend(svg);
+  const spin = (a) => { for (const m of mer) { const l = m.lon * Math.PI / 180 + a; const rot = Math.atan2(-Math.cos(l), -Math.sin(l) * Math.sin(TILT)) * 180 / Math.PI; m.el.setAttribute("ry", Math.abs(Math.sin(l) * Math.cos(TILT)).toFixed(4)); m.el.setAttribute("transform", `rotate(${rot.toFixed(2)})`); } };
+  spin(0.3);
+  globes.push({ host, spin });
+  return spin;
+}
+document.querySelectorAll("[data-globe]").forEach(makeGlobe);
+const spinOf = (id) => globes.find((g) => g.host.id === id)?.spin;
+
+/* ---------- legenda ---------- */
+const CAPS = [
+  [0.15, 2.55, "Seu concorrente aparece.", 1.1, 2.55, "Sua barbearia, <span class=soft>não.</span>"],
+  [5.15, 7.95, "Sob medida, com WhatsApp,", 6.1, 7.95, "mapa e Instagram."],
+  [8.05, 10.25, "Mudou algo?", 8.45, 10.25, "Manda no WhatsApp."],
+  [10.4, 13.2, "Atualizações sem limite,", 11.3, 13.2, "feitas em até 3 horas."],
+];
+function captions(t) {
+  const c1 = $("c1"), c2 = $("c2");
+  let a = null;
+  // c = [início linha 1, fim, texto 1, início linha 2, fim, texto 2]
+  for (const c of CAPS) if (t >= c[0] - 0.01 && t < c[1] + 0.2) a = c;
+  if (!a) { c1.style.opacity = 0; c2.style.opacity = 0; return; }
+  if (c1.dataset.k !== a[2]) { c1.innerHTML = a[2]; c2.innerHTML = a[5]; c1.dataset.k = a[2]; }
+  const out = E.in(prog(t, a[1] - 0.05, 0.15));
+  const e1 = enter(t, a[0]), e2 = enter(t, a[3]);
+  tf(c1, { ...e1, o: e1.o * (1 - out), y: e1.y - out * 20 });
+  tf(c2, { ...e2, o: e2.o * (1 - out), y: e2.y - out * 20 });
+}
+
+/* ---------- cenas ---------- */
+const show = (id, o) => { $(id).style.opacity = o; $(id).style.visibility = o > 0.001 ? "visible" : "hidden"; };
+
+function scene1(t) {
+  const on = t < 2.85;
+  show("s1", on ? 1 - E.in(prog(t, 2.45, 0.3)) : 0);
+  if (!on) return;
+  const z = lerp(1, 1.05, prog(t, 0, 2.8));
+  $("s1").style.transform = `scale(${z * (1 - 0.25 * E.in(prog(t, 2.45, 0.35)))})`;
+  const full = "barbearia perto de mim";
+  const n = Math.round(lerp(4, full.length, E.out(prog(t, 0, 0.4))));
+  $("q").textContent = full.slice(0, n);
+  $("caret").style.opacity = Math.floor(t * 2.5) % 2 ? 0.15 : 1;
+  const dk = E.spring(prog(t, 0.35, 0.6));
+  tf($("comp"), { o: clamp(prog(t, 0.35, 0.12)), y: (1 - dk) * -90 });
+  $("shine").style.transform = `translateX(${lerp(-300, 1150, E.inOut(prog(t, 0.55, 0.6)))}px) skewX(-20deg)`;
+  const pulse = Math.sin(prog(t, 0.95, 0.4) * Math.PI);
+  $("wapill").style.transform = `scale(${1 + 0.1 * pulse})`;
+  // Cartão fantasma: aparece, treme e se desfaz.
+  const ga = prog(t, 1.1, 0.15) * 0.4 * (1 - prog(t, 1.75, 0.35));
+  const shake = t > 1.25 && t < 1.75 ? Math.round(Math.sin(t * 90)) * 6 : 0;
+  tf($("ghost"), { o: ga, x: shake, blur: prog(t, 1.75, 0.35) * 10, s: 1 - 0.04 * prog(t, 1.75, 0.35) });
+}
+function scene1dot(t) {
+  const d = prog(t, 2.55, 0.2);
+  tf($("dot"), { o: t < 3.1 ? d * (1 - prog(t, 2.85, 0.2)) : 0, s: lerp(0.3, 1, E.out(d)), y: lerp(0, -230, E.inOut(prog(t, 2.6, 0.25))) });
+}
+function scene2(t) {
+  const on = t >= 2.75 && t < 5.15;
+  show("s2", on ? 1 : 0);
+  if (!on) return;
+  const push = lerp(1, 1.04, prog(t, 2.8, 2.3));
+  const g = E.out(prog(t, 2.8, 0.4));
+  const exit = E.inOut(prog(t, 4.95, 0.18));
+  tf($("g2"), { o: g * (1 - exit), s: lerp(0.05, 1, g) * push * (1 - 0.5 * exit), y: -exit * 500 });
+  spinOf("g2")(0.3 + (t - 2.8) * (Math.PI * 2 / 4));
+  const b = enter(t, 2.85), tg = enter(t, 2.95, 0.22, 20);
+  tf($("brand2"), { ...b, o: b.o * (1 - exit), y: b.y - exit * 500, s: push });
+  tf($("tag2"), { ...tg, o: tg.o * (1 - exit), y: tg.y - exit * 400, s: push });
+}
+function phoneAndChat(t) {
+  const on = t >= 5.0 && t < 13.35;
+  show("s3", on ? 1 : 0);
+  if (!on) return;
+  // Celular sobe com mola; recua na conversa; volta; zoom no preço; sai voando.
+  const up = E.spring(prog(t, 5.0, 0.55));
+  const recede = E.inOut(prog(t, 8.0, 0.3)) * (1 - E.inOut(prog(t, 10.25, 0.25)));
+  const zoom = E.inOut(prog(t, 10.4, 0.45));
+  const fly = E.in(prog(t, 13.15, 0.18));
+  const tilt = Math.sin(t * 1.3) * 1.5;
+  const ph = $("phone");
+  ph.style.opacity = clamp(prog(t, 5.0, 0.1)) * (1 - 0.5 * recede) * (1 - fly);
+  const s = (1 - 0.15 * recede) * (1 + 0.12 * zoom);
+  ph.style.transform = `translateY(${(1 - up) * 900 + recede * 40 + zoom * 60 - fly * 1400}px) scale(${s}) perspective(1600px) rotateY(${tilt}deg)`;
+  ph.style.filter = fly > 0.05 ? `blur(${fly * 14}px)` : "none";
+  // Rascunho cinza some numa cortina e o site ganha cor.
+  const wipe = E.inOut(prog(t, 5.15, 0.45));
+  $("draft").style.clipPath = `inset(0 0 0 ${wipe * 100}%)`;
+  // Botão flutuante, mapa e fotos entram.
+  const fab = prog(t, 5.6, 0.35);
+  $("fab").style.transform = `scale(${fab <= 0 ? 0 : E.back(fab)})`;
+  const map = E.out(prog(t, 6.1, 0.35));
+  tf($("map"), { o: map, x: (1 - map) * 120 });
+  const pin = E.spring(prog(t, 6.25, 0.5));
+  $("pin").style.transform = `translateY(${(1 - pin) * -120}px)`;
+  const strip = E.out(prog(t, 6.4, 0.4));
+  tf($("strip"), { o: strip, x: (1 - strip) * 260 });
+  // Rolagem da página dentro do celular.
+  const scroll = 200 * E.inOut(prog(t, 5.6, 2.2)) * (1 - E.inOut(prog(t, 10.4, 0.45))) + 60 * E.inOut(prog(t, 11.4, 0.4)) * 0;
+  $("page").style.transform = `translateY(${-scroll}px)`;
+  // Odômetros: R$ 40 -> 45 e 20h -> 21h.
+  const lh = parseFloat(getComputedStyle($("odoP").firstElementChild).lineHeight) || 40.8;
+  const op = E.out(prog(t, 10.5, 0.33)) * 5;
+  $("odoP").style.transform = `translateY(${-op * lh}px)`;
+  const oh = E.out(prog(t, 11.4, 0.33));
+  $("odoH").style.transform = `translateY(${-oh * lh}px)`;
+  // Selos "atualizado agora": um por vez.
+  const stamp = (el, s0, s1) => { const a = prog(t, s0, 0.2); const k = a <= 0 ? 0 : E.back(a); const out = s1 ? prog(t, s1, 0.2) : 0; el.style.opacity = clamp(a * 3) * (1 - out); el.style.transform = `scale(${lerp(1.3, 1, k) || 1}) rotate(${Math.sin(a * 20) * (1 - a) * 4}deg)`; };
+  stamp($("bdg1"), 10.55, 11.4);
+  stamp($("bdg2"), 11.45, 12.3);
+  // Troca da foto (crossfade) e terceiro selo, posicionado sobre a foto.
+  $("chair2").style.opacity = E.inOut(prog(t, 12.3, 0.35));
+  const b3 = $("bdg3");
+  b3.style.top = "330px"; b3.style.bottom = "auto"; b3.style.right = "60px";
+  stamp(b3, 12.4, 13.1);
+  // Conversa.
+  const chatIn = E.out(prog(t, 8.05, 0.4)), chatOut = E.in(prog(t, 10.25, 0.2));
+  tf($("chat"), { o: clamp(prog(t, 8.05, 0.1)) * (1 - chatOut), y: (1 - chatIn) * 700 + chatOut * 700 });
+  const msg = "Muda o corte pra R$ 45";
+  const sent = t >= 8.85;
+  $("typed").textContent = sent ? "" : msg.slice(0, Math.round(msg.length * prog(t, 8.35, 0.45)));
+  const tap = prog(t, 8.8, 0.35);
+  $("ring").style.opacity = tap > 0 && tap < 1 ? 1 - tap : 0;
+  $("ring").style.transform = `scale(${1 + tap * 1.4})`;
+  $("send").style.transform = `scale(${1 - 0.12 * Math.sin(prog(t, 8.8, 0.2) * Math.PI)})`;
+  const b1 = E.out(prog(t, 8.85, 0.22));
+  tf($("b1"), { o: b1, y: (1 - b1) * 80, s: lerp(0.9, 1, b1) });
+  const typing = t >= 9.0 && t < 9.3;
+  $("typing").style.opacity = typing ? 1 : 0;
+  $("typing").querySelectorAll("i").forEach((d, i) => (d.style.transform = `translateY(${Math.sin(t * 18 - i) * 5}px)`));
+  const b2 = prog(t, 9.3, 0.3);
+  tf($("b2"), { o: clamp(b2 * 4), y: (1 - (b2 <= 0 ? 0 : E.back(b2))) * 30 });
+}
+function scene6(t) {
+  const on = t >= 13.25 && t < 15.85;
+  show("s6", on ? 1 : 0);
+  if (!on) return;
+  globes.filter((g) => g.host.closest("#s6")).forEach((g) => g.spin(t * 0.25));
+  const row = (id, s0) => {
+    const el = $(id);
+    const k = E.out(prog(t, s0, 0.3));
+    const exit = E.in(prog(t, 15.65, 0.15));
+    el.querySelector(".ckp").style.strokeDashoffset = 1 - prog(t, s0, 0.27);
+    el.querySelector(".tx").style.clipPath = `inset(0 ${100 - k * 100}% 0 0)`;
+    const breath = lerp(1, 1.02, prog(t, s0 + 0.3, 1.8));
+    tf(el, { o: clamp(prog(t, s0, 0.08)) * (1 - exit), x: -exit * 900, s: breath });
+  };
+  row("k1", 13.3); row("k2", 13.85);
+}
+function scene7(t) {
+  const on = t >= 15.75 && t < 18.3;
+  show("s7", on ? 1 : 0);
+  if (!on) return;
+  globes.filter((g) => g.host.closest("#s7")).forEach((g) => g.spin(t * 0.25));
+  const out = E.inOut(prog(t, 17.95, 0.25));
+  const a = enter(t, 15.8, 0.2, 20), c = enter(t, 16.0, 0.2, 20);
+  tf($("m1"), { ...a, o: a.o * (1 - out) });
+  tf($("m3"), { ...c, o: c.o * (1 - out) });
+  const k = prog(t, 15.9, 0.25);
+  const shake = t > 16.1 && t < 16.2 ? (Math.round(t * 60) % 2 ? 4 : -4) : 0;
+  tf($("m2"), { o: clamp(k * 3) * (1 - out), s: lerp(1.4, 1, E.out(k)) * (1 - 0.4 * out), y: shake - out * 120, x: shake });
+  $("stage").style.transform = shake ? `translate(${shake}px,${-shake}px)` : "none";
+}
+function scene8(t) {
+  const on = t >= 17.95;
+  show("s8", on ? 1 : 0);
+  if (!on) return;
+  spinOf("g8")(t * 0.6);
+  const g = E.out(prog(t, 18.25, 0.35));
+  tf($("g8"), { o: g, s: lerp(0.3, 1, g) });
+  tf($("brand8"), enter(t, 18.3, 0.25, 20));
+  const p = E.out(prog(t, 17.95, 0.35));
+  tf($("price8"), { o: p, y: (1 - p) * 140, s: lerp(1.25, 1, p) });
+  tf($("call8"), enter(t, 18.35, 0.25, 20));
+  const b = prog(t, 18.45, 0.35);
+  const pulse = t > 19 ? Math.max(0, Math.sin(((t - 19) % 1) * Math.PI)) * 0.03 : 0;
+  tf($("btn8"), { o: clamp(b * 3), y: (1 - (b <= 0 ? 0 : E.spring(b))) * 60, s: 1 + pulse });
+  const r = t > 19 ? ((t - 19) % 1) : -1;
+  $("ring8").style.opacity = r >= 0 && r < 0.6 ? 0.8 * (1 - r / 0.6) : 0;
+  $("ring8").style.transform = `scale(${1 + Math.max(r, 0) * 0.12}, ${1 + Math.max(r, 0) * 0.35})`;
+  tf($("bio8"), enter(t, 18.55, 0.25, 20));
+  tf($("area8"), enter(t, 18.7, 0.25, 20));
+}
+function watermark(t) {
+  // Marca d'água discreta (some na cena da marca e no cartão final, que já mostram o logo).
+  const hide = (t > 2.7 && t < 5.2) || t > 17.9;
+  $("wm").style.opacity = hide ? 0 : 0.9;
+  globes.find((g) => g.host.parentElement === $("wm"))?.spin(t * 0.8);
+}
+
+function renderAt(t) {
+  $("stage").style.transform = "none";
+  scene1(t); scene1dot(t); scene2(t); phoneAndChat(t); scene6(t); scene7(t); scene8(t);
+  captions(t); watermark(t);
+}
+window.renderAt = renderAt;
+renderAt(0);
+
+// Prévia no navegador (fora da gravação): toca em loop.
+if (!navigator.webdriver) {
+  const start = performance.now();
+  const loop = (now) => { renderAt(((now - start) / 1000) % DURATION); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>
