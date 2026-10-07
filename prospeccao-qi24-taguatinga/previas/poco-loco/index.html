@@ -1,0 +1,708 @@
+<!--
+  PRÉVIA DE SITE: Poco Loco Pizzaria (Taguatinga Norte, DF)
+  Feita só para apresentação ao dono. NÃO é o site oficial e não deve ser indexada.
+
+  O QUE O VENDEDOR PRECISA TROCAR ANTES DE PUBLICAR DE VERDADE:
+  1. Fotos reais: trocar os 6 espaços da galeria (desenhos em CSS, classes .f1 a .f6) por fotos
+     reais da pizzaria, enviadas ou autorizadas pelo dono. Não copiar fotos do Instagram sem permissão.
+  2. Tirar o noindex: apagar a linha <meta name="robots" content="noindex, nofollow">.
+  3. Tirar a faixa de prévia do topo (div.previa) e a frase repetida no rodapé (p.previa-rodape).
+  4. Confirmar horários e telefone com o dono: hoje está quinta a domingo, das 19h às 23h,
+     segunda a quarta fechado, e WhatsApp (61) 99804-2052. Se algo mudar, atualizar os textos,
+     o objeto HORARIO no script e o bloco JSON-LD (telephone e openingHoursSpecification).
+  5. Confirmar com o dono o link do cardápio digital (https://pizzaria-poco-loco.ola.click/)
+     e se o pino do mapa caiu no lugar certo.
+  6. Perguntar se tem entrega, retirada e salão para comer no local. Nada disso foi citado na prévia.
+     Perguntar também se aceita pedido pelo WhatsApp (a prévia só diz "chame no WhatsApp").
+  7. Com o domínio definido: adicionar og:url, og:image (foto real) e link canonical.
+  8. Sabores, tamanhos, preços, meio a meio, taxa de entrega e qualquer outro dado:
+     só entra se o dono passar por escrito.
+-->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Poco Loco Pizzaria | Pizzaria em Taguatinga Norte - DF</title>
+<meta name="description" content="Poco Loco Pizzaria, pizzaria na QNL 3, em Taguatinga Norte (DF). Quinta a domingo, das 19h às 23h. Peça pelo cardápio digital ou chame no WhatsApp.">
+<meta name="theme-color" content="#1B1B1B">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Poco Loco Pizzaria">
+<meta property="og:title" content="Poco Loco Pizzaria | Taguatinga Norte - DF">
+<meta property="og:description" content="Pizzaria na QNL 3, em Taguatinga Norte. Loucura de quinta a domingo, das 19h às 23h. Peça pelo cardápio digital ou chame no WhatsApp.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B1B1B'/%3E%3Ccircle cx='16' cy='16' r='11' fill='%23DB9A4A'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23D7263D'/%3E%3Ccircle cx='13' cy='13' r='3.2' fill='%23FFF4D6'/%3E%3Ccircle cx='19.5' cy='17' r='3' fill='%23FFF4D6'/%3E%3Ccircle cx='14' cy='20' r='2' fill='%232E8B57'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Work+Sans:wght@400;500;600;700&display=swap">
+<script>document.documentElement.classList.add('js');</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "Poco Loco Pizzaria",
+  "servesCuisine": "Pizza",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "QNL 3, conjunto A, lote 17, Taguatinga Norte",
+    "addressLocality": "Taguatinga",
+    "addressRegion": "DF",
+    "postalCode": "72150-301",
+    "addressCountry": "BR"
+  },
+  "telephone": "+55 61 99804-2052",
+  "hasMenu": "https://pizzaria-poco-loco.ola.click/",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "19:00",
+      "closes": "23:00"
+    }
+  ],
+  "sameAs": ["https://www.instagram.com/pocolocoqnl/"]
+}
+</script>
+<style>
+:root{
+  --forno:#1B1B1B;--forno-2:#232323;--forno-3:#2C2B29;--linha:#3D3A36;
+  --tomate:#D7263D;--tomate-escuro:#B51F33;--tomate-claro:#FF5A6E;
+  --mussarela:#FFF4D6;--mussarela-2:#FFFBEF;--suave:#C9BFA6;--suave-escuro:#5A5246;
+  --manjericao:#2E8B57;--manjericao-claro:#4CC38A;--oregano:#6A7F3B;
+  --f-titulo:"Bowlby One","Arial Black","Helvetica Neue",Impact,sans-serif;
+  --f-texto:"Work Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --raio:22px;--max:1180px;--gutter:16px;--topo:64px;--foco:var(--mussarela);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--forno);color:var(--mussarela);font-family:var(--f-texto);font-size:1.0625rem;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+@supports (overflow:clip){body{overflow-x:clip}}
+svg,iframe{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{margin:0;font-family:var(--f-titulo);font-weight:400;line-height:1;letter-spacing:0;overflow-wrap:break-word}
+p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+address{font-style:normal}
+:focus-visible{outline:3px solid var(--foco);outline-offset:3px;border-radius:8px}
+.pular{position:absolute;left:var(--gutter);top:-100px;z-index:100;background:var(--mussarela);color:var(--forno);padding:.75rem 1rem;border-radius:12px;font-weight:700;text-decoration:none}
+.pular:focus{top:12px}
+.wrap{width:100%;max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
+section[id]{scroll-margin-top:var(--topo)}
+.claro{background:var(--mussarela);color:var(--forno);--foco:var(--forno)}
+.vermelho{background:var(--tomate);color:var(--mussarela)}
+
+/* Faixa de prévia */
+.previa{background:var(--mussarela);color:var(--forno);text-align:center;font-size:1rem;font-weight:600;line-height:1.35;padding:.55rem var(--gutter);border-bottom:3px solid var(--tomate)}
+
+/* Topo */
+.topo{position:sticky;top:0;z-index:50;background:rgba(27,27,27,.9);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,191,166,.18)}
+.topo-in{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-height:var(--topo)}
+.topo-in>*{min-width:0}
+.logo{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;min-height:44px}
+.logo-pizza{width:30px;height:30px;border-radius:50%;flex:none;background:radial-gradient(circle at 38% 38%,var(--mussarela) 0 18%,transparent 20%),radial-gradient(circle at 64% 58%,var(--mussarela) 0 16%,transparent 18%),radial-gradient(circle at 40% 68%,var(--manjericao) 0 9%,transparent 11%),radial-gradient(circle,var(--tomate) 0 64%,#DB9A4A 66% 100%)}
+.logo-txt{font-family:var(--f-titulo);font-size:1.25rem;line-height:.95}
+.logo-txt b{display:block;font-family:var(--f-texto);font-weight:700;font-size:1rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tomate-claro);line-height:1.2}
+.nav{display:none}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 .8rem;text-decoration:none;font-weight:600;color:var(--suave);border-radius:999px;transition:color .2s}
+.nav a:hover{color:var(--mussarela)}
+.topo-dir{display:flex;align-items:center;gap:.75rem}
+.pill{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;padding:0 .95rem;border:1px solid var(--linha);border-radius:999px;font-size:1rem;font-weight:600;text-decoration:none;white-space:nowrap;background:var(--forno-2)}
+.ponto{width:10px;height:10px;border-radius:50%;background:#8A8580;flex:none}
+html[data-aberto="1"] .ponto{background:var(--manjericao-claro);animation:pulso-ponto 2s infinite}
+.topo .topo-cta{display:none}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:54px;padding:.8rem 1.45rem;border-radius:999px;font-family:var(--f-texto);font-weight:700;font-size:1.0625rem;line-height:1.2;text-decoration:none;text-align:center;border:2px solid transparent;transition:transform .2s ease,background-color .2s,border-color .2s,box-shadow .2s,color .2s}
+.btn svg{width:22px;height:22px;flex:none}
+.btn-tomate{background:var(--tomate);color:var(--mussarela);box-shadow:0 5px 0 #7E1222}
+.btn-tomate:hover{transform:translateY(-2px);box-shadow:0 7px 0 #7E1222}
+.btn-tomate:active{transform:translateY(3px);box-shadow:0 2px 0 #7E1222}
+.btn-linha{border-color:var(--mussarela);color:var(--mussarela);background:transparent}
+.btn-linha:hover{background:var(--mussarela);color:var(--forno);transform:translateY(-2px)}
+.btn-escuro{background:var(--forno);color:var(--mussarela);box-shadow:0 5px 0 rgba(0,0,0,.35)}
+.btn-escuro:hover{transform:translateY(-2px)}
+.btn-linha-escura{border-color:var(--forno);color:var(--forno);background:transparent}
+.btn-linha-escura:hover{background:var(--forno);color:var(--mussarela);transform:translateY(-2px)}
+.btn-sm{min-height:44px;padding:.5rem 1.1rem;font-size:1rem;box-shadow:none}
+.btn-sm:hover{box-shadow:none}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;isolation:isolate;padding:2.75rem 0 4.5rem}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(70% 45% at 75% 72%,rgba(215,38,61,.38),transparent 70%),radial-gradient(40% 30% at 10% 10%,rgba(46,139,87,.16),transparent 70%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;background-image:radial-gradient(rgba(106,127,59,.55) 1.2px,transparent 1.6px);background-size:26px 26px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 75%);mask-image:linear-gradient(180deg,#000,transparent 75%)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:2.5rem;align-items:center}
+.kicker{display:inline-flex;align-items:center;gap:.6rem;font-size:1rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tomate-claro)}
+.kicker::before{content:"";width:26px;height:3px;border-radius:3px;background:currentColor;flex:none}
+.claro .kicker{color:var(--tomate-escuro)}
+.vermelho .kicker{color:var(--mussarela)}
+.hero-titulo{margin-top:1rem;font-size:clamp(4.75rem,25vw,9.5rem);line-height:.86}
+.hero-titulo span{display:block}
+.hero-titulo .l2{color:var(--tomate);transform:rotate(-3deg);transform-origin:left;margin-left:.06em}
+.hero-titulo .l3{display:table;margin-top:1.4rem;font-family:var(--f-texto);font-weight:700;font-size:1.25rem;letter-spacing:.22em;text-transform:uppercase;line-height:1;padding:.6rem .9rem .55rem;background:var(--mussarela);color:var(--forno);border-radius:10px;transform:rotate(2deg)}
+.hero-texto{margin-top:1.25rem;max-width:32rem;color:var(--suave);font-size:1.125rem}
+.hero-texto strong{color:var(--mussarela);font-weight:600}
+.hero-acoes{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:1.75rem}
+.hero-acoes .btn{flex:1 1 100%}
+.hero-meta{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;margin-top:1.75rem;color:var(--suave);font-size:1rem;font-weight:500}
+.hero-meta li{display:inline-flex;align-items:center;gap:.5rem}
+.hero-meta li+li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--tomate);margin-right:.2rem}
+.entra{animation:entra .9s cubic-bezier(.2,.7,.2,1) both}
+.entra.d1{animation-delay:.08s}.entra.d2{animation-delay:.18s}.entra.d3{animation-delay:.28s}.entra.d4{animation-delay:.38s}.entra.d5{animation-delay:.48s}
+.hero-titulo .l2.entra{animation-name:entra-torto}
+
+/* Pizza em CSS */
+.cena{position:relative;width:min(86vw,400px);aspect-ratio:1/1;margin-inline:auto}
+.cena::before{content:"";position:absolute;left:8%;right:8%;bottom:-2%;height:18%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.65),transparent)}
+.cena::after{content:"";position:absolute;inset:-14%;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(215,38,61,.45),rgba(215,38,61,.12) 55%,transparent);animation:respira 4s ease-in-out infinite alternate}
+.pizza{position:absolute;inset:5%;animation:gira 70s linear infinite}
+.pizza-arte{position:absolute;inset:0;border-radius:50%;background:
+ repeating-conic-gradient(from -.5deg,rgba(27,27,27,.3) 0 1deg,transparent 1deg 45deg),
+ radial-gradient(ellipse 50% 50% at 50% 50%,transparent 0 83%,#F0C27A 85%,#DB9A4A 91%,#B36C2D 97%,transparent 99%),
+ radial-gradient(ellipse 6% 3.4% at 62% 22%,#2E8B57 0 75%,transparent 100%),
+ radial-gradient(ellipse 3.4% 6% at 29% 33%,#2E8B57 0 75%,transparent 100%),
+ radial-gradient(ellipse 6% 3.4% at 71% 63%,#2E8B57 0 75%,transparent 100%),
+ radial-gradient(ellipse 3.4% 6% at 39% 74%,#2E8B57 0 75%,transparent 100%),
+ radial-gradient(ellipse 5% 3% at 50% 47%,#2E8B57 0 75%,transparent 100%),
+ radial-gradient(ellipse 1.1% 1.1% at 44% 20%,#6A7F3B 0 70%,transparent 100%),
+ radial-gradient(ellipse 1.1% 1.1% at 70% 30%,#6A7F3B 0 70%,transparent 100%),
+ radial-gradient(ellipse 1.1% 1.1% at 34% 45%,#6A7F3B 0 70%,transparent 100%),
+ radial-gradient(ellipse 1.1% 1.1% at 58% 56%,#6A7F3B 0 70%,transparent 100%),
+ radial-gradient(ellipse 1.1% 1.1% at 25% 64%,#6A7F3B 0 70%,transparent 100%),
+ radial-gradient(ellipse 1.1% 1.1% at 52% 82%,#6A7F3B 0 70%,transparent 100%),
+ radial-gradient(ellipse 1.1% 1.1% at 78% 48%,#6A7F3B 0 70%,transparent 100%),
+ radial-gradient(ellipse 1.1% 1.1% at 64% 76%,#6A7F3B 0 70%,transparent 100%),
+ radial-gradient(ellipse 7.5% 7.5% at 74% 38%,#EE5A6B 0 38%,#B51F33 46% 82%,transparent 88%),
+ radial-gradient(ellipse 7.5% 7.5% at 24% 52%,#EE5A6B 0 38%,#B51F33 46% 82%,transparent 88%),
+ radial-gradient(ellipse 7.5% 7.5% at 57% 80%,#EE5A6B 0 38%,#B51F33 46% 82%,transparent 88%),
+ radial-gradient(ellipse 7.5% 7.5% at 44% 30%,#EE5A6B 0 38%,#B51F33 46% 82%,transparent 88%),
+ radial-gradient(ellipse 2.6% 2.6% at 36% 58%,rgba(219,154,74,.7) 0 50%,transparent 100%),
+ radial-gradient(ellipse 2.2% 2.2% at 66% 50%,rgba(219,154,74,.7) 0 50%,transparent 100%),
+ radial-gradient(ellipse 22% 19% at 40% 40%,#FFF4D6 0 52%,rgba(255,244,214,0) 100%),
+ radial-gradient(ellipse 19% 22% at 64% 47%,#FFF4D6 0 52%,rgba(255,244,214,0) 100%),
+ radial-gradient(ellipse 22% 17% at 45% 67%,#FFF4D6 0 52%,rgba(255,244,214,0) 100%),
+ radial-gradient(ellipse 17% 16% at 58% 24%,#FFF4D6 0 52%,rgba(255,244,214,0) 100%),
+ radial-gradient(ellipse 50% 50% at 50% 50%,rgba(251,226,170,.95) 0 58%,rgba(251,226,170,0) 76%),
+ radial-gradient(ellipse 50% 50% at 50% 50%,#D7263D 0 72%,#B51F33 84%,transparent 85%)}
+.pizza-base{-webkit-mask-image:conic-gradient(transparent 0 45deg,#000 45deg);mask-image:conic-gradient(transparent 0 45deg,#000 45deg)}
+.pizza-fatia{-webkit-clip-path:polygon(50% 50%,50% 0,100% 0);clip-path:polygon(50% 50%,50% 0,100% 0);animation:puxa 2.8s ease-in-out infinite alternate}
+.selo-gira{position:absolute;left:-3%;top:-3%;width:30%;min-width:96px;aspect-ratio:1/1;animation:gira 22s linear infinite reverse;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}
+.selo-gira text{font-family:var(--f-texto);font-weight:700;font-size:12.5px;letter-spacing:.5px;fill:var(--mussarela)}
+.adesivo{position:absolute;right:-1%;bottom:6%;padding:.55rem .9rem;border-radius:12px;background:#1E6B43;color:var(--mussarela);font-family:var(--f-titulo);font-size:1.25rem;line-height:1.1;transform:rotate(-7deg);box-shadow:4px 4px 0 var(--forno)}
+
+/* Faixas corridas */
+.faixas{position:relative;overflow:hidden;padding:2.1rem 0;background:linear-gradient(180deg,var(--forno) 50%,var(--mussarela) 50%)}
+.faixa{width:116%;margin-left:-8%;overflow:hidden;padding:.6rem 0}
+.faixa-1{position:relative;z-index:2;background:var(--tomate);color:var(--mussarela);transform:rotate(-3deg);box-shadow:0 8px 0 rgba(0,0,0,.25)}
+.faixa-2{position:absolute;left:0;top:50%;background:var(--manjericao);color:var(--mussarela);transform:translateY(-50%) rotate(2.5deg)}
+.faixa-trilho{display:flex;width:max-content;animation:corre 30s linear infinite}
+.faixa-2 .faixa-trilho{animation-direction:reverse;animation-duration:38s}
+.faixa-trilho span{font-family:var(--f-titulo);font-size:1.6rem;line-height:1.1;padding:0 .9rem;white-space:nowrap}
+
+/* Seções */
+.secao{padding:4.75rem 0}
+.secao-topo{max-width:44rem;margin-bottom:2.5rem}
+.h2{margin-top:.9rem;font-size:clamp(2.25rem,9.6vw,4.5rem)}
+.h2 em{font-style:normal;color:var(--tomate)}
+.vermelho .h2 em{color:var(--forno)}
+.secao-sub{margin-top:1rem;font-size:1.125rem;color:var(--suave)}
+.claro .secao-sub{color:var(--suave-escuro)}
+.vermelho .secao-sub{color:var(--mussarela)}
+
+/* Cards */
+.cards{display:grid;grid-template-columns:minmax(0,1fr);gap:1.25rem}
+.card{position:relative;background:var(--mussarela-2);color:var(--forno);border:3px solid var(--forno);border-radius:var(--raio);padding:1.6rem 1.4rem 1.5rem;box-shadow:6px 6px 0 var(--forno);transition:transform .25s ease,box-shadow .25s ease}
+.card:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--tomate)}
+.card-num{position:absolute;top:1rem;right:1.2rem;font-family:var(--f-titulo);font-size:2.6rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--forno);opacity:.35}
+.card-icone{display:grid;place-items:center;width:62px;height:62px;border-radius:50%;background:var(--tomate);transform:rotate(-6deg)}
+.card:nth-child(2) .card-icone{background:var(--manjericao)}
+.card:nth-child(3) .card-icone{background:var(--forno)}
+.card:nth-child(4) .card-icone{background:var(--oregano)}
+.card-icone svg{width:34px;height:34px;fill:none;stroke:var(--mussarela);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.card h3{margin-top:1.1rem;font-size:1.9rem}
+.card p{margin-top:.5rem;color:var(--suave-escuro)}
+.cardapio{position:relative;overflow:hidden;isolation:isolate;margin-top:2rem;display:flex;flex-direction:column;gap:1.4rem;align-items:flex-start;padding:2rem 1.5rem;border-radius:var(--raio);background:var(--forno);color:var(--mussarela);--foco:var(--mussarela)}
+.cardapio::after{content:"";position:absolute;z-index:-1;right:-110px;bottom:-120px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,var(--tomate) 0 52%,#DB9A4A 54% 62%,transparent 64%);opacity:.9}
+.cardapio .kicker{color:var(--tomate-claro)}
+.cardapio h3{margin-top:.7rem;font-size:clamp(2rem,8vw,2.75rem)}
+.cardapio p:not(.kicker){margin-top:.5rem;color:var(--suave);max-width:30rem}
+
+/* Galeria */
+.galeria{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
+.foto{position:relative;margin:0;border-radius:var(--raio);overflow:hidden;aspect-ratio:1/1;border:1px solid var(--linha);background:var(--forno-3)}
+.foto.larga{grid-column:span 2;aspect-ratio:16/10}
+.foto-arte{position:absolute;inset:0;transition:transform .6s ease}
+.foto:hover .foto-arte{transform:scale(1.04)}
+.foto figcaption{position:absolute;left:.6rem;bottom:.6rem;display:inline-flex;align-items:center;gap:.45rem;max-width:calc(100% - 1.2rem);padding:.4rem .75rem;border-radius:14px;background:rgba(27,27,27,.88);color:var(--mussarela);font-size:1rem;font-weight:600;line-height:1.25}
+.foto figcaption svg{width:16px;height:16px;flex:none;fill:none;stroke:var(--tomate-claro);stroke-width:2}
+.mini-pizza{position:absolute;left:50%;top:50%;height:80%;aspect-ratio:1/1;transform:translate(-50%,-50%) rotate(-14deg);filter:drop-shadow(0 18px 22px rgba(0,0,0,.55))}
+.mini-fatia{position:absolute;width:170%;aspect-ratio:1/1;left:-35%;top:9%;-webkit-clip-path:polygon(50% 50%,29.3% 0,70.7% 0);clip-path:polygon(50% 50%,29.3% 0,70.7% 0);filter:drop-shadow(0 10px 10px rgba(0,0,0,.5))}
+.f1 .foto-arte{background:radial-gradient(60% 70% at 50% 50%,rgba(215,38,61,.35),transparent 70%),repeating-linear-gradient(90deg,#2A2522 0 34px,#231F1D 34px 68px)}
+.f2 .foto-arte{background:linear-gradient(180deg,rgba(27,27,27,.15),rgba(27,27,27,.55)),repeating-conic-gradient(#D7263D 0 25%,#FFF4D6 0 50%) 0 0/48px 48px}
+.f3 .foto-arte{background:radial-gradient(ellipse 40% 52% at 50% 96%,#FFF4D6 0 8%,#F0A04B 20%,#D7263D 38%,#6E1220 60%,#141414 62% 72%,transparent 73%),radial-gradient(60% 50% at 50% 70%,rgba(215,38,61,.3),transparent 70%),repeating-linear-gradient(0deg,#3A302B 0 26px,#1B1B1B 26px 30px)}
+.f4 .foto-arte{background:radial-gradient(circle at 18% 22%,rgba(255,244,214,.8) 0 3%,transparent 10%),radial-gradient(circle at 46% 14%,rgba(255,244,214,.8) 0 3%,transparent 10%),radial-gradient(circle at 76% 20%,rgba(255,244,214,.8) 0 3%,transparent 10%),radial-gradient(circle at 30% 60%,rgba(215,38,61,.45),transparent 22%),radial-gradient(circle at 74% 66%,rgba(46,139,87,.4),transparent 24%),linear-gradient(180deg,#2C2B29,#161616)}
+.f5 .foto-arte{background:repeating-linear-gradient(90deg,#D7263D 0 22px,#FFF4D6 22px 44px) 0 24%/100% 14% no-repeat,linear-gradient(180deg,#1B1B1B 0 24%,transparent 24%),radial-gradient(ellipse 18% 26% at 50% 100%,#F0A04B,rgba(215,38,61,.5) 60%,transparent 100%) 50% 100%/100% 62% no-repeat,linear-gradient(90deg,#3A3633 0 32%,#141414 32% 68%,#3A3633 68%)}
+.f6 .foto-arte{background:radial-gradient(circle 23px at 27% calc(100% - 104px),#121212 0 95%,transparent 100%),radial-gradient(ellipse 50px 80px at 27% 100%,#121212 0 97%,transparent 100%),radial-gradient(circle 26px at 51% calc(100% - 116px),#121212 0 95%,transparent 100%),radial-gradient(ellipse 56px 90px at 51% 100%,#121212 0 97%,transparent 100%),radial-gradient(circle 22px at 75% calc(100% - 100px),#121212 0 95%,transparent 100%),radial-gradient(ellipse 48px 76px at 75% 100%,#121212 0 97%,transparent 100%),radial-gradient(55% 60% at 50% 55%,rgba(255,244,214,.55),rgba(215,38,61,.45) 45%,transparent 75%),linear-gradient(180deg,#2E8B57 0,#1F5A3A 40%,#161616)}
+
+/* Horário */
+.horario-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:2.5rem}
+.status{margin-top:1.75rem;display:flex;gap:1rem;align-items:flex-start;padding:1.5rem;border-radius:var(--raio);background:var(--forno);color:var(--mussarela);box-shadow:6px 6px 0 #8E1525}
+.status .ponto{width:16px;height:16px;margin-top:.55rem}
+.status-titulo{font-family:var(--f-titulo);font-size:2rem;line-height:1.05}
+.status-detalhe{margin-top:.4rem;color:var(--suave)}
+.nota{margin-top:1.25rem;font-size:1rem}
+.dias{border-top:2px solid rgba(255,244,214,.55)}
+.dias li{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:56px;padding:.5rem .25rem;border-bottom:2px solid rgba(255,244,214,.55);font-size:1.125rem}
+.dias li span:first-child{font-weight:700}
+.dias li span:last-child{font-variant-numeric:tabular-nums;font-weight:500}
+.dias li.fechado span:last-child{font-style:italic}
+.dias li.hoje{background:var(--mussarela);color:var(--forno);padding-inline:.8rem;border-radius:12px;border-bottom-color:transparent}
+.dias li.hoje span:first-child::after{content:"Hoje";margin-left:.6rem;padding:.1rem .55rem;border-radius:999px;background:var(--forno);color:var(--mussarela);font-size:1rem;font-weight:700}
+
+/* Endereço */
+.endereco-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:2rem}
+.endereco-grid address{margin-top:1.25rem;font-size:1.25rem;font-weight:600;line-height:1.45}
+.acoes{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:1.75rem}
+.mapa{position:relative;border-radius:var(--raio);overflow:hidden;border:3px solid var(--forno);box-shadow:6px 6px 0 var(--forno);background:#E9DFC4;background-image:linear-gradient(rgba(27,27,27,.07) 2px,transparent 2px),linear-gradient(90deg,rgba(27,27,27,.07) 2px,transparent 2px);background-size:44px 44px;min-height:320px}
+.mapa-reserva{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;padding:1.5rem;text-align:center;font-weight:600;line-height:1.4;color:var(--suave-escuro)}
+.mapa-reserva svg{width:44px;height:44px;color:var(--tomate)}
+.mapa iframe{position:relative;z-index:1;width:100%;height:100%;min-height:320px;border:0}
+
+/* Instagram e chamada final */
+.final{position:relative;overflow:hidden;isolation:isolate}
+.final::before{content:"";position:absolute;z-index:-1;left:50%;bottom:-55%;width:150%;height:100%;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(215,38,61,.35),transparent)}
+.final-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:1.25rem}
+.bloco{padding:2rem 1.5rem;border-radius:var(--raio);border:1px solid var(--linha);background:rgba(35,35,35,.9)}
+.insta-num{font-family:var(--f-titulo);font-size:clamp(4rem,20vw,7rem);line-height:.9;color:var(--tomate-claro)}
+.insta-txt{margin-top:.6rem;font-size:1.25rem;font-weight:600}
+.insta-user{margin-top:.25rem;color:var(--suave)}
+.bloco .btn{margin-top:1.5rem}
+.cta .h2{font-size:clamp(2.6rem,11vw,5rem)}
+.cta p:not(.kicker){margin-top:.9rem;color:var(--suave);font-size:1.125rem}
+.cta .acoes .btn{margin-top:0}
+
+/* Rodapé */
+.rodape{border-top:3px solid var(--tomate);padding:3.5rem 0 7rem;background:#121212}
+.rodape-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:2rem}
+.rodape h3{font-size:1.4rem;color:var(--tomate-claro);margin-bottom:.6rem}
+.rodape p,.rodape address{color:var(--suave)}
+.rodape .logo-txt{font-size:1.9rem;color:var(--mussarela)}
+.rodape-links a{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;font-weight:600;text-decoration:underline;text-decoration-color:rgba(255,90,110,.6);text-underline-offset:4px}
+.rodape-links a:hover{color:var(--tomate-claro)}
+.rodape-links svg{width:20px;height:20px;flex:none}
+.tel{white-space:nowrap}
+.previa-rodape{margin-top:2.5rem;padding:1rem 1.25rem;border-radius:12px;border:2px dashed rgba(255,244,214,.6);color:var(--mussarela)!important;font-weight:600;font-size:1rem}
+
+/* WhatsApp fixo (celular) */
+.wa-fixo{position:fixed;z-index:60;right:var(--gutter);bottom:calc(16px + env(safe-area-inset-bottom));display:inline-flex;align-items:center;justify-content:center;width:62px;height:62px;border-radius:50%;background:var(--manjericao);color:var(--mussarela);text-decoration:none;border:3px solid var(--mussarela);box-shadow:0 14px 30px -10px rgba(0,0,0,.85);animation:chama 7s ease-in-out infinite}
+.wa-fixo svg{width:32px;height:32px}
+.wa-fixo{transition:opacity .3s ease,transform .3s ease,visibility .3s}
+.wa-fixo.recolhido{opacity:0;visibility:hidden;transform:translateY(24px) scale(.8);animation:none}
+
+/* Revelar ao rolar */
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.js .reveal.visivel{opacity:1;transform:none}
+
+@media (max-width:639px){
+  .foto:not(.larga) figcaption svg{display:none}
+}
+@media (max-width:479px){
+  .cta .acoes .btn{flex:1 1 100%}
+}
+@media (min-width:480px){
+  .hero-acoes .btn{flex:0 1 auto}
+}
+@media (min-width:640px){
+  :root{--gutter:24px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cardapio{padding:2.25rem 2.5rem}
+  .galeria{grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+  .f1{grid-row:span 2;aspect-ratio:auto!important}
+  .f6{grid-column:auto!important;aspect-ratio:1/1!important}
+}
+@media (min-width:900px){
+  :root{--gutter:32px;--topo:72px}
+  .nav{display:flex;gap:.25rem}
+  .cardapio{flex-direction:row;align-items:center;justify-content:space-between}
+  .cardapio .btn{flex:none;margin-right:5rem}
+  .cardapio::after{right:-70px;bottom:-90px}
+  .topo .topo-cta{display:inline-flex}
+  .wa-fixo{display:none}
+  .rodape{padding-bottom:3.5rem}
+  .hero{padding:4.5rem 0 6rem}
+  .hero-grid{grid-template-columns:1.05fr .95fr;gap:3rem}
+  .cena{width:min(42vw,500px)}
+  .secao{padding:6.5rem 0}
+  .horario-grid{grid-template-columns:5fr 6fr;gap:4rem;align-items:start}
+  .horario-grid .h2,.endereco-grid .h2{font-size:clamp(2.25rem,5.6vw,4.5rem)}
+  .dias{margin-top:2.6rem}
+  .endereco-grid{grid-template-columns:5fr 7fr;gap:3.5rem;align-items:center}
+  .mapa,.mapa iframe{min-height:440px}
+  .final-grid{grid-template-columns:5fr 7fr}
+  .bloco{padding:2.75rem}
+  .rodape-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}
+}
+@media (min-width:1100px){
+  .cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+@keyframes gira{to{transform:rotate(360deg)}}
+@keyframes puxa{from{transform:translate(0,0)}to{transform:translate(2.7%,-6.5%)}}
+@keyframes respira{from{opacity:.7}to{opacity:1}}
+@keyframes entra{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes entra-torto{from{opacity:0;transform:translateY(28px) rotate(-3deg)}to{opacity:1;transform:rotate(-3deg)}}
+@keyframes corre{to{transform:translateX(-50%)}}
+@keyframes pulso-ponto{0%{box-shadow:0 0 0 0 rgba(76,195,138,.7)}70%{box-shadow:0 0 0 10px rgba(76,195,138,0)}100%{box-shadow:0 0 0 0 rgba(76,195,138,0)}}
+@keyframes chama{0%,86%,100%{transform:none}89%{transform:rotate(-12deg) scale(1.06)}92%{transform:rotate(10deg) scale(1.06)}95%{transform:rotate(-6deg)}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .hero-titulo .l2{transform:rotate(-3deg)}
+  .js .reveal{opacity:1;transform:none}
+  .card:hover,.btn:hover{transform:none}
+  .foto:hover .foto-arte{transform:none}
+  .pizza-fatia{transform:translate(2%,-5%)}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29Z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M9.5 7.5h5M9.5 11h5M9.5 14.5h3"/><path d="M11 18.5h2"/></g></symbol>
+  <symbol id="i-pino" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 7.5h3.2L9 5h6l1.8 2.5H20v11.5H4z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5"/></symbol>
+</svg>
+
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<div class="previa" role="note">Prévia de site criada para apresentação. Não é o site oficial de Poco Loco Pizzaria.</div>
+
+<header class="topo">
+  <div class="wrap topo-in">
+    <a class="logo" href="#inicio" aria-label="Poco Loco Pizzaria, voltar ao início">
+      <span class="logo-pizza" aria-hidden="true"></span>
+      <span class="logo-txt" aria-hidden="true">Poco Loco <b>Pizzaria</b></span>
+    </a>
+    <nav class="nav" aria-label="Seções">
+      <a href="#oferecemos">O que oferecemos</a>
+      <a href="#galeria">Fotos</a>
+      <a href="#horario">Horário</a>
+      <a href="#endereco">Endereço</a>
+    </nav>
+    <div class="topo-dir">
+      <a class="pill" href="#horario"><span class="ponto" aria-hidden="true"></span><span data-status-curto>Horário</span></a>
+      <a class="btn btn-tomate btn-sm topo-cta" href="https://wa.me/5561998042052?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Poco%20Loco%20Pizzaria." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo">
+  <section class="hero" id="inicio" aria-labelledby="titulo-hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker entra">QNL 3 · Taguatinga Norte</p>
+        <h1 class="hero-titulo" id="titulo-hero"><span class="entra d1">Poco</span> <span class="l2 entra d2">Loco</span> <span class="l3 entra d3">Pizzaria</span></h1>
+        <p class="hero-texto entra d3"><strong>Loucura de quinta a domingo, das 19h às 23h.</strong> Escolha no cardápio digital ou chame a gente no WhatsApp.</p>
+        <div class="hero-acoes entra d4">
+          <a class="btn btn-tomate" href="https://wa.me/5561998042052?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Poco%20Loco%20Pizzaria." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp</a>
+          <a class="btn btn-linha" href="https://pizzaria-poco-loco.ola.click/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-menu"/></svg>Pedir pelo cardápio digital</a>
+        </div>
+        <ul class="hero-meta entra d5">
+          <li><span class="ponto" aria-hidden="true"></span><span data-status-longo>Quinta a domingo, 19h às 23h</span></li>
+          <li>7,6 mil seguidores no Instagram</li>
+        </ul>
+      </div>
+      <div class="cena entra d3" aria-hidden="true">
+        <div class="pizza">
+          <div class="pizza-arte pizza-base"></div>
+          <div class="pizza-arte pizza-fatia"></div>
+        </div>
+        <svg class="selo-gira" viewBox="0 0 120 120"><defs><path id="circulo" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0"/></defs><circle cx="60" cy="60" r="59" fill="#D7263D" stroke="#FFF4D6" stroke-width="2"/><text><textPath href="#circulo" textLength="274" lengthAdjust="spacing">QUINTA A DOMINGO • 19H ÀS 23H • </textPath></text><path d="M44 47c10-6 22-6 32 0L60 80Z" fill="#FFF4D6"/><circle cx="56" cy="54" r="3.5" fill="#D7263D"/><circle cx="64" cy="61" r="3" fill="#D7263D"/><circle cx="60" cy="68" r="2.2" fill="#2E8B57"/></svg>
+        <span class="adesivo">Pizza na QNL 3!</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="faixas" aria-hidden="true">
+    <div class="faixa faixa-2">
+      <div class="faixa-trilho">
+        <span>Quinta</span><span>★</span><span>Sexta</span><span>★</span><span>Sábado</span><span>★</span><span>Domingo</span><span>★</span>
+        <span>Quinta</span><span>★</span><span>Sexta</span><span>★</span><span>Sábado</span><span>★</span><span>Domingo</span><span>★</span>
+        <span>Quinta</span><span>★</span><span>Sexta</span><span>★</span><span>Sábado</span><span>★</span><span>Domingo</span><span>★</span>
+        <span>Quinta</span><span>★</span><span>Sexta</span><span>★</span><span>Sábado</span><span>★</span><span>Domingo</span><span>★</span>
+      </div>
+    </div>
+    <div class="faixa faixa-1">
+      <div class="faixa-trilho">
+        <span>Pizza</span><span>•</span><span>19h às 23h</span><span>•</span><span>QNL 3</span><span>•</span><span>Cardápio digital</span><span>•</span>
+        <span>Pizza</span><span>•</span><span>19h às 23h</span><span>•</span><span>QNL 3</span><span>•</span><span>Cardápio digital</span><span>•</span>
+        <span>Pizza</span><span>•</span><span>19h às 23h</span><span>•</span><span>QNL 3</span><span>•</span><span>Cardápio digital</span><span>•</span>
+        <span>Pizza</span><span>•</span><span>19h às 23h</span><span>•</span><span>QNL 3</span><span>•</span><span>Cardápio digital</span><span>•</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="secao claro" id="oferecemos" aria-labelledby="titulo-oferecemos">
+    <div class="wrap">
+      <header class="secao-topo reveal">
+        <p class="kicker">Pizzaria na QNL 3</p>
+        <h2 class="h2" id="titulo-oferecemos">O que <em>oferecemos</em></h2>
+        <p class="secao-sub">Pizza de quinta a domingo, com pedido pelo cardápio digital e conversa direta no WhatsApp.</p>
+      </header>
+      <div class="cards">
+        <article class="card reveal">
+          <span class="card-num" aria-hidden="true">01</span>
+          <span class="card-icone" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 13c11-6 23-6 34 0L24 43Z"/><path d="M9.5 18.5c9-4.5 20-4.5 29 0"/><circle cx="20" cy="24" r="2.6"/><circle cx="28" cy="29" r="2.2"/></svg></span>
+          <h3>Pizza</h3>
+          <p>Tá no nome da casa. Veja as opções no cardápio digital e escolha a sua.</p>
+        </article>
+        <article class="card reveal">
+          <span class="card-num" aria-hidden="true">02</span>
+          <span class="card-icone" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="13" y="5" width="22" height="38" rx="5"/><path d="M19 14h10M19 21h10M19 28h6M22 37h4"/></svg></span>
+          <h3>Cardápio digital</h3>
+          <p>Os pedidos são feitos pelo cardápio digital. É só abrir o link no celular.</p>
+        </article>
+        <article class="card reveal">
+          <span class="card-num" aria-hidden="true">03</span>
+          <span class="card-icone" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 9h28a5 5 0 0 1 5 5v15a5 5 0 0 1-5 5H22l-9 8v-8h-3a5 5 0 0 1-5-5V14a5 5 0 0 1 5-5Z"/><path d="M16 21.5h.1M24 21.5h.1M32 21.5h.1"/></svg></span>
+          <h3>WhatsApp</h3>
+          <p>Ficou com dúvida? Chame no <span class="tel">(61) 99804-2052</span> e fale com a gente.</p>
+        </article>
+        <article class="card reveal">
+          <span class="card-num" aria-hidden="true">04</span>
+          <span class="card-icone" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="32" rx="5"/><path d="M6 19h36M16 5v9M32 5v9"/><path d="M17 30l5 5 9-10"/></svg></span>
+          <h3>Quinta a domingo</h3>
+          <p>A loucura começa quinta, às 19h, e vai até domingo. De segunda a quarta, a casa descansa.</p>
+        </article>
+      </div>
+      <div class="cardapio reveal">
+        <div>
+          <p class="kicker">Cardápio digital</p>
+          <h3>Escolheu? É só pedir.</h3>
+          <p>Abra o cardápio digital da Poco Loco e faça o seu pedido pelo celular.</p>
+        </div>
+        <a class="btn btn-tomate" href="https://pizzaria-poco-loco.ola.click/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-menu"/></svg>Abrir o cardápio digital</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" id="galeria" aria-labelledby="titulo-galeria">
+    <div class="wrap">
+      <header class="secao-topo reveal">
+        <p class="kicker">A casa</p>
+        <h2 class="h2" id="titulo-galeria">Galeria</h2>
+        <p class="secao-sub">Cada espaço abaixo vai receber uma foto real da Poco Loco.</p>
+      </header>
+      <div class="galeria">
+        <figure class="foto larga f1 reveal"><div class="foto-arte" aria-hidden="true"><div class="pizza-arte mini-pizza"></div></div><figcaption><svg aria-hidden="true"><use href="#i-cam"/></svg>Foto da pizza</figcaption></figure>
+        <figure class="foto f2 reveal"><div class="foto-arte" aria-hidden="true"><div class="pizza-arte mini-fatia"></div></div><figcaption><svg aria-hidden="true"><use href="#i-cam"/></svg>Foto da fatia</figcaption></figure>
+        <figure class="foto f3 reveal"><div class="foto-arte" aria-hidden="true"></div><figcaption><svg aria-hidden="true"><use href="#i-cam"/></svg>Foto do forno</figcaption></figure>
+        <figure class="foto f4 reveal"><div class="foto-arte" aria-hidden="true"></div><figcaption><svg aria-hidden="true"><use href="#i-cam"/></svg>Foto do preparo</figcaption></figure>
+        <figure class="foto f5 reveal"><div class="foto-arte" aria-hidden="true"></div><figcaption><svg aria-hidden="true"><use href="#i-cam"/></svg>Foto da fachada</figcaption></figure>
+        <figure class="foto larga f6 reveal"><div class="foto-arte" aria-hidden="true"></div><figcaption><svg aria-hidden="true"><use href="#i-cam"/></svg>Foto da equipe</figcaption></figure>
+      </div>
+      <div class="acoes"><a class="btn btn-linha btn-sm" href="https://www.instagram.com/pocolocoqnl/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ig"/></svg>Ver mais no Instagram</a></div>
+    </div>
+  </section>
+
+  <section class="secao vermelho" id="horario" aria-labelledby="titulo-horario">
+    <div class="wrap horario-grid">
+      <div class="reveal">
+        <p class="kicker">Quando a loucura acontece</p>
+        <h2 class="h2" id="titulo-horario">Horário de <em>funcionamento</em></h2>
+        <div class="status" aria-live="polite">
+          <span class="ponto" aria-hidden="true"></span>
+          <div>
+            <p class="status-titulo" data-status>Quinta a domingo</p>
+            <p class="status-detalhe" id="status-detalhe">Das 19h às 23h. Segunda a quarta fechado.</p>
+          </div>
+        </div>
+        <p class="nota">Horário de Brasília.</p>
+      </div>
+      <ul class="dias reveal" aria-label="Horário por dia da semana">
+        <li data-dia="1" class="fechado"><span>Segunda</span><span>Fechado</span></li>
+        <li data-dia="2" class="fechado"><span>Terça</span><span>Fechado</span></li>
+        <li data-dia="3" class="fechado"><span>Quarta</span><span>Fechado</span></li>
+        <li data-dia="4"><span>Quinta</span><span>19h às 23h</span></li>
+        <li data-dia="5"><span>Sexta</span><span>19h às 23h</span></li>
+        <li data-dia="6"><span>Sábado</span><span>19h às 23h</span></li>
+        <li data-dia="0"><span>Domingo</span><span>19h às 23h</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao claro" id="endereco" aria-labelledby="titulo-endereco">
+    <div class="wrap endereco-grid">
+      <div class="reveal">
+        <p class="kicker">Onde fica</p>
+        <h2 class="h2" id="titulo-endereco">Na <em>QNL 3</em>, Taguatinga Norte</h2>
+        <address>QNL 3, conjunto A, lote 17<br>Taguatinga Norte - DF<br>CEP 72150-301</address>
+        <p class="secao-sub">Veja a localização no mapa.</p>
+        <div class="acoes">
+          <a class="btn btn-tomate" href="https://www.google.com/maps/search/?api=1&amp;query=QNL%203%20Conjunto%20A%20Lote%2017%2C%20Taguatinga%20Norte%2C%20Bras%C3%ADlia%20-%20DF%2C%2072150-301" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-pino"/></svg>Abrir no Google Maps</a>
+          <a class="btn btn-linha-escura" href="https://wa.me/5561998042052?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Poco%20Loco%20Pizzaria." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp</a>
+        </div>
+      </div>
+      <div class="mapa reveal">
+        <div class="mapa-reserva" aria-hidden="true"><svg><use href="#i-pino"/></svg><span>QNL 3, conjunto A, lote 17<br>Taguatinga Norte - DF</span></div>
+        <iframe src="https://www.google.com/maps?q=QNL%203%20Conjunto%20A%20Lote%2017%2C%20Taguatinga%20Norte%2C%20Bras%C3%ADlia%20-%20DF%2C%2072150-301&amp;output=embed" loading="lazy" title="Mapa com o endereço da Poco Loco Pizzaria: QNL 3, conjunto A, lote 17, Taguatinga Norte - DF" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao final" aria-labelledby="titulo-final">
+    <div class="wrap final-grid">
+      <div class="bloco reveal">
+        <p class="insta-num">7,6 mil</p>
+        <p class="insta-txt">seguidores no Instagram</p>
+        <p class="insta-user">@pocolocoqnl</p>
+        <a class="btn btn-linha" href="https://www.instagram.com/pocolocoqnl/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ig"/></svg>Ver o Instagram</a>
+      </div>
+      <div class="bloco cta reveal">
+        <p class="kicker">Fome de pizza?</p>
+        <h2 class="h2" id="titulo-final">Bateu a <em>fome</em>?</h2>
+        <p>De quinta a domingo, das 19h às 23h, peça pelo cardápio digital ou chame no WhatsApp.</p>
+        <div class="acoes">
+          <a class="btn btn-tomate" href="https://wa.me/5561998042052?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Poco%20Loco%20Pizzaria." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp</a>
+          <a class="btn btn-linha" href="https://pizzaria-poco-loco.ola.click/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-menu"/></svg>Pedir pelo cardápio digital</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="wrap rodape-grid">
+    <div>
+      <p class="logo-txt">Poco Loco <b>Pizzaria</b></p>
+      <p style="margin-top:.75rem">Pizzaria em Taguatinga Norte - DF. Loucura de quinta a domingo.</p>
+    </div>
+    <div>
+      <h3>Endereço</h3>
+      <address>QNL 3, conjunto A, lote 17<br>Taguatinga Norte - DF<br>CEP 72150-301</address>
+    </div>
+    <div>
+      <h3>Horário</h3>
+      <p>Quinta a domingo, das 19h às 23h<br>Segunda a quarta fechado</p>
+    </div>
+    <div>
+      <h3>Contato</h3>
+      <ul class="rodape-links">
+        <li><a href="https://wa.me/5561998042052?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Poco%20Loco%20Pizzaria." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp <span class="tel">(61) 99804-2052</span></span></a></li>
+        <li><a href="https://www.instagram.com/pocolocoqnl/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-ig"/></svg>Instagram @pocolocoqnl</a></li>
+        <li><a href="https://pizzaria-poco-loco.ola.click/" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-menu"/></svg>Cardápio digital</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="previa-rodape">Prévia de site criada para apresentação. Não é o site oficial de Poco Loco Pizzaria.</p>
+  </div>
+</footer>
+
+<a class="wa-fixo" href="https://wa.me/5561998042052?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Poco%20Loco%20Pizzaria." target="_blank" rel="noopener" aria-label="Chamar no WhatsApp" title="Chamar no WhatsApp"><svg aria-hidden="true"><use href="#i-wa"/></svg></a>
+
+<script>
+(function () {
+  'use strict';
+  var raiz = document.documentElement;
+
+  /* Horário em minutos desde 0h, por dia (0 = domingo ... 6 = sábado). null = fechado.
+     Fechamento menor ou igual à abertura (ex.: 0 = 0h) significa que fecha depois da
+     meia-noite: 0h vira 24h, a meia-noite do fim daquele dia. */
+  var HORARIO = {0: [1140, 1380], 1: null, 2: null, 3: null, 4: [1140, 1380], 5: [1140, 1380], 6: [1140, 1380]};
+  var NOMES = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+  var SEMANA = {Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6};
+
+  function fim(h) { return h[1] <= h[0] ? h[1] + 1440 : h[1]; }
+
+  function agoraSP() {
+    try {
+      var partes = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Sao_Paulo', weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23'
+      }).formatToParts(new Date());
+      var o = {};
+      partes.forEach(function (p) { o[p.type] = p.value; });
+      var dia = SEMANA[o.weekday];
+      var h = parseInt(o.hour, 10) % 24;
+      var m = parseInt(o.minute, 10);
+      if (dia === undefined || isNaN(h) || isNaN(m)) throw new Error('data');
+      return {dia: dia, min: h * 60 + m};
+    } catch (e) {
+      var n = new Date();
+      return {dia: n.getDay(), min: n.getHours() * 60 + n.getMinutes()};
+    }
+  }
+
+  function quando(min) {
+    min = min % 1440;
+    var h = Math.floor(min / 60), m = min % 60;
+    if (h === 0 && m === 0) return 'à meia-noite';
+    return 'às ' + h + 'h' + (m ? (m < 10 ? '0' : '') + m : '');
+  }
+
+  function estado(t) {
+    var hoje = HORARIO[t.dia];
+    if (hoje && t.min >= hoje[0] && t.min < fim(hoje)) return {aberto: true, fecha: fim(hoje)};
+    var ontem = HORARIO[(t.dia + 6) % 7];
+    if (ontem && fim(ontem) > 1440 && t.min < fim(ontem) - 1440) return {aberto: true, fecha: fim(ontem) - 1440};
+    for (var i = 0; i < 8; i++) {
+      var d = (t.dia + i) % 7, h = HORARIO[d];
+      if (h && (i > 0 || t.min < h[0])) return {aberto: false, emDias: i, abre: h[0], nome: NOMES[d]};
+    }
+    return {aberto: false};
+  }
+
+  function escreve(el, texto) { if (el && el.textContent !== texto) el.textContent = texto; }
+
+  function atualizar() {
+    var t = agoraSP(), e = estado(t), detalhe;
+    if (e.aberto) {
+      detalhe = 'Fecha ' + (e.fecha === 1440 ? '' : e.fecha > 1440 ? 'amanhã ' : 'hoje ') + quando(e.fecha) + '.';
+    } else if (e.abre !== undefined) {
+      var dia = e.emDias === 0 ? 'hoje' : e.emDias === 1 ? 'amanhã' : ((e.nome === 'sábado' || e.nome === 'domingo') ? 'no ' : 'na ') + e.nome;
+      detalhe = 'Abre ' + dia + ' ' + quando(e.abre) + '.';
+    } else {
+      detalhe = '';
+    }
+    var rotulo = e.aberto ? 'Aberto agora' : 'Fechado agora';
+    raiz.setAttribute('data-aberto', e.aberto ? '1' : '0');
+    document.querySelectorAll('[data-status]').forEach(function (el) { escreve(el, rotulo); });
+    document.querySelectorAll('[data-status-curto]').forEach(function (el) { escreve(el, e.aberto ? 'Aberto' : 'Fechado'); });
+    document.querySelectorAll('[data-status-longo]').forEach(function (el) { escreve(el, rotulo + (detalhe ? ' · ' + detalhe.replace(/\.$/, '').toLowerCase() : '')); });
+    escreve(document.getElementById('status-detalhe'), detalhe);
+    document.querySelectorAll('.dias li').forEach(function (li) {
+      li.classList.toggle('hoje', Number(li.getAttribute('data-dia')) === t.dia);
+    });
+  }
+
+  atualizar();
+  setInterval(atualizar, 30000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) atualizar(); });
+
+  /* Botão fixo do WhatsApp some enquanto os botões do topo estão na tela */
+  var wa = document.querySelector('.wa-fixo'), acoes = document.querySelector('.hero-acoes');
+  if (wa && acoes && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entradas) {
+      wa.classList.toggle('recolhido', entradas[0].isIntersecting);
+    }).observe(acoes);
+  }
+
+  /* Aparecer ao rolar */
+  var itens = document.querySelectorAll('.reveal');
+  var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!calmo && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('visivel'); io.unobserve(en.target); }
+      });
+    }, {rootMargin: '0px 0px -8% 0px', threshold: 0.12});
+    itens.forEach(function (el) { io.observe(el); });
+  } else {
+    itens.forEach(function (el) { el.classList.add('visivel'); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,670 @@
+<!--
+  PRÉVIA DE SITE: Seu Zé e Seu Mané (Taguatinga Norte, DF)
+  Feita só para apresentação ao dono. NÃO é o site oficial e não deve ser indexada.
+
+  O QUE O VENDEDOR PRECISA TROCAR ANTES DE PUBLICAR DE VERDADE:
+  1. Fotos reais: trocar os 6 espaços da galeria (gradientes em CSS, classes .f1 a .f6) por fotos reais
+     da casa, enviadas ou autorizadas pelo dono. Não copiar fotos do Instagram sem permissão por escrito.
+  2. Tirar o noindex: apagar a linha <meta name="robots" content="noindex, nofollow">.
+  3. Tirar a faixa de prévia do topo (div.previa) e a frase repetida no rodapé (p.previa-rodape).
+  4. Confirmar horários e telefone com o dono. Hoje está: terça a sexta das 17h à 0h (meia-noite),
+     sábado das 11h à 0h, domingo das 11h às 22h e segunda fechado; WhatsApp no celular (61) 98273-5004
+     e fixo (61) 3042-2456. Se algo mudar, atualizar os textos, o objeto HORARIO no script e o bloco
+     JSON-LD (telephone e openingHoursSpecification).
+  5. Confirmar com o dono qual número atende no WhatsApp (aqui foi usado o celular).
+  6. Comida di Buteco: confirmar o ano (e o prato) antes de citar mais do que "Já participou".
+     Nota 4,5 no Tripadvisor e 28 mil seguidores: conferir se continuam valendo na data da publicação.
+  7. Conferir se o pino do mapa caiu no lugar certo (EQNL 2/4, bloco B).
+  8. Com o domínio definido: adicionar og:url, og:image (foto real) e link canonical.
+  9. Cardápio, preços, reservas, eventos e qualquer outro dado: só entra se o dono passar por escrito.
+-->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Seu Zé e Seu Mané | Bar e restaurante em Taguatinga Norte - DF</title>
+<meta name="description" content="Seu Zé e Seu Mané, bar e restaurante no estilo boteco na EQNL 2/4, em Taguatinga Norte (DF). Aberto de terça a domingo. Chame no WhatsApp ou venha nos visitar.">
+<meta name="theme-color" content="#0A3622">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Seu Zé e Seu Mané">
+<meta property="og:title" content="Seu Zé e Seu Mané | Boteco em Taguatinga Norte - DF">
+<meta property="og:description" content="Bar e restaurante no estilo boteco na EQNL 2/4, Taguatinga Norte. Terça a domingo. Chame no WhatsApp.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A3622'/%3E%3Crect x='6' y='6' width='20' height='20' rx='3' fill='%23FFF8E7'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%231D4E89'/%3E%3Ccircle cx='6' cy='6' r='5' fill='%231D4E89'/%3E%3Ccircle cx='26' cy='26' r='5' fill='%231D4E89'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Karla:wght@400;500;700&display=swap">
+<script>document.documentElement.classList.add('js');</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["BarOrPub", "Restaurant"],
+  "name": "Seu Zé e Seu Mané",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "EQNL 2/4, bloco B, Setor L Norte, Taguatinga Norte",
+    "addressLocality": "Taguatinga",
+    "addressRegion": "DF",
+    "postalCode": "72155-215",
+    "addressCountry": "BR"
+  },
+  "telephone": "+55 61 98273-5004",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "17:00",
+      "closes": "23:59"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "11:00",
+      "closes": "23:59"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "11:00",
+      "closes": "22:00"
+    }
+  ],
+  "sameAs": ["https://www.instagram.com/seuzeeseumane/"]
+}
+</script>
+<style>
+:root{
+  --garrafa:#0F5132;--garrafa-2:#0A3622;--garrafa-3:#072818;
+  --ambar:#F4A300;--ambar-2:#FFB91F;--ambar-sombra:#A86F00;
+  --espuma:#FFF8E7;--espuma-2:#F6EBCF;
+  --azulejo:#1D4E89;--vermelho:#B3261E;--neon-vermelho:#FF7A6E;
+  --tinta:#0A3622;--tinta-suave:#44524A;--claro-suave:#D9D2BF;--placa:#0B1A12;
+  --neon-luz:0 0 4px rgba(255,231,179,.9),0 0 14px rgba(244,163,0,.85),0 0 32px rgba(244,163,0,.5),0 0 60px rgba(244,163,0,.3);
+  --neon-luz-v:0 0 4px rgba(255,208,203,.9),0 0 14px rgba(255,77,61,.8),0 0 32px rgba(255,77,61,.45);
+  --f-titulo:"Alfa Slab One","Rockwell","Roboto Slab",Georgia,serif;
+  --f-texto:"Karla",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --raio:16px;--max:1180px;--gutter:16px;--topo:64px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--espuma);color:var(--tinta);font-family:var(--f-texto);font-size:1.0625rem;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+@supports (overflow:clip){body{overflow-x:clip}}
+img,svg,iframe{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{margin:0;font-family:var(--f-titulo);font-weight:400;line-height:1.05;overflow-wrap:break-word}
+p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+address{font-style:normal}
+:focus-visible{outline:3px solid var(--ambar);outline-offset:3px;border-radius:6px}
+.clara :focus-visible,.clara-2 :focus-visible{outline-color:var(--azulejo)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.pular{position:absolute;left:var(--gutter);top:-100px;z-index:100;background:var(--ambar);color:var(--garrafa-2);padding:.75rem 1rem;border-radius:10px;font-weight:700;text-decoration:none}
+.pular:focus{top:12px}
+.wrap{width:100%;max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
+section[id]{scroll-margin-top:var(--topo)}
+.i{width:22px;height:22px;flex:none}
+
+/* Azulejo português feito só com gradientes (sem imagem) */
+.azulejo{
+  --t:64px;--a:var(--azulejo);--b:var(--espuma);
+  background-color:var(--b);
+  background-image:
+    radial-gradient(circle,var(--a) 0 calc(var(--t)*.09),transparent calc(var(--t)*.09 + 1px)),
+    radial-gradient(circle,transparent 0 calc(var(--t)*.19),var(--a) calc(var(--t)*.19 + 1px) calc(var(--t)*.24),transparent calc(var(--t)*.24 + 1px)),
+    radial-gradient(circle at 0 0,var(--a) 0 calc(var(--t)*.22),transparent calc(var(--t)*.22 + 1px)),
+    radial-gradient(circle at 100% 0,var(--a) 0 calc(var(--t)*.22),transparent calc(var(--t)*.22 + 1px)),
+    radial-gradient(circle at 0 100%,var(--a) 0 calc(var(--t)*.22),transparent calc(var(--t)*.22 + 1px)),
+    radial-gradient(circle at 100% 100%,var(--a) 0 calc(var(--t)*.22),transparent calc(var(--t)*.22 + 1px)),
+    linear-gradient(45deg,transparent calc(50% - 1px),var(--a) calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px)),
+    linear-gradient(-45deg,transparent calc(50% - 1px),var(--a) calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px));
+  background-size:var(--t) var(--t);
+}
+
+/* Faixa de prévia */
+.previa{background:var(--vermelho);color:var(--espuma);text-align:center;font-size:1rem;font-weight:500;line-height:1.4;padding:.55rem var(--gutter)}
+
+/* Topo */
+.topo{position:sticky;top:0;z-index:50;background:rgba(10,54,34,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,248,231,.12);color:var(--espuma)}
+.topo-in{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-height:var(--topo)}
+.logo{display:inline-flex;align-items:center;min-height:44px;min-width:0;font-family:var(--f-titulo);font-size:clamp(.95rem,4.5vw,1.2rem);color:var(--ambar);text-decoration:none;white-space:nowrap}
+.nav{display:none}
+.nav a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;color:var(--espuma);text-decoration:none;font-weight:500}
+.nav a:hover{color:var(--ambar)}
+.topo-dir{display:flex;align-items:center;gap:.75rem;flex:none}
+.pill{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;padding:0 .9rem;border-radius:999px;border:1px solid rgba(255,248,231,.28);color:var(--espuma);text-decoration:none;font-weight:700;font-size:.9375rem;white-space:nowrap}
+.pill:hover{background:rgba(255,248,231,.08)}
+.topo-cta{display:none!important}
+@media (min-width:900px){
+  .nav{display:flex;gap:1.75rem}
+  .topo-cta{display:inline-flex!important}
+}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:52px;padding:.75rem 1.4rem;border-radius:999px;font-weight:700;font-size:1.0625rem;line-height:1.2;text-align:center;text-decoration:none;border:2px solid transparent;cursor:pointer}
+.btn-sm{min-height:44px;padding:.5rem 1.1rem;font-size:1rem}
+.btn-ambar{background:var(--ambar);color:var(--garrafa-2);box-shadow:0 5px 0 var(--ambar-sombra)}
+.btn-ambar:hover{background:var(--ambar-2)}
+.btn-ambar:active{box-shadow:0 2px 0 var(--ambar-sombra);transform:translateY(3px)}
+.btn-linha{border-color:currentColor;color:var(--espuma);background:transparent}
+.btn-linha:hover{background:rgba(255,248,231,.1)}
+.btn-verde{background:var(--garrafa);color:var(--espuma)}
+.btn-verde:hover{background:var(--garrafa-2)}
+.btn-linha-v{border-color:var(--garrafa);color:var(--garrafa);background:transparent}
+.btn-linha-v:hover{background:rgba(15,81,50,.08)}
+.acoes{display:flex;flex-wrap:wrap;gap:14px;margin-top:1.75rem}
+@media (max-width:479px){.acoes .btn{width:100%}}
+
+/* Pontinho de aberto/fechado */
+.ponto{width:12px;height:12px;border-radius:50%;background:var(--claro-suave);flex:none}
+[data-aberto="1"] .ponto{background:var(--ambar);box-shadow:0 0 0 4px rgba(244,163,0,.25),0 0 12px var(--ambar)}
+[data-aberto="0"] .ponto{background:var(--neon-vermelho);box-shadow:0 0 0 4px rgba(255,122,110,.2)}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;color:var(--espuma);background:radial-gradient(120% 70% at 85% 12%,rgba(244,163,0,.11),transparent 60%),var(--garrafa-2);padding:clamp(40px,8vw,96px) 0 clamp(52px,8vw,104px)}
+.hero-grid{display:grid;gap:2.75rem;align-items:center}
+.kicker{font-weight:700;font-size:.9375rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.85rem}
+.hero .kicker{color:var(--ambar)}
+.neon{font-size:clamp(2.55rem,11.4vw,5.6rem);line-height:.98;letter-spacing:.01em;color:#FFE7B3;text-shadow:var(--neon-luz)}
+.neon span{display:block}
+.hero-ramo{font-family:var(--f-titulo);color:var(--ambar);font-size:clamp(1.25rem,4.8vw,1.65rem);line-height:1.2;margin-top:1.25rem}
+.hero-texto{font-size:1.1875rem;max-width:36ch;margin-top:.9rem}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:2rem}
+.hero-meta li{display:inline-flex;align-items:center;gap:.5rem;padding:.45rem .85rem;border-radius:999px;background:rgba(255,248,231,.07);border:1px solid rgba(255,248,231,.16);font-size:1rem;font-weight:500}
+.hero-meta .i{width:18px;height:18px;color:var(--ambar)}
+
+.painel{position:relative;aspect-ratio:5/4;border-radius:22px;overflow:hidden;border:6px solid var(--espuma);box-shadow:0 0 0 3px var(--azulejo),0 30px 60px rgba(0,0,0,.4)}
+.painel::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 48%,transparent 28%,rgba(7,40,24,.6) 100%);pointer-events:none}
+.placa{position:absolute;z-index:2;left:50%;top:54%;width:min(84%,340px);transform:translate(-50%,-50%) rotate(-2deg);background:var(--placa);border:3px solid #2C3D33;border-radius:16px;padding:1.2rem 1rem 1.1rem;text-align:center;box-shadow:0 18px 40px rgba(0,0,0,.5),inset 0 0 30px rgba(244,163,0,.08)}
+.placa::before,.placa::after{content:"";position:absolute;bottom:100%;width:2px;height:240px;background:linear-gradient(transparent,#9AA79F)}
+.placa::before{left:18%}.placa::after{right:18%}
+.placa-rotulo{font-size:.875rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--claro-suave)}
+.placa-tubo{font-family:var(--f-titulo);font-size:clamp(1.65rem,7.4vw,2.35rem);line-height:1.08;margin-top:.35rem;color:#FFE7B3;text-shadow:var(--neon-luz)}
+[data-aberto="0"] .placa-tubo,[data-aberto="0"] .status-titulo{color:#FFD0CB;text-shadow:var(--neon-luz-v)}
+.placa-sub{margin-top:.5rem;font-size:1rem;color:var(--claro-suave)}
+.painel-num{position:absolute;z-index:2;left:14px;bottom:14px;background:var(--espuma);color:var(--azulejo);border:2px solid var(--azulejo);border-radius:8px;padding:.3rem .65rem;font-weight:700;font-size:.9375rem;line-height:1.3}
+@media (min-width:900px){
+  .hero-grid{grid-template-columns:1.15fr .85fr;gap:3.5rem}
+  .painel{aspect-ratio:4/5}
+}
+.barrado{--t:36px;height:40px;border-top:5px solid var(--vermelho)}
+
+/* Seções */
+.secao{padding:clamp(64px,10vw,112px) 0}
+.clara{background:var(--espuma);color:var(--tinta)}
+.clara-2{background:var(--espuma-2);color:var(--tinta)}
+.escura{background:var(--garrafa-2);color:var(--espuma)}
+.clara h2,.clara-2 h2{color:var(--garrafa)}
+.clara .kicker,.clara-2 .kicker{color:var(--vermelho)}
+.escura .kicker{color:var(--ambar)}
+h2{font-size:clamp(2rem,7.4vw,3.3rem);text-wrap:balance}
+.sub{font-size:1.125rem;max-width:56ch;margin-top:1rem}
+.clara .sub,.clara-2 .sub{color:var(--tinta-suave)}
+
+/* O que oferecemos */
+.cards{display:grid;gap:22px;margin-top:2.5rem}
+.card{position:relative;overflow:hidden;background:#fff;border:2px solid var(--garrafa);border-radius:var(--raio);padding:1.6rem 1.4rem 1.5rem;box-shadow:6px 6px 0 var(--garrafa)}
+.card-canto{--t:30px;position:absolute;right:0;top:0;width:60px;height:60px;border-bottom-left-radius:14px;border-left:2px solid var(--garrafa);border-bottom:2px solid var(--garrafa)}
+.card-icone{width:64px;height:64px;border-radius:50%;background:var(--ambar);color:var(--garrafa-2);display:grid;place-items:center;margin-bottom:1.1rem}
+.card-icone svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:1.6rem;color:var(--garrafa)}
+.card p{margin-top:.6rem;color:var(--tinta-suave)}
+.nota-wa{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 1.5rem;margin-top:2.25rem;padding:1.4rem;border-radius:var(--raio);background:var(--garrafa);color:var(--espuma)}
+.nota-wa p{font-size:1.125rem;font-weight:500;max-width:40ch}
+.nota-wa strong{font-family:var(--f-titulo);font-weight:400;color:var(--ambar);display:block;font-size:1.35rem;line-height:1.2;margin-bottom:.2rem}
+@media (min-width:760px){.cards{grid-template-columns:repeat(3,1fr);gap:26px}}
+
+/* Currículo da casa (bolachas de bar) */
+.azul{--t:96px;--a:rgba(255,248,231,.05);--b:var(--azulejo);color:var(--espuma);text-align:center}
+.azul h2{color:var(--espuma)}
+.azul .kicker{color:var(--espuma)}
+.azul .sub{color:var(--espuma);margin-inline:auto}
+.bolachas{display:flex;flex-wrap:wrap;justify-content:center;gap:18px 12px;margin-top:2.75rem}
+.bolacha{position:relative;width:156px;aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;text-align:center;box-shadow:0 12px 26px rgba(0,0,0,.3);rotate:var(--r,0deg)}
+.bolacha::before{content:"";position:absolute;inset:8px;border-radius:50%;border:2px dashed currentColor;opacity:.45}
+.b1{background:var(--espuma);color:var(--vermelho);--r:-5deg}
+.b2{background:var(--ambar);color:var(--garrafa-2);--r:4deg}
+.b3{background:var(--vermelho);color:var(--espuma);--r:-2deg}
+.bolacha-pre,.bolacha-txt{font-weight:700;font-size:.875rem;line-height:1.25}
+.bolacha-num{font-family:var(--f-titulo);font-size:2.5rem;line-height:1;margin:.15rem 0;white-space:nowrap}
+.bolacha-num.longo{font-size:1.85rem}
+.bolacha-nome{font-family:var(--f-titulo);font-size:1.2rem;line-height:1.1;margin-top:.2rem}
+.azul .acoes{justify-content:center;margin-top:2.75rem}
+@media (min-width:600px){
+  .bolachas{gap:28px}
+  .bolacha{width:200px}
+  .bolacha-num{font-size:3.2rem}
+  .bolacha-num.longo{font-size:2.45rem}
+  .bolacha-nome{font-size:1.5rem}
+  .bolacha-pre,.bolacha-txt{font-size:.9375rem}
+}
+
+/* Galeria (espaços para fotos reais) */
+.galeria{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:150px;gap:10px;margin-top:2.5rem}
+.foto{position:relative;margin:0;border-radius:14px;overflow:hidden;background:var(--garrafa)}
+.foto-arte{position:absolute;inset:0}
+.foto.larga{grid-column:span 2}
+.foto figcaption{position:absolute;left:10px;bottom:10px;max-width:calc(100% - 20px);display:inline-flex;align-items:center;gap:.4rem;background:rgba(7,40,24,.9);color:var(--espuma);font-size:.875rem;font-weight:700;line-height:1.25;padding:.4rem .7rem;border-radius:999px}
+.foto figcaption .i{width:16px;height:16px;color:var(--ambar)}
+.f1 .foto-arte{background:radial-gradient(55% 35% at 50% 26%,rgba(244,163,0,.6),transparent 70%),linear-gradient(180deg,var(--garrafa) 0 58%,var(--garrafa-3) 58%)}
+.f1 .foto-arte::after{content:"";position:absolute;left:30%;right:30%;top:20%;height:12%;border-radius:8px;border:2px solid rgba(255,231,179,.8);box-shadow:0 0 18px rgba(244,163,0,.7),inset 0 0 12px rgba(244,163,0,.5)}
+.f2 .foto-arte{--t:44px;background-color:var(--espuma)}
+.f2 .foto-arte::after{content:"";position:absolute;inset:0 0 52% 0;background:linear-gradient(var(--garrafa),#13613D);border-bottom:4px solid var(--vermelho)}
+.f3 .foto-arte{background:radial-gradient(circle at 50% 50%,var(--espuma) 0 26%,var(--espuma-2) 26% 31%,rgba(0,0,0,.22) 31% 34%,transparent 34.5%),repeating-conic-gradient(var(--vermelho) 0 25%,#F3E3C7 0 50%) 0 0/36px 36px}
+.f4 .foto-arte{background:linear-gradient(180deg,var(--garrafa) 0 46%,var(--ambar) 46% 52%,#7A5200 52% 56%,transparent 56%),linear-gradient(90deg,#16365F 0 50%,var(--azulejo) 50%) 0 0/28px 100%}
+.f5 .foto-arte{background:radial-gradient(70% 60% at 30% 70%,rgba(244,163,0,.55),transparent 70%),linear-gradient(135deg,var(--vermelho),#6E1712)}
+.f6 .foto-arte{background:radial-gradient(28% 55% at 20% 40%,rgba(255,185,31,.75),rgba(244,163,0,.25) 45%,transparent 70%),radial-gradient(30% 60% at 80% 55%,rgba(255,77,61,.6),transparent 70%),radial-gradient(35% 70% at 50% 15%,rgba(29,78,137,.8),transparent 70%),linear-gradient(180deg,var(--garrafa-3),#03140B)}
+.galeria-nota{margin-top:1.25rem;color:var(--tinta-suave)}
+@media (min-width:760px){
+  .galeria{grid-template-columns:repeat(4,1fr);grid-auto-rows:210px;gap:16px}
+  .foto.f1{grid-column:span 2;grid-row:span 2}
+  .foto.f6{grid-column:1/-1}
+  .foto figcaption{font-size:.9375rem}
+}
+
+/* Horário */
+.horario-grid{display:grid;gap:2.75rem}
+.status{display:flex;align-items:center;gap:1rem;margin-top:1.75rem;padding:1.25rem;border-radius:var(--raio);background:var(--placa);border:2px solid rgba(255,248,231,.14)}
+.status .ponto{width:16px;height:16px}
+.status-titulo{font-family:var(--f-titulo);font-size:1.8rem;line-height:1.1;color:#FFE7B3;text-shadow:var(--neon-luz)}
+.status-detalhe{margin-top:.3rem;color:var(--claro-suave)}
+.nota{margin-top:1rem;color:var(--claro-suave)}
+.dias{border-top:1px dashed rgba(255,248,231,.25)}
+.dias li{display:flex;justify-content:space-between;gap:1rem;padding:.95rem 1rem;border-bottom:1px dashed rgba(255,248,231,.25);font-size:1.0625rem}
+.dias li span:first-child{font-weight:700}
+.dias li.fechado span:last-child{color:var(--claro-suave)}
+.dias li.hoje{background:var(--ambar);color:var(--garrafa-2);border-radius:12px;border-bottom-color:transparent}
+.dias li.hoje span:last-child{color:var(--garrafa-2);font-weight:700}
+.dias li.hoje span:first-child::after{content:" · hoje"}
+@media (min-width:860px){.horario-grid{grid-template-columns:1fr 1fr;align-items:start;gap:4rem}}
+
+/* Endereço */
+.endereco-grid{display:grid;gap:2.5rem;align-items:start}
+.endereco-grid address{font-size:1.1875rem;margin-top:1.25rem;line-height:1.55}
+.contatos{margin-top:1.5rem;display:grid;gap:.4rem}
+.contatos a{display:inline-flex;align-items:center;gap:.65rem;min-height:44px;font-weight:700;color:var(--garrafa);text-decoration:none}
+.contatos a:hover{text-decoration:underline}
+.contatos .i{color:var(--vermelho)}
+.mapa{position:relative;border-radius:var(--raio);overflow:hidden;border:3px solid var(--garrafa);box-shadow:8px 8px 0 var(--azulejo);background:var(--espuma);height:320px}
+.mapa iframe{position:relative;z-index:1;width:100%;height:100%;border:0}
+/* Fundo que aparece enquanto o mapa carrega (ou se ele não carregar) */
+.mapa-reserva{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:1.5rem;text-align:center;color:var(--tinta-suave);font-weight:700;background:linear-gradient(90deg,rgba(15,81,50,.09) 2px,transparent 2px) 0 0/48px 48px,linear-gradient(rgba(15,81,50,.09) 2px,transparent 2px) 0 0/48px 48px,var(--espuma)}
+.mapa-reserva .i{width:48px;height:48px;color:var(--vermelho)}
+.mapa-reserva strong{font-family:var(--f-titulo);font-weight:400;font-size:1.45rem;line-height:1.15;color:var(--garrafa)}
+@media (min-width:900px){.endereco-grid{grid-template-columns:.9fr 1.1fr;gap:4rem}.mapa{height:440px}}
+
+/* Chamada final */
+.cta-final{background:var(--vermelho);color:var(--espuma);text-align:center}
+.cta-final h2{color:var(--espuma);margin-inline:auto}
+.cta-final h2 span{display:block}
+.cta-final .kicker{color:var(--espuma)}
+.cta-final p.texto{font-size:1.1875rem;max-width:46ch;margin:1rem auto 0}
+.cta-final .acoes{justify-content:center}
+
+/* Rodapé */
+.rodape{background:var(--garrafa-3);color:var(--claro-suave);padding:56px 0 calc(110px + env(safe-area-inset-bottom))}
+.rodape-grid{display:grid;gap:2rem}
+.rodape .logo{font-size:1.4rem;white-space:normal}
+.rodape h3{font-size:1.05rem;color:var(--ambar);margin-bottom:.6rem}
+.rodape a{color:var(--espuma)}
+.rodape-links{display:grid;gap:.2rem}
+.rodape-links a{display:inline-flex;align-items:center;gap:.55rem;min-height:44px;text-decoration:none}
+.rodape-links a:hover{text-decoration:underline}
+.rodape-links .i{width:20px;height:20px;color:var(--ambar)}
+.previa-rodape{margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,248,231,.16);font-size:1rem}
+@media (min-width:760px){.rodape-grid{grid-template-columns:1.2fr 1fr 1fr 1.25fr}}
+@media (min-width:900px){.rodape{padding-bottom:56px}}
+
+/* WhatsApp fixo (telas pequenas) */
+.wa-fixo{position:fixed;z-index:60;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:var(--ambar);color:var(--garrafa-2);border:3px solid var(--garrafa-2);box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.wa-fixo .i{width:30px;height:30px}
+@media (min-width:900px){.wa-fixo{display:none}}
+
+/* Movimento leve (só para quem não pediu menos movimento) */
+@media (prefers-reduced-motion:no-preference){
+  .neon{animation:liga 1.7s linear .25s both}
+  .placa{animation:balanca 6s ease-in-out 1.5s infinite}
+  .btn,.card,.bolacha{transition:transform .18s ease,translate .18s ease,rotate .18s ease,scale .18s ease,box-shadow .18s ease,background-color .18s ease}
+  .card:hover{translate:-2px -2px;box-shadow:8px 8px 0 var(--garrafa)}
+  .bolacha:hover{rotate:0deg;scale:1.04}
+  .js .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease,translate .18s ease,rotate .18s ease,scale .18s ease,box-shadow .18s ease}
+  .js .reveal.visivel{opacity:1;transform:none}
+  .wa-fixo::before{content:"";position:absolute;inset:-3px;border-radius:50%;border:3px solid var(--ambar);animation:pulso 2.6s ease-out 2s infinite}
+}
+@keyframes liga{0%{opacity:.12;text-shadow:none}7%{opacity:1}10%{opacity:.2}15%{opacity:1}19%{opacity:.35}24%{opacity:1}100%{opacity:1}}
+@keyframes balanca{0%,100%{transform:translate(-50%,-50%) rotate(-2deg)}50%{transform:translate(-50%,-50%) rotate(-.5deg)}}
+@keyframes pulso{0%{transform:scale(1);opacity:.8}70%,100%{transform:scale(1.45);opacity:0}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3Z"/></symbol>
+  <symbol id="i-tel" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 3.5h3.5l2 5-2.5 1.6a11 11 0 0 0 5.4 5.4l1.6-2.5 5 2V18.5a2 2 0 0 1-2 2A16.5 16.5 0 0 1 3 5.5a2 2 0 0 1 2-2Z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></g><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-pino" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 21.5s-7-6.2-7-11.7a7 7 0 0 1 14 0c0 5.5-7 11.7-7 11.7Z"/><circle cx="12" cy="9.8" r="2.6"/></g></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2.5" y="7" width="19" height="13" rx="3"/><path d="M8 7l1.6-3h4.8L16 7"/><circle cx="12" cy="13.5" r="3.4"/></g></symbol>
+  <symbol id="i-estrela" viewBox="0 0 24 24"><path fill="currentColor" d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9Z"/></symbol>
+  <symbol id="i-relogio" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+</svg>
+
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<div class="previa" role="note">Prévia de site criada para apresentação. Não é o site oficial de Seu Zé e Seu Mané.</div>
+
+<header class="topo">
+  <div class="wrap topo-in">
+    <a class="logo" href="#inicio">Seu Zé e Seu Mané</a>
+    <nav class="nav" aria-label="Seções">
+      <a href="#oferecemos">A casa</a>
+      <a href="#galeria">Fotos</a>
+      <a href="#horario">Horário</a>
+      <a href="#endereco">Como chegar</a>
+    </nav>
+    <div class="topo-dir">
+      <a class="pill" href="#horario"><span class="ponto" aria-hidden="true"></span><span data-status-curto>Horário</span><span class="sr-only">: ver horário de funcionamento</span></a>
+      <a class="btn btn-ambar btn-sm topo-cta" href="https://wa.me/5561982735004?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20queria%20uma%20informa%C3%A7%C3%A3o." target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp</a>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo">
+  <section class="hero" id="inicio" aria-labelledby="titulo-hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker">EQNL 2/4 · Taguatinga Norte · DF</p>
+        <h1 class="neon" id="titulo-hero"><span>Seu Zé</span> <span>e Seu Mané</span></h1>
+        <p class="hero-ramo">Bar e restaurante no estilo boteco</p>
+        <p class="hero-texto">Chegou, puxou a cadeira, virou de casa. De terça a domingo, a porta tá aberta pra você em Taguatinga Norte.</p>
+        <div class="acoes">
+          <a class="btn btn-ambar" href="https://wa.me/5561982735004?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20queria%20uma%20informa%C3%A7%C3%A3o." target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp</a>
+          <a class="btn btn-linha" href="tel:+556130422456"><svg class="i" aria-hidden="true"><use href="#i-tel"/></svg>Ligar (61) 3042-2456</a>
+        </div>
+        <ul class="hero-meta">
+          <li><span class="ponto" aria-hidden="true"></span><span data-status-longo>Terça a domingo</span></li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-estrela"/></svg>Nota 4,5 no Tripadvisor</li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>28 mil seguidores</li>
+        </ul>
+      </div>
+      <div class="painel azulejo" role="img" aria-label="Parede de azulejo português com placa de neon mostrando se a casa está aberta agora">
+        <div class="placa" aria-hidden="true">
+          <p class="placa-rotulo">Seu Zé e Seu Mané</p>
+          <p class="placa-tubo" data-status>Terça a domingo</p>
+          <p class="placa-sub" data-detalhe>Segunda a casa descansa.</p>
+        </div>
+        <p class="painel-num" aria-hidden="true">EQNL 2/4 · Bloco B</p>
+      </div>
+    </div>
+  </section>
+  <div class="barrado azulejo" aria-hidden="true"></div>
+
+  <section class="secao clara" id="oferecemos" aria-labelledby="titulo-oferecemos">
+    <div class="wrap">
+      <header class="reveal">
+        <p class="kicker">Pra beber, comer e ficar</p>
+        <h2 id="titulo-oferecemos">O que oferecemos</h2>
+        <p class="sub">Bar, restaurante e aquele clima de boteco de bairro, tudo no mesmo endereço.</p>
+      </header>
+      <div class="cards">
+        <article class="card reveal">
+          <span class="card-canto azulejo" aria-hidden="true"></span>
+          <div class="card-icone" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M13 9h22l-3 31H16Z"/><path d="M14.4 19h19.2"/><path d="M20 26v8M26 24v10"/></svg></div>
+          <h3>Bar</h3>
+          <p>Fim de expediente pede mesa e conversa boa. De terça a sexta, a casa abre às 17h.</p>
+        </article>
+        <article class="card reveal">
+          <span class="card-canto azulejo" aria-hidden="true"></span>
+          <div class="card-icone" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="25" cy="25" r="11.5"/><circle cx="25" cy="25" r="6"/><path d="M7 9v9m3-9v9M7 18h3m-1.5 0v22"/><path d="M42 9c-3.5 3-3.5 10 0 12.5V40"/></svg></div>
+          <h3>Restaurante</h3>
+          <p>Não é só bar: é bar e restaurante. Quer saber o que sai da cozinha hoje? Pergunte no WhatsApp.</p>
+        </article>
+        <article class="card reveal">
+          <span class="card-canto azulejo" aria-hidden="true"></span>
+          <div class="card-icone" aria-hidden="true"><svg viewBox="0 0 48 48"><ellipse cx="24" cy="15" rx="17" ry="5"/><path d="M24 20v19M15 41h18"/><path d="M9 22v17M39 22v17"/></svg></div>
+          <h3>Clima de boteco</h3>
+          <p>Do jeito que boteco tem que ser: chega, puxa a cadeira e fica à vontade. Sábado e domingo, desde as 11h.</p>
+        </article>
+      </div>
+      <div class="nota-wa reveal">
+        <p><strong>Bateu a dúvida?</strong>Pergunte direto pra casa pelo WhatsApp.</p>
+        <a class="btn btn-ambar" href="https://wa.me/5561982735004?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20queria%20uma%20informa%C3%A7%C3%A3o." target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao azul azulejo" aria-labelledby="titulo-curriculo">
+    <div class="wrap">
+      <header class="reveal">
+        <p class="kicker">Não é conversa de mesa de bar</p>
+        <h2 id="titulo-curriculo">O currículo da casa</h2>
+      </header>
+      <ul class="bolachas">
+        <li class="bolacha b1 reveal"><span class="bolacha-pre">Nota</span><span class="bolacha-num">4,5</span><span class="bolacha-txt">de 5 no Tripadvisor</span></li>
+        <li class="bolacha b2 reveal"><span class="bolacha-pre">Já participou do</span><span class="bolacha-nome">Comida di Buteco</span></li>
+        <li class="bolacha b3 reveal"><span class="bolacha-num longo">28 mil</span><span class="bolacha-txt">seguidores no Instagram</span></li>
+      </ul>
+      <div class="acoes">
+        <a class="btn btn-linha" href="https://www.instagram.com/seuzeeseumane/" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Seguir @seuzeeseumane</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao clara" id="galeria" aria-labelledby="titulo-galeria">
+    <div class="wrap">
+      <header class="reveal">
+        <p class="kicker">A casa por dentro</p>
+        <h2 id="titulo-galeria">Galeria</h2>
+        <p class="sub">Cada espaço abaixo recebe uma foto real da casa.</p>
+      </header>
+      <div class="galeria">
+        <figure class="foto larga f1 reveal"><div class="foto-arte" aria-hidden="true"></div><figcaption><svg class="i" aria-hidden="true"><use href="#i-cam"/></svg>Foto da fachada</figcaption></figure>
+        <figure class="foto f2 reveal"><div class="foto-arte azulejo" aria-hidden="true"></div><figcaption><svg class="i" aria-hidden="true"><use href="#i-cam"/></svg>Foto do salão</figcaption></figure>
+        <figure class="foto f3 reveal"><div class="foto-arte" aria-hidden="true"></div><figcaption><svg class="i" aria-hidden="true"><use href="#i-cam"/></svg>Foto do prato</figcaption></figure>
+        <figure class="foto f4 reveal"><div class="foto-arte" aria-hidden="true"></div><figcaption><svg class="i" aria-hidden="true"><use href="#i-cam"/></svg>Foto do bar</figcaption></figure>
+        <figure class="foto f5 reveal"><div class="foto-arte" aria-hidden="true"></div><figcaption><svg class="i" aria-hidden="true"><use href="#i-cam"/></svg>Foto da mesa</figcaption></figure>
+        <figure class="foto larga f6 reveal"><div class="foto-arte" aria-hidden="true"></div><figcaption><svg class="i" aria-hidden="true"><use href="#i-cam"/></svg>Foto do ambiente à noite</figcaption></figure>
+      </div>
+      <div class="acoes"><a class="btn btn-linha-v btn-sm" href="https://www.instagram.com/seuzeeseumane/" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Ver mais no Instagram</a></div>
+    </div>
+  </section>
+
+  <section class="secao escura" id="horario" aria-labelledby="titulo-horario">
+    <div class="wrap horario-grid">
+      <div class="reveal">
+        <p class="kicker">Que horas a porta abre?</p>
+        <h2 id="titulo-horario">Horário de funcionamento</h2>
+        <div class="status" role="status" aria-live="polite">
+          <span class="ponto" aria-hidden="true"></span>
+          <div>
+            <p class="status-titulo" data-status>Terça a domingo</p>
+            <p class="status-detalhe" data-detalhe>Segunda a casa descansa.</p>
+          </div>
+        </div>
+        <p class="nota">Horário de Brasília. Na segunda-feira a casa descansa.</p>
+      </div>
+      <ul class="dias reveal" aria-label="Horário por dia da semana">
+        <li data-dia="1" class="fechado"><span>Segunda</span><span>Fechado</span></li>
+        <li data-dia="2"><span>Terça</span><span>17h à meia-noite</span></li>
+        <li data-dia="3"><span>Quarta</span><span>17h à meia-noite</span></li>
+        <li data-dia="4"><span>Quinta</span><span>17h à meia-noite</span></li>
+        <li data-dia="5"><span>Sexta</span><span>17h à meia-noite</span></li>
+        <li data-dia="6"><span>Sábado</span><span>11h à meia-noite</span></li>
+        <li data-dia="0"><span>Domingo</span><span>11h às 22h</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao clara-2" id="endereco" aria-labelledby="titulo-endereco">
+    <div class="wrap endereco-grid">
+      <div class="reveal">
+        <p class="kicker">Como chegar</p>
+        <h2 id="titulo-endereco">Venha nos visitar</h2>
+        <address>EQNL 2/4, bloco B<br>Setor L Norte, Taguatinga Norte - DF<br>CEP 72155-215</address>
+        <ul class="contatos">
+          <li><a href="https://wa.me/5561982735004?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20queria%20uma%20informa%C3%A7%C3%A3o." target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp (61) 98273-5004</a></li>
+          <li><a href="tel:+556130422456"><svg class="i" aria-hidden="true"><use href="#i-tel"/></svg>Fixo (61) 3042-2456</a></li>
+        </ul>
+        <div class="acoes">
+          <a class="btn btn-verde" href="https://www.google.com/maps/search/?api=1&amp;query=EQNL%202%2F4%2C%20bloco%20B%2C%20Setor%20L%20Norte%2C%20Taguatinga%20Norte%2C%20Bras%C3%ADlia%20-%20DF%2C%2072155-215" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-pino"/></svg>Abrir no Google Maps</a>
+          <a class="btn btn-linha-v" href="https://wa.me/5561982735004?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20queria%20uma%20informa%C3%A7%C3%A3o." target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp</a>
+        </div>
+      </div>
+      <div class="mapa reveal">
+        <div class="mapa-reserva" aria-hidden="true"><svg class="i"><use href="#i-pino"/></svg><strong>EQNL 2/4 · Bloco B</strong><span>Taguatinga Norte - DF</span></div>
+        <iframe src="https://www.google.com/maps?q=EQNL%202%2F4%2C%20bloco%20B%2C%20Setor%20L%20Norte%2C%20Taguatinga%20Norte%2C%20Bras%C3%ADlia%20-%20DF%2C%2072155-215&amp;output=embed" loading="lazy" title="Mapa com o endereço do Seu Zé e Seu Mané: EQNL 2/4, bloco B, Setor L Norte, Taguatinga Norte - DF" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao cta-final" aria-labelledby="titulo-final">
+    <div class="wrap reveal">
+      <p class="kicker">Bora?</p>
+      <h2 id="titulo-final">Seu Zé e Seu Mané <span>te esperam</span></h2>
+      <p class="texto">De terça a domingo na EQNL 2/4. Ficou com dúvida? Chama no WhatsApp ou liga pra casa.</p>
+      <div class="acoes">
+        <a class="btn btn-ambar" href="https://wa.me/5561982735004?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20queria%20uma%20informa%C3%A7%C3%A3o." target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp</a>
+        <a class="btn btn-linha" href="tel:+556130422456"><svg class="i" aria-hidden="true"><use href="#i-tel"/></svg>Ligar (61) 3042-2456</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="wrap rodape-grid">
+    <div>
+      <p class="logo">Seu Zé e Seu Mané</p>
+      <p style="margin-top:.6rem">Bar e restaurante no estilo boteco em Taguatinga Norte - DF.</p>
+    </div>
+    <div>
+      <h3>Endereço</h3>
+      <address>EQNL 2/4, bloco B<br>Setor L Norte<br>Taguatinga Norte - DF<br>CEP 72155-215</address>
+    </div>
+    <div>
+      <h3>Horário</h3>
+      <p>Terça a sexta: 17h à meia-noite<br>Sábado: 11h à meia-noite<br>Domingo: 11h às 22h<br>Segunda: fechado</p>
+    </div>
+    <div>
+      <h3>Contato</h3>
+      <ul class="rodape-links">
+        <li><a href="https://wa.me/5561982735004?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20queria%20uma%20informa%C3%A7%C3%A3o." target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp (61) 98273-5004</a></li>
+        <li><a href="tel:+556130422456"><svg class="i" aria-hidden="true"><use href="#i-tel"/></svg>Fixo (61) 3042-2456</a></li>
+        <li><a href="https://www.instagram.com/seuzeeseumane/" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Instagram @seuzeeseumane</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="previa-rodape">Prévia de site criada para apresentação. Não é o site oficial de Seu Zé e Seu Mané.</p>
+  </div>
+</footer>
+
+<a class="wa-fixo" href="https://wa.me/5561982735004?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20queria%20uma%20informa%C3%A7%C3%A3o." target="_blank" rel="noopener" aria-label="Chamar no WhatsApp" title="Chamar no WhatsApp"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg></a>
+
+<script>
+(function () {
+  'use strict';
+  var raiz = document.documentElement;
+
+  /* Horário em minutos desde 0h, por dia (0 = domingo ... 6 = sábado). null = fechado.
+     Para trocar, basta escrever [abre, fecha] em minutos (17h = 17 * 60).
+     Fechamento 0 (0h) quer dizer meia-noite do FIM daquele dia (vira 24h = 1440).
+     Fechamento menor que a abertura (ex.: 2h) quer dizer que passa da meia-noite. */
+  var HORARIO = {
+    0: [11 * 60, 22 * 60],  /* domingo: 11h às 22h */
+    1: null,                /* segunda: fechado */
+    2: [17 * 60, 0],        /* terça: 17h à 0h */
+    3: [17 * 60, 0],        /* quarta */
+    4: [17 * 60, 0],        /* quinta */
+    5: [17 * 60, 0],        /* sexta */
+    6: [11 * 60, 0]         /* sábado: 11h à 0h */
+  };
+  var NOMES = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+  var SEMANA = {Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6};
+
+  function fim(h) { return h[1] <= h[0] ? h[1] + 1440 : h[1]; }
+
+  function agoraSP() {
+    try {
+      var partes = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Sao_Paulo', weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23'
+      }).formatToParts(new Date());
+      var o = {};
+      partes.forEach(function (p) { o[p.type] = p.value; });
+      var dia = SEMANA[o.weekday];
+      var h = parseInt(o.hour, 10) % 24;
+      var m = parseInt(o.minute, 10);
+      if (dia === undefined || isNaN(h) || isNaN(m)) throw new Error('data');
+      return {dia: dia, min: h * 60 + m};
+    } catch (e) {
+      /* Sem suporte a fuso: usa UTC-3 (Brasília não tem horário de verão desde 2019) */
+      var n = new Date(Date.now() - 3 * 3600000);
+      return {dia: n.getUTCDay(), min: n.getUTCHours() * 60 + n.getUTCMinutes()};
+    }
+  }
+
+  function quando(min) {
+    min = min % 1440;
+    var h = Math.floor(min / 60), m = min % 60;
+    if (h === 0 && m === 0) return 'à meia-noite';
+    return (h === 1 ? 'à ' : 'às ') + h + 'h' + (m ? (m < 10 ? '0' : '') + m : '');
+  }
+
+  function estado(t) {
+    var hoje = HORARIO[t.dia];
+    if (hoje && t.min >= hoje[0] && t.min < fim(hoje)) return {aberto: true, fecha: fim(hoje)};
+    var ontem = HORARIO[(t.dia + 6) % 7];
+    if (ontem && fim(ontem) > 1440 && t.min < fim(ontem) - 1440) return {aberto: true, fecha: fim(ontem) - 1440};
+    for (var i = 0; i < 8; i++) {
+      var d = (t.dia + i) % 7, h = HORARIO[d];
+      if (h && (i > 0 || t.min < h[0])) return {aberto: false, emDias: i, abre: h[0], nome: NOMES[d]};
+    }
+    return {aberto: false};
+  }
+
+  function escreve(el, texto) { if (el && el.textContent !== texto) el.textContent = texto; }
+  function todos(sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); }
+
+  function atualizar() {
+    var t = agoraSP(), e = estado(t), detalhe = '';
+    if (e.aberto) {
+      detalhe = 'Fecha ' + (e.fecha === 1440 ? '' : e.fecha > 1440 ? 'amanhã ' : 'hoje ') + quando(e.fecha) + '.';
+    } else if (e.abre !== undefined) {
+      var dia = e.emDias === 0 ? 'hoje' : e.emDias === 1 ? 'amanhã' : ((e.nome === 'sábado' || e.nome === 'domingo') ? 'no ' : 'na ') + e.nome;
+      detalhe = 'Abre ' + dia + ' ' + quando(e.abre) + '.';
+    }
+    var rotulo = e.aberto ? 'Aberto agora' : 'Fechado agora';
+    raiz.setAttribute('data-aberto', e.aberto ? '1' : '0');
+    todos('[data-status]', function (el) { escreve(el, rotulo); });
+    todos('[data-status-curto]', function (el) { escreve(el, e.aberto ? 'Aberto' : 'Fechado'); });
+    todos('[data-detalhe]', function (el) { escreve(el, detalhe); });
+    todos('[data-status-longo]', function (el) {
+      escreve(el, rotulo + (detalhe ? ' · ' + detalhe.charAt(0).toLowerCase() + detalhe.slice(1).replace(/\.$/, '') : ''));
+    });
+    todos('.dias li', function (li) {
+      var ehHoje = Number(li.getAttribute('data-dia')) === t.dia;
+      li.classList.toggle('hoje', ehHoje);
+      if (ehHoje) li.setAttribute('aria-current', 'date'); else li.removeAttribute('aria-current');
+    });
+  }
+
+  atualizar();
+  setInterval(atualizar, 30000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) atualizar(); });
+
+  /* Aparecer ao rolar */
+  var itens = document.querySelectorAll('.reveal');
+  var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!calmo && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('visivel'); io.unobserve(en.target); }
+      });
+    }, {rootMargin: '0px 0px -8% 0px', threshold: 0.12});
+    Array.prototype.forEach.call(itens, function (el) { io.observe(el); });
+  } else {
+    Array.prototype.forEach.call(itens, function (el) { el.classList.add('visivel'); });
+  }
+})();
+</script>
+</body>
+</html>

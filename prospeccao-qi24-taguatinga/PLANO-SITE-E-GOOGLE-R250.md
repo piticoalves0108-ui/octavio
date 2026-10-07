@@ -7,8 +7,8 @@ Pesquisa feita em 07/10/2026. Pensado para quem tem notebook e internet, 2 horas
 - **O que vender:** "Presença Digital Local". Um site de 1 página e o Perfil da Empresa no Google (o que aparece no Maps) configurado e atualizado todo mês, por **R$250/mês, sem taxa de criação**.
 - **Para quem:** comércios de bairro que só têm Instagram. Esta pasta já tem 10 em Taguatinga Norte, com telefone, Instagram e prompt de site.
 - **Como vender sem aparecer:** pelo WhatsApp Business, com logo e nome de marca, mandando uma prévia pronta do site do próprio comércio.
-- **Quanto gasta para começar:** R$0. O domínio (R$40/ano) só é registrado depois que o cliente paga.
-- **Lucro em 2 dias:** dá para conseguir, mas não tem garantia. Depende do volume: a meta é abordar 40 comércios em 2 dias.
+- **Quanto gasta para começar:** R$0. O domínio (R$40/ano) fica no nome do cliente e é pago por ele direto ao Registro.br, depois que ele fecha.
+- **Lucro em 2 dias:** dá para conseguir, mas não tem garantia. Depende do volume, e o WhatsApp limita conversas novas (veja o [passo a passo](PASSO-A-PASSO.md)). A meta é de 5 a 7 conversas novas por dia no WhatsApp, mais mensagens diretas no Instagram da marca.
 
 ## Por que esta ideia e não outras
 
@@ -65,71 +65,40 @@ Pesquisa feita em 07/10/2026. Pensado para quem tem notebook e internet, 2 horas
 ## A oferta: o que entra nos R$250/mês
 
 1. Site de 1 página feito para celular: o que vende, fotos, horário, mapa e botão de WhatsApp.
-2. Domínio .com.br e hospedagem incluídos.
+2. Hospedagem incluída. O domínio .com.br fica no CPF ou CNPJ do cliente, que paga R$40/ano direto ao Registro.br.
 3. Perfil da Empresa no Google completo: categorias, horário, fotos, link do site e WhatsApp.
 4. 4 postagens por mês no Perfil do Google (promoções, novidades).
 5. Respostas às avaliações do Google.
 6. Até 2 alterações por mês no site (preço, cardápio, horário, promoção).
 7. Print mensal das visualizações e ligações vindas do Google.
 
-**Regras:** o 1º mês é pago antes de o site ir para o ar. Depois, a mensalidade vence todo mês no mesmo dia. Para cancelar, basta avisar com 30 dias. Com 7 dias de atraso, o site fica pausado. O domínio é sempre do cliente.
+**Regras:** o 1º mês é pago antes de o site ir para o ar. Depois, a mensalidade vence todo mês no mesmo dia. Para cancelar, basta avisar com 30 dias. Com 7 dias de atraso, o site fica pausado. O domínio é sempre do cliente. Por regra do Google, avise por escrito que o Perfil da Empresa é gratuito (os R$250 são pelo seu trabalho), nunca garanta posição no Google e, se o cliente cancelar, saia do perfil dele.
 
 **Adicionais para vender depois:** 8 posts de Instagram por mês (+R$300), robô de respostas no WhatsApp e site "premium" com 3D, usando os prompts que já estão em `prompts/` (cobrando taxa de criação).
 
 ## Plano de 48 horas (2 horas por dia)
 
-### Dia 1
-| Tempo | O que fazer |
-|---|---|
-| 20 min | Criar WhatsApp Business, Gmail, conta no Cloudflare e o logo no Canva. |
-| 60 min | Gerar e publicar **2 prévias** (prompt rápido abaixo). Comece pelos que têm mais seguidores e WhatsApp de celular: **Churrasquinho do Bruce** (27 mil seguidores), **Seu Zé e Seu Mané** (28 mil) e **Poco Loco** (7,6 mil). Publique em endereço `*.pages.dev`, com `noindex`. |
-| 40 min | Mandar a mensagem 1 (com prévia) para esses 2 e a mensagem 2 (diagnóstico do Google) para mais 15 a 20 comércios. Para achar mais, pesquise "barbearia Taguatinga Norte", "pet shop Taguatinga" e similares no Google Maps e anote quem não tem site ou tem o perfil incompleto (sem horário, sem fotos, sem site). |
+O roteiro clique a clique, as mensagens personalizadas para os 10 comércios e o termo de serviço estão no **[PASSO-A-PASSO.md](PASSO-A-PASSO.md)**. Resumo:
 
-### Dia 2
-| Tempo | O que fazer |
-|---|---|
-| 30 min | Responder quem respondeu e mandar o follow-up para quem não respondeu (mensagem 3). |
-| 45 min | Fazer a prévia de quem pediu para ver e mandar mais 15 a 20 abordagens. |
-| 45 min | Fechar: mandar o termo de serviço e a chave Pix e, assim que o pagamento cair, registrar o domínio e publicar. |
+- **Dia 1:** marca e logo, WhatsApp Business num chip separado, publicar as 3 prévias prontas em `previas/` no Cloudflare Pages, e mandar 7 mensagens no WhatsApp e 2 no Instagram.
+- **Dia 2:** mandar o link para quem respondeu, fazer prévias novas para quem pediu, abordar de 5 a 7 comércios novos e fechar com termo + Pix.
 
-**Plano B (se ninguém fechar a mensalidade em 48h):** ofereça uma "configuração do Perfil da Empresa no Google" avulsa por R$150, paga antes. Isso põe dinheiro no bolso no prazo, e depois você oferece a mensalidade para manter tudo atualizado.
+**Como abordar sem ser bloqueado:** uma mensagem só, personalizada, pedindo permissão para mandar o link da prévia. O link vai só depois da resposta. Faça um único lembrete, 3 a 5 dias depois. A Meta testa desde 2025 um limite para mensagens sem resposta, e em setembro de 2026 saíram relatos, ainda sem confirmação oficial, de um teto de 150 conversas novas por mês.
 
-**Conta de volume (é uma hipótese, não um dado de pesquisa):** se 1 em cada 20 abordagens fechar, 40 abordagens dão 2 clientes, ou seja, R$500 no 1º mês, com custo de R$80 em domínios.
+**Plano B (se ninguém fechar a mensalidade em 48h):** ofereça uma configuração avulsa do Perfil da Empresa no Google por R$150, paga antes, deixando claro que o Perfil é gratuito e que você cobra pelo serviço. Depois ofereça a mensalidade para manter tudo atualizado.
 
-## Mensagens prontas
-
-**1. Com prévia pronta**
-> Oi, tudo bem? Aqui é [Nome] da [Marca], cuido de site e Google de comércios aqui de Taguatinga. Vi o Instagram do [Negócio] ([detalhe real: "o espetinho de picanha", "a participação no Comida di Buteco"]) e notei que vocês ainda não têm site. Montei uma prévia de como ficaria, sem compromisso: [link]
-> Se gostar, coloco no ar com domínio próprio e cuido de tudo, inclusive do Google Maps, por R$250/mês, sem taxa de criação. Posso te passar os detalhes?
-
-**2. Diagnóstico do Google (sem prévia)**
-> Oi, tudo bem? Pesquisei "[ramo] em Taguatinga" no Google e o [Negócio] [não aparece no mapa / aparece sem horário, sem fotos e sem site]. Muita gente decide por ali antes de sair de casa. Eu arrumo isso e deixo atualizado todo mês. Quer que eu te mande o print do que encontrei?
-
-**3. Follow-up (24 horas depois)**
-> Oi, [Nome do dono]! Conseguiu dar uma olhada na prévia? Se quiser, mudo cores, fotos ou textos sem custo antes de decidir.
-
-**4. Fechamento**
-> Fechado! Funciona assim:
-> 1) Você faz o Pix do 1º mês (R$250) na chave [chave].
-> 2) Em até 24h eu coloco o site no ar no endereço [nome].com.br e arrumo o seu Google.
-> 3) A mensalidade vence todo dia [dia]. Para cancelar, é só avisar com 30 dias.
-> Me responde "Aceito" que eu já começo.
+**Conta de volume (é uma hipótese, não um dado de pesquisa):** com umas 20 abordagens em 2 dias, entre WhatsApp e Instagram, 1 cliente já paga o primeiro mês (R$250, sem custo seu). Com 7 abordagens por dia útil, são cerca de 150 por mês. Se 1 em cada 20 fechar, isso dá uns 7 clientes novos por mês.
 
 ### Respostas para objeções
 - **"Tá caro."** São menos de R$9 por dia. Um cliente a mais por mês já paga, e não tem taxa de criação.
 - **"Já tenho Instagram."** O Instagram funciona para quem já te segue. O site e o Google são para quem ainda não te conhece e está pesquisando "[ramo] perto de mim".
-- **"Vou pensar."** Claro! A prévia fica no ar até [dia]. Quer que eu reserve o domínio [nome].com.br para você enquanto isso?
+- **"Vou pensar."** Claro! A prévia fica no ar até [dia]. Se quiser mudar alguma coisa nela antes de decidir, é só falar.
 - **"Meu sobrinho faz."** Tranquilo! Se ele não tiver tempo de manter o Google e o site atualizados, estou por aqui.
+- **"O Google não é de graça?"** É, sim! O Perfil da Empresa é gratuito. Os R$250 são pelo meu trabalho de montar, atualizar todo mês, responder avaliações e manter o site no ar.
 
-## Termo de serviço simples (mandar no WhatsApp antes do Pix)
+## Termo de serviço
 
-> **Serviço:** Presença Digital Local para [Negócio].
-> **Inclui:** site de 1 página, domínio [nome].com.br registrado no nome do cliente, hospedagem, Perfil da Empresa no Google configurado, 4 postagens por mês no Google, respostas às avaliações, até 2 alterações por mês no site e relatório mensal.
-> **Valor:** R$250 por mês, pagos até o dia [dia]. O 1º mês é pago antes da publicação.
-> **Cancelamento:** aviso com 30 dias de antecedência, sem multa. O domínio continua sendo do cliente.
-> **Atraso:** a partir de 7 dias de atraso, o site fica pausado até a regularização.
-> **Conteúdo:** o cliente autoriza o uso das fotos e informações enviadas por ele e das que estão no Instagram dele.
-> Respondendo "Aceito", você concorda com estes termos.
+O termo atualizado, que inclui as regras do Google para quem gerencia o perfil de terceiros (perfil gratuito, dono continua proprietário, sem garantia de posição, saída do perfil ao cancelar), está no [Passo 8 do PASSO-A-PASSO.md](PASSO-A-PASSO.md#passo-8-fechar-a-venda).
 
 ## Prompt rápido para a prévia do site
 
@@ -150,23 +119,25 @@ Seções:
 Requisitos: feito primeiro para celular; carregar rápido em 4G; botão de WhatsApp fixo no canto da tela; paleta [cores do Instagram do negócio]; uma fonte do Google Fonts; title, meta description e Open Graph; schema.org LocalBusiness com nome, endereço, telefone e horário; e <meta name="robots" content="noindex"> porque é uma prévia.
 ```
 
-Os dados de cada comércio estão em `comercios.json`. Quando o cliente fechar, tire o `noindex` e troque as fotos de exemplo pelas fotos dele.
+Os dados de cada comércio estão em `comercios.json`. As 3 primeiras prévias já estão prontas em `previas/`. Em cada pasta nova, copie também o arquivo `_headers`, que esconde o endereço `.pages.dev` do Google. Quando o cliente fechar, tire o `noindex` e a faixa de prévia e troque as fotos de exemplo pelas fotos dele.
 
 ## Quanto dá para ganhar
 
 Tempo por cliente: de 2 a 3 horas para montar tudo e cerca de 1 hora por mês para manter. Com 2 horas por dia (60 horas por mês), sobra tempo para atender uns 20 clientes e ainda prospectar.
 
-| Clientes | Receita por mês | Custo com domínios por mês | Horas de manutenção por mês |
+| Clientes | Receita por mês | Seu custo por mês | Horas de manutenção por mês |
 |---|---|---|---|
-| 1 | R$250 | ~R$3 | ~1 h |
-| 4 | R$1.000 | ~R$13 | ~4 h |
-| 8 | R$2.000 | ~R$27 | ~8 h |
-| 12 | R$3.000 | ~R$40 | ~12 h |
-| 20 | R$5.000 | ~R$67 | ~20 h |
+| 1 | R$250 | R$0 | ~1 h |
+| 4 | R$1.000 | R$0 | ~4 h |
+| 8 | R$2.000 | R$0 | ~8 h |
+| 12 | R$3.000 | R$0 | ~12 h |
+| 20 | R$5.000 | R$0 | ~20 h |
+
+O domínio é pago pelo cliente e a hospedagem no Cloudflare é grátis. Sua despesa é só a recarga do chip do WhatsApp e, quando formalizar, o contador e os impostos.
 
 ## Riscos e cuidados
 
-- **Banimento no WhatsApp:** mande mensagens uma a uma e personalizadas, no máximo umas 20 a 30 para contatos novos por dia, sem programa de disparo em massa. Se alguém pedir para parar, pare.
+- **Bloqueio no WhatsApp:** mande mensagens uma a uma, personalizadas e num balão só, com no máximo 5 a 7 conversas novas por dia, e sem programa de disparo em massa. Peça permissão antes de mandar o link. Se alguém pedir para parar, pare.
 - **Prévia sem autorização:** deixe a prévia com `noindex` num endereço `*.pages.dev`, mande só para o dono e tire do ar se ele recusar. Nunca registre domínio com o nome de um negócio sem o dono pedir.
 - **Hospedagem:** use o Cloudflare Pages, porque o Hobby da Vercel proíbe site de cliente.
 - **Cliente que para de pagar:** o site fica pausado depois de 7 dias de atraso. Como o custo é quase zero, você não perde dinheiro.
