@@ -6,17 +6,27 @@
   // Se algum dia fechar, é só tirar o número dele da lista.
   const HORARIO = { abre: 18 * 60, fecha: 23 * 60, dias: [0, 1, 2, 3, 4, 5, 6] };
 
-  const reduzMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   // Links do WhatsApp com a mensagem pronta
   const linkWhats = `https://wa.me/${WHATS_NUMERO}?text=${encodeURIComponent(WHATS_MENSAGEM)}`;
   document.querySelectorAll(".js-whats").forEach((a) => { a.href = linkWhats; });
 
-  // Topo muda ao rolar
+  // Topo muda ao rolar (no máximo uma vez por quadro)
   const topo = document.getElementById("topo");
-  const marcaTopo = () => topo.classList.toggle("rolado", window.scrollY > 24);
+  let rolado = null;
+  let pendente = false;
+  const marcaTopo = () => {
+    pendente = false;
+    const agora = window.scrollY > 24;
+    if (agora === rolado) return;
+    rolado = agora;
+    topo.classList.toggle("rolado", agora);
+  };
   marcaTopo();
-  window.addEventListener("scroll", marcaTopo, { passive: true });
+  window.addEventListener("scroll", () => {
+    if (pendente) return;
+    pendente = true;
+    requestAnimationFrame(marcaTopo);
+  }, { passive: true });
 
   // Revela elementos ao entrarem na tela
   const revelar = document.querySelectorAll("[data-revela]");
@@ -33,23 +43,25 @@
     revelar.forEach((el) => el.classList.add("visivel"));
   }
 
-  // Parallax suave do prato
-  const parallax = document.querySelectorAll("[data-parallax]");
-  if (!reduzMovimento && parallax.length) {
-    let pendente = false;
-    const mover = () => {
-      const y = window.scrollY;
-      parallax.forEach((el) => {
-        const fator = parseFloat(el.dataset.parallax) || 0.1;
-        el.style.transform = `translate3d(0, ${y * fator}px, 0)`;
-      });
-      pendente = false;
-    };
-    window.addEventListener("scroll", () => {
-      if (pendente) return;
-      pendente = true;
-      requestAnimationFrame(mover);
-    }, { passive: true });
+  // Animações contínuas param quando a parte da página sai da tela
+  if ("IntersectionObserver" in window) {
+    const pausa = new IntersectionObserver((entradas) => {
+      entradas.forEach((e) => e.target.classList.toggle("pausado", !e.isIntersecting));
+    });
+    document.querySelectorAll(".hero, .faixa, .secao").forEach((el) => pausa.observe(el));
+  }
+
+  // Mapa do Google só carrega quando a pessoa pede
+  const botaoMapa = document.querySelector("[data-mapa]");
+  if (botaoMapa) {
+    botaoMapa.addEventListener("click", () => {
+      const mapa = botaoMapa.closest(".mapa");
+      const iframe = document.createElement("iframe");
+      iframe.title = "Mapa: Banzai, Av. Bandeirantes, 1767 - Centro, Andradina - SP";
+      iframe.src = "https://maps.google.com/maps?q=Av.%20Bandeirantes%2C%201767%20-%20Centro%2C%20Andradina%20-%20SP&z=16&output=embed";
+      iframe.referrerPolicy = "no-referrer-when-downgrade";
+      mapa.replaceChildren(iframe);
+    });
   }
 
   // Aberto agora / fechado

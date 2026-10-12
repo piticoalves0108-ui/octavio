@@ -97,7 +97,6 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   color: var(--texto);
   border: 1.5px solid var(--linha);
   background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(6px);
 }
 .btn-linha:hover { border-color: var(--sol-2); background: rgba(240, 138, 62, 0.08); }
 
@@ -113,16 +112,13 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 14px max(16px, calc((100vw - var(--largura)) / 2));
-  transition: background-color 0.4s, padding 0.4s var(--sai), border-color 0.4s;
+  padding: 12px max(16px, calc((100vw - var(--largura)) / 2));
+  transition: background-color 0.4s, border-color 0.4s;
   border-bottom: 1px solid transparent;
   animation: desce 0.9s var(--sai) 0.2s both;
 }
 .topo.rolado {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  background: rgba(11, 9, 8, 0.82);
-  backdrop-filter: blur(14px);
+  background: rgba(11, 9, 8, 0.95);
   border-color: var(--linha);
 }
 .topo-logo img {
@@ -175,10 +171,8 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   height: 900px;
   right: -300px;
   top: 10%;
-  background: radial-gradient(circle, rgba(240, 138, 62, 0.22), rgba(240, 138, 62, 0) 62%);
-  animation: respira 7s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(240, 138, 62, 0.18), rgba(240, 138, 62, 0) 62%);
 }
-@keyframes respira { 50% { transform: scale(1.12); opacity: 0.7; } }
 
 .bambu {
   position: absolute;
@@ -187,6 +181,7 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   width: auto;
   color: #2a1e15;
   transform-origin: 50% 100%;
+  will-change: transform;
   animation: balanca 6s ease-in-out infinite;
 }
 .bambu-esq { left: -46px; opacity: 0.8; }
@@ -260,7 +255,7 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
 
 /* Entrada da hero */
 .entra { animation: entra 1s var(--sai) both; animation-delay: calc(0.35s + var(--i) * 0.11s); }
-@keyframes entra { from { opacity: 0; transform: translateY(26px); filter: blur(6px); } }
+@keyframes entra { from { opacity: 0; transform: translateY(26px); } }
 
 /* Prato giratório */
 .hero-prato { position: relative; display: grid; place-items: center; }
@@ -271,16 +266,32 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   display: grid;
   place-items: center;
 }
+.prato-parallax::before {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(240, 138, 62, 0.42) 30%, rgba(240, 138, 62, 0) 68%);
+  will-change: transform, opacity;
+  animation: aparece 1.4s ease 0.6s both, sol-pulsa 6s ease-in-out 2s infinite;
+}
+@supports (animation-timeline: scroll()) {
+  .prato-parallax {
+    animation: parallax linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100vh;
+  }
+  @keyframes parallax { to { transform: translate3d(0, 12vh, 0); } }
+}
 .sol {
   position: absolute;
   inset: 9%;
   border-radius: 50%;
   background: var(--sol);
-  box-shadow: 0 0 120px 10px rgba(240, 138, 62, 0.35);
-  animation: sol-nasce 1.4s var(--sai) 0.3s both, sol-pulsa 6s ease-in-out 1.7s infinite;
+  animation: sol-nasce 1.4s var(--sai) 0.3s both;
 }
 @keyframes sol-nasce { from { transform: scale(0.4) translateY(30%); opacity: 0; } }
-@keyframes sol-pulsa { 50% { box-shadow: 0 0 160px 26px rgba(240, 138, 62, 0.45); } }
+@keyframes sol-pulsa { 50% { transform: scale(1.1); opacity: 0.65; } }
 
 .anel {
   position: absolute;
@@ -288,6 +299,7 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   width: 100%;
   height: 100%;
   overflow: visible;
+  will-change: transform;
   animation: aparece 1s ease 1s both, gira 40s linear infinite reverse;
 }
 .anel text {
@@ -303,7 +315,8 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 50%;
-  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.85), 0 0 0 6px rgba(11, 9, 8, 0.65);
+  box-shadow: 0 0 0 6px rgba(11, 9, 8, 0.65);
+  will-change: transform;
   animation: prato-entra 1.6s var(--sai) 0.5s both, gira 70s linear 2.1s infinite;
 }
 @keyframes prato-entra { from { opacity: 0; transform: scale(0.6) rotate(-120deg); } }
@@ -334,22 +347,27 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
 }
 @keyframes rolinho { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(14px); } }
 
-/* Faixa */
-.faixa {
+/* Faixa (a moldura reta corta as pontas da faixa inclinada) */
+.faixa-moldura {
   position: relative;
   z-index: 2;
   overflow: hidden;
+  padding: 40px 0;
+  margin: -54px 0 -40px;
+  pointer-events: none;
+}
+.faixa {
   padding: 16px 0;
   background: var(--sol);
   color: #1a0d05;
   transform: rotate(-2deg) scale(1.04);
-  margin: -14px 0 0;
 }
 .faixa-trilho {
   display: flex;
   width: max-content;
   align-items: center;
   gap: 26px;
+  will-change: transform;
   animation: corre 32s linear infinite;
 }
 .faixa span {
@@ -523,8 +541,8 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   border-radius: 50%;
   background: var(--sol);
   opacity: 0.9;
-  filter: blur(2px);
-  box-shadow: 0 0 140px 30px rgba(240, 138, 62, 0.35);
+  box-shadow: 0 0 120px 20px rgba(240, 138, 62, 0.3);
+  will-change: transform;
   transition: transform 1.6s var(--sai);
   transform: translateY(120px);
 }
@@ -540,6 +558,34 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   border: 1px solid var(--linha);
   background: var(--cartao);
 }
+.mapa { position: relative; display: grid; }
+.mapa-capa {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  padding: 40px 24px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(240, 138, 62, 0.18), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(255, 236, 214, 0.04) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(90deg, rgba(255, 236, 214, 0.04) 0 1px, transparent 1px 44px);
+}
+.mapa-pino {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--sol);
+  color: #1a0d05;
+  animation: quica 2.4s var(--sai) infinite;
+}
+.mapa-pino .ico { width: 30px; height: 30px; }
+@keyframes quica { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-10px); } }
+.mapa-capa p { margin: 0; color: var(--suave); }
+.mapa-capa strong { display: block; color: var(--texto); font-family: var(--serifa); font-size: 22px; }
+.mapa-acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 6px; }
 .mapa iframe {
   display: block;
   width: 100%;
@@ -625,7 +671,7 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   color: var(--texto);
 }
 .caixa[open] { display: grid; place-items: center; animation: aparece 0.35s ease; }
-.caixa::backdrop { background: rgba(8, 6, 5, 0.6); backdrop-filter: blur(10px); }
+.caixa::backdrop { background: rgba(8, 6, 5, 0.75); }
 .caixa figure { margin: 0; text-align: center; }
 .caixa img {
   max-width: min(92vw, 900px);
@@ -663,15 +709,8 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
   transition: opacity 1s var(--sai), transform 1s var(--sai);
   transition-delay: calc(var(--i, 0) * 0.1s);
 }
-.js [data-revela="foto"] {
-  transform: none;
-  clip-path: inset(18% 0 0 0 round var(--raio));
-  transition: opacity 1s var(--sai), clip-path 1.2s var(--sai);
-  transition-delay: calc(var(--i, 0) * 0.1s);
-}
-.js [data-revela="foto"] img { transform: scale(1.18); }
+.js [data-revela="foto"] img { transform: scale(1.15); }
 .js [data-revela].visivel { opacity: 1; transform: none; }
-.js [data-revela="foto"].visivel { clip-path: inset(0 0 0 0 round var(--raio)); }
 .js [data-revela="foto"].visivel img { transform: scale(1); }
 .js [data-revela="foto"].visivel:hover img { transform: scale(1.07); }
 
@@ -725,8 +764,13 @@ h2 { font-size: clamp(32px, 5.4vw, 54px); }
     animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
   }
-  .js [data-revela],
-  .js [data-revela="foto"] { opacity: 1; transform: none; clip-path: none; }
+  .js [data-revela] { opacity: 1; transform: none; }
   .js [data-revela="foto"] img { transform: none; }
   .graos { display: none; }
 }
+
+/* Animações fora da tela ficam paradas */
+.pausado,
+.pausado *,
+.pausado *::before,
+.pausado *::after { animation-play-state: paused !important; }

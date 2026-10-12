@@ -30,7 +30,7 @@
   <!-- Topo -->
   <header class="topo" id="topo">
     <a href="#inicio" class="topo-logo" aria-label="Banzai, voltar ao início">
-      <img src="img/logo.webp" alt="Banzai" width="768" height="271">
+      <img decoding="async" src="img/logo.webp" alt="Banzai" width="768" height="271">
     </a>
     <nav class="topo-nav" aria-label="Seções">
       <a href="#pratos">Pratos</a>
@@ -65,7 +65,7 @@
       </div>
 
       <div class="hero-texto">
-        <img class="hero-logo entra" style="--i:0" src="img/logo.webp" alt="Banzai, Andradina - SP" width="768" height="271">
+        <img decoding="async" class="hero-logo entra" style="--i:0" src="img/logo.webp" alt="Banzai, Andradina - SP" width="768" height="271">
         <p class="kicker entra" style="--i:1">Comida japonesa</p>
         <h1 class="entra" style="--i:2">O sabor do Japão<br><em>no centro de Andradina.</em></h1>
         <p class="hero-sub entra" style="--i:3">Sushis, sashimis, hot rolls, combinados e barcas. Chame no WhatsApp e faça seu pedido.</p>
@@ -86,13 +86,13 @@
       </div>
 
       <div class="hero-prato" aria-hidden="true">
-        <div class="prato-parallax" data-parallax="0.12">
+        <div class="prato-parallax">
           <div class="sol"></div>
           <svg class="anel" viewBox="0 0 400 400">
             <defs><path id="circulo" d="M200,200 m-188,0 a188,188 0 1,1 376,0 a188,188 0 1,1 -376,0"/></defs>
             <text><textPath href="#circulo" startOffset="0" textLength="1175" lengthAdjust="spacing">BANZAI ✦ COMIDA JAPONESA ✦ ANDRADINA - SP ✦ BANZAI ✦ COMIDA JAPONESA ✦ ANDRADINA - SP ✦</textPath></text>
           </svg>
-          <img class="prato" src="img/prato-giratorio.webp" alt="" width="700" height="700">
+          <img decoding="async" class="prato" src="img/prato-giratorio.webp" alt="" width="700" height="700">
         </div>
       </div>
 
@@ -102,11 +102,13 @@
     </section>
 
     <!-- Faixa animada -->
-    <div class="faixa" aria-hidden="true">
+    <div class="faixa-moldura" aria-hidden="true">
+    <div class="faixa">
       <div class="faixa-trilho">
         <span>Sushi</span><b>✦</b><span>Sashimi</span><b>✦</b><span>Hot roll</span><b>✦</b><span>Uramaki</span><b>✦</b><span>Niguiri</span><b>✦</b><span>Combinados</span><b>✦</b><span>Barcas</span><b>✦</b>
         <span>Sushi</span><b>✦</b><span>Sashimi</span><b>✦</b><span>Hot roll</span><b>✦</b><span>Uramaki</span><b>✦</b><span>Niguiri</span><b>✦</b><span>Combinados</span><b>✦</b><span>Barcas</span><b>✦</b>
       </div>
+    </div>
     </div>
 
     <!-- Pratos -->
@@ -120,31 +122,31 @@
       <div class="galeria">
         <figure class="foto foto-grande" data-revela="foto" style="--i:0">
           <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Combinado">
-            <img src="img/combinado.webp" alt="Combinado com sashimi de salmão, niguiris, uramakis e hot rolls" width="772" height="736" loading="lazy">
+            <img decoding="async" src="img/combinado.webp" alt="Combinado com sashimi de salmão, niguiris, uramakis e hot rolls" width="772" height="736" loading="lazy">
           </button>
           <figcaption>Combinado</figcaption>
         </figure>
         <figure class="foto" data-revela="foto" style="--i:1">
           <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Barca">
-            <img src="img/barca.webp" alt="Barca de madeira com sushis, sashimis e hot rolls" width="730" height="623" loading="lazy">
+            <img decoding="async" src="img/barca.webp" alt="Barca de madeira com sushis, sashimis e hot rolls" width="730" height="623" loading="lazy">
           </button>
           <figcaption>Barca</figcaption>
         </figure>
         <figure class="foto" data-revela="foto" style="--i:2">
           <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Sushis variados">
-            <img src="img/sushi-variado.webp" alt="Prato com niguiris de salmão, uramakis e hot rolls" width="772" height="615" loading="lazy">
+            <img decoding="async" src="img/sushi-variado.webp" alt="Prato com niguiris de salmão, uramakis e hot rolls" width="772" height="615" loading="lazy">
           </button>
           <figcaption>Sushis variados</figcaption>
         </figure>
         <figure class="foto" data-revela="foto" style="--i:3">
           <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Sashimi de salmão">
-            <img src="img/sashimi-pepino.webp" alt="Sashimi de salmão montado sobre pepino" width="747" height="575" loading="lazy">
+            <img decoding="async" src="img/sashimi-pepino.webp" alt="Sashimi de salmão montado sobre pepino" width="747" height="575" loading="lazy">
           </button>
           <figcaption>Sashimi de salmão</figcaption>
         </figure>
         <figure class="foto" data-revela="foto" style="--i:4">
           <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Flor de sashimi">
-            <img src="img/sashimi-flor.webp" alt="Sashimi de salmão em formato de flor com pimenta e folhas" width="761" height="736" loading="lazy">
+            <img decoding="async" src="img/sashimi-flor.webp" alt="Sashimi de salmão em formato de flor com pimenta e folhas" width="761" height="736" loading="lazy">
           </button>
           <figcaption>Flor de sashimi</figcaption>
         </figure>
@@ -207,16 +209,20 @@
       </div>
 
       <div class="mapa" data-revela>
-        <iframe
-          title="Mapa: Banzai, Av. Bandeirantes, 1767 - Centro, Andradina - SP"
-          src="https://maps.google.com/maps?q=Av.%20Bandeirantes%2C%201767%20-%20Centro%2C%20Andradina%20-%20SP&amp;z=16&amp;output=embed"
-          loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="mapa-capa">
+          <div class="mapa-pino"><svg class="ico" aria-hidden="true"><use href="#i-local"/></svg></div>
+          <p><strong>Av. Bandeirantes, 1767</strong>Centro · Andradina - SP</p>
+          <div class="mapa-acoes">
+            <button type="button" class="btn btn-linha btn-sm" data-mapa>Ver o mapa aqui</button>
+            <a class="btn btn-sol btn-sm" href="https://www.google.com/maps/search/?api=1&amp;query=Av.%20Bandeirantes%2C%201767%20-%20Centro%2C%20Andradina%20-%20SP" target="_blank" rel="noopener">Abrir no Google Maps</a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="rodape">
-    <img src="img/logo.webp" alt="Banzai, Andradina - SP" width="768" height="271" loading="lazy">
+    <img decoding="async" src="img/logo.webp" alt="Banzai, Andradina - SP" width="768" height="271" loading="lazy">
     <p>Av. Bandeirantes, 1767 · Centro · Andradina - SP</p>
     <p>Atendimento das 18h às 23h · (18) 3725-0358 · (18) 99802-7388</p>
     <p class="rodape-copy">© <span data-ano>2026</span> Banzai Andradina</p>
@@ -233,7 +239,7 @@
     <button type="button" class="caixa-fechar" data-fechar aria-label="Fechar">×</button>
     <button type="button" class="caixa-nav caixa-ant" data-ant aria-label="Foto anterior">‹</button>
     <figure>
-      <img src="" alt="">
+      <img decoding="async" src="" alt="">
       <figcaption></figcaption>
     </figure>
     <button type="button" class="caixa-nav caixa-prox" data-prox aria-label="Próxima foto">›</button>
