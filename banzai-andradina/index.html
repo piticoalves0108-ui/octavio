@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add("js")</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Banzai · Comida japonesa em Andradina - SP</title>
+  <meta name="description" content="Banzai, comida japonesa no centro de Andradina - SP. Sushis, sashimis, hot rolls, combinados e barcas. Atendimento das 18h às 23h. Peça pelo WhatsApp (18) 99802-7388.">
+  <meta name="theme-color" content="#0b0908">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Banzai · Comida japonesa em Andradina - SP">
+  <meta property="og:description" content="Sushis, sashimis, hot rolls, combinados e barcas. Das 18h às 23h, na Av. Bandeirantes, 1767. Peça pelo WhatsApp.">
+  <meta property="og:image" content="img/og-banzai.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/icone-180.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Shippori+Mincho+B1:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Topo -->
+  <header class="topo" id="topo">
+    <a href="#inicio" class="topo-logo" aria-label="Banzai, voltar ao início">
+      <img src="img/logo.webp" alt="Banzai" width="768" height="271">
+    </a>
+    <nav class="topo-nav" aria-label="Seções">
+      <a href="#pratos">Pratos</a>
+      <a href="#info">Horário</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a class="btn btn-sm btn-sol js-whats" href="https://wa.me/5518998027388" target="_blank" rel="noopener">
+      <svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg>
+      <span>Pedir</span>
+    </a>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="inicio">
+      <div class="hero-fundo" aria-hidden="true">
+        <div class="brilho"></div>
+        <svg class="bambu bambu-esq" viewBox="0 0 120 600" preserveAspectRatio="xMidYMax meet"><use href="#bambu"/></svg>
+        <svg class="bambu bambu-dir" viewBox="0 0 120 600" preserveAspectRatio="xMidYMax meet"><use href="#bambu"/></svg>
+        <div class="graos">
+          <i style="--x:8%;--d:11s;--a:0s;--s:1"></i>
+          <i style="--x:17%;--d:14s;--a:-4s;--s:.7"></i>
+          <i style="--x:29%;--d:12s;--a:-8s;--s:.9"></i>
+          <i style="--x:41%;--d:16s;--a:-2s;--s:.6"></i>
+          <i style="--x:52%;--d:13s;--a:-10s;--s:1"></i>
+          <i style="--x:63%;--d:15s;--a:-6s;--s:.8"></i>
+          <i style="--x:72%;--d:11s;--a:-3s;--s:.7"></i>
+          <i style="--x:81%;--d:17s;--a:-12s;--s:1"></i>
+          <i style="--x:90%;--d:12s;--a:-7s;--s:.6"></i>
+          <i style="--x:96%;--d:14s;--a:-1s;--s:.9"></i>
+        </div>
+      </div>
+
+      <div class="hero-texto">
+        <img class="hero-logo entra" style="--i:0" src="img/logo.webp" alt="Banzai, Andradina - SP" width="768" height="271">
+        <p class="kicker entra" style="--i:1">Comida japonesa</p>
+        <h1 class="entra" style="--i:2">O sabor do Japão<br><em>no centro de Andradina.</em></h1>
+        <p class="hero-sub entra" style="--i:3">Sushis, sashimis, hot rolls, combinados e barcas. Chame no WhatsApp e faça seu pedido.</p>
+        <div class="hero-acoes entra" style="--i:4">
+          <a class="btn btn-sol js-whats" href="https://wa.me/5518998027388" target="_blank" rel="noopener">
+            <svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg>
+            Pedir pelo WhatsApp
+          </a>
+          <a class="btn btn-linha" href="tel:+551837250358">
+            <svg class="ico" aria-hidden="true"><use href="#i-tel"/></svg>
+            (18) 3725-0358
+          </a>
+        </div>
+        <p class="status entra" style="--i:5" data-status>
+          <span class="status-ponto"></span>
+          <span class="status-texto">Atendimento das 18h às 23h</span>
+        </p>
+      </div>
+
+      <div class="hero-prato" aria-hidden="true">
+        <div class="prato-parallax" data-parallax="0.12">
+          <div class="sol"></div>
+          <svg class="anel" viewBox="0 0 400 400">
+            <defs><path id="circulo" d="M200,200 m-188,0 a188,188 0 1,1 376,0 a188,188 0 1,1 -376,0"/></defs>
+            <text><textPath href="#circulo" startOffset="0" textLength="1175" lengthAdjust="spacing">BANZAI ✦ COMIDA JAPONESA ✦ ANDRADINA - SP ✦ BANZAI ✦ COMIDA JAPONESA ✦ ANDRADINA - SP ✦</textPath></text>
+          </svg>
+          <img class="prato" src="img/prato-giratorio.webp" alt="" width="700" height="700">
+        </div>
+      </div>
+
+      <a class="rolar" href="#pratos" aria-label="Ver os pratos">
+        <span></span>
+      </a>
+    </section>
+
+    <!-- Faixa animada -->
+    <div class="faixa" aria-hidden="true">
+      <div class="faixa-trilho">
+        <span>Sushi</span><b>✦</b><span>Sashimi</span><b>✦</b><span>Hot roll</span><b>✦</b><span>Uramaki</span><b>✦</b><span>Niguiri</span><b>✦</b><span>Combinados</span><b>✦</b><span>Barcas</span><b>✦</b>
+        <span>Sushi</span><b>✦</b><span>Sashimi</span><b>✦</b><span>Hot roll</span><b>✦</b><span>Uramaki</span><b>✦</b><span>Niguiri</span><b>✦</b><span>Combinados</span><b>✦</b><span>Barcas</span><b>✦</b>
+      </div>
+    </div>
+
+    <!-- Pratos -->
+    <section class="secao pratos" id="pratos">
+      <div class="secao-cabeca" data-revela>
+        <p class="kicker">Nossos pratos</p>
+        <h2>Feito para comer<br>com os olhos primeiro.</h2>
+        <p class="secao-sub">Um pouco do que sai da nossa cozinha. Toque na foto para ver maior.</p>
+      </div>
+
+      <div class="galeria">
+        <figure class="foto foto-grande" data-revela="foto" style="--i:0">
+          <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Combinado">
+            <img src="img/combinado.webp" alt="Combinado com sashimi de salmão, niguiris, uramakis e hot rolls" width="772" height="736" loading="lazy">
+          </button>
+          <figcaption>Combinado</figcaption>
+        </figure>
+        <figure class="foto" data-revela="foto" style="--i:1">
+          <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Barca">
+            <img src="img/barca.webp" alt="Barca de madeira com sushis, sashimis e hot rolls" width="730" height="623" loading="lazy">
+          </button>
+          <figcaption>Barca</figcaption>
+        </figure>
+        <figure class="foto" data-revela="foto" style="--i:2">
+          <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Sushis variados">
+            <img src="img/sushi-variado.webp" alt="Prato com niguiris de salmão, uramakis e hot rolls" width="772" height="615" loading="lazy">
+          </button>
+          <figcaption>Sushis variados</figcaption>
+        </figure>
+        <figure class="foto" data-revela="foto" style="--i:3">
+          <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Sashimi de salmão">
+            <img src="img/sashimi-pepino.webp" alt="Sashimi de salmão montado sobre pepino" width="747" height="575" loading="lazy">
+          </button>
+          <figcaption>Sashimi de salmão</figcaption>
+        </figure>
+        <figure class="foto" data-revela="foto" style="--i:4">
+          <button type="button" class="foto-btn" data-ampliar aria-label="Ampliar foto: Flor de sashimi">
+            <img src="img/sashimi-flor.webp" alt="Sashimi de salmão em formato de flor com pimenta e folhas" width="761" height="736" loading="lazy">
+          </button>
+          <figcaption>Flor de sashimi</figcaption>
+        </figure>
+      </div>
+
+      <div class="pratos-cta" data-revela>
+        <p>Bateu vontade? A gente prepara o seu.</p>
+        <a class="btn btn-sol js-whats" href="https://wa.me/5518998027388" target="_blank" rel="noopener">
+          <svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg>
+          Fazer meu pedido
+        </a>
+      </div>
+    </section>
+
+    <!-- Informações -->
+    <section class="secao info" id="info">
+      <div class="secao-cabeca" data-revela>
+        <p class="kicker">Venha nos visitar</p>
+        <h2>Onde e quando.</h2>
+      </div>
+
+      <div class="cartoes">
+        <article class="cartao" data-revela style="--i:0">
+          <div class="cartao-ico"><svg class="ico" aria-hidden="true"><use href="#i-relogio"/></svg></div>
+          <h3>Horário</h3>
+          <p class="cartao-destaque">18h às 23h</p>
+          <p class="cartao-sub" data-status-cartao>Atendimento à noite</p>
+        </article>
+
+        <article class="cartao" data-revela style="--i:1">
+          <div class="cartao-ico"><svg class="ico" aria-hidden="true"><use href="#i-local"/></svg></div>
+          <h3>Endereço</h3>
+          <p class="cartao-destaque">Av. Bandeirantes, 1767</p>
+          <p class="cartao-sub">Centro · Andradina - SP</p>
+          <a class="cartao-link" href="https://www.google.com/maps/search/?api=1&amp;query=Av.%20Bandeirantes%2C%201767%20-%20Centro%2C%20Andradina%20-%20SP" target="_blank" rel="noopener">Abrir no mapa →</a>
+        </article>
+
+        <article class="cartao" data-revela style="--i:2">
+          <div class="cartao-ico"><svg class="ico" aria-hidden="true"><use href="#i-tel"/></svg></div>
+          <h3>Telefones</h3>
+          <p class="cartao-destaque"><a href="tel:+551837250358">(18) 3725-0358</a></p>
+          <p class="cartao-sub"><a class="js-whats" href="https://wa.me/5518998027388" target="_blank" rel="noopener">(18) 99802-7388 · WhatsApp</a></p>
+          <a class="cartao-link js-whats" href="https://wa.me/5518998027388" target="_blank" rel="noopener">Chamar no WhatsApp →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section class="secao contato" id="contato">
+      <div class="contato-chamada" data-revela>
+        <div class="contato-sol" aria-hidden="true"></div>
+        <p class="kicker">Pedidos</p>
+        <h2>Bateu a fome?</h2>
+        <p class="secao-sub">Mande uma mensagem no WhatsApp e faça seu pedido. É só tocar no botão.</p>
+        <a class="btn btn-sol btn-grande js-whats" href="https://wa.me/5518998027388" target="_blank" rel="noopener">
+          <svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg>
+          Chamar no WhatsApp
+        </a>
+        <p class="contato-alt">ou ligue: <a href="tel:+551837250358">(18) 3725-0358</a> · <a href="tel:+5518998027388">(18) 99802-7388</a></p>
+      </div>
+
+      <div class="mapa" data-revela>
+        <iframe
+          title="Mapa: Banzai, Av. Bandeirantes, 1767 - Centro, Andradina - SP"
+          src="https://maps.google.com/maps?q=Av.%20Bandeirantes%2C%201767%20-%20Centro%2C%20Andradina%20-%20SP&amp;z=16&amp;output=embed"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <img src="img/logo.webp" alt="Banzai, Andradina - SP" width="768" height="271" loading="lazy">
+    <p>Av. Bandeirantes, 1767 · Centro · Andradina - SP</p>
+    <p>Atendimento das 18h às 23h · (18) 3725-0358 · (18) 99802-7388</p>
+    <p class="rodape-copy">© <span data-ano>2026</span> Banzai Andradina</p>
+  </footer>
+
+  <!-- Botão flutuante do WhatsApp -->
+  <a class="whats-flutua js-whats" href="https://wa.me/5518998027388" target="_blank" rel="noopener" aria-label="Pedir pelo WhatsApp">
+    <svg aria-hidden="true"><use href="#i-whats"/></svg>
+    <span class="whats-dica">Peça pelo WhatsApp</span>
+  </a>
+
+  <!-- Foto ampliada -->
+  <dialog class="caixa" id="caixa" aria-label="Foto ampliada">
+    <button type="button" class="caixa-fechar" data-fechar aria-label="Fechar">×</button>
+    <button type="button" class="caixa-nav caixa-ant" data-ant aria-label="Foto anterior">‹</button>
+    <figure>
+      <img src="" alt="">
+      <figcaption></figcaption>
+    </figure>
+    <button type="button" class="caixa-nav caixa-prox" data-prox aria-label="Próxima foto">›</button>
+  </dialog>
+
+  <!-- Ícones -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-whats" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.3 1.27.49 1.7.63.71.23 1.36.2 1.88.12.57-.09 1.75-.72 2-1.4.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.04 21.5h-.01a9.43 9.43 0 0 1-4.8-1.32l-.35-.2-3.57.93.96-3.48-.23-.36a9.41 9.41 0 0 1-1.44-5.02c0-5.2 4.24-9.44 9.45-9.44 2.52 0 4.9.99 6.68 2.77a9.37 9.37 0 0 1 2.76 6.68c0 5.21-4.24 9.44-9.45 9.44zm8.04-17.49A11.3 11.3 0 0 0 12.04.67C5.77.67.67 5.77.67 12.04c0 2 .52 3.96 1.52 5.69L.57 23.33l5.73-1.5a11.34 11.34 0 0 0 5.73 1.46h.01c6.27 0 11.37-5.1 11.37-11.37 0-3.04-1.18-5.9-3.33-8.04z"/>
+    </symbol>
+    <symbol id="i-tel" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>
+    </symbol>
+    <symbol id="i-relogio" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 6.5V12l3.5 2"/>
+    </symbol>
+    <symbol id="i-local" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 22s7-6.1 7-12a7 7 0 0 0-14 0c0 5.9 7 12 7 12z"/>
+      <circle cx="12" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </symbol>
+    <symbol id="bambu" viewBox="0 0 120 600">
+      <g fill="currentColor">
+        <rect x="34" y="40" width="12" height="560" rx="5"/>
+        <rect x="31" y="150" width="18" height="5" rx="2"/>
+        <rect x="31" y="300" width="18" height="5" rx="2"/>
+        <rect x="31" y="450" width="18" height="5" rx="2"/>
+        <rect x="70" y="120" width="10" height="480" rx="4"/>
+        <rect x="67" y="230" width="16" height="4" rx="2"/>
+        <rect x="67" y="380" width="16" height="4" rx="2"/>
+        <rect x="67" y="520" width="16" height="4" rx="2"/>
+        <path d="M46 150c18-14 40-18 62-14-20 6-40 12-62 18z"/>
+        <path d="M34 300c-14-16-24-22-34-24 12 8 22 16 34 28z"/>
+        <path d="M80 230c14-10 26-12 38-10-12 4-24 8-38 14z"/>
+        <path d="M46 450c16-6 30-6 46 0-16 0-30 2-46 4z"/>
+        <path d="M70 380c-14-12-26-16-40-16 14 4 26 10 40 20z"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
