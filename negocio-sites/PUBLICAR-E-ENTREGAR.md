@@ -2,39 +2,49 @@
 
 Tudo na Cloudflare, de graça e com uso comercial permitido. O plano grátis dá 100 projetos por conta: 1 é o seu site e os outros 99 são clientes.
 
-> As telas da Cloudflare mudam de nome com frequência. Se algum botão estiver diferente, procure por **Workers & Pages** e pela opção de criar um projeto **Pages**.
+> As telas da Cloudflare mudam de nome com frequência. Se algum botão estiver diferente, procure por **Workers & Pages** e pela opção de criar um projeto **Pages** (não "Worker").
 
 ---
 
 ## Parte A · Publicar o site da Vitrine 61 (uma vez só, 15 minutos)
 
-### Jeito 1: ligado ao GitHub (recomendado, atualiza sozinho)
-1. Crie a conta grátis em **dash.cloudflare.com/sign-up** (só e-mail e senha).
-2. Menu **Workers & Pages** → **Create** → aba **Pages** → **Connect to Git**.
-3. Autorize o GitHub e escolha o repositório **octavio**.
-4. Preencha:
-   - **Project name:** `vitrine61` (o endereço vira `vitrine61.pages.dev`; se o nome estiver ocupado, escolha outro e troque o `url` no `config.js`)
-   - **Production branch:** `claude/jolly-johnson-ck8gfh` (depois que isso for para o `main`, troque para `main`)
-   - **Framework preset:** None
-   - **Build command:** deixe vazio
-   - **Build output directory:** `negocio-sites/site`
-5. **Save and Deploy**. Em 1 ou 2 minutos o site está no ar.
+> **Os links das prévias só abrem depois deste passo.** Antes disso, o celular mostra "site não encontrado" ou "não foi possível acessar". É normal: o endereço ainda não existe.
 
-Para mudar o seu WhatsApp, a chave Pix ou o preço: no GitHub, abra `negocio-sites/site/config.js`, toque no lápis, edite e toque em **Commit changes**. A Cloudflare publica de novo sozinha.
+### Jeito 1 (recomendado, dá para fazer pelo celular): subir o .zip
+1. **Baixe o site pronto** neste link (abre direto o download):
+   `https://github.com/piticoalves0108-ui/octavio/raw/claude/jolly-johnson-ck8gfh/negocio-sites/vitrine61-site.zip`
+2. Crie a conta grátis em **dash.cloudflare.com/sign-up** (e-mail e senha) e confirme o e-mail.
+3. No menu, vá em **Workers & Pages** → **Create application** (ou "Criar aplicativo").
+4. A tela abre em "Workers". Procure a parte de **Pages** ("Looking to deploy Pages?" → **Get started**) e escolha **Drag and drop your files** (ou "Upload assets").
+5. **Project name:** digite `vitrine61` → **Create project**.
+6. Toque para escolher o arquivo e selecione o `vitrine61-site.zip` baixado no passo 1 → **Deploy site**.
+7. Quando terminar, a Cloudflare mostra o endereço do site, embaixo do nome do projeto. **Anote esse endereço.** Se o nome `vitrine61` já tiver dono, ela coloca letras a mais (ex.: `vitrine61-4xz.pages.dev`) sem avisar.
 
-### Jeito 2: subir o .zip (sem GitHub)
-1. **Workers & Pages** → **Create** → **Pages** → **Upload assets**.
-2. Nome do projeto: `vitrine61` → envie o arquivo `negocio-sites/vitrine61-site.zip` → **Deploy**.
-3. Nesse jeito, o `config.js` vai como está (sem o seu WhatsApp). Peça para o Claude gerar o .zip de novo com o seu número.
+### Jeito 2: ligado ao GitHub (atualiza sozinho quando algo muda)
+1. **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
+2. Autorize o GitHub e escolha o repositório **octavio**.
+3. **Project name:** apague o `octavio` que vem preenchido e digite `vitrine61`.
+4. **Production branch:** escolha `claude/jolly-johnson-ck8gfh`. Não deixe o que vem marcado: ele não tem o site.
+5. **Framework preset:** None · **Build command:** `node negocio-sites/ferramentas/build.mjs --sem-imagens` · **Build output directory:** `negocio-sites/site`.
+6. **Save and Deploy**. Se aparecer "Output directory not found", o Production branch está errado.
 
-### Conferir
-- `https://vitrine61.pages.dev` → site da marca
-- `https://vitrine61.pages.dev/fabrica/` → Fábrica (adicione à tela inicial do celular)
-- `https://vitrine61.pages.dev/previa/nina-pets/` → exemplo de prévia pronta
+### Teste antes de mandar qualquer link (2 minutos, obrigatório)
+1. No celular, abra o endereço que a Cloudflare mostrou. Precisa aparecer o site da Vitrine 61.
+2. Abra `seu-endereço/previa/nina-pets/`. Precisa aparecer o site da Nina Pets com a faixa "Prévia".
+3. Abra `seu-endereço/fabrica/` e use **Adicionar à tela inicial**. **A partir daqui, mande os links sempre pela Fábrica**: ela usa sozinha o endereço onde está publicada, mesmo que não seja `vitrine61.pages.dev`.
+4. Se o endereço **não** for `https://vitrine61.pages.dev`, mande o endereço certo para o Claude. Ele gera de novo a lista de links, a planilha e as imagens de compartilhamento com o endereço certo, e você sobe o .zip novo.
 
-Se o endereço for diferente de `vitrine61.pages.dev`, troque o `url` no `config.js` e peça ao Claude para rodar o build de novo. Isso atualiza as imagens que aparecem quando o link é colado no WhatsApp.
+| O que aparece no celular | O que fazer |
+|---|---|
+| "Site não encontrado" ou "não foi possível acessar" | O site ainda não foi publicado, ou o endereço é outro. Confira o endereço na Cloudflare. Logo depois de publicar, pode levar alguns minutos: espere e alterne entre Wi-Fi e 4G. |
+| O site de outra pessoa | O nome `vitrine61` já tinha dono. Use o endereço que a Cloudflare mostrou para o seu projeto. |
+| "Este link está incompleto ou errado" | O link foi cortado ao copiar. Mande de novo pela Fábrica. |
+| A prévia abre, mas o botão "Quero no ar" não aparece | Falta o seu WhatsApp no `config.js` (veja abaixo). |
 
----
+### Colocar o seu WhatsApp, a chave Pix e o Instagram
+O jeito mais fácil: **mande o seu número para o Claude**. Ele coloca no `config.js`, gera o .zip de novo e você só sobe o arquivo novo (Cloudflare → projeto → **Create deployment** → envie o .zip).
+
+Se quiser fazer sozinho, edite por este link: `https://github.com/piticoalves0108-ui/octavio/edit/claude/jolly-johnson-ck8gfh/negocio-sites/site/config.js` → **Commit changes**. No Jeito 2, a Cloudflare publica sozinha. No Jeito 1, peça o .zip novo.
 
 ## Parte B · Entregar o site de um cliente (cerca de 1 hora)
 

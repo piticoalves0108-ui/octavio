@@ -1,6 +1,9 @@
-# Links de prévia prontos
+# Links de prévia (abrem depois que o site for publicado)
 
-Base: https://vitrine61.pages.dev (troque em site/config.js e rode o build de novo se o seu endereço for outro)
+> **Estes links só funcionam depois que você publicar o site** (Parte A de `PUBLICAR-E-ENTREGAR.md`). Antes disso o celular mostra erro.
+> Depois de publicar, abra https://vitrine61.pages.dev no celular. Se não aparecer o site da Vitrine 61, o seu endereço é outro: mande o endereço certo para o Claude, que ele gera tudo de novo.
+
+Endereço usado: **https://vitrine61.pages.dev**
 
 | Prioridade | Comércio | Canal | Link da prévia | Imagem para mandar junto | De onde vieram os dados |
 |---|---|---|---|---|---|

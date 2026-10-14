@@ -11,7 +11,7 @@ Por que isso e não outra coisa, com fontes: [`PESQUISA.md`](PESQUISA.md).
 | **Fábrica de Sites** | `site/fabrica/` | Você preenche nome, WhatsApp e endereço, e em 2 minutos sai o site, o link de prévia e a mensagem pronta no WhatsApp do cliente. Tem 14 ramos, fotos, mini-CRM e o .zip para publicar. |
 | **Site da sua marca** | `site/index.html` | Vitrine 61: preços, exemplos e botão de WhatsApp. Sem rosto e sem nome pessoal. |
 | **13 sites de exemplo** | `site/exemplos/?n=barbearia` (e os outros) | Portfólio por ramo |
-| **12 prévias de clientes reais** | `site/previa/…` + [`LINKS-DAS-PREVIAS.md`](LINKS-DAS-PREVIAS.md) | Negócios **novos** de Samambaia, Ceilândia e Guará sem site, com a prévia pronta para mandar hoje |
+| **12 prévias de clientes reais** | `site/previa/…` + [`LINKS-DAS-PREVIAS.md`](LINKS-DAS-PREVIAS.md) | Negócios **novos** de Samambaia, Ceilândia e Guará sem site, com a prévia pronta. **Os links só abrem depois que você publicar o site** (passo 2 abaixo). |
 | **12 imagens para mandar junto** | `imagens/previas/` | "Fizemos uma prévia do seu site", no formato do WhatsApp |
 | **6 posts + foto de perfil** | `imagens/instagram/` | Instagram da marca pronto para postar |
 | **3 Reels (MP4)** | `videos/` | Vídeos de 14 segundos com os sites rolando no celular |
@@ -24,11 +24,12 @@ Por que isso e não outra coisa, com fontes: [`PESQUISA.md`](PESQUISA.md).
 
 ## Hoje (cerca de 1h30)
 
-1. **Seu WhatsApp e Pix:** edite `site/config.js` (no GitHub: lápis → edite → Commit). *Ou mande o número para o Claude configurar.*
-2. **Publique:** Parte A de [`PUBLICAR-E-ENTREGAR.md`](PUBLICAR-E-ENTREGAR.md) (Cloudflare grátis, 15 minutos).
-3. **WhatsApp Business e Instagram:** foto, bio, respostas automáticas e os 6 posts + 3 Reels.
-4. **Abra a Fábrica no celular** (`seusite.pages.dev/fabrica/`) → Clientes → **Importar lista pronta** → os 12 negócios aparecem.
-5. Para cada um: **Abrir** → **Mandar no WhatsApp do cliente**. A conversa abre com a mensagem e o link da prévia. Para os que só têm Instagram, use **Copiar mensagem** e cole no direct.
+1. **Mande o seu WhatsApp para o Claude** (ou edite `site/config.js`). Assim o botão "Quero no ar" das prévias abre conversa com você.
+2. **Publique o site:** Jeito 1 da Parte A de [`PUBLICAR-E-ENTREGAR.md`](PUBLICAR-E-ENTREGAR.md). É baixar um .zip e arrastar na Cloudflare, grátis, em 15 minutos. **Sem isso, nenhum link de prévia abre.**
+3. **Teste no celular:** abra o endereço que a Cloudflare mostrou e depois `/previa/nina-pets/`. Os dois precisam abrir.
+4. **WhatsApp Business e Instagram:** foto, bio, respostas automáticas e os 6 posts + 3 Reels.
+5. **Abra a Fábrica pelo seu site** (`seu-endereço/fabrica/`) → Clientes → **Importar lista pronta** → os 12 negócios aparecem.
+6. Para cada um: **Abrir** → toque no link para testar → **Mandar no WhatsApp do cliente**. A conversa abre com a mensagem e o link certo. Para os que só têm Instagram, use **Copiar mensagem** e cole no direct.
 
 Depois disso, siga o [`PLANO-14-DIAS.md`](PLANO-14-DIAS.md).
 

@@ -27,19 +27,35 @@ a{color:#2E4BFF;font-weight:700}
 <script>
 (function () {
   var marca = window.VITRINE_CONFIG || {};
-  var codigo = location.hash.slice(1);
+  var CHAVE = 'vitrine.ultimoLink';
+  var ehCodigo = function (h) { return /^#?[zj][A-Za-z0-9_-]{4,}/.test(h || ''); };
+  function guardar(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+  function lerGuardado(k) { try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; } }
+
   function erro(t) {
+    var el = document.getElementById('msg');
+    if (!el) return;
     var url = marca.url || '../';
-    document.getElementById('msg').innerHTML = '<p>' + t + '</p><p><a href="' + url + '">Conhecer a ' + (marca.nome || 'Vitrine 61') + '</a></p>';
+    el.innerHTML = '<p>' + t + '</p><p><a href="' + url + '">Conhecer a ' + (marca.nome || 'Vitrine 61') + '</a></p>';
   }
-  if (!codigo) return erro('Este link de prévia está incompleto.');
-  if (codigo[0] === 'z' && typeof DecompressionStream !== 'function') return erro('Seu navegador é antigo para abrir esta prévia. Tente abrir no Chrome ou no Safari atualizado.');
-  Vitrine.deLink(codigo).then(function (cfg) {
-    cfg.modo = 'previa';
-    cfg.agencia = { nome: marca.nome, whatsapp: marca.whatsapp, url: marca.url, preco: marca.preco };
-    var html = Vitrine.gerarSite(cfg);
-    Vitrine.substituirPagina(html);
-  }).catch(function () { erro('Não conseguimos abrir esta prévia. O link pode ter sido cortado ao copiar.'); });
+
+  function abrir(codigo) {
+    if (!window.Vitrine) return erro('Não conseguimos carregar a prévia. Confira a internet e toque para recarregar a página.');
+    // Promise.resolve().then: qualquer erro (link cortado, navegador antigo) cai no .catch e mostra a mensagem.
+    Promise.resolve().then(function () { return Vitrine.deLink(codigo); }).then(function (cfg) {
+      guardar(CHAVE, codigo);
+      cfg.modo = 'previa';
+      cfg.agencia = { nome: marca.nome, whatsapp: marca.whatsapp, instagram: marca.instagram, url: marca.url, preco: marca.preco };
+      Vitrine.substituirPagina(Vitrine.gerarSite(cfg));
+    }).catch(function () {
+      erro('Não conseguimos abrir esta prévia. O link pode ter sido cortado ao copiar. Peça o link de novo pelo WhatsApp.');
+    });
+  }
+
+  // Se o endereço perdeu o código (ex.: alguém tocou num link interno antes de a página carregar), usa o último que abriu aqui.
+  var codigo = ehCodigo(location.hash) ? location.hash : lerGuardado(CHAVE);
+  if (!codigo) return erro('Este link de prévia está incompleto. Peça o link de novo pelo WhatsApp.');
+  abrir(codigo);
 })();
 </script>
 </body>

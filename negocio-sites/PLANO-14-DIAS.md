@@ -34,16 +34,17 @@ Limites para não tomar bloqueio: **até 15 conversas novas por dia no WhatsApp 
 
 ---
 
-## Dia 1 · qui 15/10 · Montar tudo e mandar as 12 prévias prontas
+## Dia 1 · qui 15/10 · Publicar, testar e mandar as 12 prévias prontas
 
-1. **Seu WhatsApp no site** (5 min): edite `negocio-sites/site/config.js` no GitHub (lápis → troque `whatsapp: ''` pelo seu número com DDD → Commit). Coloque também a chave Pix. *Se preferir, mande o número para o Claude configurar.*
-2. **Publicar o site da marca** (15 min): siga a Parte A de `PUBLICAR-E-ENTREGAR.md`. No fim você tem `https://vitrine61.pages.dev` com a Fábrica em `/fabrica/`.
-3. **WhatsApp Business** (10 min): instale, use o nome "Vitrine 61 | Sites" e a foto `imagens/instagram/00-foto-de-perfil.png`. Configure a saudação, a ausência e as respostas rápidas (seção 7 de `SCRIPTS-DE-VENDA.md`).
-4. **Instagram da marca** (20 min): crie o perfil e poste as 6 artes e os 3 Reels na ordem de `REELS-E-INSTAGRAM.md`.
-5. **Fábrica no celular** (2 min): abra `vitrine61.pages.dev/fabrica/` e use "Adicionar à tela inicial".
-6. **Mande as 12 prévias prontas** (40 min): abra `LINKS-DAS-PREVIAS.md` e comece pela prioridade 1. Mande o link com a mensagem de 1º contato e a imagem de `imagens/previas/`. Antes de cada envio, abra o Instagram do negócio por 10 segundos para conferir se ainda não tem site.
+1. **Seu WhatsApp e Pix** (2 min): mande para o Claude, que ele coloca no `config.js` e gera o .zip de novo.
+2. **Publicar o site da marca** (15 min): Jeito 1 da Parte A de `PUBLICAR-E-ENTREGAR.md` (baixar o .zip e arrastar na Cloudflare). **Sem isso, nenhum link abre.**
+3. **Testar no celular** (2 min): abra o seu endereço e `/previa/nina-pets/`. Se o endereço não for `vitrine61.pages.dev`, mande o certo para o Claude.
+4. **WhatsApp Business** (10 min): instale, use o nome "Vitrine 61 | Sites" e a foto `imagens/instagram/00-foto-de-perfil.png`. Configure a saudação, a ausência e as respostas rápidas (seção 7 de `SCRIPTS-DE-VENDA.md`).
+5. **Instagram da marca** (20 min): crie o perfil e poste as 6 artes e os 3 Reels na ordem de `REELS-E-INSTAGRAM.md`.
+6. **Fábrica no celular** (2 min): abra `seu-endereço/fabrica/`, use "Adicionar à tela inicial" e toque em Clientes → **Importar lista pronta**.
+7. **Mande as 12 prévias** (40 min): na Fábrica, abra cada negócio (prioridade 1 primeiro), toque no link para conferir e depois em **Mandar no WhatsApp do cliente**. Mande junto a imagem de `imagens/previas/`. Antes de cada envio, abra o Instagram do negócio por 10 segundos para conferir se ainda não tem site.
 
-**Meta do dia:** 12 contatos.
+**Meta do dia:** site no ar e 12 contatos.
 
 ## Dia 2 · sex 16/10 · Beleza (barbearias, salões e esmalterias)
 - 25 negócios novos em Samambaia e Recanto das Emas.

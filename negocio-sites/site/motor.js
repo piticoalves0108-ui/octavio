@@ -677,6 +677,7 @@
       agencia: {
         nome: agencia.nome || 'Vitrine 61',
         whatsapp: numeroBR(agencia.whatsapp),
+        instagram: limparInstagram(agencia.instagram),
         url: String(agencia.url || '').replace(/\/+$/, ''),
         preco: agencia.preco || 'R$250'
       },
@@ -831,9 +832,12 @@
       '.zap::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #25D366;animation:onda 2.4s infinite}',
       '@keyframes onda{from{transform:scale(1);opacity:.7}to{transform:scale(1.6);opacity:0}}',
       // animações de entrada
-      '.revela{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}.revela.in{opacity:1;transform:none}',
-      '.hero .revela{transition-delay:calc(var(--i,0) * 90ms)}',
-      '@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.revela{opacity:1;transform:none;transition:none}.zap::after,.status.aberto i{animation:none}.card,.btn,.galeria img{transition:none}}',
+      // A animação de entrada só liga quando o script do fim da página roda (classe "js" no <html>).
+      // Sem JavaScript, ou se algo travar, o conteúdo aparece normalmente.
+      '.js .revela{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}.js .revela.in{opacity:1;transform:none}',
+      '.js .hero .revela{transition-delay:calc(var(--i,0) * 90ms)}',
+      '[id]{scroll-margin-top:84px}',
+      '@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js .revela{opacity:1;transform:none;transition:none}.zap::after,.status.aberto i{animation:none}.card,.btn,.galeria img{transition:none}}',
       '.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}'
     ].join('\n');
   }
@@ -890,9 +894,18 @@
       'document.querySelectorAll("[data-status]").forEach(function(el){el.classList.add(aberto?"aberto":"fechado");var s=el.querySelector("span");if(s&&txt)s.textContent=txt});' +
       'var tr=document.querySelector("[data-dia=\\""+dia+"\\"]");if(tr)tr.classList.add("hoje");' +
       '}catch(e){}}' +
-      'var els=document.querySelectorAll(".revela");' +
-      'if(!("IntersectionObserver" in window)||matchMedia("(prefers-reduced-motion: reduce)").matches){els.forEach(function(e){e.classList.add("in")});}' +
-      'else{var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px"});els.forEach(function(e){io.observe(e)});}' +
+      'var els=[].slice.call(document.querySelectorAll(".revela"));' +
+      'var calmo=matchMedia("(prefers-reduced-motion: reduce)").matches;' +
+      'if("IntersectionObserver" in window&&!calmo){' +
+      // o que já está visível entra direto (sem piscar); o resto anima ao rolar
+      'els.forEach(function(e){if(e.getBoundingClientRect().top<innerHeight)e.classList.add("in")});' +
+      'document.documentElement.classList.add("js");' +
+      'var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px"});' +
+      'els.forEach(function(e){if(!e.classList.contains("in"))io.observe(e)});}' +
+      // links internos (#servicos, #inicio...) rolam a página sem trocar o endereço: o link de prévia /p/#... continua válido
+      'document.addEventListener("click",function(ev){var a=ev.target.closest&&ev.target.closest("a[href^=\'#\']");if(!a)return;' +
+      'var alvo=document.getElementById(a.getAttribute("href").slice(1));if(!alvo)return;ev.preventDefault();' +
+      'alvo.scrollIntoView({behavior:calmo?"auto":"smooth",block:"start"})});' +
       'var a=document.getElementById("ano");if(a)a.textContent=new Date().getFullYear();' +
       '})();';
   }
@@ -906,7 +919,8 @@
     var ag = c.agencia;
     var linkAg = ag.whatsapp
       ? linkWhats(ag.whatsapp, exemplo ? 'Olá! Vi o site de exemplo de ' + c.rotulo.toLowerCase() + ' e quero um site assim para o meu negócio.' : 'Olá! Vi a prévia do site da ' + c.nome + ' e quero colocar no ar.')
-      : (ag.url || '#');
+      : ag.instagram ? 'https://ig.me/m/' + ag.instagram
+      : (ag.url || '');
     // No site de exemplo, os botões levam para o WhatsApp da agência.
     var zap = exemplo ? linkAg : linkWhats(c.whatsapp, c.msg);
     // Sem WhatsApp: liga no fixo. Sem telefone nenhum: abre o direct do Instagram.
@@ -934,14 +948,16 @@
     o.push('<meta property="og:type" content="website"><meta property="og:locale" content="pt_BR">');
     o.push('<meta property="og:title" content="' + esc(previa ? 'Prévia do site: ' + c.nome : titulo) + '">');
     o.push('<meta property="og:description" content="' + esc(previa ? 'Veja como ficaria o site da ' + c.nome + '. Toque para abrir.' : c.subtitulo) + '">');
-    if (opcoes.ogImagem) o.push('<meta property="og:image" content="' + esc(opcoes.ogImagem) + '"><meta name="twitter:card" content="summary_large_image">');
+    if (opcoes.ogImagem) o.push('<meta property="og:image" content="' + esc(opcoes.ogImagem) + '">' + (opcoes.ogImagemTam ? '<meta property="og:image:width" content="' + opcoes.ogImagemTam[0] + '"><meta property="og:image:height" content="' + opcoes.ogImagemTam[1] + '">' : '') + '<meta name="twitter:card" content="summary_large_image">');
+    if (opcoes.ogUrl) o.push('<meta property="og:url" content="' + esc(opcoes.ogUrl) + '">');
     if (c.urlSite && !previa) o.push('<link rel="canonical" href="' + esc(c.urlSite) + '">');
     var favTxt = iniciais(c.nome);
     var fav = c.fotos.logo ? foto(c.fotos.logo, 'logo')
       : 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="' + t.destaque + '"/><text x="32" y="42" font-family="Arial,sans-serif" font-size="28" font-weight="700" text-anchor="middle" fill="' + t.sobre + '">' + esc(favTxt) + '</text></svg>');
     o.push('<link rel="icon" href="' + esc(fav) + '">');
     o.push('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>');
-    o.push('<link rel="stylesheet" href="' + urlFonte(t) + '">');
+    // Carrega as fontes sem segurar a página: se o Google Fonts demorar, o site aparece com a fonte do sistema.
+    o.push('<link rel="stylesheet" href="' + urlFonte(t) + '" media="print" onload="this.media=\'all\'"><noscript><link rel="stylesheet" href="' + urlFonte(t) + '"></noscript>');
     o.push('<style>' + css(c) + '</style>');
     o.push('<script type="application/ld+json">' + jsonLd(c) + '</script>');
     o.push('</head><body>');
@@ -950,7 +966,7 @@
       o.push('<div class="previa" role="note"><div class="wrap"><span>' +
         (previa ? '<b>Prévia</b> do site da ' + esc(c.nome) + ' feita pela ' + esc(ag.nome) + '. Ainda não está no ar.'
                 : '<b>Site de exemplo</b> da ' + esc(ag.nome) + '. O seu fica assim, com seus dados e fotos.') +
-        '</span><a href="' + esc(linkAg) + '" target="_blank" rel="noopener">' + (previa ? 'Quero no ar' : 'Quero o meu por ' + esc(ag.preco)) + '</a></div></div>');
+        '</span>' + (linkAg && (!previa || ag.whatsapp || ag.instagram) ? '<a href="' + esc(linkAg) + '" target="_blank" rel="noopener">' + (previa ? 'Quero no ar' : 'Quero o meu por ' + esc(ag.preco)) + '</a>' : '') + '</div></div>');
     }
 
     // topo
@@ -1134,30 +1150,162 @@
     return new Response(stream).arrayBuffer().then(function (b) { return new Uint8Array(b); });
   }
 
-  function paraLink(cfg) {
-    var limpo = {};
-    Object.keys(cfg || {}).forEach(function (k) {
-      if (k === 'fotos' || k === 'agencia' || k === 'modo') return;
-      var v = cfg[k];
-      if (v === '' || v == null || (Array.isArray(v) && !v.length)) return;
-      limpo[k] = v;
-    });
-    var bytes = new TextEncoder().encode(JSON.stringify(limpo));
-    if (typeof CompressionStream === 'function') {
-      var cs = new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw'));
-      return lerStream(cs).then(function (z) { return 'z' + b64url(z); });
+  // Descompactador DEFLATE em JavaScript puro (RFC 1951), para celulares sem DecompressionStream
+  // (iPhone com iOS anterior ao 16.4 e Androids antigos). Baseado no algoritmo do tiny-inflate.
+  var inflar = (function () {
+    function Arvore() { this.tabela = new Uint16Array(16); this.trans = new Uint16Array(288); }
+    var fixaLit = new Arvore(), fixaDist = new Arvore(), arvoreCodigos = new Arvore();
+    var bitsTam = new Uint8Array(30), baseTam = new Uint16Array(30), bitsDist = new Uint8Array(30), baseDist = new Uint16Array(30);
+    var ordemCl = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
+    var comprimentos = new Uint8Array(288 + 32), offs = new Uint16Array(16);
+    function bitsBase(bits, base, delta, primeiro) {
+      var i, soma;
+      for (i = 0; i < delta; ++i) bits[i] = 0;
+      for (i = 0; i < 30 - delta; ++i) bits[i + delta] = (i / delta) | 0;
+      for (soma = primeiro, i = 0; i < 30; ++i) { base[i] = soma; soma += 1 << bits[i]; }
     }
-    return Promise.resolve('j' + b64url(bytes));
+    function montar(t, lens, ini, num) {
+      var i, soma;
+      for (i = 0; i < 16; ++i) t.tabela[i] = 0;
+      for (i = 0; i < num; ++i) t.tabela[lens[ini + i]]++;
+      t.tabela[0] = 0;
+      for (soma = 0, i = 0; i < 16; ++i) { offs[i] = soma; soma += t.tabela[i]; }
+      for (i = 0; i < num; ++i) if (lens[ini + i]) t.trans[offs[lens[ini + i]]++] = i;
+    }
+    (function () {
+      var i;
+      for (i = 0; i < 7; ++i) fixaLit.tabela[i] = 0;
+      fixaLit.tabela[7] = 24; fixaLit.tabela[8] = 152; fixaLit.tabela[9] = 112;
+      for (i = 0; i < 24; ++i) fixaLit.trans[i] = 256 + i;
+      for (i = 0; i < 144; ++i) fixaLit.trans[24 + i] = i;
+      for (i = 0; i < 8; ++i) fixaLit.trans[24 + 144 + i] = 280 + i;
+      for (i = 0; i < 112; ++i) fixaLit.trans[24 + 144 + 8 + i] = 144 + i;
+      for (i = 0; i < 5; ++i) fixaDist.tabela[i] = 0;
+      fixaDist.tabela[5] = 32;
+      for (i = 0; i < 32; ++i) fixaDist.trans[i] = i;
+      bitsBase(bitsTam, baseTam, 4, 3);
+      bitsBase(bitsDist, baseDist, 2, 1);
+      bitsTam[28] = 0; baseTam[28] = 258;
+    })();
+    return function (fonte) {
+      var d = { src: fonte, i: 0, tag: 0, nbits: 0, out: new Uint8Array(Math.max(4096, fonte.length * 8)), n: 0, lit: new Arvore(), dist: new Arvore() };
+      function cabe(extra) {
+        if (d.n + extra <= d.out.length) return;
+        if (d.n + extra > 1 << 22) throw new Error('grande demais');
+        var novo = new Uint8Array(Math.max(d.out.length * 2, d.n + extra));
+        novo.set(d.out); d.out = novo;
+      }
+      function encher() { while (d.nbits < 24) { d.tag |= (d.src[d.i++] | 0) << d.nbits; d.nbits += 8; } }
+      function bit() { if (!d.nbits--) { d.tag = d.src[d.i++] | 0; d.nbits = 7; } var b = d.tag & 1; d.tag >>>= 1; return b; }
+      function ler(num, base) {
+        if (!num) return base;
+        encher();
+        var v = d.tag & (0xffff >>> (16 - num));
+        d.tag >>>= num; d.nbits -= num;
+        return v + base;
+      }
+      function simbolo(t) {
+        encher();
+        var soma = 0, cur = 0, len = 0, tag = d.tag;
+        do { cur = 2 * cur + (tag & 1); tag >>>= 1; ++len; if (len > 15) throw new Error('dados inválidos'); soma += t.tabela[len]; cur -= t.tabela[len]; } while (cur >= 0);
+        d.tag = tag; d.nbits -= len;
+        return t.trans[soma + cur];
+      }
+      function arvores() {
+        var hlit = ler(5, 257), hdist = ler(5, 1), hclen = ler(4, 4), i, num, n, prev;
+        for (i = 0; i < 19; ++i) comprimentos[i] = 0;
+        for (i = 0; i < hclen; ++i) comprimentos[ordemCl[i]] = ler(3, 0);
+        montar(arvoreCodigos, comprimentos, 0, 19);
+        for (num = 0; num < hlit + hdist;) {
+          var sym = simbolo(arvoreCodigos);
+          if (sym === 16) { prev = comprimentos[num - 1]; for (n = ler(2, 3); n; --n) comprimentos[num++] = prev; }
+          else if (sym === 17) { for (n = ler(3, 3); n; --n) comprimentos[num++] = 0; }
+          else if (sym === 18) { for (n = ler(7, 11); n; --n) comprimentos[num++] = 0; }
+          else comprimentos[num++] = sym;
+        }
+        montar(d.lit, comprimentos, 0, hlit);
+        montar(d.dist, comprimentos, hlit, hdist);
+      }
+      function blocoComprimido(lt, dt) {
+        for (;;) {
+          if (d.i > d.src.length + 4) throw new Error('dados cortados');
+          var sym = simbolo(lt);
+          if (sym === 256) return;
+          if (sym < 256) { cabe(1); d.out[d.n++] = sym; continue; }
+          sym -= 257;
+          if (sym > 28) throw new Error('dados inválidos');
+          var tam = ler(bitsTam[sym], baseTam[sym]);
+          var ds = simbolo(dt);
+          if (ds > 29) throw new Error('dados inválidos');
+          var de = d.n - ler(bitsDist[ds], baseDist[ds]);
+          if (de < 0) throw new Error('dados inválidos');
+          cabe(tam);
+          for (var k = de; k < de + tam; ++k) d.out[d.n++] = d.out[k];
+        }
+      }
+      function blocoCru() {
+        while (d.nbits > 8) { d.i--; d.nbits -= 8; }
+        var tam = d.src[d.i] | (d.src[d.i + 1] << 8), inv = d.src[d.i + 2] | (d.src[d.i + 3] << 8);
+        if (tam !== (~inv & 0xffff)) throw new Error('dados inválidos');
+        d.i += 4;
+        if (d.i + tam > d.src.length) throw new Error('dados cortados');
+        cabe(tam);
+        for (var k = 0; k < tam; ++k) d.out[d.n++] = d.src[d.i++];
+        d.tag = 0; d.nbits = 0;
+      }
+      var fim, tipo;
+      do {
+        if (d.i > d.src.length + 4) throw new Error('dados cortados');
+        fim = bit();
+        tipo = ler(2, 0);
+        if (tipo === 0) blocoCru();
+        else if (tipo === 1) blocoComprimido(fixaLit, fixaDist);
+        else if (tipo === 2) { arvores(); blocoComprimido(d.lit, d.dist); }
+        else throw new Error('dados inválidos');
+      } while (!fim);
+      return d.out.subarray(0, d.n);
+    };
+  })();
+
+  function temCompressao(Classe) {
+    try { return typeof Classe === 'function' && !!new Classe('deflate-raw'); } catch (e) { return false; }
   }
 
+  function paraLink(cfg) {
+    return new Promise(function (ok) {
+      var limpo = {};
+      Object.keys(cfg || {}).forEach(function (k) {
+        if (k === 'fotos' || k === 'agencia' || k === 'modo') return;
+        var v = cfg[k];
+        if (v === '' || v == null || (Array.isArray(v) && !v.length)) return;
+        limpo[k] = v;
+      });
+      var bytes = new TextEncoder().encode(JSON.stringify(limpo));
+      var cru = function () { ok('j' + b64url(bytes)); };
+      if (!temCompressao(typeof CompressionStream !== 'undefined' ? CompressionStream : null)) return cru();
+      try {
+        var cs = new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw'));
+        lerStream(cs).then(function (z) { ok('z' + b64url(z)); }, cru);
+      } catch (e) { cru(); }
+    });
+  }
+
+  // Lê o código do link de prévia. Sempre devolve uma Promise (erros viram rejeição, nunca travam a página).
   function deLink(codigo) {
-    codigo = String(codigo || '').replace(/^#/, '');
-    var tipo = codigo[0], bytes = deB64url(codigo.slice(1));
-    if (tipo === 'z') {
-      var ds = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
-      return lerStream(ds).then(function (b) { return JSON.parse(new TextDecoder().decode(b)); });
-    }
-    return Promise.resolve(JSON.parse(new TextDecoder().decode(bytes)));
+    return new Promise(function (ok) {
+      // Tira o # e qualquer sujeira que o app colou no fim (ponto, espaço, aspas).
+      codigo = String(codigo || '').replace(/^#/, '').replace(/[^A-Za-z0-9_-][\s\S]*$/, '');
+      var tipo = codigo[0];
+      if (tipo !== 'z' && tipo !== 'j') throw new Error('link sem código');
+      var bytes = deB64url(codigo.slice(1));
+      var json = function (b) { return JSON.parse(new TextDecoder().decode(b)); };
+      if (tipo === 'j') return ok(json(bytes));
+      if (temCompressao(typeof DecompressionStream !== 'undefined' ? DecompressionStream : null)) {
+        var ds = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+        return ok(lerStream(ds).then(json, function () { return json(inflar(bytes)); }));
+      }
+      ok(json(inflar(bytes)));
+    });
   }
 
   // ---------------------------------------------------------------- .zip simples (sem compressão) para baixar o site
@@ -1228,7 +1376,7 @@
     NICHOS: NICHOS, TEMAS: TEMAS, LISTA_NICHOS: LISTA_NICHOS, HORARIOS_PADRAO: HORARIOS_PADRAO, DIAS: DIAS,
     gerarSite: gerarSite, gerarPacote: gerarPacote, criarZip: criarZip, normalizar: normalizar,
     paraLink: paraLink, deLink: deLink, linkWhats: linkWhats, numeroBR: numeroBR, formatarTelefone: formatarTelefone,
-    substituirPagina: substituirPagina, slug: slug, servicosParaTexto: servicosParaTexto, lerFaixas: lerFaixas, contraste: contraste, icone: icone, esc: esc
+    substituirPagina: substituirPagina, inflar: inflar, slug: slug, servicosParaTexto: servicosParaTexto, lerFaixas: lerFaixas, contraste: contraste, icone: icone, esc: esc
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   raiz.Vitrine = api;

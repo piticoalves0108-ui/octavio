@@ -1,7 +1,8 @@
-// Gera tudo que depende de navegador: prévias dos prospects, prints dos exemplos,
-// imagens de compartilhamento (WhatsApp/Instagram) e o .zip do site.
-// Uso: node ferramentas/build.mjs            (precisa do Playwright com Chromium)
-//      node ferramentas/build.mjs --sem-imagens   (só gera as páginas de prévia)
+// Gera as prévias dos prospects (páginas prontas, que abrem até sem JavaScript), a lista de links,
+// a planilha de controle e, com navegador, os prints, as imagens de compartilhamento e o .zip do site.
+// Uso: node ferramentas/build.mjs                         (precisa do Playwright com Chromium)
+//      node ferramentas/build.mjs --sem-imagens           (só páginas, lista e planilha; roda até na Cloudflare)
+//      node ferramentas/build.mjs --url=https://meusite.pages.dev   (endereço real do site, se não for o do config.js)
 import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
@@ -14,6 +15,7 @@ const require = createRequire(import.meta.url);
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = path.join(RAIZ, 'site');
 const SEM_IMAGENS = process.argv.includes('--sem-imagens');
+const ARG_URL = (process.argv.find(a => a.startsWith('--url=')) || '').slice(6);
 
 const V = require(path.join(SITE, 'motor.js'));
 const marca = (() => {
@@ -21,57 +23,28 @@ const marca = (() => {
   vm.runInNewContext(fs.readFileSync(path.join(SITE, 'config.js'), 'utf8'), ctx);
   return ctx.window.VITRINE_CONFIG;
 })();
-const URL_SITE = String(marca.url || 'https://vitrine61.pages.dev').replace(/\/+$/, '');
+const URL_SITE = String(ARG_URL || marca.url || 'https://vitrine61.pages.dev').replace(/\/+$/, '');
+if (!/^https:\/\/[^/]+/.test(URL_SITE)) throw new Error('Endereço do site inválido: ' + URL_SITE);
 const { prospects } = JSON.parse(fs.readFileSync(path.join(RAIZ, 'dados', 'prospects.json'), 'utf8'));
+const ordenados = [...prospects].sort((a, b) => a.prioridade - b.prioridade);
+const AGENCIA = { nome: marca.nome, whatsapp: marca.whatsapp, instagram: marca.instagram, url: URL_SITE, preco: marca.preco };
+if (!V.numeroBR(marca.whatsapp)) {
+  console.warn('AVISO: site/config.js está sem o seu WhatsApp. O botão "Quero no ar" das prévias ' +
+    (marca.instagram ? 'vai para o direct do Instagram.' : 'fica escondido e os botões do site da marca não abrem conversa.'));
+}
 
 const esc = V.esc;
 const escreve = (arq, conteudo) => { fs.mkdirSync(path.dirname(arq), { recursive: true }); fs.writeFileSync(arq, conteudo); };
 
-// ------------------------------------------------------------------ 1. páginas de prévia
-// HTML estático com as etiquetas de compartilhamento (o WhatsApp lê só o <head>)
-// e o site desenhado na hora com o config.js atual (assim, trocar o WhatsApp da marca vale para todas).
-function paginaPrevia(p) {
-  const c = V.normalizar(p.cfg);
-  const titulo = 'Prévia do site: ' + c.nome;
-  const desc = 'Veja como ficaria o site da ' + c.nome + '. Toque para abrir no celular.';
-  return `<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>${esc(titulo)}</title>
-<meta name="description" content="${esc(desc)}">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="pt_BR">
-<meta property="og:title" content="${esc(titulo)}">
-<meta property="og:description" content="${esc(desc)}">
-<meta property="og:image" content="${esc(URL_SITE + '/previa/' + p.id + '/og.jpg')}">
-<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta property="og:url" content="${esc(URL_SITE + '/previa/' + p.id + '/')}">
-<meta name="twitter:card" content="summary_large_image">
-</head>
-<body>
-<script>window.CFG = ${JSON.stringify(p.cfg).replace(/</g, '\\u003c')};</script>
-<script src="../../config.js"></script>
-<script src="../../motor.js"></script>
-<script>
-(function () {
-  var m = window.VITRINE_CONFIG || {};
-  var cfg = window.CFG; cfg.modo = 'previa';
-  cfg.agencia = { nome: m.nome, whatsapp: m.whatsapp, url: m.url, preco: m.preco };
-  Vitrine.substituirPagina(Vitrine.gerarSite(cfg));
-})();
-</script>
-<noscript>Abra este link no navegador do celular para ver a prévia.</noscript>
-</body>
-</html>
-`;
+// ------------------------------------------------------------------ 1. páginas de prévia (prontas, sem depender de JavaScript)
+for (const p of prospects) {
+  const html = V.gerarSite(Object.assign({}, p.cfg, { modo: 'previa', agencia: AGENCIA }), {
+    ogImagem: URL_SITE + '/previa/' + p.id + '/og.jpg', ogImagemTam: [1200, 630], ogUrl: URL_SITE + '/previa/' + p.id + '/'
+  });
+  escreve(path.join(SITE, 'previa', p.id, 'index.html'), html);
 }
-
-for (const p of prospects) escreve(path.join(SITE, 'previa', p.id, 'index.html'), paginaPrevia(p));
 // Lista para o botão "Importar lista pronta" da Fábrica.
-escreve(path.join(SITE, 'fabrica', 'lista.json'), JSON.stringify([...prospects].sort((a, b) => a.prioridade - b.prioridade).map(p => ({ id: p.id, canal: p.canal, prioridade: p.prioridade, cfg: p.cfg }))));
+escreve(path.join(SITE, 'fabrica', 'lista.json'), JSON.stringify(ordenados.map(p => ({ id: p.id, canal: p.canal, prioridade: p.prioridade, cfg: p.cfg }))));
 
 // Endereço absoluto das imagens de compartilhamento.
 for (const arq of ['index.html', 'p/index.html']) {
@@ -80,14 +53,44 @@ for (const arq of ['index.html', 'p/index.html']) {
   fs.writeFileSync(f, s);
 }
 
-// Lista de links de prévia para mandar (vai para a pasta de vendas).
-const linhas = ['# Links de prévia prontos', '', `Base: ${URL_SITE} (troque em site/config.js e rode o build de novo se o seu endereço for outro)`, '',
+// Lista de links para mandar.
+const linhas = ['# Links de prévia (abrem depois que o site for publicado)', '',
+  `> **Estes links só funcionam depois que você publicar o site** (Parte A de \`PUBLICAR-E-ENTREGAR.md\`). Antes disso o celular mostra erro.`,
+  `> Depois de publicar, abra ${URL_SITE} no celular. Se não aparecer o site da ${marca.nome}, o seu endereço é outro: mande o endereço certo para o Claude, que ele gera tudo de novo.`,
+  '', `Endereço usado: **${URL_SITE}**`, '',
   '| Prioridade | Comércio | Canal | Link da prévia | Imagem para mandar junto | De onde vieram os dados |', '|---|---|---|---|---|---|'];
-for (const p of [...prospects].sort((a, b) => a.prioridade - b.prioridade)) {
+for (const p of ordenados) {
   linhas.push(`| ${p.prioridade} | ${p.cfg.nome} | ${p.canal} | ${URL_SITE}/previa/${p.id}/ | imagens/previas/${p.id}.jpg | ${p.fonte || ''} |`);
 }
 escreve(path.join(RAIZ, 'LINKS-DAS-PREVIAS.md'), linhas.join('\n') + '\n');
-console.log('Prévias geradas:', prospects.length);
+
+// Planilha de controle (abre no Google Planilhas e no Excel). Mantém o status que você já marcou.
+const ROTULOS = Object.fromEntries(V.LISTA_NICHOS.map(n => [n.id, n.rotulo]));
+const csvArq = path.join(RAIZ, 'controle-clientes.csv');
+const antigos = {};
+if (fs.existsSync(csvArq)) {
+  const [cab, ...resto] = fs.readFileSync(csvArq, 'utf8').replace(/^\ufeff/, '').split(/\r?\n/).filter(Boolean);
+  const cols = cab.split(';');
+  for (const l of resto) {
+    const v = l.split(';'), o = Object.fromEntries(cols.map((c, i) => [c, v[i] || '']));
+    if (o.comercio) antigos[o.comercio] = o;
+  }
+}
+const COLS = ['prioridade', 'comercio', 'ramo', 'regiao', 'canal', 'whatsapp', 'telefone', 'instagram', 'link_previa', 'imagem_para_mandar', 'status', 'data_envio', 'retorno_em', 'valor_pago', 'plano_mensal', 'observacoes', 'fonte'];
+const limpaCsv = v => String(v == null ? '' : v).replace(/[;\r\n]+/g, ' ');
+const csv = [COLS.join(';')].concat(ordenados.map(p => {
+  const c = p.cfg, a = antigos[c.nome] || {};
+  const linha = {
+    prioridade: p.prioridade, comercio: c.nome, ramo: c.rotulo || ROTULOS[c.nicho] || c.nicho, regiao: c.cidade || '', canal: p.canal,
+    whatsapp: c.whatsapp ? V.formatarTelefone(c.whatsapp) : '', telefone: c.telefone ? V.formatarTelefone(c.telefone) : '',
+    instagram: c.instagram ? '@' + c.instagram : '', link_previa: `${URL_SITE}/previa/${p.id}/`, imagem_para_mandar: `imagens/previas/${p.id}.jpg`,
+    status: a.status || 'Novo', data_envio: a.data_envio || '', retorno_em: a.retorno_em || '', valor_pago: a.valor_pago || '', plano_mensal: a.plano_mensal || '',
+    observacoes: a.observacoes || p.porque || '', fonte: p.fonte || ''
+  };
+  return COLS.map(k => limpaCsv(linha[k])).join(';');
+})).join('\n') + '\n';
+fs.writeFileSync(csvArq, '\ufeff' + csv);
+console.log('Prévias geradas:', prospects.length, '· endereço:', URL_SITE);
 
 if (SEM_IMAGENS) process.exit(0);
 

@@ -294,9 +294,12 @@ footer a{text-decoration:none}footer a:hover{text-decoration:underline}
   var c = window.VITRINE_CONFIG || {};
   var num = String(c.whatsapp || '').replace(/\D/g, '');
   if (num.length >= 12 && num.indexOf('55') === 0) num = num.slice(2);
+  var insta = String(c.instagram || '').replace(/^@/, '');
   document.querySelectorAll('[data-zap]').forEach(function (a) {
-    if (!num) return;
-    a.href = 'https://wa.me/55' + num + '?text=' + encodeURIComponent(a.getAttribute('data-zap'));
+    // Sem WhatsApp configurado, os botões abrem o direct do Instagram da marca (se houver).
+    if (num) a.href = 'https://wa.me/55' + num + '?text=' + encodeURIComponent(a.getAttribute('data-zap'));
+    else if (insta) a.href = 'https://ig.me/m/' + insta;
+    else return;
     a.target = '_blank'; a.rel = 'noopener';
   });
   document.querySelectorAll('[data-marca]').forEach(function (e) { if (c.nome) e.textContent = c.nome; });

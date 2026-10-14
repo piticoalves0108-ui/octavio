@@ -184,6 +184,7 @@ dialog .corpo{padding:16px}
           <button type="button" class="b" id="copiarLink">Copiar só o link</button>
         </div>
         <div class="link" id="linkPrevia">O link aparece aqui.</div>
+        <button type="button" class="b full" id="abrirLink">Testar o link no celular (abre como o cliente vai ver)</button>
         <div class="duas">
           <button type="button" class="b y" id="salvarCliente">Salvar nos clientes</button>
           <button type="button" class="b" id="novo">Novo negócio</button>
@@ -239,6 +240,7 @@ dialog .corpo{padding:16px}
       <div><label for="aPix">Sua chave Pix</label><input type="text" id="aPix"></div>
     </div>
     <label for="aUrl">Endereço do seu site <small>(onde ficam as prévias)</small></label><input type="url" id="aUrl" placeholder="https://vitrine61.pages.dev">
+    <p class="dica" id="aUrlAtual"></p>
     <div class="duas">
       <div><label for="aPreco">Preço do site</label><input type="text" id="aPreco"></div>
       <div><label for="aCidade">Cidade padrão</label><input type="text" id="aCidade"></div>
@@ -264,8 +266,21 @@ dialog .corpo{padding:16px}
   // ------------------------------------------------ marca
   var base = window.VITRINE_CONFIG || {};
   var marca = Object.assign({ nome: 'Vitrine 61', whatsapp: '', url: '', preco: 'R$250', cidadePadrao: 'Brasília - DF', pix: '' }, base, guardar.ler('vitrine.marca', {}));
-  if (!marca.url && location.protocol.indexOf('http') === 0 && location.pathname.indexOf('/fabrica') >= 0) {
-    marca.url = location.origin + location.pathname.split('/fabrica')[0];
+  // Os links usam o endereço onde esta Fábrica está publicada (é lá que ficam /p/ e /previa/).
+  // Só quando ela é aberta fora de um site publicado (arquivo no celular, teste local) vale o endereço dos Ajustes.
+  function enderecoPublicado() {
+    if (!/^https?:$/.test(location.protocol) || location.pathname.indexOf('/fabrica') < 0) return '';
+    if (/^(localhost|127\.|\[::1\])/.test(location.hostname)) return '';
+    // a Cloudflare também mostra endereços de cada publicação (ex.: 1a2b3c4d.vitrine61.pages.dev): usa o principal
+    var host = location.host.replace(/^[0-9a-f]{8}\.(?=[^.]+\.pages\.dev$)/, '');
+    return location.protocol + '//' + host + location.pathname.split('/fabrica')[0];
+  }
+  function baseLinks() { return (enderecoPublicado() || marca.url || '').replace(/\/+$/, ''); }
+  // As prévias prontas guardam só o caminho (/previa/x/); o endereço completo é montado na hora de mandar.
+  function linkDaPrevia(caminho) {
+    if (!caminho) return '';
+    var m = String(caminho).match(/\/previa\/[^/?#]+\/?/);
+    return m ? baseLinks() + m[0].replace(/\/?$/, '/') : caminho;
   }
   function mostrarMarca() { $('marcaNome').textContent = marca.nome; }
   mostrarMarca();
@@ -358,7 +373,7 @@ dialog .corpo{padding:16px}
     var cfg = lerForm();
     cfg.fotos = fotos;
     cfg.modo = modo;
-    cfg.agencia = { nome: marca.nome, whatsapp: marca.whatsapp, url: marca.url, preco: marca.preco };
+    cfg.agencia = { nome: marca.nome, whatsapp: marca.whatsapp, instagram: marca.instagram, url: baseLinks() || marca.url, preco: marca.preco };
     return cfg;
   }
 
@@ -379,20 +394,26 @@ dialog .corpo{padding:16px}
   var linkAtual = '';
   var linkFixo = ''; // prévia já publicada em /previa/<id>/ (some quando você edita algo)
   function gerarLink() {
-    if (linkFixo) { linkAtual = linkFixo; $('linkPrevia').textContent = linkFixo; return Promise.resolve(linkFixo); }
+    if (linkFixo) return Promise.resolve(mostrarLink(linkDaPrevia(linkFixo)));
     var cfg = lerForm();
     if (!cfg.nome) { linkAtual = ''; $('linkPrevia').textContent = 'Preencha o nome do negócio para gerar o link.'; return Promise.resolve(''); }
-    return V.paraLink(cfg).then(function (codigo) {
-      var baseUrl = (marca.url || '').replace(/\/+$/, '');
-      linkAtual = (baseUrl || '[configure o endereço do seu site nos Ajustes]') + '/p/#' + codigo;
-      $('linkPrevia').textContent = linkAtual;
-      return linkAtual;
-    });
+    if (!baseLinks()) { linkAtual = ''; $('linkPrevia').textContent = 'Falta o endereço do seu site: toque em ⚙︎ e preencha "Endereço do seu site".'; return Promise.resolve(''); }
+    return V.paraLink(cfg).then(function (codigo) { return mostrarLink(baseLinks() + '/p/#' + codigo); });
+  }
+
+  // Mostra o link como um link de verdade: toque para testar no celular antes de mandar.
+  function mostrarLink(url) {
+    linkAtual = url;
+    var el = $('linkPrevia'); el.textContent = '';
+    var a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = url;
+    el.appendChild(a);
+    return url;
   }
 
   function montarMensagem() {
     var m = MODELOS.filter(function (x) { return x.id === $('modelo').value; })[0] || MODELOS[0];
     return gerarLink().then(function (link) {
+      if (!link) throw new Error('sem link');
       return m.txt.replace(/\{(\w+)\}/g, function (_, k) {
         var mapa = { nome: $('nome').value.trim() || 'sua empresa', link: link, preco: marca.preco, precoMensal: marca.precoMensal || 'R$39,90', precoReels: marca.precoReels || 'R$250', marca: marca.nome, pix: marca.pix || '[sua chave Pix]', endereco: $('endereco').value.trim() || '[endereço]' };
         return mapa[k] != null ? mapa[k] : '';
@@ -425,6 +446,9 @@ dialog .corpo{padding:16px}
       var url = numero ? 'https://wa.me/55' + numero + '?text=' + encodeURIComponent(msg) : 'https://wa.me/?text=' + encodeURIComponent(msg);
       if (janela) janela.location.href = url; else location.href = url;
       registrarEnvio();
+    }).catch(function () {
+      if (janela) janela.close();
+      aviso('Não deu para montar o link. Confira o endereço do seu site em ⚙︎ Ajustes.');
     });
   }
 
@@ -569,6 +593,7 @@ dialog .corpo{padding:16px}
   $('abrirAjustes').onclick = function () {
     $('aNome').value = marca.nome; $('aZap').value = marca.whatsapp; $('aPix').value = marca.pix || '';
     $('aUrl').value = marca.url; $('aPreco').value = marca.preco; $('aCidade').value = marca.cidadePadrao || '';
+    $('aUrlAtual').textContent = enderecoPublicado() ? 'Os links estão usando o endereço desta página: ' + enderecoPublicado() : 'Os links estão usando: ' + (marca.url || '(vazio)');
     $('dAjustes').showModal();
   };
   $('salvarAjustes').onclick = function () {
@@ -602,18 +627,19 @@ dialog .corpo{padding:16px}
   $('form').addEventListener('input', function (e) { linkFixo = ''; if (e.target.id !== 'cor' && e.target.type !== 'file') atualizar(); });
   $('importar').onclick = function () {
     fetch('lista.json').then(function (r) { return r.json(); }).then(function (lista) {
-      var base = (marca.url || '').replace(/\/+$/, ''), novos = 0;
+      var novos = 0;
       lista.forEach(function (p) {
         if (clientes.some(function (c) { return c.id === p.id; })) return;
-        clientes.push({ id: p.id, nome: p.cfg.nome, nicho: p.cfg.nicho, whatsapp: p.cfg.whatsapp || '', cfg: p.cfg, status: 'Novo', notas: p.canal, criado: new Date().toISOString(), previa: base ? base + '/previa/' + p.id + '/' : '' });
+        clientes.push({ id: p.id, nome: p.cfg.nome, nicho: p.cfg.nicho, whatsapp: p.cfg.whatsapp || '', cfg: p.cfg, status: 'Novo', notas: p.canal, criado: new Date().toISOString(), previa: '/previa/' + p.id + '/' });
         novos++;
       });
       salvarClientes(); desenharClientes(); aviso(novos ? novos + ' negócios importados.' : 'A lista já estava importada.');
     }).catch(function () { aviso('Não achei a lista pronta (abra a Fábrica pelo seu site publicado).'); });
   };
   $('mandarZap').onclick = mandarZap; $('mandarZap2').onclick = mandarZap;
-  $('copiarMsg').onclick = function () { montarMensagem().then(copiar).then(registrarEnvio); };
+  $('copiarMsg').onclick = function () { montarMensagem().then(copiar).then(registrarEnvio).catch(function () { aviso('Não deu para montar o link. Confira o endereço do seu site em ⚙︎ Ajustes.'); }); };
   $('copiarLink').onclick = function () { gerarLink().then(function (l) { if (l) copiar(l); }); };
+  $('abrirLink').onclick = function () { var j = window.open('', '_blank'); gerarLink().then(function (l) { if (l && j) j.location.href = l; else if (j) j.close(); }); };
   $('modelo').onchange = function () { guardar.gravar('vitrine.modelo', this.value); };
   $('modelo').value = guardar.ler('vitrine.modelo', 'zap1');
   $('novo').onclick = function () { if (confirm('Começar um negócio novo? O atual fica salvo só se você tocou em Salvar nos clientes.')) { var n = $('nicho').value; preencherForm({ nicho: n }); atualizar(); window.scrollTo(0, 0); } };
