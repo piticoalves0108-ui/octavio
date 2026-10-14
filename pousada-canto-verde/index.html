@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pousada Canto Verde</title>
+<meta name="description" content="Pousada Canto Verde: descanso em meio à mata, com piscina, natureza e acolhimento.">
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde:#2f6b3a; --verde-escuro:#1d4425; --verde-claro:#5fa86a;
+    --madeira:#6b4a2e; --areia:#f6f1e7; --texto:#2b2b2b; --branco:#fff;
+    --sombra:0 10px 30px rgba(0,0,0,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Poppins',sans-serif;color:var(--texto);background:var(--areia);line-height:1.7}
+  img{max-width:100%;display:block}
+  a{text-decoration:none;color:inherit}
+  h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.2}
+  .container{width:min(1150px,100% - 32px);margin-inline:auto}
+  section{padding:90px 0}
+  .tag{display:inline-block;color:var(--verde-claro);font-weight:600;letter-spacing:3px;text-transform:uppercase;font-size:.8rem;margin-bottom:10px}
+  .titulo{font-size:clamp(1.9rem,4vw,2.8rem);color:var(--verde-escuro);margin-bottom:18px}
+  .centro{text-align:center;max-width:680px;margin:0 auto 50px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;border-radius:50px;font-weight:500;transition:.3s;cursor:pointer;border:none;font-size:1rem}
+  .btn-verde{background:var(--verde);color:#fff}
+  .btn-verde:hover{background:var(--verde-escuro);transform:translateY(-2px)}
+  .btn-borda{border:2px solid #fff;color:#fff}
+  .btn-borda:hover{background:#fff;color:var(--verde-escuro)}
+
+  /* HEADER */
+  header{position:fixed;inset:0 0 auto 0;z-index:100;transition:.35s;padding:16px 0}
+  header.rolou{background:rgba(29,68,37,.96);padding:8px 0;box-shadow:var(--sombra)}
+  .nav{display:flex;align-items:center;justify-content:space-between}
+  .marca{display:flex;align-items:center;gap:12px;color:#fff;font-family:'Playfair Display',serif;font-size:1.3rem}
+  .marca img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.7)}
+  .menu{display:flex;gap:28px;list-style:none}
+  .menu a{color:#fff;font-size:.95rem;position:relative}
+  .menu a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:2px;background:var(--verde-claro);transition:.3s}
+  .menu a:hover::after{width:100%}
+  .hamb{display:none;background:none;border:none;color:#fff;font-size:1.8rem;cursor:pointer}
+
+  /* BANNER */
+  .hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;overflow:hidden}
+  .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.5s ease;transform:scale(1.08);animation:zoom 14s linear infinite}
+  .slide.ativo{opacity:1}
+  @keyframes zoom{to{transform:scale(1)}}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(13,40,20,.6))}
+  .hero-conteudo{position:relative;z-index:2;padding:0 16px;max-width:820px}
+  .hero-logo{width:110px;height:110px;border-radius:50%;margin:0 auto 22px;border:3px solid #fff;object-fit:cover;box-shadow:var(--sombra)}
+  .hero h1{font-size:clamp(2.4rem,6vw,4.3rem);margin-bottom:14px;text-shadow:0 3px 12px rgba(0,0,0,.4)}
+  .hero p{font-size:clamp(1rem,2vw,1.2rem);font-weight:300;margin-bottom:34px}
+  .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .seta{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;color:#fff;font-size:1.6rem;animation:pula 2s infinite}
+  @keyframes pula{50%{transform:translate(-50%,10px)}}
+
+  /* SOBRE */
+  .sobre-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  .sobre-img{position:relative}
+  .sobre-img img{border-radius:20px;box-shadow:var(--sombra);aspect-ratio:4/3;object-fit:cover;width:100%}
+  .sobre-img .selo{position:absolute;bottom:-25px;right:-20px;background:var(--verde);color:#fff;padding:20px 26px;border-radius:16px;box-shadow:var(--sombra);text-align:center}
+  .selo strong{display:block;font-size:2rem;font-family:'Playfair Display',serif}
+  .sobre-txt p{margin-bottom:16px;color:#555}
+  .numeros{display:flex;gap:36px;margin-top:26px;flex-wrap:wrap}
+  .numeros div strong{display:block;font-size:1.8rem;color:var(--verde);font-family:'Playfair Display',serif}
+  .numeros div span{font-size:.85rem;color:#777}
+
+  /* COMODIDADES */
+  .comodidades{background:#fff}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:24px}
+  .card{background:var(--areia);padding:34px 26px;border-radius:18px;text-align:center;transition:.35s}
+  .card:hover{transform:translateY(-8px);box-shadow:var(--sombra);background:#fff}
+  .card .ico{font-size:2.4rem;margin-bottom:14px}
+  .card h3{color:var(--verde-escuro);margin-bottom:8px;font-size:1.25rem}
+  .card p{font-size:.92rem;color:#666}
+
+  /* ACOMODAÇÕES */
+  .quartos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+  .quarto{background:#fff;border-radius:20px;overflow:hidden;box-shadow:var(--sombra);transition:.35s}
+  .quarto:hover{transform:translateY(-6px)}
+  .quarto img{height:230px;width:100%;object-fit:cover}
+  .quarto-info{padding:26px}
+  .quarto-info h3{color:var(--verde-escuro);margin-bottom:8px}
+  .quarto-info ul{list-style:none;margin:14px 0 20px;font-size:.9rem;color:#666}
+  .quarto-info li::before{content:"✓ ";color:var(--verde-claro);font-weight:700}
+
+  /* PARALLAX */
+  .faixa{background:linear-gradient(rgba(13,40,20,.65),rgba(13,40,20,.65)),url('img/ponte.png') center/cover fixed;color:#fff;text-align:center;padding:120px 0}
+  .faixa h2{font-size:clamp(1.8rem,4vw,3rem);margin-bottom:16px}
+  .faixa p{max-width:620px;margin:0 auto 30px;font-weight:300}
+
+  /* GALERIA */
+  .galeria{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:14px}
+  .galeria figure{overflow:hidden;border-radius:16px;cursor:pointer;position:relative}
+  .galeria figure:nth-child(1){grid-column:span 2;grid-row:span 2}
+  .galeria figure:nth-child(4){grid-column:span 2}
+  .galeria img{width:100%;height:100%;object-fit:cover;transition:.6s}
+  .galeria figure:hover img{transform:scale(1.1)}
+  .galeria figcaption{position:absolute;inset:auto 0 0 0;padding:14px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:.9rem;opacity:0;transition:.3s}
+  .galeria figure:hover figcaption{opacity:1}
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:300;padding:20px}
+  .lightbox.aberto{display:flex}
+  .lightbox img{max-height:88vh;border-radius:12px}
+  .lightbox button{position:absolute;top:20px;right:28px;background:none;border:none;color:#fff;font-size:2.5rem;cursor:pointer}
+
+  /* DEPOIMENTOS */
+  .depoimentos{background:#fff}
+  .dep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+  .dep{background:var(--areia);padding:30px;border-radius:18px;border-left:5px solid var(--verde-claro)}
+  .dep .estrelas{color:#f2b01e;margin-bottom:10px;letter-spacing:2px}
+  .dep p{font-style:italic;color:#555;margin-bottom:16px}
+  .dep strong{color:var(--verde-escuro)}
+
+  /* CONTATO */
+  .contato-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+  .info-item{display:flex;gap:16px;margin-bottom:22px;align-items:flex-start}
+  .info-item .ico{width:50px;height:50px;flex-shrink:0;border-radius:50%;background:var(--verde);color:#fff;display:grid;place-items:center;font-size:1.3rem}
+  .info-item h4{color:var(--verde-escuro)}
+  .info-item p,.info-item a{color:#666;font-size:.95rem}
+  form{background:#fff;padding:34px;border-radius:20px;box-shadow:var(--sombra)}
+  form h3{color:var(--verde-escuro);margin-bottom:18px}
+  .linha{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  input,select,textarea{width:100%;padding:13px 16px;border:1px solid #ddd;border-radius:10px;margin-bottom:14px;font-family:inherit;font-size:.95rem;background:var(--areia)}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--verde-claro);border-color:transparent}
+  form .btn{width:100%;justify-content:center}
+  .mapa{margin-top:50px;border-radius:20px;overflow:hidden;box-shadow:var(--sombra)}
+  .mapa iframe{width:100%;height:360px;border:0;display:block}
+
+  /* FOOTER */
+  footer{background:var(--verde-escuro);color:#d7e6d9;padding:60px 0 24px}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:40px}
+  footer h4{color:#fff;margin-bottom:14px;font-family:'Playfair Display',serif;font-size:1.2rem}
+  footer ul{list-style:none}
+  footer li{margin-bottom:8px}
+  footer a:hover{color:#fff}
+  .social{display:flex;gap:12px;margin-top:16px}
+  .social a{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center;transition:.3s}
+  .social a:hover{background:var(--verde-claro)}
+  .copy{text-align:center;border-top:1px solid rgba(255,255,255,.15);padding-top:22px;font-size:.85rem}
+
+  /* WHATSAPP */
+  .whats{position:fixed;bottom:24px;right:24px;width:62px;height:62px;border-radius:50%;background:#25d366;display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:200;animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.6)}70%{box-shadow:0 0 0 18px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+
+  /* ANIMAÇÃO AO ROLAR */
+  .revela{opacity:0;transform:translateY(40px);transition:1s ease}
+  .revela.visivel{opacity:1;transform:none}
+
+  /* RESPONSIVO */
+  @media (max-width:900px){
+    .sobre-grid,.contato-grid{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr}
+    .galeria{grid-template-columns:repeat(2,1fr);grid-auto-rows:180px}
+    .galeria figure:nth-child(4){grid-column:span 2}
+    .sobre-img .selo{right:10px}
+  }
+  @media (max-width:760px){
+    .hamb{display:block}
+    .menu{position:fixed;top:0;right:-100%;height:100vh;width:72%;background:var(--verde-escuro);flex-direction:column;justify-content:center;align-items:center;gap:30px;transition:.4s}
+    .menu.aberto{right:0}
+    .menu a{font-size:1.2rem}
+    .linha{grid-template-columns:1fr}
+    section{padding:70px 0}
+    .faixa{background-attachment:scroll}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="topo">
+  <div class="container nav">
+    <a href="#inicio" class="marca"><img src="img/logo.png" alt="Logo Pousada Canto Verde">Canto Verde</a>
+    <ul class="menu" id="menu">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#comodidades">Comodidades</a></li>
+      <li><a href="#acomodacoes">Acomodações</a></li>
+      <li><a href="#galeria">Galeria</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <button class="hamb" id="hamb" aria-label="Abrir menu">☰</button>
+  </div>
+</header>
+
+<!-- BANNER -->
+<section class="hero" id="inicio">
+  <div class="slide ativo" style="background-image:url('img/piscina.webp')"></div>
+  <div class="slide" style="background-image:url('img/area-piscina.png')"></div>
+  <div class="slide" style="background-image:url('img/entrada.png')"></div>
+  <div class="slide" style="background-image:url('img/ponte.png')"></div>
+  <div class="hero-conteudo">
+    <img src="img/logo.png" alt="Pousada Canto Verde" class="hero-logo">
+    <h1>Pousada Canto Verde</h1>
+    <p>Seu refúgio em meio à mata. Descanso, natureza e acolhimento em cada detalhe.</p>
+    <div class="hero-btns">
+      <a href="#contato" class="btn btn-verde">Reservar agora</a>
+      <a href="#galeria" class="btn btn-borda">Conheça a pousada</a>
+    </div>
+  </div>
+  <a href="#sobre" class="seta" aria-label="Rolar para baixo">⌄</a>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="container sobre-grid">
+    <div class="sobre-img revela">
+      <img src="img/entrada.png" alt="Entrada da Pousada Canto Verde">
+      <div class="selo"><strong>100%</strong>Natureza</div>
+    </div>
+    <div class="sobre-txt revela">
+      <span class="tag">Bem-vindo</span>
+      <h2 class="titulo">Um canto especial para desacelerar</h2>
+      <p>A Pousada Canto Verde fica cercada por mata nativa, palmeiras e o som dos pássaros. Um lugar pensado para quem quer fugir da rotina e reencontrar a calma.</p>
+      <p>Aqui você aproveita a piscina ao sol, caminha pelas trilhas, atravessa a nossa ponte suspensa e termina o dia relaxando com a família ou os amigos.</p>
+      <div class="numeros">
+        <div><strong>🌿</strong><span>Mata preservada</span></div>
+        <div><strong>🏊</strong><span>Piscina ampla</span></div>
+        <div><strong>❤️</strong><span>Atendimento familiar</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMODIDADES -->
+<section class="comodidades" id="comodidades">
+  <div class="container">
+    <div class="centro revela">
+      <span class="tag">Comodidades</span>
+      <h2 class="titulo">Tudo para a sua estadia perfeita</h2>
+      <p>Conforto e natureza lado a lado.</p>
+    </div>
+    <div class="cards">
+      <div class="card revela"><div class="ico">🏊</div><h3>Piscina</h3><p>Piscina ampla com espreguiçadeiras, cercada por palmeiras.</p></div>
+      <div class="card revela"><div class="ico">☕</div><h3>Café da manhã</h3><p>Café caprichado para começar o dia com energia.</p></div>
+      <div class="card revela"><div class="ico">🌳</div><h3>Trilhas e ponte</h3><p>Caminhos na mata e uma ponte suspensa encantadora.</p></div>
+      <div class="card revela"><div class="ico">📶</div><h3>Wi-Fi</h3><p>Internet nas áreas comuns para você ficar conectado.</p></div>
+      <div class="card revela"><div class="ico">🚗</div><h3>Estacionamento</h3><p>Estacionamento interno e seguro para hóspedes.</p></div>
+      <div class="card revela"><div class="ico">🍹</div><h3>Área de lazer</h3><p>Mesas à beira da piscina para relaxar ao ar livre.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ACOMODAÇÕES -->
+<section id="acomodacoes">
+  <div class="container">
+    <div class="centro revela">
+      <span class="tag">Acomodações</span>
+      <h2 class="titulo">Escolha o seu cantinho</h2>
+      <p>Opções para casais, famílias e grupos.</p>
+    </div>
+    <div class="quartos">
+      <div class="quarto revela">
+        <img src="img/area-piscina.png" alt="Suíte Casal">
+        <div class="quarto-info">
+          <h3>Suíte Casal</h3>
+          <p>Aconchego e privacidade para dois.</p>
+          <ul><li>Cama de casal</li><li>Ar-condicionado</li><li>TV e frigobar</li><li>Banheiro privativo</li></ul>
+          <a href="#contato" class="btn btn-verde">Consultar valores</a>
+        </div>
+      </div>
+      <div class="quarto revela">
+        <img src="img/piscina.webp" alt="Suíte Família">
+        <div class="quarto-info">
+          <h3>Suíte Família</h3>
+          <p>Espaço de sobra para toda a família.</p>
+          <ul><li>Até 4 pessoas</li><li>Ar-condicionado</li><li>TV e frigobar</li><li>Banheiro privativo</li></ul>
+          <a href="#contato" class="btn btn-verde">Consultar valores</a>
+        </div>
+      </div>
+      <div class="quarto revela">
+        <img src="img/ponte.png" alt="Chalé na mata">
+        <div class="quarto-info">
+          <h3>Chalé na Mata</h3>
+          <p>Para quem quer ficar ainda mais perto da natureza.</p>
+          <ul><li>Vista para o verde</li><li>Varanda</li><li>Ventilador e frigobar</li><li>Banheiro privativo</li></ul>
+          <a href="#contato" class="btn btn-verde">Consultar valores</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAIXA -->
+<section class="faixa">
+  <div class="container revela">
+    <h2>Viva a experiência Canto Verde</h2>
+    <p>Atravesse a ponte, respire o ar puro da mata e deixe o estresse para trás.</p>
+    <a href="#contato" class="btn btn-verde">Quero me hospedar</a>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section id="galeria">
+  <div class="container">
+    <div class="centro revela">
+      <span class="tag">Galeria</span>
+      <h2 class="titulo">Conheça nossos espaços</h2>
+      <p>Clique nas fotos para ampliar.</p>
+    </div>
+    <div class="galeria revela">
+      <figure><img src="img/piscina.webp" alt="Piscina"><figcaption>Nossa piscina</figcaption></figure>
+      <figure><img src="img/entrada.png" alt="Entrada"><figcaption>Entrada da pousada</figcaption></figure>
+      <figure><img src="img/ponte.png" alt="Ponte suspensa"><figcaption>Ponte suspensa</figcaption></figure>
+      <figure><img src="img/area-piscina.png" alt="Área da piscina"><figcaption>Área de lazer com vista para a serra</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox"><button aria-label="Fechar">×</button><img src="" alt=""></div>
+
+<!-- DEPOIMENTOS -->
+<section class="depoimentos">
+  <div class="container">
+    <div class="centro revela">
+      <span class="tag">Depoimentos</span>
+      <h2 class="titulo">Quem vem, volta</h2>
+    </div>
+    <div class="dep-grid">
+      <div class="dep revela"><div class="estrelas">★★★★★</div><p>"Lugar lindo, muito verde e tranquilo. A piscina é maravilhosa e o atendimento impecável!"</p><strong>Hóspede</strong></div>
+      <div class="dep revela"><div class="estrelas">★★★★★</div><p>"As crianças amaram a ponte suspensa. Café da manhã delicioso. Voltaremos com certeza!"</p><strong>Hóspede</strong></div>
+      <div class="dep revela"><div class="estrelas">★★★★★</div><p>"Perfeito para descansar de verdade. Acordar com o som dos pássaros não tem preço."</p><strong>Hóspede</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="container">
+    <div class="centro revela">
+      <span class="tag">Reservas</span>
+      <h2 class="titulo">Fale com a gente</h2>
+      <p>Envie sua solicitação e responderemos pelo WhatsApp.</p>
+    </div>
+    <div class="contato-grid">
+      <div class="revela">
+        <div class="info-item"><div class="ico">📍</div><div><h4>Endereço</h4><p>Rua Exemplo, 123 · Cidade / UF</p></div></div>
+        <div class="info-item"><div class="ico">📱</div><div><h4>WhatsApp</h4><a href="https://wa.me/5500000000000" target="_blank">(00) 00000-0000</a></div></div>
+        <div class="info-item"><div class="ico">✉️</div><div><h4>E-mail</h4><a href="mailto:contato@pousadacantoverde.com.br">contato@pousadacantoverde.com.br</a></div></div>
+        <div class="info-item"><div class="ico">📸</div><div><h4>Instagram</h4><a href="https://www.instagram.com/pousadacantoverde" target="_blank">@pousadacantoverde</a></div></div>
+      </div>
+      <form id="form-reserva" class="revela">
+        <h3>Solicite sua reserva</h3>
+        <input type="text" id="nome" placeholder="Seu nome" required>
+        <div class="linha">
+          <input type="date" id="entrada" required title="Check-in">
+          <input type="date" id="saida" required title="Check-out">
+        </div>
+        <div class="linha">
+          <select id="hospedes"><option>1 hóspede</option><option selected>2 hóspedes</option><option>3 hóspedes</option><option>4 hóspedes</option><option>5 ou mais</option></select>
+          <select id="quarto"><option>Suíte Casal</option><option>Suíte Família</option><option>Chalé na Mata</option></select>
+        </div>
+        <textarea id="msg" rows="3" placeholder="Mensagem (opcional)"></textarea>
+        <button type="submit" class="btn btn-verde">Enviar pelo WhatsApp</button>
+      </form>
+    </div>
+    <div class="mapa revela">
+      <!-- Troque "Pousada Canto Verde" pelo endereço completo, se quiser -->
+      <iframe src="https://www.google.com/maps?q=Pousada+Canto+Verde&output=embed" loading="lazy" title="Mapa"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a href="#inicio" class="marca"><img src="img/logo.png" alt="Logo">Pousada Canto Verde</a>
+        <p style="margin-top:14px;max-width:360px">Natureza, conforto e acolhimento. Esperamos por você!</p>
+        <div class="social">
+          <a href="https://www.instagram.com/pousadacantoverde" target="_blank" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 4.7a5.1 5.1 0 100 10.2 5.1 5.1 0 000-10.2zm0 8.4a3.3 3.3 0 110-6.6 3.3 3.3 0 010 6.6zm5.3-9.8a1.2 1.2 0 100 2.4 1.2 1.2 0 000-2.4z"/></svg>
+          </a>
+          <a href="https://wa.me/5500000000000" target="_blank" aria-label="WhatsApp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1 3 .8 3.6.7.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2S21.8 6.6 21.8 12 17.4 21.8 12 21.8z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4>Navegação</h4>
+        <ul><li><a href="#sobre">Sobre</a></li><li><a href="#comodidades">Comodidades</a></li><li><a href="#acomodacoes">Acomodações</a></li><li><a href="#galeria">Galeria</a></li></ul>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <ul><li>(00) 00000-0000</li><li>contato@pousadacantoverde.com.br</li><li>Cidade / UF</li></ul>
+      </div>
+    </div>
+    <p class="copy">© <span id="ano"></span> Pousada Canto Verde. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<!-- BOTÃO WHATSAPP -->
+<a href="https://wa.me/5500000000000?text=Ol%C3%A1!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20hospedagem." class="whats" target="_blank" aria-label="WhatsApp">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1 3 .8 3.6.7.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4C2.7 15.6 2.2 13.8 2.2 12 2.2 6.6 6.6 2.2 12 2.2S21.8 6.6 21.8 12 17.4 21.8 12 21.8z"/></svg>
+</a>
+
+<script>
+  // ⚠️ TROQUE PELO WHATSAPP DA POUSADA (só números, com 55 + DDD)
+  const WHATSAPP = '5500000000000';
+
+  // Header muda ao rolar
+  const topo = document.getElementById('topo');
+  addEventListener('scroll', () => topo.classList.toggle('rolou', scrollY > 60));
+
+  // Menu mobile
+  const menu = document.getElementById('menu');
+  document.getElementById('hamb').onclick = () => menu.classList.toggle('aberto');
+  menu.querySelectorAll('a').forEach(a => a.onclick = () => menu.classList.remove('aberto'));
+
+  // Banner com troca de fotos
+  const slides = document.querySelectorAll('.slide');
+  let atual = 0;
+  setInterval(() => {
+    slides[atual].classList.remove('ativo');
+    atual = (atual + 1) % slides.length;
+    slides[atual].classList.add('ativo');
+  }, 5000);
+
+  // Animação ao rolar
+  const obs = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visivel'); obs.unobserve(e.target); }
+  }), { threshold: .15 });
+  document.querySelectorAll('.revela').forEach(el => obs.observe(el));
+
+  // Galeria ampliada
+  const lb = document.getElementById('lightbox'), lbImg = lb.querySelector('img');
+  document.querySelectorAll('.galeria img').forEach(img => img.onclick = () => {
+    lbImg.src = img.src; lbImg.alt = img.alt; lb.classList.add('aberto');
+  });
+  lb.onclick = e => { if (e.target !== lbImg) lb.classList.remove('aberto'); };
+
+  // Formulário envia para o WhatsApp
+  const fmt = d => d ? d.split('-').reverse().join('/') : '';
+  document.getElementById('form-reserva').onsubmit = e => {
+    e.preventDefault();
+    const v = id => document.getElementById(id).value;
+    const texto = `Olá! Gostaria de fazer uma reserva na Pousada Canto Verde.%0A%0A` +
+      `*Nome:* ${encodeURIComponent(v('nome'))}%0A` +
+      `*Check-in:* ${fmt(v('entrada'))}%0A*Check-out:* ${fmt(v('saida'))}%0A` +
+      `*Hóspedes:* ${encodeURIComponent(v('hospedes'))}%0A*Acomodação:* ${encodeURIComponent(v('quarto'))}%0A` +
+      (v('msg') ? `*Mensagem:* ${encodeURIComponent(v('msg'))}` : '');
+    window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
+  };
+
+  document.getElementById('ano').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
