@@ -1,0 +1,44 @@
+{
+  "name": "ui-premium",
+  "productName": "UI Premium",
+  "version": "1.0.0",
+  "description": "Protótipo de UI empacotado como aplicativo desktop",
+  "main": "main.js",
+  "private": true,
+  "author": "piticoalves0108-ui",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win portable --x64",
+    "dist:linux": "electron-builder --linux AppImage --x64"
+  },
+  "devDependencies": {
+    "electron": "44.4.5",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.piticoalves.uipremium",
+    "productName": "UI Premium",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "src/**/*",
+      "build/icon.png"
+    ],
+    "publish": null,
+    "win": {
+      "icon": "build/icon.ico"
+    },
+    "portable": {
+      "artifactName": "UI-Premium-${version}-portable.exe"
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "category": "Utility",
+      "artifactName": "UI-Premium-${version}.AppImage"
+    }
+  }
+}

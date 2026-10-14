@@ -1,0 +1,39 @@
+name: Build UI Premium (.exe)
+
+on:
+  push:
+    paths:
+      - 'ui-premium-app/**'
+      - '.github/workflows/build-ui-premium.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-exe:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui-premium-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ui-premium-app/package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Gerar o .exe portátil
+        run: npm run dist:win
+
+      - name: Publicar o .exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: UI-Premium-Windows
+          path: ui-premium-app/dist/*.exe
+          if-no-files-found: error

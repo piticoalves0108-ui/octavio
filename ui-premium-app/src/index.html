@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'" />
+<title>UI Premium - Protótipo</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    background: radial-gradient(circle at 50% 50%, #0a0a18, #020208);
+    height: 100vh;
+    overflow: hidden;
+    color: #e0e0f0;
+  }
+
+  /* Janela principal */
+  .main-frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 340px;
+    background: linear-gradient(145deg, #14142a, #0b0b18);
+    border-radius: 14px;
+    box-shadow: 0 0 30px rgba(0, 170, 255, 0.25), 0 10px 40px rgba(0,0,0,0.7);
+    border: 1px solid rgba(0, 170, 255, 0.25);
+    padding-bottom: 20px;
+    user-select: none;
+    backdrop-filter: blur(6px);
+  }
+
+  /* Barra de título */
+  .title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: rgba(25, 25, 45, 0.8);
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    cursor: grab;
+    border-bottom: 1px solid rgba(0, 170, 255, 0.15);
+  }
+
+  .title-bar:active {
+    cursor: grabbing;
+  }
+
+  .title-bar h2 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #00c8ff;
+    text-shadow: 0 0 12px rgba(0, 200, 255, 0.6);
+  }
+
+  .title-bar .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #444;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    transition: all 0.3s;
+  }
+
+  .title-bar .status-dot.on {
+    background: #00ffaa;
+    box-shadow: 0 0 12px #00ffaa;
+  }
+
+  /* Conteúdo */
+  .content {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Botão AIM ASSIST */
+  .aim-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #1e1e3a;
+    color: #b0b0d0;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: 1px solid rgba(0, 170, 255, 0.4);
+    transition: all 0.25s ease;
+    text-shadow: 0 0 6px rgba(0,0,0,0.5);
+  }
+
+  .aim-btn:hover {
+    background: #252550;
+    border-color: #00aaff;
+    box-shadow: 0 0 18px rgba(0, 170, 255, 0.3);
+  }
+
+  .aim-btn.active {
+    background: linear-gradient(135deg, #0055aa, #00aaff);
+    color: #ffffff;
+    border-color: #00e0ff;
+    box-shadow: 0 0 25px rgba(0, 200, 255, 0.6);
+  }
+
+  /* Grupos de input */
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .input-group label {
+    font-size: 12px;
+    color: #8888aa;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+
+  .input-group input {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 170, 255, 0.25);
+    background: #12122a;
+    color: #e0e0f0;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .input-group input:focus {
+    border-color: #00aaff;
+    box-shadow: 0 0 14px rgba(0, 170, 255, 0.3);
+  }
+
+  .input-group input::placeholder {
+    color: #555577;
+  }
+
+  /* Erro */
+  .error-msg {
+    font-size: 12px;
+    color: #ff5555;
+    min-height: 16px;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+  }
+
+  /* Círculo de mira */
+  .aim-circle {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    display: none;
+    z-index: 9999;
+    transition: width 0.1s, height 0.1s, border-color 0.1s, opacity 0.1s;
+  }
+
+  .aim-circle.visible {
+    display: block;
+  }
+
+  /* Rodapé */
+  .footer {
+    font-size: 10px;
+    color: #444466;
+    text-align: center;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Círculo centralizado -->
+<div class="aim-circle" id="aimCircle"></div>
+
+<!-- Janela principal -->
+<div class="main-frame" id="mainFrame">
+  <div class="title-bar" id="titleBar">
+    <h2>PREMIUM AIM ASSIST</h2>
+    <div class="status-dot" id="statusDot"></div>
+  </div>
+
+  <div class="content">
+    <button class="aim-btn" id="aimBtn">AIM ASSIST: OFF</button>
+
+    <div class="input-group">
+      <label for="sizeInput">Tamanho do círculo (px)</label>
+      <input type="text" id="sizeInput" placeholder="Ex: 150" value="150" />
+    </div>
+
+    <div class="input-group">
+      <label for="opacityInput">Transparência (0.0 - 1.0)</label>
+      <input type="text" id="opacityInput" placeholder="Ex: 0.4" value="0.4" />
+    </div>
+
+    <div class="input-group">
+      <label for="thicknessInput">Espessura da borda (px)</label>
+      <input type="text" id="thicknessInput" placeholder="Ex: 2" value="2" />
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="footer">Apenas protótipo de UI — não interage com jogos</div>
+  </div>
+</div>
+
+<script>
+  // ========== ESTADO ==========
+  const state = {
+    enabled: false,
+    size: 150,
+    opacity: 0.4,
+    thickness: 2,
+    color: '#00aaff'
+  };
+
+  // ========== ELEMENTOS ==========
+  const aimCircle = document.getElementById('aimCircle');
+  const aimBtn = document.getElementById('aimBtn');
+  const sizeInput = document.getElementById('sizeInput');
+  const opacityInput = document.getElementById('opacityInput');
+  const thicknessInput = document.getElementById('thicknessInput');
+  const errorMsg = document.getElementById('errorMsg');
+  const statusDot = document.getElementById('statusDot');
+  const mainFrame = document.getElementById('mainFrame');
+  const titleBar = document.getElementById('titleBar');
+
+  // ========== ATUALIZAR CÍRCULO ==========
+  function updateCircle() {
+    aimCircle.style.width = state.size + 'px';
+    aimCircle.style.height = state.size + 'px';
+    aimCircle.style.border = state.thickness + 'px solid ' + state.color;
+    aimCircle.style.opacity = state.opacity;
+    aimCircle.style.boxShadow = '0 0 ' + (state.size * 0.2) + 'px ' + state.color;
+  }
+
+  // ========== LIGAR/DESLIGAR ==========
+  function setEnabled(enabled) {
+    state.enabled = enabled;
+    if (enabled) {
+      aimCircle.classList.add('visible');
+      aimBtn.textContent = 'AIM ASSIST: ON';
+      aimBtn.classList.add('active');
+      statusDot.classList.add('on');
+    } else {
+      aimCircle.classList.remove('visible');
+      aimBtn.textContent = 'AIM ASSIST: OFF';
+      aimBtn.classList.remove('active');
+      statusDot.classList.remove('on');
+    }
+  }
+
+  // ========== VALIDAÇÃO ==========
+  function validateNumber(value, min, max) {
+    const num = parseFloat(value.replace(',', '.'));
+    if (isNaN(num)) return { ok: false, msg: 'Digite um número válido.' };
+    if (num < min || num > max) return { ok: false, msg: `Valor deve estar entre ${min} e ${max}.` };
+    return { ok: true, value: num };
+  }
+
+  // ========== EVENTOS ==========
+  aimBtn.addEventListener('click', () => {
+    setEnabled(!state.enabled);
+  });
+
+  sizeInput.addEventListener('change', () => {
+    const res = validateNumber(sizeInput.value, 20, 800);
+    if (res.ok) {
+      state.size = res.value;
+      sizeInput.value = res.value;
+      errorMsg.textContent = '';
+      updateCircle();
+    } else {
+      errorMsg.textContent = res.msg;
+      sizeInput.value = state.size;
+    }
+  });
+
+  opacityInput.addEventListener('change', () => {
+    const res = validateNumber(opacityInput.value, 0, 1);
+    if (res.ok) {
+      state.opacity = res.value;
+      opacityInput.value = res.value;
+      errorMsg.textContent = '';
+      updateCircle();
+    } else {
+      errorMsg.textContent = res.msg;
+      opacityInput.value = state.opacity;
+    }
+  });
+
+  thicknessInput.addEventListener('change', () => {
+    const res = validateNumber(thicknessInput.value, 1, 20);
+    if (res.ok) {
+      state.thickness = res.value;
+      thicknessInput.value = res.value;
+      errorMsg.textContent = '';
+      updateCircle();
+    } else {
+      errorMsg.textContent = res.msg;
+      thicknessInput.value = state.thickness;
+    }
+  });
+
+  // ========== ARRASTAR JANELA ==========
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  titleBar.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    const rect = mainFrame.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    mainFrame.style.left = rect.left + 'px';
+    mainFrame.style.top = rect.top + 'px';
+    mainFrame.style.transform = 'none';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    mainFrame.style.left = (e.clientX - offsetX) + 'px';
+    mainFrame.style.top = (e.clientY - offsetY) + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  // ========== INICIALIZAÇÃO ==========
+  updateCircle();
+  setEnabled(false);
+</script>
+</body>
+</html>
