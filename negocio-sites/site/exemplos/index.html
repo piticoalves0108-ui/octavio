@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Site de exemplo</title>
+<link rel="icon" href="../img/logo.svg">
+</head>
+<body>
+<script src="../config.js"></script>
+<script src="../motor.js"></script>
+<script>
+(function () {
+  // Negócios fictícios para mostrar como fica cada ramo. Os botões levam para o WhatsApp da agência.
+  var EXEMPLOS = {
+    barbearia:   { nome: 'Barbearia Navalha de Ouro', destaques: ['Agende pelo WhatsApp', 'Corte + barba', 'Ambiente climatizado'] },
+    salao:       { nome: 'Studio Bela Flor', destaques: ['Agende pelo WhatsApp', 'Cabelo, unhas e sobrancelha'] },
+    restaurante: { nome: 'Restaurante Sabor de Casa', destaques: ['Almoço todo dia', 'Pedidos pelo WhatsApp'] },
+    lanchonete:  { nome: 'Brasa Burger', destaques: ['Feito na hora', 'Pedidos pelo WhatsApp'] },
+    pizzaria:    { nome: 'Pizzaria Forno da Praça', destaques: ['Massa de longa fermentação', 'Pedidos pelo WhatsApp'] },
+    padaria:     { nome: 'Padaria Trigo Bom', destaques: ['Pão quentinho', 'Encomendas para festas'] },
+    petshop:     { nome: 'Pet Feliz Banho & Tosa', destaques: ['Banho e tosa', 'Rações e acessórios'] },
+    oficina:     { nome: 'Auto Center Pista', destaques: ['Orçamento pelo WhatsApp', 'Revisão completa'] },
+    gas:         { nome: 'Gás Rápido Distribuidora', destaques: ['Entrega na porta', 'Gás e água'] },
+    loja:        { nome: 'Ateliê Festa & Cia', destaques: ['Artigos de festa', 'Encomendas'] },
+    academia:    { nome: 'Academia Força Total', destaques: ['Musculação e funcional', 'Planos flexíveis'] },
+    saude:       { nome: 'Clínica Bem Viver', destaques: ['Consulta com hora marcada', 'Atendimento humanizado'] },
+    servicos:    { nome: 'Faz Tudo Reformas', destaques: ['Orçamento pelo WhatsApp', 'Elétrica, hidráulica e pintura'] },
+    outro:       { nome: 'Seu Negócio Aqui', destaques: ['Atendimento pelo WhatsApp'] }
+  };
+  var marca = window.VITRINE_CONFIG || {};
+  var nicho = new URLSearchParams(location.search).get('n');
+  if (!EXEMPLOS[nicho]) nicho = 'barbearia';
+  var e = EXEMPLOS[nicho];
+  var horas = Vitrine.HORARIOS_PADRAO[nicho].map(function (h) { return h || 'fechado'; });
+  var html = Vitrine.gerarSite({
+    nicho: nicho, nome: e.nome, destaques: e.destaques,
+    whatsapp: marca.whatsapp || '61900000000',
+    instagram: marca.instagram || '',
+    endereco: 'Brasília - DF',
+    cidade: 'Brasília - DF',
+    horarios: horas,
+    modo: 'exemplo',
+    agencia: { nome: marca.nome, whatsapp: marca.whatsapp, url: marca.url, preco: marca.preco }
+  });
+  Vitrine.substituirPagina(html);
+})();
+</script>
+</body>
+</html>

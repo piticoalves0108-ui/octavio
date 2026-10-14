@@ -1,0 +1,221 @@
+{
+  "_leia": "Lista NOVA de comércios (Samambaia, Ceilândia e Guará), levantada em 14/10/2026 por bios do Instagram e diretórios públicos. Nenhum é da lista antiga de Taguatinga. Antes de mandar, abra o Instagram ou o Google Maps do negócio por 10 segundos: se aparecer site próprio, pule. Rode node ferramentas/build.mjs para gerar as prévias em site/previa/<id>/.",
+  "prospects": [
+    {
+      "id": "pizza-sams",
+      "canal": "WhatsApp",
+      "prioridade": 1,
+      "fonte": "Bio do Instagram @pizzasamsoficial",
+      "porque": "Pedidos só pelo Instagram e WhatsApp, sem cardápio próprio",
+      "cfg": {
+        "nicho": "pizzaria",
+        "nome": "Pizza Sam's",
+        "whatsapp": "61983825293",
+        "instagram": "pizzasamsoficial",
+        "endereco": "Quadras 410/412, Samambaia",
+        "cidade": "Samambaia - DF",
+        "horarios": ["18:30-23:00", "18:30-23:00", "18:30-23:00", "fechado", "18:30-23:00", "18:30-23:00", "18:30-23:00"],
+        "destaques": ["Pedidos pelo WhatsApp", "Fecha só na quarta"]
+      }
+    },
+    {
+      "id": "mw-pizzaria",
+      "canal": "WhatsApp",
+      "prioridade": 1,
+      "fonte": "Bio do Instagram @mwpizzaria e Bendito Guia (nota 4,6 com 34 avaliações no Google)",
+      "porque": "Boa nota no Google e nenhum site oficial encontrado",
+      "cfg": {
+        "nicho": "pizzaria",
+        "nome": "M&W Pizzaria",
+        "whatsapp": "61993862513",
+        "instagram": "mwpizzaria",
+        "endereco": "QR 827, conjunto 04, casa 2, Samambaia Norte",
+        "cidade": "Samambaia Norte - DF",
+        "subtitulo": "Pizza quentinha das 18h às 23h45. Peça pelo WhatsApp em poucos toques.",
+        "destaques": ["Nota 4,6 no Google", "Pedidos pelo WhatsApp"]
+      }
+    },
+    {
+      "id": "pizzaria-brasil-21",
+      "canal": "WhatsApp",
+      "prioridade": 2,
+      "fonte": "Bio do Instagram @brasil21samambaia",
+      "porque": "Só tem cardápio de delivery: falta a vitrine",
+      "cfg": {
+        "nicho": "pizzaria",
+        "nome": "Pizzaria Brasil 21",
+        "whatsapp": "61999218921",
+        "instagram": "brasil21samambaia",
+        "endereco": "Samambaia Norte",
+        "cidade": "Samambaia Norte - DF",
+        "horarios": ["18:00-23:30", "18:00-23:30", "fechado", "18:00-23:30", "18:00-23:30", "18:00-23:30", "18:00-23:30"],
+        "destaques": ["Delivery", "Fecha só na terça"]
+      }
+    },
+    {
+      "id": "nina-pets",
+      "canal": "WhatsApp (a bio diz: só WhatsApp)",
+      "prioridade": 1,
+      "fonte": "Bio do Instagram @ninapetsbsb",
+      "porque": "Banho e tosa vive de agendamento, e o atendimento já é só pelo WhatsApp",
+      "cfg": {
+        "nicho": "petshop",
+        "nome": "Nina Pets",
+        "whatsapp": "61982710070",
+        "instagram": "ninapetsbsb",
+        "endereco": "QN 406, conjunto A, lote 2, loja 3, Samambaia Norte",
+        "cidade": "Samambaia Norte - DF",
+        "destaques": ["Banho e tosa", "Agendamento pelo WhatsApp"]
+      }
+    },
+    {
+      "id": "agropet-latidos",
+      "canal": "WhatsApp",
+      "prioridade": 2,
+      "fonte": "Bio do Instagram @agropet.latidos",
+      "porque": "Vende de tudo (banho, ração, remédio): um site organiza e mostra",
+      "cfg": {
+        "nicho": "petshop",
+        "nome": "Agropet Latidos",
+        "rotulo": "Agropet e pet shop",
+        "whatsapp": "61991939532",
+        "telefone": "6135739988",
+        "instagram": "agropet.latidos",
+        "endereco": "Samambaia Sul",
+        "cidade": "Samambaia Sul - DF",
+        "servicos": "Banho e tosa | Seu pet limpinho e bem cuidado.\nRações | Para cães e gatos de todas as idades.\nMedicamentos | Consulte a disponibilidade pelo WhatsApp.\nAcessórios | Coleiras, camas, potes e brinquedos.",
+        "destaques": ["Banho e tosa", "Rações e medicamentos"]
+      }
+    },
+    {
+      "id": "liberato-rocha-pet-shop",
+      "canal": "WhatsApp (celular do diretório; confirme)",
+      "prioridade": 1,
+      "fonte": "Bendito Guia: nota 4,7 com 43 avaliações no Google",
+      "porque": "Nota alta no Google e nenhum site encontrado",
+      "cfg": {
+        "nicho": "petshop",
+        "nome": "Liberato Rocha Pet Shop",
+        "whatsapp": "61999080715",
+        "endereco": "QE 34, Guará II",
+        "cidade": "Guará II - DF",
+        "servicos": "Banho | Seu pet limpinho, cheiroso e bem tratado.\nTosa | Higiênica, na máquina ou na tesoura.\nCuidados com a saúde | Consulte os atendimentos pelo WhatsApp.\nProdutos | Rações, petiscos e acessórios.",
+        "destaques": ["Nota 4,7 no Google", "Banho e tosa"]
+      }
+    },
+    {
+      "id": "barbearia-ffranca",
+      "canal": "WhatsApp",
+      "prioridade": 1,
+      "fonte": "Bio do Instagram @barbeariaffranca",
+      "porque": "Duas unidades e nenhum site para juntar as duas",
+      "cfg": {
+        "nicho": "barbearia",
+        "nome": "Barbearia Ffrança",
+        "whatsapp": "61981924996",
+        "telefone": "61981522615",
+        "instagram": "barbeariaffranca",
+        "endereco": "QNM 19 e QNN 01 (em frente ao Beer House), Ceilândia",
+        "cidade": "Ceilândia - DF",
+        "destaques": ["Duas unidades em Ceilândia", "Agende pelo WhatsApp"]
+      }
+    },
+    {
+      "id": "marinhos-barbearia",
+      "canal": "Instagram (direct): não achei WhatsApp público",
+      "prioridade": 2,
+      "fonte": "Bio do Instagram @marinhos_barbearia",
+      "porque": "Abre 7 dias por semana e trabalha com agendamento",
+      "cfg": {
+        "nicho": "barbearia",
+        "nome": "Marinhos Barbearia",
+        "instagram": "marinhos_barbearia",
+        "endereco": "EQNM 20/22, Ceilândia",
+        "cidade": "Ceilândia - DF",
+        "subtitulo": "Corte, barba e acabamento com atenção aos detalhes. Aberto todos os dias, com horário marcado.",
+        "horarios": ["09:00-14:00", "09:00-19:30", "09:00-19:30", "09:00-19:30", "09:00-19:30", "09:00-19:30", "09:00-19:30"],
+        "diferenciais": [["calendario", "Horário marcado", "Mande uma mensagem no direct e garanta o seu horário."], ["brilho", "Atenção aos detalhes", "Do degradê ao acabamento da barba, tudo feito com calma."], ["relogio", "Aberto todos os dias", "Inclusive domingo e feriado, até as 14h."]],
+        "faq": [["Como faço para agendar?", "Mande uma mensagem no direct do Instagram @marinhos_barbearia."]],
+        "destaques": ["Aberto todos os dias", "Horário marcado"]
+      }
+    },
+    {
+      "id": "salao-lucia-e-luiza",
+      "canal": "Instagram (direct)",
+      "prioridade": 2,
+      "fonte": "Bio do Instagram @salaoluciaeluiza",
+      "porque": "Salão de bairro com agenda de segunda a sábado",
+      "cfg": {
+        "nicho": "salao",
+        "nome": "Salão Lucia & Luiza",
+        "instagram": "salaoluciaeluiza",
+        "endereco": "QNN 25, conjunto C, casa 22, Ceilândia Norte",
+        "cidade": "Ceilândia Norte - DF",
+        "subtitulo": "Cabelo, unhas e cuidados que fazem você se sentir bem. Agende pelo direct do Instagram.",
+        "horarios": ["fechado", "08:00-18:00", "08:00-18:00", "08:00-18:00", "08:00-18:00", "08:00-18:00", "08:00-18:00"],
+        "diferenciais": [["calendario", "Horário marcado", "Mande uma mensagem no direct e reserve o seu horário."], ["coracao", "Atendimento com carinho", "Um momento só seu, sem pressa."], ["brilho", "Cuidado em cada detalhe", "Do corte à finalização, você sai como imaginou."]],
+        "faq": [["Como faço para agendar?", "Mande uma mensagem no direct do Instagram @salaoluciaeluiza com o serviço e o melhor horário."]],
+        "destaques": ["Segunda a sábado", "Horário marcado"]
+      }
+    },
+    {
+      "id": "autolub-super-troca",
+      "canal": "Ligar no fixo ou Instagram (direct)",
+      "prioridade": 2,
+      "fonte": "Bio do Instagram @autolubsupertroca",
+      "porque": "Troca de óleo é busca no Google na hora da necessidade",
+      "cfg": {
+        "nicho": "oficina",
+        "nome": "AutoLub Super Troca de Óleo",
+        "rotulo": "Troca de óleo e lava jato",
+        "telefone": "6135327576",
+        "instagram": "autolubsupertroca",
+        "endereco": "QE 26, conjunto U, lote 48, Guará II (em frente ao 4º DP)",
+        "cidade": "Guará II - DF",
+        "titulo": "Troca de óleo rápida no Guará II",
+        "subtitulo": "Troca de óleo e filtros e lava jato num lugar só, em frente ao 4º DP. Ligue e venha.",
+        "servicos": "Troca de óleo | Com o óleo certo para o seu motor.\nTroca de filtros | Óleo, ar, combustível e cabine.\nLava jato | Seu carro limpo enquanto você espera.",
+        "diferenciais": [["relogio", "Rápido", "Serviço feito na hora."], ["pino", "Fácil de achar", "Em frente ao 4º DP, no Guará II."], ["escudo", "Óleo certo", "O produto indicado para o seu carro."]],
+        "faq": [["Preciso marcar horário?", "Ligue para (61) 3532-7576 e confirme o melhor horário para vir."]],
+        "destaques": ["Em frente ao 4º DP", "Troca de óleo e lava jato"]
+      }
+    },
+    {
+      "id": "stop-car-super-troca",
+      "canal": "WhatsApp (celular do diretório; confirme)",
+      "prioridade": 3,
+      "fonte": "Bendito Guia",
+      "porque": "Fica dentro de posto: o cliente procura no Google",
+      "cfg": {
+        "nicho": "oficina",
+        "nome": "Stop Car Super Troca",
+        "rotulo": "Troca de óleo",
+        "whatsapp": "61991298040",
+        "endereco": "SRIA 1, QE 2, Posto São Roque, Guará I",
+        "cidade": "Guará I - DF",
+        "titulo": "Troca de óleo no Posto São Roque, Guará I",
+        "subtitulo": "Troca de óleo e filtros rapidinho, sem sair do caminho. Chame no WhatsApp.",
+        "cta": "Chamar no WhatsApp",
+        "msg": "Olá! Vim pelo site e quero fazer a troca de óleo.",
+        "servicos": "Troca de óleo | Com o óleo certo para o seu motor.\nTroca de filtros | Óleo, ar, combustível e cabine.\nVerificação de fluidos | Para rodar tranquilo.",
+        "destaques": ["Dentro do Posto São Roque"]
+      }
+    },
+    {
+      "id": "impala-auto-center",
+      "canal": "Instagram (direct)",
+      "prioridade": 3,
+      "fonte": "Bio do Instagram @impalaautocenter",
+      "porque": "Faz muita coisa (mecânica, elétrica, alinhamento, câmbio) e só mostra no Instagram",
+      "cfg": {
+        "nicho": "oficina",
+        "nome": "Impala Auto Center",
+        "instagram": "impalaautocenter",
+        "cidade": "Ceilândia - DF",
+        "servicos": "Mecânica | Diagnóstico e reparo.\nPeças nacionais e importadas | Peça certa para o seu carro.\nAlinhamento e balanceamento | Direção firme e pneus durando mais.\nElétrica | Bateria, alternador e partida.\nTroca de fluido de câmbio automático | Para o câmbio durar mais.",
+        "diferenciais": [["instagram", "Orçamento pelo direct", "Mande o modelo do carro e o problema no Instagram."], ["escudo", "Serviço explicado", "Você entende o que vai ser feito antes de aprovar."], ["chave", "Tudo num lugar só", "Mecânica, elétrica, alinhamento e câmbio."]],
+        "faq": [["Como peço um orçamento?", "Mande no direct do Instagram @impalaautocenter o modelo, o ano do carro e o que está acontecendo."]]
+      }
+    }
+  ]
+}

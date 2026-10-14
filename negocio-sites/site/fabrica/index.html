@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Fábrica de Sites</title>
+<link rel="icon" href="../img/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--bg:#F4F3EF;--card:#FFFFFF;--ink:#14151A;--soft:#5D6070;--line:#E3E1DA;--blue:#2E4BFF;--blue-ink:#FFFFFF;--yellow:#FFD24A;--green:#12A150;--red:#D93025;--r:16px;font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101114;--card:#1A1B20;--ink:#F1F1EE;--soft:#A3A6B3;--line:#2C2E36;--blue:#6E83FF;--blue-ink:#0B0C10}}
+:root[data-theme="dark"]{--bg:#101114;--card:#1A1B20;--ink:#F1F1EE;--soft:#A3A6B3;--line:#2C2E36;--blue:#6E83FF;--blue-ink:#0B0C10}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+.topo{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px}
+.logo img{width:34px;height:34px;border-radius:9px}
+.logo small{display:block;font-weight:600;color:var(--soft);font-size:12px}
+.topo nav{display:flex;gap:8px}
+.b{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
+.b:hover{border-color:var(--blue)}
+.b.p{background:var(--blue);color:var(--blue-ink);border-color:var(--blue)}
+.b.g{background:#25D366;color:#06210F;border-color:#25D366}
+.b.y{background:var(--yellow);color:#14151A;border-color:var(--yellow)}
+.b.full{width:100%}
+.b svg{width:18px;height:18px;flex:none}
+.cont{display:grid;gap:16px;padding:16px;max-width:1500px;margin:0 auto}
+@media(min-width:1050px){.cont{grid-template-columns:470px 1fr;align-items:start}.lado{position:sticky;top:72px}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.box h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.box h2 span{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--blue);color:var(--blue-ink);font-size:13px}
+label{display:block;font-weight:700;font-size:13px;margin:10px 0 5px}
+label small{font-weight:500;color:var(--soft)}
+input[type=text],input[type=tel],input[type=url],select,textarea{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 22%,transparent)}
+textarea{min-height:110px;resize:vertical}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dica{font-size:12.5px;color:var(--soft);margin:6px 0 0}
+.aviso{font-size:13px;padding:10px 12px;border-radius:11px;background:color-mix(in srgb,var(--yellow) 30%,transparent);margin-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 11px;font-size:12.5px;font-weight:700;cursor:pointer}
+.chip:hover{border-color:var(--blue)}
+.horas{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center}
+.horas span{font-size:13px;font-weight:700;color:var(--soft)}
+.horas input{min-height:38px;padding:6px 10px}
+.fotos{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.fotos figure{position:relative;margin:0;width:74px;height:74px;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.fotos img{width:100%;height:100%;object-fit:cover}
+.fotos button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.7);color:#fff;cursor:pointer;line-height:1}
+.arquivo{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.arquivo input{font-size:13px;max-width:100%}
+details.box summary{cursor:pointer;font-weight:800;list-style:none}
+details.box summary::-webkit-details-marker{display:none}
+details.box summary::after{content:" +";color:var(--blue)}
+details.box[open] summary::after{content:" −"}
+.prev{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.prev .barra{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.prev .barra b{font-size:14px}
+.prev .palco{background:repeating-conic-gradient(var(--bg) 0 25%,var(--card) 0 50%) 0 0/24px 24px;display:flex;justify-content:center;padding:16px;height:calc(100vh - 210px);min-height:520px}
+.prev iframe{border:0;background:#fff;width:100%;height:100%;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.18);transition:width .3s}
+.prev.celular iframe{width:390px;max-width:100%;border-radius:28px;border:8px solid #111}
+.envio{display:grid;gap:8px}
+.link{font-size:12px;word-break:break-all;background:var(--bg);border:1px dashed var(--line);border-radius:10px;padding:8px 10px;color:var(--soft);max-height:70px;overflow:auto}
+.rodape-mob{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--card);border-top:1px solid var(--line)}
+.rodape-mob .b{flex:1}
+@media(min-width:1050px){.rodape-mob{display:none}}
+@media(max-width:1049px){body{padding-bottom:80px}.lado{display:none}.lado.aberto{display:block;position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto;padding:12px}.lado.aberto .palco{height:calc(100vh - 150px)}}
+.fechar-prev{display:none}@media(max-width:1049px){.fechar-prev{display:inline-flex}}
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100vw - 24px));max-height:calc(100vh - 40px);background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(10,10,15,.55)}
+dialog .cab{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card)}
+dialog .corpo{padding:16px}
+.lista{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.item b{display:block}.item small{color:var(--soft)}
+.item select{min-height:36px;padding:4px 8px;font-size:13px}
+.item .acoes{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.item .acoes .b{min-height:34px;padding:0 10px;font-size:13px}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.contador{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--yellow);color:#14151A;font-size:12px}
+.resumo{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.resumo div{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.resumo b{display:block;font-size:22px}.resumo small{color:var(--soft);font-size:12px}
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="logo"><img src="../img/logo.svg" alt=""><div>Fábrica de Sites<small id="marcaNome">Vitrine 61</small></div></div>
+  <nav>
+    <button class="b" id="abrirClientes" type="button">Clientes <span class="contador" id="qtdClientes">0</span></button>
+    <button class="b" id="abrirAjustes" type="button" aria-label="Ajustes da marca">⚙︎</button>
+  </nav>
+</header>
+
+<div class="cont">
+  <form id="form" autocomplete="off" onsubmit="return false">
+    <section class="box">
+      <h2><span>1</span>Negócio</h2>
+      <label for="nicho">Ramo</label>
+      <select id="nicho" name="nicho"></select>
+      <label for="nome">Nome do negócio *</label>
+      <input type="text" id="nome" name="nome" placeholder="Ex.: Barbearia do Zé" required>
+      <div class="duas">
+        <div><label for="whatsapp">WhatsApp *</label><input type="tel" id="whatsapp" name="whatsapp" placeholder="(61) 99999-9999" inputmode="tel"></div>
+        <div><label for="telefone">Telefone fixo</label><input type="tel" id="telefone" name="telefone" placeholder="(61) 3333-3333" inputmode="tel"></div>
+      </div>
+      <p class="aviso" id="avisoFixo" hidden>Esse número parece fixo. Confira se ele tem WhatsApp antes de mandar a prévia.</p>
+      <label for="instagram">Instagram <small>(@ ou link)</small></label>
+      <input type="text" id="instagram" name="instagram" placeholder="@nomedonegocio">
+      <label for="endereco">Endereço</label>
+      <input type="text" id="endereco" name="endereco" placeholder="QI 23, Lote 1, Loja 2, Setor Industrial">
+      <label for="cidade">Bairro e UF <small>(aparece no título e no Google)</small></label>
+      <input type="text" id="cidade" name="cidade" placeholder="Samambaia Norte - DF">
+    </section>
+
+    <section class="box">
+      <h2><span>2</span>Horário</h2>
+      <p class="dica" style="margin-top:0">Preencha só se tiver certeza (Google Maps ou Instagram do cliente). Vazio = "Consulte pelo WhatsApp". Formato: 08:00-18:00, vários horários com vírgula, ou "fechado".</p>
+      <div class="chips" id="presets">
+        <button type="button" class="chip" data-p="comercial">Seg–sex 8h–18h · sáb 8h–12h</button>
+        <button type="button" class="chip" data-p="segsab">Seg–sáb 9h–19h</button>
+        <button type="button" class="chip" data-p="todos">Todo dia 11h–23h</button>
+        <button type="button" class="chip" data-p="noite">Ter–dom 18h–23h30</button>
+        <button type="button" class="chip" data-p="nicho">Padrão do ramo</button>
+        <button type="button" class="chip" data-p="limpar">Limpar</button>
+      </div>
+      <div class="horas" id="horas" style="margin-top:10px"></div>
+    </section>
+
+    <details class="box" id="boxTextos">
+      <summary>3 · Textos e serviços <small style="font-weight:500;color:var(--soft)">(já vem pronto pelo ramo)</small></summary>
+      <label for="titulo">Frase principal</label>
+      <input type="text" id="titulo" name="titulo">
+      <label for="subtitulo">Texto de apoio</label>
+      <textarea id="subtitulo" name="subtitulo" style="min-height:70px"></textarea>
+      <label for="servicos">Serviços ou cardápio <small>(um por linha: Nome | descrição | preço)</small></label>
+      <textarea id="servicos" name="servicos" style="min-height:170px"></textarea>
+      <label for="sobre">Sobre o negócio</label>
+      <textarea id="sobre" name="sobre" style="min-height:80px"></textarea>
+      <label for="destaques">Destaques curtos <small>(um por linha, até 4. Ex.: Desde 2013)</small></label>
+      <textarea id="destaques" name="destaques" style="min-height:70px" placeholder="Desde 2013&#10;Delivery próprio"></textarea>
+      <div class="duas">
+        <div><label for="ifood">Link do iFood</label><input type="url" id="ifood" name="ifood" placeholder="https://www.ifood.com.br/..."></div>
+        <div><label for="cardapio">Link do cardápio</label><input type="url" id="cardapio" name="cardapio" placeholder="https://..."></div>
+      </div>
+      <label for="agendamento">Link de agendamento online</label>
+      <input type="url" id="agendamento" name="agendamento" placeholder="https://...">
+      <label for="cor">Cor principal</label>
+      <div class="arquivo"><input type="color" id="cor" name="cor" value="#000000"><button type="button" class="chip" id="corPadrao">Usar cor do ramo</button></div>
+    </details>
+
+    <details class="box" id="boxFotos">
+      <summary>4 · Fotos <small style="font-weight:500;color:var(--soft)">(só no site final)</small></summary>
+      <p class="dica">As fotos ficam no site que você baixa. O link de prévia vai sem fotos para ficar leve. Use fotos do cliente só com autorização.</p>
+      <label>Logo</label>
+      <div class="arquivo"><input type="file" id="fLogo" accept="image/*"></div>
+      <div class="fotos" id="vLogo"></div>
+      <label>Foto de capa <small>(fachada ou ambiente, deitada)</small></label>
+      <div class="arquivo"><input type="file" id="fCapa" accept="image/*"></div>
+      <div class="fotos" id="vCapa"></div>
+      <label>Galeria <small>(até 9)</small></label>
+      <div class="arquivo"><input type="file" id="fGaleria" accept="image/*" multiple></div>
+      <div class="fotos" id="vGaleria"></div>
+    </details>
+
+    <details class="box">
+      <summary>5 · Depoimentos reais <small style="font-weight:500;color:var(--soft)">(opcional)</small></summary>
+      <p class="dica">Só use avaliações reais (Google, Instagram ou enviadas pelo dono). Uma por linha: Nome | texto.</p>
+      <textarea id="depoimentos" name="depoimentos" placeholder="Maria S. | Atendimento excelente, voltarei sempre!"></textarea>
+    </details>
+
+    <section class="box">
+      <h2><span>✓</span>Enviar e entregar</h2>
+      <div class="envio">
+        <label for="modelo" style="margin-top:0">Mensagem</label>
+        <select id="modelo"></select>
+        <button type="button" class="b g full" id="mandarZap"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.05 2C6.53 2 2.06 6.47 2.06 11.99c0 1.76.46 3.48 1.34 5L2 22l5.14-1.35a9.95 9.95 0 0 0 4.9 1.25h.01c5.51 0 9.99-4.47 9.99-9.99A9.93 9.93 0 0 0 12.05 2zm5.8 14.13c-.24.69-1.42 1.32-1.97 1.37-.5.05-.98.24-3.3-.69-2.8-1.1-4.56-3.96-4.7-4.15-.13-.18-1.12-1.49-1.12-2.85 0-1.35.71-2.02.96-2.29.25-.28.55-.35.73-.35l.53.01c.17.01.4-.06.62.48.24.56.8 1.94.87 2.08.07.14.12.3.02.48-.09.18-.14.3-.28.46l-.41.49c-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.17-.19.7-.82.88-1.1.19-.28.37-.23.63-.14.25.09 1.62.76 1.9.9.28.14.46.21.53.33.07.11.07.66-.17 1.35z"/></svg>Mandar no WhatsApp do cliente</button>
+        <div class="duas">
+          <button type="button" class="b" id="copiarMsg">Copiar mensagem</button>
+          <button type="button" class="b" id="copiarLink">Copiar só o link</button>
+        </div>
+        <div class="link" id="linkPrevia">O link aparece aqui.</div>
+        <div class="duas">
+          <button type="button" class="b y" id="salvarCliente">Salvar nos clientes</button>
+          <button type="button" class="b" id="novo">Novo negócio</button>
+        </div>
+        <hr style="border:0;border-top:1px solid var(--line);width:100%;margin:6px 0">
+        <b style="font-size:13px">Cliente aceitou? Prévia com fotos para ele aprovar:</b>
+        <button type="button" class="b" id="baixarPreviaZip">Baixar prévia com fotos (.zip)</button>
+        <b style="font-size:13px">Cliente pagou? Baixe o site final:</b>
+        <div class="duas">
+          <button type="button" class="b p" id="baixarZip">Baixar site final (.zip)</button>
+          <button type="button" class="b" id="baixarHtml">Baixar .html</button>
+        </div>
+        <p class="dica">Suba a prévia com fotos num projeto da Cloudflare (Workers e Pages → Upload). Depois do Pix, suba o site final <b>no mesmo projeto</b>: o endereço continua o mesmo e a faixa de prévia some.</p>
+      </div>
+    </section>
+  </form>
+
+  <aside class="lado" id="lado">
+    <div class="prev celular" id="prev">
+      <div class="barra">
+        <b>Prévia ao vivo</b>
+        <div style="display:flex;gap:6px">
+          <button type="button" class="b" id="verCel">Celular</button>
+          <button type="button" class="b" id="verPc">Computador</button>
+          <button type="button" class="b fechar-prev" id="fecharPrev">Fechar</button>
+        </div>
+      </div>
+      <div class="palco"><iframe id="quadro" title="Prévia do site"></iframe></div>
+    </div>
+  </aside>
+</div>
+
+<div class="rodape-mob">
+  <button type="button" class="b" id="abrirPrev">Ver prévia</button>
+  <button type="button" class="b g" id="mandarZap2">Mandar no WhatsApp</button>
+</div>
+
+<dialog id="dClientes">
+  <div class="cab"><b>Meus clientes</b><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="b y" id="importar" type="button">Importar lista pronta</button><button class="b" id="exportar" type="button">Exportar CSV</button><button class="b" type="button" data-fechar>Fechar</button></div></div>
+  <div class="corpo">
+    <div class="resumo" id="resumo"></div>
+    <div class="lista" id="lista"></div>
+  </div>
+</dialog>
+
+<dialog id="dAjustes">
+  <div class="cab"><b>Ajustes da sua marca</b><button class="b" type="button" data-fechar>Fechar</button></div>
+  <div class="corpo">
+    <p class="dica" style="margin-top:0">Fica salvo neste aparelho. Para valer em todos os aparelhos, edite o arquivo config.js.</p>
+    <label for="aNome">Nome da marca</label><input type="text" id="aNome">
+    <div class="duas">
+      <div><label for="aZap">Seu WhatsApp</label><input type="tel" id="aZap" placeholder="61999998888"></div>
+      <div><label for="aPix">Sua chave Pix</label><input type="text" id="aPix"></div>
+    </div>
+    <label for="aUrl">Endereço do seu site <small>(onde ficam as prévias)</small></label><input type="url" id="aUrl" placeholder="https://vitrine61.pages.dev">
+    <div class="duas">
+      <div><label for="aPreco">Preço do site</label><input type="text" id="aPreco"></div>
+      <div><label for="aCidade">Cidade padrão</label><input type="text" id="aCidade"></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px"><button class="b p" type="button" id="salvarAjustes">Salvar</button><button class="b" type="button" id="tema">Tema claro/escuro</button></div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="../config.js"></script>
+<script src="../motor.js"></script>
+<script>
+(function () {
+  'use strict';
+  var V = window.Vitrine;
+  var $ = function (id) { return document.getElementById(id); };
+  var guardar = {
+    ler: function (k, padrao) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : padrao; } catch (e) { return padrao; } },
+    gravar: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { aviso('Não deu para salvar neste navegador (memória cheia ou modo anônimo).'); } }
+  };
+
+  // ------------------------------------------------ marca
+  var base = window.VITRINE_CONFIG || {};
+  var marca = Object.assign({ nome: 'Vitrine 61', whatsapp: '', url: '', preco: 'R$250', cidadePadrao: 'Brasília - DF', pix: '' }, base, guardar.ler('vitrine.marca', {}));
+  if (!marca.url && location.protocol.indexOf('http') === 0 && location.pathname.indexOf('/fabrica') >= 0) {
+    marca.url = location.origin + location.pathname.split('/fabrica')[0];
+  }
+  function mostrarMarca() { $('marcaNome').textContent = marca.nome; }
+  mostrarMarca();
+
+  // ------------------------------------------------ mensagens prontas
+  var MODELOS = [
+    { id: 'zap1', nome: '1º contato (WhatsApp)', txt: 'Oi, tudo bem? Falo com o responsável pela {nome}?\n\nMontei uma prévia de site para vocês, sem compromisso. Abre no celular:\n{link}\n\nTem botão de WhatsApp, mapa, horário e ajuda a aparecer no Google. Se gostar, eu coloco as fotos de vocês e deixo no ar por {preco}, pagamento só depois de aprovar.\n\nPosso te explicar rapidinho como funciona?' },
+    { id: 'insta', nome: '1º contato (Instagram, curta)', txt: 'Oi! Sou da {marca}, faço sites para negócios aqui da região. Montei uma prévia de como ficaria o site da {nome}, abre no celular: {link}\n\nSe curtir, coloco no ar com as fotos de vocês por {preco}. Posso te explicar como funciona?' },
+    { id: 'follow', nome: 'Retorno (2 dias depois)', txt: 'Oi! Conseguiu ver a prévia do site da {nome}? {link}\n\nSe quiser, ajusto com as fotos, os serviços e o horário de vocês antes de você decidir qualquer coisa. Sem custo até aprovar.' },
+    { id: 'dados', nome: 'Pedir fotos e dados (fechou)', txt: 'Fechado! Para deixar o site pronto, me manda por aqui:\n\n1. De 5 a 10 fotos (fachada, ambiente, produtos ou serviços)\n2. Lista de serviços ou cardápio (com preços, se quiser mostrar)\n3. Horário de funcionamento\n4. Confirma o endereço: {endereco}\n\nEm até 48h te mando a versão final. Aprovou, o pagamento é {preco} no Pix e o site entra no ar.' },
+    { id: 'cobrar', nome: 'Cobrança (site aprovado)', txt: 'Que bom que gostou! O valor é {preco} no Pix.\nChave Pix: {pix}\n\nAssim que cair, publico e te mando o link oficial do site da {nome}.' },
+    { id: 'mensal', nome: 'Oferta do plano mensal', txt: 'Seu site está no ar! 🎉\n\nSe quiser, posso cuidar dele todo mês por {precoMensal}: troco preços, fotos, horário e promoções sempre que você pedir (até 4 mudanças por mês) e fico de olho para ele nunca sair do ar. Quer ativar?' },
+    { id: 'reels', nome: 'Oferta de Reels editados', txt: 'Outra coisa que ajuda muito a vender: vídeos curtos no Instagram. Você grava do seu jeito, sem precisar aparecer se não quiser, e eu edito com legenda, música e capa. São 6 Reels por mês por {precoReels}. Quer testar este mês?' }
+  ];
+  MODELOS.forEach(function (m) { var o = document.createElement('option'); o.value = m.id; o.textContent = m.nome; $('modelo').appendChild(o); });
+
+  // ------------------------------------------------ formulário
+  V.LISTA_NICHOS.forEach(function (n) { var o = document.createElement('option'); o.value = n.id; o.textContent = n.rotulo; $('nicho').appendChild(o); });
+  var DIAS_ORDEM = [1, 2, 3, 4, 5, 6, 0];
+  DIAS_ORDEM.forEach(function (d) {
+    var s = document.createElement('span'); s.textContent = V.DIAS[d];
+    var i = document.createElement('input'); i.type = 'text'; i.id = 'h' + d; i.placeholder = 'ex.: 08:00-18:00 ou fechado';
+    $('horas').appendChild(s); $('horas').appendChild(i);
+  });
+
+  var fotos = { logo: '', capa: '', galeria: [] };
+  var corTocada = false;
+  var textosPadrao = {};
+
+  function padroesDoNicho(id) {
+    var n = V.NICHOS[id];
+    return { titulo: n.titulo, subtitulo: n.subtitulo, servicos: V.servicosParaTexto(n.servicos), sobre: n.sobre };
+  }
+
+  // Ao trocar o ramo, troca os textos que o usuário ainda não mexeu.
+  function aplicarNicho(id, forcar) {
+    var novos = padroesDoNicho(id);
+    ['titulo', 'subtitulo', 'servicos', 'sobre'].forEach(function (k) {
+      var el = $(k);
+      if (forcar || !el.value || el.value === textosPadrao[k]) el.value = novos[k];
+    });
+    textosPadrao = novos;
+    if (!corTocada) $('cor').value = V.TEMAS[id].destaque;
+  }
+
+  function lerForm() {
+    var g = function (id) { return $(id).value.trim(); };
+    var horarios = DIAS_ORDEM.reduce(function (a, d) { a[d] = g('h' + d); return a; }, []);
+    var temHorario = horarios.some(function (h) { return h; });
+    var cfg = {
+      nicho: g('nicho'), nome: g('nome'), whatsapp: g('whatsapp'), telefone: g('telefone'),
+      instagram: g('instagram'), endereco: g('endereco'), cidade: g('cidade'),
+      horarios: temHorario ? horarios.map(function (h) { return h || 'fechado'; }) : null,
+      links: {}, destaques: g('destaques'), depoimentos: g('depoimentos') ? g('depoimentos').split('\n').filter(Boolean) : []
+    };
+    ['ifood', 'cardapio', 'agendamento'].forEach(function (k) { if (g(k)) cfg.links[k] = g(k); });
+    if (!Object.keys(cfg.links).length) delete cfg.links;
+    // Só manda o texto se ele foi mudado (deixa o link de prévia curto).
+    ['titulo', 'subtitulo', 'servicos', 'sobre'].forEach(function (k) { if (g(k) && g(k) !== textosPadrao[k]) cfg[k] = g(k); });
+    if (corTocada) cfg.cor = $('cor').value;
+    if (!cfg.destaques) delete cfg.destaques;
+    if (!cfg.horarios) delete cfg.horarios;
+    return cfg;
+  }
+
+  function preencherForm(cfg, fixo) {
+    cfg = cfg || {};
+    linkFixo = fixo || '';
+    $('nicho').value = V.NICHOS[cfg.nicho] ? cfg.nicho : 'barbearia';
+    textosPadrao = padroesDoNicho($('nicho').value);
+    ['nome', 'whatsapp', 'telefone', 'instagram', 'endereco', 'cidade'].forEach(function (k) { $(k).value = cfg[k] || ''; });
+    if (!cfg.cidade && !cfg.nome) $('cidade').value = marca.cidadePadrao || '';
+    DIAS_ORDEM.forEach(function (d) { $('h' + d).value = cfg.horarios ? (cfg.horarios[d] === 'fechado' ? 'fechado' : cfg.horarios[d] || '') : ''; });
+    $('titulo').value = cfg.titulo || textosPadrao.titulo;
+    $('subtitulo').value = cfg.subtitulo || textosPadrao.subtitulo;
+    $('servicos').value = typeof cfg.servicos === 'string' ? cfg.servicos : cfg.servicos ? V.servicosParaTexto(cfg.servicos) : textosPadrao.servicos;
+    $('sobre').value = cfg.sobre || textosPadrao.sobre;
+    $('destaques').value = Array.isArray(cfg.destaques) ? cfg.destaques.join('\n') : cfg.destaques || '';
+    $('depoimentos').value = (cfg.depoimentos || []).map(function (d) { return typeof d === 'string' ? d : d.nome + ' | ' + d.texto; }).join('\n');
+    var l = cfg.links || {};
+    ['ifood', 'cardapio', 'agendamento'].forEach(function (k) { $(k).value = l[k] || ''; });
+    corTocada = !!cfg.cor;
+    $('cor').value = cfg.cor || V.TEMAS[$('nicho').value].destaque;
+    fotos = cfg.fotos ? JSON.parse(JSON.stringify(cfg.fotos)) : { logo: '', capa: '', galeria: [] };
+    if (!fotos.galeria) fotos.galeria = [];
+    mostrarFotos();
+  }
+
+  function cfgCompleta(modo) {
+    var cfg = lerForm();
+    cfg.fotos = fotos;
+    cfg.modo = modo;
+    cfg.agencia = { nome: marca.nome, whatsapp: marca.whatsapp, url: marca.url, preco: marca.preco };
+    return cfg;
+  }
+
+  // ------------------------------------------------ prévia ao vivo
+  var espera;
+  function atualizar() {
+    clearTimeout(espera);
+    espera = setTimeout(function () {
+      var html = V.gerarSite(cfgCompleta('previa'));
+      $('quadro').srcdoc = html;
+      guardar.gravar('vitrine.rascunho', Object.assign(lerForm(), { fotos: fotos }));
+      gerarLink();
+      var d = V.numeroBR($('whatsapp').value);
+      $('avisoFixo').hidden = !(d.length === 10 && /^[2-5]$/.test(d[2]));
+    }, 250);
+  }
+
+  var linkAtual = '';
+  var linkFixo = ''; // prévia já publicada em /previa/<id>/ (some quando você edita algo)
+  function gerarLink() {
+    if (linkFixo) { linkAtual = linkFixo; $('linkPrevia').textContent = linkFixo; return Promise.resolve(linkFixo); }
+    var cfg = lerForm();
+    if (!cfg.nome) { linkAtual = ''; $('linkPrevia').textContent = 'Preencha o nome do negócio para gerar o link.'; return Promise.resolve(''); }
+    return V.paraLink(cfg).then(function (codigo) {
+      var baseUrl = (marca.url || '').replace(/\/+$/, '');
+      linkAtual = (baseUrl || '[configure o endereço do seu site nos Ajustes]') + '/p/#' + codigo;
+      $('linkPrevia').textContent = linkAtual;
+      return linkAtual;
+    });
+  }
+
+  function montarMensagem() {
+    var m = MODELOS.filter(function (x) { return x.id === $('modelo').value; })[0] || MODELOS[0];
+    return gerarLink().then(function (link) {
+      return m.txt.replace(/\{(\w+)\}/g, function (_, k) {
+        var mapa = { nome: $('nome').value.trim() || 'sua empresa', link: link, preco: marca.preco, precoMensal: marca.precoMensal || 'R$39,90', precoReels: marca.precoReels || 'R$250', marca: marca.nome, pix: marca.pix || '[sua chave Pix]', endereco: $('endereco').value.trim() || '[endereço]' };
+        return mapa[k] != null ? mapa[k] : '';
+      });
+    });
+  }
+
+  function copiar(txt) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(txt).then(function () { aviso('Copiado!'); }, function () { copiarVelho(txt); });
+    copiarVelho(txt); return Promise.resolve();
+  }
+  function copiarVelho(txt) {
+    var t = document.createElement('textarea'); t.value = txt; t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); aviso('Copiado!'); } catch (e) { prompt('Copie o texto:', txt); }
+    t.remove();
+  }
+
+  function aviso(txt) {
+    var t = $('toast'); t.textContent = txt; t.classList.add('on');
+    clearTimeout(aviso.t); aviso.t = setTimeout(function () { t.classList.remove('on'); }, 2200);
+  }
+
+  function mandarZap() {
+    var numero = V.numeroBR($('whatsapp').value);
+    if (!$('nome').value.trim()) { aviso('Preencha o nome do negócio.'); return; }
+    // Abre a janela já no clique (o Safari bloqueia janelas abertas depois de uma espera).
+    var janela = window.open('', '_blank');
+    montarMensagem().then(function (msg) {
+      var url = numero ? 'https://wa.me/55' + numero + '?text=' + encodeURIComponent(msg) : 'https://wa.me/?text=' + encodeURIComponent(msg);
+      if (janela) janela.location.href = url; else location.href = url;
+      registrarEnvio();
+    });
+  }
+
+  // ------------------------------------------------ fotos
+  function comprimir(arquivo, max, tipo, qualidade) {
+    return new Promise(function (ok, erro) {
+      var leitor = new FileReader();
+      leitor.onerror = erro;
+      leitor.onload = function () {
+        var img = new Image();
+        img.onerror = erro;
+        img.onload = function () {
+          var e = Math.min(1, max / Math.max(img.width, img.height));
+          var c = document.createElement('canvas');
+          c.width = Math.round(img.width * e); c.height = Math.round(img.height * e);
+          var ctx = c.getContext('2d');
+          if (tipo === 'image/jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); }
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+          ok(c.toDataURL(tipo, qualidade));
+        };
+        img.src = leitor.result;
+      };
+      leitor.readAsDataURL(arquivo);
+    });
+  }
+
+  function mostrarFotos() {
+    function mini(src, remover) {
+      var f = document.createElement('figure');
+      f.innerHTML = '<img alt=""><button type="button" aria-label="Remover">×</button>';
+      f.querySelector('img').src = src;
+      f.querySelector('button').onclick = remover;
+      return f;
+    }
+    ['Logo', 'Capa'].forEach(function (k) {
+      var alvo = $('v' + k), chave = k.toLowerCase();
+      alvo.innerHTML = '';
+      if (fotos[chave]) alvo.appendChild(mini(fotos[chave], function () { fotos[chave] = ''; mostrarFotos(); atualizar(); }));
+    });
+    $('vGaleria').innerHTML = '';
+    fotos.galeria.forEach(function (src, i) {
+      $('vGaleria').appendChild(mini(src, function () { fotos.galeria.splice(i, 1); mostrarFotos(); atualizar(); }));
+    });
+  }
+
+  $('fLogo').onchange = function () { var f = this.files[0]; if (!f) return; comprimir(f, 400, 'image/png').then(function (d) { fotos.logo = d; mostrarFotos(); atualizar(); }); this.value = ''; };
+  $('fCapa').onchange = function () { var f = this.files[0]; if (!f) return; comprimir(f, 1800, 'image/jpeg', 0.8).then(function (d) { fotos.capa = d; mostrarFotos(); atualizar(); }); this.value = ''; };
+  $('fGaleria').onchange = function () {
+    var lista = Array.prototype.slice.call(this.files, 0, 9 - fotos.galeria.length);
+    Promise.all(lista.map(function (f) { return comprimir(f, 1200, 'image/jpeg', 0.78); })).then(function (ds) {
+      fotos.galeria = fotos.galeria.concat(ds).slice(0, 9); mostrarFotos(); atualizar();
+    });
+    this.value = '';
+  };
+
+  // ------------------------------------------------ downloads
+  function baixar(blob, nome) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = nome;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+  }
+  function cfgFinal() {
+    var cfg = cfgCompleta('final');
+    if (!cfg.nome) { aviso('Preencha o nome do negócio.'); return null; }
+    if (!cfg.horarios) aviso('Dica: confirme o horário com o cliente antes de publicar.');
+    return cfg;
+  }
+  $('baixarZip').onclick = function () {
+    var cfg = cfgFinal(); if (!cfg) return;
+    baixar(V.criarZip(V.gerarPacote(cfg)), V.slug(cfg.nome) + '.zip');
+    marcarStatus('Pago');
+  };
+  $('baixarPreviaZip').onclick = function () {
+    var cfg = cfgCompleta('previa');
+    if (!cfg.nome) { aviso('Preencha o nome do negócio.'); return; }
+    baixar(V.criarZip(V.gerarPacote(cfg)), V.slug(cfg.nome) + '-previa.zip');
+    marcarStatus('Fechou');
+  };
+  $('baixarHtml').onclick = function () {
+    var cfg = cfgFinal(); if (!cfg) return;
+    baixar(new Blob([V.gerarSite(cfg)], { type: 'text/html' }), V.slug(cfg.nome) + '.html');
+  };
+
+  // ------------------------------------------------ clientes (mini CRM no aparelho)
+  var STATUS = ['Novo', 'Prévia enviada', 'Respondeu', 'Negociando', 'Fechou', 'Pago', 'Mensal ativo', 'Não quer'];
+  var clientes = guardar.ler('vitrine.clientes', []);
+  function salvarClientes() { guardar.gravar('vitrine.clientes', clientes); $('qtdClientes').textContent = clientes.length; }
+  $('qtdClientes').textContent = clientes.length;
+
+  function idAtual() { return V.slug($('nome').value + '-' + V.numeroBR($('whatsapp').value)); }
+  function salvarAtual(status) {
+    var cfg = lerForm(); if (!cfg.nome) { aviso('Preencha o nome do negócio.'); return null; }
+    var id = idAtual();
+    var c = clientes.filter(function (x) { return x.id === id; })[0];
+    var semFotosPesadas = Object.assign({}, cfg, { fotos: { logo: fotos.logo, capa: fotos.capa, galeria: fotos.galeria } });
+    if (!c) { c = { id: id, criado: new Date().toISOString(), status: 'Novo', notas: '' }; clientes.unshift(c); }
+    c.cfg = semFotosPesadas; c.nome = cfg.nome; c.nicho = cfg.nicho; c.whatsapp = cfg.whatsapp; c.atualizado = new Date().toISOString();
+    if (status && STATUS.indexOf(status) > STATUS.indexOf(c.status)) c.status = status;
+    salvarClientes();
+    return c;
+  }
+  function registrarEnvio() {
+    var c = salvarAtual('Prévia enviada');
+    if (c && !c.enviado) { c.enviado = new Date().toISOString(); salvarClientes(); }
+  }
+  function marcarStatus(s) { salvarAtual(s); }
+  $('salvarCliente').onclick = function () { if (salvarAtual()) aviso('Salvo em Clientes.'); };
+
+  function desenharClientes() {
+    var cont = {}; STATUS.forEach(function (s) { cont[s] = 0; }); clientes.forEach(function (c) { cont[c.status] = (cont[c.status] || 0) + 1; });
+    var pagos = cont['Pago'] + cont['Mensal ativo'];
+    $('resumo').innerHTML = '<div><b>' + clientes.length + '</b><small>no total</small></div><div><b>' + (clientes.length - cont['Novo']) + '</b><small>contatados</small></div><div><b>' + (cont['Respondeu'] + cont['Negociando'] + cont['Fechou']) + '</b><small>em conversa</small></div><div><b>' + pagos + '</b><small>pagaram</small></div>';
+    var lista = $('lista'); lista.innerHTML = '';
+    if (!clientes.length) { lista.innerHTML = '<p class="dica">Nenhum cliente ainda. Preencha um negócio e toque em Salvar nos clientes.</p>'; return; }
+    clientes.forEach(function (c, i) {
+      var el = document.createElement('div'); el.className = 'item';
+      var dias = c.enviado ? Math.floor((Date.now() - new Date(c.enviado)) / 864e5) : null;
+      var lembrete = c.status === 'Prévia enviada' && dias >= 2 ? ' · <b style="color:var(--red);display:inline">mandar retorno</b>' : '';
+      el.innerHTML = '<div><b></b><small></small></div><div class="acoes"><select aria-label="Status"></select><button class="b" type="button">Abrir</button><button class="b" type="button" aria-label="Excluir">🗑</button></div>';
+      el.querySelector('b').textContent = c.nome;
+      el.querySelector('small').innerHTML = V.esc((V.NICHOS[c.nicho] || {}).rotulo || '') + ' · ' + V.esc(V.formatarTelefone(c.whatsapp || '')) + (dias != null ? ' · enviado há ' + dias + ' dia(s)' : '') + lembrete;
+      var sel = el.querySelector('select');
+      STATUS.forEach(function (s) { var o = document.createElement('option'); o.textContent = s; if (s === c.status) o.selected = true; sel.appendChild(o); });
+      sel.onchange = function () { c.status = sel.value; salvarClientes(); desenharClientes(); };
+      var bts = el.querySelectorAll('button');
+      bts[0].onclick = function () { preencherForm(c.cfg, c.previa); atualizar(); $('dClientes').close(); aviso('Aberto: ' + c.nome); };
+      bts[1].onclick = function () { if (confirm('Excluir ' + c.nome + '?')) { clientes.splice(i, 1); salvarClientes(); desenharClientes(); } };
+      lista.appendChild(el);
+    });
+  }
+  $('abrirClientes').onclick = function () { desenharClientes(); $('dClientes').showModal(); };
+  $('exportar').onclick = function () {
+    var linhas = [['nome', 'ramo', 'whatsapp', 'status', 'criado', 'enviado']].concat(clientes.map(function (c) {
+      return [c.nome, (V.NICHOS[c.nicho] || {}).rotulo || '', V.formatarTelefone(c.whatsapp || ''), c.status, (c.criado || '').slice(0, 10), (c.enviado || '').slice(0, 10)];
+    }));
+    var csv = linhas.map(function (l) { return l.map(function (v) { return '"' + String(v || '').replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
+    baixar(new Blob(['﻿' + csv], { type: 'text/csv' }), 'clientes.csv');
+  };
+
+  // ------------------------------------------------ ajustes
+  $('abrirAjustes').onclick = function () {
+    $('aNome').value = marca.nome; $('aZap').value = marca.whatsapp; $('aPix').value = marca.pix || '';
+    $('aUrl').value = marca.url; $('aPreco').value = marca.preco; $('aCidade').value = marca.cidadePadrao || '';
+    $('dAjustes').showModal();
+  };
+  $('salvarAjustes').onclick = function () {
+    marca = Object.assign(marca, { nome: $('aNome').value.trim() || 'Vitrine 61', whatsapp: V.numeroBR($('aZap').value), pix: $('aPix').value.trim(), url: $('aUrl').value.trim().replace(/\/+$/, ''), preco: $('aPreco').value.trim() || 'R$250', cidadePadrao: $('aCidade').value.trim() });
+    guardar.gravar('vitrine.marca', marca); mostrarMarca(); atualizar(); $('dAjustes').close(); aviso('Ajustes salvos.');
+  };
+  $('tema').onclick = function () {
+    var r = document.documentElement, escuro = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    r.dataset.theme = escuro ? 'light' : 'dark'; guardar.gravar('vitrine.tema', r.dataset.theme);
+  };
+  var temaSalvo = guardar.ler('vitrine.tema', ''); if (temaSalvo) document.documentElement.dataset.theme = temaSalvo;
+  document.querySelectorAll('[data-fechar]').forEach(function (b) { b.onclick = function () { b.closest('dialog').close(); }; });
+
+  // ------------------------------------------------ eventos
+  var PRESETS = {
+    comercial: ['fechado', '08:00-18:00', '08:00-18:00', '08:00-18:00', '08:00-18:00', '08:00-18:00', '08:00-12:00'],
+    segsab: ['fechado', '09:00-19:00', '09:00-19:00', '09:00-19:00', '09:00-19:00', '09:00-19:00', '09:00-19:00'],
+    todos: ['11:00-23:00', '11:00-23:00', '11:00-23:00', '11:00-23:00', '11:00-23:00', '11:00-23:00', '11:00-23:00'],
+    noite: ['18:00-23:30', 'fechado', '18:00-23:30', '18:00-23:30', '18:00-23:30', '18:00-23:30', '18:00-23:30'],
+    limpar: ['', '', '', '', '', '', '']
+  };
+  $('presets').onclick = function (e) {
+    var p = e.target.dataset && e.target.dataset.p; if (!p) return;
+    var h = p === 'nicho' ? V.HORARIOS_PADRAO[$('nicho').value].map(function (x) { return x || 'fechado'; }) : PRESETS[p];
+    DIAS_ORDEM.forEach(function (d) { $('h' + d).value = h[d]; });
+    atualizar();
+  };
+  $('nicho').onchange = function () { aplicarNicho(this.value); atualizar(); };
+  $('cor').oninput = function () { corTocada = true; atualizar(); };
+  $('corPadrao').onclick = function () { corTocada = false; $('cor').value = V.TEMAS[$('nicho').value].destaque; atualizar(); };
+  $('form').addEventListener('input', function (e) { linkFixo = ''; if (e.target.id !== 'cor' && e.target.type !== 'file') atualizar(); });
+  $('importar').onclick = function () {
+    fetch('lista.json').then(function (r) { return r.json(); }).then(function (lista) {
+      var base = (marca.url || '').replace(/\/+$/, ''), novos = 0;
+      lista.forEach(function (p) {
+        if (clientes.some(function (c) { return c.id === p.id; })) return;
+        clientes.push({ id: p.id, nome: p.cfg.nome, nicho: p.cfg.nicho, whatsapp: p.cfg.whatsapp || '', cfg: p.cfg, status: 'Novo', notas: p.canal, criado: new Date().toISOString(), previa: base ? base + '/previa/' + p.id + '/' : '' });
+        novos++;
+      });
+      salvarClientes(); desenharClientes(); aviso(novos ? novos + ' negócios importados.' : 'A lista já estava importada.');
+    }).catch(function () { aviso('Não achei a lista pronta (abra a Fábrica pelo seu site publicado).'); });
+  };
+  $('mandarZap').onclick = mandarZap; $('mandarZap2').onclick = mandarZap;
+  $('copiarMsg').onclick = function () { montarMensagem().then(copiar).then(registrarEnvio); };
+  $('copiarLink').onclick = function () { gerarLink().then(function (l) { if (l) copiar(l); }); };
+  $('modelo').onchange = function () { guardar.gravar('vitrine.modelo', this.value); };
+  $('modelo').value = guardar.ler('vitrine.modelo', 'zap1');
+  $('novo').onclick = function () { if (confirm('Começar um negócio novo? O atual fica salvo só se você tocou em Salvar nos clientes.')) { var n = $('nicho').value; preencherForm({ nicho: n }); atualizar(); window.scrollTo(0, 0); } };
+  $('verCel').onclick = function () { $('prev').classList.add('celular'); };
+  $('verPc').onclick = function () { $('prev').classList.remove('celular'); };
+  $('abrirPrev').onclick = function () { $('lado').classList.add('aberto'); };
+  $('fecharPrev').onclick = function () { $('lado').classList.remove('aberto'); };
+
+  // ------------------------------------------------ início
+  var rascunho = guardar.ler('vitrine.rascunho', null);
+  var q = new URLSearchParams(location.search);
+  if (q.get('nicho') && V.NICHOS[q.get('nicho')]) rascunho = { nicho: q.get('nicho') };
+  preencherForm(rascunho || { nicho: 'barbearia' });
+  atualizar();
+})();
+</script>
+</body>
+</html>
