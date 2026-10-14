@@ -18,14 +18,14 @@ Clique em **Mais informações** e depois em **Executar assim mesmo**.
 
 ## Rodar e gerar o `.exe` no seu computador
 
-Precisa do [Node.js](https://nodejs.org/) 22 ou mais novo.
+Precisa do [Node.js](https://nodejs.org/) 22.12 ou mais novo (de preferência a versão LTS atual).
 
 ```bash
 cd ui-premium-app
-npm install          # baixa o Electron (só na primeira vez)
+npm install          # instala as dependências (só na primeira vez)
 npm start            # abre o app para testar
 npm run dist:win     # gera dist/UI-Premium-1.0.0-portable.exe
-npm run dist:linux   # (opcional) gera dist/UI-Premium-1.0.0.AppImage para Linux
+npm run dist:linux   # (opcional, só funciona no Linux) gera dist/UI-Premium-1.0.0.AppImage
 ```
 
 O `dist:win` funciona tanto no Windows quanto no Linux.
@@ -34,8 +34,8 @@ O `dist:win` funciona tanto no Windows quanto no Linux.
 
 | Arquivo | O que é |
 | --- | --- |
-| `src/index.html` | A interface (HTML, CSS e JavaScript). Edite aqui e rode `npm start` para ver. |
-| `main.js` | Cria a janela do programa (tamanho, título, ícone). |
+| `src/index.html` | A interface (HTML, CSS e JavaScript) e o título da janela (tag `<title>`). Edite aqui e rode `npm start` para ver. |
+| `main.js` | Cria a janela do programa (tamanho e ícone). |
 | `build/icon.ico`, `build/icon.png` | Ícone do `.exe` e da janela. |
 | `package.json` | Nome do programa, versão e configuração do empacotamento. |
 

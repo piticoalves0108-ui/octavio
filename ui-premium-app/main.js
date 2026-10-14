@@ -1,6 +1,11 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 
+const APP_ID = 'com.piticoalves.uipremium';
+
+// Windows: usa o mesmo ID do build para a barra de tarefas reconhecer o app.
+if (process.platform === 'win32') app.setAppUserModelId(APP_ID);
+
 // Só uma instância aberta por vez: abrir de novo apenas foca a janela existente.
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
@@ -26,6 +31,18 @@ function createWindow() {
       sandbox: true,
     },
   });
+
+  // O .exe portátil roda a partir de uma cópia temporária que é apagada ao fechar.
+  // Isto faz o "Fixar na barra de tarefas" apontar para o .exe que foi baixado.
+  const portableExe = process.env.PORTABLE_EXECUTABLE_FILE;
+  if (process.platform === 'win32' && portableExe) {
+    mainWindow.setAppDetails({
+      appId: APP_ID,
+      appIconPath: portableExe,
+      relaunchCommand: `"${portableExe}"`,
+      relaunchDisplayName: 'UI Premium',
+    });
+  }
 
   mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
 

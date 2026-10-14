@@ -321,6 +321,14 @@
   let offsetX = 0;
   let offsetY = 0;
 
+  // Mantém a barra de título sempre dentro da janela.
+  function moveFrame(left, top) {
+    const maxLeft = Math.max(0, window.innerWidth - mainFrame.offsetWidth);
+    const maxTop = Math.max(0, window.innerHeight - titleBar.offsetHeight);
+    mainFrame.style.left = Math.min(Math.max(left, 0), maxLeft) + 'px';
+    mainFrame.style.top = Math.min(Math.max(top, 0), maxTop) + 'px';
+  }
+
   titleBar.addEventListener('mousedown', (e) => {
     isDragging = true;
     const rect = mainFrame.getBoundingClientRect();
@@ -333,12 +341,16 @@
 
   document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-    mainFrame.style.left = (e.clientX - offsetX) + 'px';
-    mainFrame.style.top = (e.clientY - offsetY) + 'px';
+    moveFrame(e.clientX - offsetX, e.clientY - offsetY);
   });
 
   document.addEventListener('mouseup', () => {
     isDragging = false;
+  });
+
+  window.addEventListener('resize', () => {
+    if (mainFrame.style.transform !== 'none') return;
+    moveFrame(parseFloat(mainFrame.style.left), parseFloat(mainFrame.style.top));
   });
 
   // ========== INICIALIZAÇÃO ==========
