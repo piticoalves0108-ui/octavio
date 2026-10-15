@@ -278,6 +278,7 @@ export class Game {
   async newGame() {
     const { sys, events } = this.ctx;
     await sys.ui.fadeOut(0.6);
+    if (sys.ui.isMenuOpen()) sys.ui.closeMenu();
     this.resetAll();
     this.setState('playing');
     events.emit('game:newGame', {});
@@ -290,6 +291,7 @@ export class Game {
     const target = slot ?? sys.save.latestSlot();
     if (!target) return false;
     await sys.ui.fadeOut(0.4);
+    if (sys.ui.isMenuOpen()) sys.ui.closeMenu();
     this.resetAll();
     const ok = sys.save.load(target);
     if (!ok) {
