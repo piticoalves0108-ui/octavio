@@ -94,8 +94,8 @@ export const LOCATIONS: LocationDef[] = [
     id: 'acampamento_corvos',
     name: 'Acampamento dos Corvos',
     kind: 'camp',
-    x: 230,
-    z: 470,
+    x: 232,
+    z: 530,
     radius: 45,
     flattenTo: 16,
     discoverRadius: 60,
@@ -255,7 +255,7 @@ export const ROADS: { id: string; width: number; points: [number, number][] }[] 
       [-338, 320],
       [-200, 290],
       [-40, 250],
-      [80, 245],
+      [125, 236],
       [180, 140],
       [250, 10],
       [330, -160],
@@ -266,11 +266,12 @@ export const ROADS: { id: string; width: number; points: [number, number][] }[] 
     id: 'estrada_sul',
     width: 6,
     points: [
-      [80, 245],
+      [125, 236],
       [190, 420],
       [400, 560],
       [560, 690],
-      [640, 735],
+      [622, 748],
+      [646, 760],
     ],
   },
   {
@@ -294,10 +295,99 @@ export const FLOATING_ISLANDS: { id: string; x: number; y: number; z: number; ra
   { id: 'farol_celeste', x: 520, y: 190, z: -520, radius: 12, secret: 'fragmento_memoria_2' },
 ];
 
-/** Ponto de início de um novo jogo (saída da cripta). */
-export const PLAYER_START = { x: -520, z: 548, yaw: Math.PI }; // olhando para o norte (vila)
+/**
+ * Ponto de início de um novo jogo: pátio a céu aberto da Cripta do Despertar,
+ * logo diante da porta do mausoléu, olhando para o norte (saída do pátio → estrada → vila).
+ */
+export const PLAYER_START = { x: -520, z: 553, yaw: Math.PI };
 
 /** Área da arena do chefe (usada para travar a luta, câmera de combate e música). */
 export const BOSS_ARENAS: Record<string, { x: number; z: number; radius: number; locationId: string }> = {
   guardiao_mecanico: { x: 500, z: -380, radius: 36, locationId: 'camara_guardiao' },
 };
+
+// ---------------------------------------------------------------------------
+// Ajustes do sistema de mundo (terreno, vegetação, água, portões).
+// ---------------------------------------------------------------------------
+
+/** Terreno em chunks com LOD (quadtree de 3 tamanhos: 512 → 256 → 128 m). */
+export const TERRAIN = {
+  /** Tamanho do chunk base (m). */
+  chunkSize: 128,
+  /**
+   * Distâncias (m, antes de multiplicar por q.lodBias) a partir das quais cada nível
+   * é usado: < [0] → L0 (2 m/vértice); < [1] → L1 (4 m); < [2] → L2 (nós de 256 m, 8 m);
+   * além disso → L3 (nós de 512 m, 16 m).
+   */
+  lodDistances: [150, 340, 680] as const,
+  /** Profundidade das saias (m) por nível — escondem rachaduras entre LODs. */
+  skirtDepth: [2.5, 5, 10, 22] as const,
+  /** Orçamento de construção de nós por quadro. */
+  maxBuildsPerFrame: 2,
+  buildBudgetMs: 4,
+  /** Intervalo (s) entre recálculos da seleção de LOD. */
+  selectInterval: 0.2,
+  /** Nós fora de uso por mais que isso (s) são descartados (exceto as raízes). */
+  evictAfter: 20,
+  /** Anel de montanhas além da borda do mundo (horizonte). */
+  horizonExtent: 2600,
+  horizonCell: 64,
+};
+
+/** Vegetação e objetos espalhados. Densidades multiplicam BIOME_INFO e o preset de qualidade. */
+export const VEGETATION = {
+  /** Tufos de grama por m² (× q.grassDensity × densidade do bioma). */
+  grassClumpsPerM2: 1.1,
+  bladesPerClump: 7,
+  bladeHeight: [0.38, 0.8] as const,
+  /** Flores mágicas por m² nos campos/floresta (× q.grassDensity). */
+  flowersPerM2: 0.035,
+  /** Espaçamento base (m) das grades de dispersão por chunk. */
+  treeSpacing: 8.5,
+  bushSpacing: 6,
+  rockSpacing: 13,
+  /** Até esta distância (m × lodBias) as árvores usam a malha completa. */
+  treeFullDistance: 95,
+  /** Até esta distância (m) as árvores projetam sombra (limitada por q.shadowDistance). */
+  treeShadowDistance: 70,
+  /** Raio (m) de dispersão em volta da câmera (limitado por q.viewDistance). */
+  scatterRadius: 720,
+  /** Raio (m) em que troncos/pedras grandes ganham colisores. */
+  physicsRadius: 200,
+  /** Chunks de dispersão gerados por quadro. */
+  scatterPerFrame: 2,
+  /** Distância (m) máxima das plantações/objetos de detalhe das estruturas. */
+  detailDistance: 140,
+  /** Partículas ambientes em volta do jogador (escala com q.maxParticles). */
+  ambientParticles: 700,
+};
+
+/** Água (lago, rio, pântano). */
+export const WATER = {
+  /** Resolução (m) da grade que decide onde há malha de água. */
+  cell: 8,
+  /** Blocos (m) em que a malha de água é dividida (culling). */
+  block: 256,
+};
+
+export interface GateDef {
+  id: string;
+  name: string;
+  /** Estado inicial num novo jogo. */
+  defaultOpen: boolean;
+}
+
+/**
+ * Portões e portas controlados por World.setGateOpen(id, aberto).
+ * Fechado = colisor ativo; aberto = colisor desligado.
+ */
+export const GATES: GateDef[] = [
+  { id: 'portao_brumafria_leste', name: 'Portão Leste de Brumafria', defaultOpen: true },
+  { id: 'portao_brumafria_sul', name: 'Portão Sul de Brumafria', defaultOpen: true },
+  { id: 'porta_cripta', name: 'Porta da Cripta do Despertar', defaultOpen: true },
+  { id: 'portao_ruinas', name: 'Portão Selado de Aeternum', defaultOpen: false },
+  { id: 'arena_guardiao', name: 'Entrada da Câmara do Guardião', defaultOpen: true },
+  { id: 'porta_torre', name: 'Porta da Torre do Observador', defaultOpen: false },
+  { id: 'portao_ferroluz', name: 'Portão de Ferroluz', defaultOpen: false },
+  { id: 'portao_corvos', name: 'Portão do Acampamento dos Corvos', defaultOpen: true },
+];
