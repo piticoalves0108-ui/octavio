@@ -16,6 +16,8 @@ export class Abilities implements GameSystem, Saveable {
   protected cooldowns = new Map<string, number>();
   /** Forma Ascendente ativa. */
   ascended = false;
+  /** Carga Arcana (0..100) acumulada causando dano — necessária para a Forma Ascendente. */
+  ultimateCharge = 0;
   protected ctx!: GameContext;
 
   init(ctx: GameContext) {

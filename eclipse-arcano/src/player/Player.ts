@@ -138,7 +138,33 @@ export class Player implements GameSystem, Saveable {
     const hit = this.ctx.physics.raycast(o, d, maxDist);
     return hit ? out.copy(hit.point) : out.copy(o).addScaledVector(d, maxDist);
   }
-  playAnimation(_anim: PlayerAnim, _opts?: { speed?: number }): void {}
+  /**
+   * Toca uma animação de ação. Retorna a duração (s) já considerando `speed`,
+   * para o combate sincronizar o quadro de impacto.
+   */
+  playAnimation(_anim: PlayerAnim, _opts?: { speed?: number }): number {
+    return 0.4;
+  }
+  /** Prende o modelo da arma equipada na mão direita (null = remove). */
+  setWeaponModel(_model: THREE.Object3D | null, _kind?: 'sword' | 'staff' | 'dagger' | 'spear' | 'techno' | 'artifact'): void {}
+  /** Posição da mão no mundo (origem de magias). */
+  getHandWorldPosition(_side: 'left' | 'right', out = new THREE.Vector3()): THREE.Vector3 {
+    return this.entity.getCenter(out).add(new THREE.Vector3(0, 0.3, 0));
+  }
+  /** Ponta da arma/cristal do cajado no mundo (origem de projéteis e rastros). */
+  getWeaponTipWorldPosition(out = new THREE.Vector3()): THREE.Vector3 {
+    return this.getHandWorldPosition('right', out);
+  }
+  /** Impede deslocamento voluntário por `seconds` (ataques pesados, conjurações longas). */
+  lockMovement(_seconds: number): void {}
+  /** Defesa ativa: reduz velocidade e mostra pose de bloqueio. */
+  setBlocking(_blocking: boolean): void {}
+  /** Em animação de ação que não pode ser interrompida. */
+  isBusy(): boolean {
+    return false;
+  }
+  /** Último ponto de renascimento (santuário/cripta). */
+  checkpoint = { x: PLAYER_START.x, z: PLAYER_START.z, yaw: PLAYER_START.yaw };
   applyKnockback(dir: THREE.Vector3, force: number) {
     this.entity.velocity.addScaledVector(dir, force);
   }

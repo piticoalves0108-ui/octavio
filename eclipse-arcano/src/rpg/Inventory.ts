@@ -56,6 +56,10 @@ export class Inventory implements GameSystem, Saveable {
   discard(_uid: string): boolean {
     return false;
   }
+  /** Usa a melhor poção de vida disponível (tecla H). */
+  quickUsePotion(): boolean {
+    return false;
+  }
   addGold(n: number) {
     this.gold = Math.max(0, this.gold + n);
     this.ctx.events.emit('gold:changed', { gold: this.gold });
