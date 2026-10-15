@@ -157,6 +157,8 @@ export const ARENA = {
   x: ARENA_DEF.x,
   z: ARENA_DEF.z,
   y: LOCATION_BY_ID['camara_guardiao'].flattenTo!,
+  /** Altura do piso metálico da arena (acima do relevo aplainado). */
+  floorY: LOCATION_BY_ID['camara_guardiao'].flattenTo! + 0.45,
   /** Raio do piso de luta. */
   radius: ARENA_DEF.radius,
   /** Muro interno (raio) e altura. */
@@ -182,6 +184,8 @@ export const CAMP = {
 export const TOWER = {
   ...pick(LOCATION_BY_ID['torre_observador']),
   y: LOCATION_BY_ID['torre_observador'].flattenTo!,
+  /** Piso do térreo (sobre o plinto). */
+  floorY: LOCATION_BY_ID['torre_observador'].flattenTo! + 0.6,
   radius: 7,
   height: 44,
   /** Altura da sacada acima do chão. */
@@ -351,7 +355,7 @@ const B = VILLAGE_BUILDING_BY_ID;
   }
 }
 // --- Praça, poço, portões e muralha ---
-addV('praca_centro', 'npc_leisure', 0, 0, { label: 'Praça de Brumafria', tags: ['vila', 'praca', 'lazer'] });
+addV('praca_centro', 'npc_leisure', 0, 4.6, { yaw: PI, label: 'Praça de Brumafria (junto ao poço)', tags: ['vila', 'praca', 'lazer'] });
 addV('poco', 'npc_leisure', 0, VILLAGE.wellRadius + 0.9, { yaw: PI, label: 'Poço da praça', tags: ['vila', 'praca', 'lazer', 'poco'] });
 for (let i = 0; i < 4; i++) {
   const a = PI / 4 + (i * PI) / 2 + PI / 8;
@@ -392,18 +396,18 @@ addS(CRYPT, 'cripta_mural', 'quest', -6.4, 9, { yaw: PI / 2, label: 'Mural rúni
   add('pedestal_cristal_ruinas', 'quest', px, pz, { y: undefined, yaw: toArena, label: 'Pedestal do cristal (abre o portão selado)', tags: ['ruinas', 'missao', 'pedestal'] });
   add('portao_ruinas', 'gate', gx, gz, { yaw: toArena, label: 'Portão selado de Aeternum', tags: ['ruinas', 'portao'] });
   add('arena_entrada', 'boss', ex, ez, { yaw: toArena, label: 'Entrada da Câmara do Guardião', tags: ['ruinas', 'arena', 'portao'] });
-  add('arena_centro', 'boss', ARENA.x, ARENA.z, { y: ARENA.y + 0.12, label: 'Centro da arena', tags: ['ruinas', 'arena', 'chefe'] });
+  add('arena_centro', 'boss', ARENA.x, ARENA.z, { y: ARENA.floorY + 0.3, label: 'Centro da arena (estrado)', tags: ['ruinas', 'arena', 'chefe'] });
   // Jogador entra pela entrada; o chefe desperta no centro, olhando para a entrada.
-  add('arena_chefe_inicio', 'boss', ARENA.x, ARENA.z, { y: ARENA.y + 0.12, yaw: yawTowards(ARENA.x, ARENA.z, ex, ez), label: 'Guardião (posição inicial)', tags: ['ruinas', 'arena', 'chefe'] });
+  add('arena_chefe_inicio', 'boss', ARENA.x, ARENA.z, { y: ARENA.floorY + 0.3, yaw: yawTowards(ARENA.x, ARENA.z, ex, ez), label: 'Guardião (posição inicial)', tags: ['ruinas', 'arena', 'chefe'] });
   for (let i = 0; i < 4; i++) {
     const a = ARENA.entranceAngle + PI / 4 + (i * PI) / 2;
     const [sx, sz] = polar(ARENA, ARENA.socketRadius, a);
-    add(`arena_soquete_${i + 1}`, 'boss', sx, sz, { y: ARENA.y + 0.12, label: `Soquete de pilar ${i + 1} (fase 2)`, tags: ['ruinas', 'arena', 'soquete'] });
+    add(`arena_soquete_${i + 1}`, 'boss', sx, sz, { y: ARENA.floorY, label: `Soquete de pilar ${i + 1} (fase 2)`, tags: ['ruinas', 'arena', 'soquete'] });
   }
   for (let i = 0; i < 6; i++) {
     const a = ARENA.entranceAngle + PI / 6 + (i * PI) / 3;
     const [vx, vz] = polar(ARENA, ARENA.ventRadius, a);
-    add(`arena_respiradouro_${i + 1}`, 'boss', vx, vz, { y: ARENA.y + 0.12, label: `Respiradouro ${i + 1} (fase 3)`, tags: ['ruinas', 'arena', 'respiradouro'] });
+    add(`arena_respiradouro_${i + 1}`, 'boss', vx, vz, { y: ARENA.floorY, label: `Respiradouro ${i + 1} (fase 3)`, tags: ['ruinas', 'arena', 'respiradouro'] });
   }
 }
 addS(RUINS, 'ruinas_entrada', 'poi', -46, 58, { yaw: yawTowards(RUINS.x - 46, RUINS.z + 58, RUINS.x, RUINS.z), label: 'Entrada das ruínas (fim da estrada)', tags: ['ruinas'] });
@@ -444,9 +448,9 @@ for (let i = 0; i < 5; i++) {
   const [dx, dz] = rotYaw(TOWER.doorYaw, 0, TOWER.radius + 1.6);
   add('porta_torre', 'gate', TOWER.x + dx, TOWER.z + dz, { yaw: TOWER.doorYaw + PI, label: 'Porta da Torre do Observador (trancada)', tags: ['torre', 'porta', 'missao'] });
   addS(TOWER, 'torre_biblioteca', 'quest', 2.2, -2.2, { yaw: 0.8, label: 'Estantes proibidas (térreo)', tags: ['torre', 'leitura', 'interior', 'missao'] });
-  addS(TOWER, 'torre_sacada', 'poi', TOWER.balconyRadius - 1.5, 0, { y: TOWER.y + TOWER.balconyHeight + 0.2, yaw: PI / 2, label: 'Sacada do Observador', tags: ['torre', 'sacada', 'voo'] });
-  addS(TOWER, 'torre_telescopio', 'quest', -(TOWER.balconyRadius - 1.6), 0, { y: TOWER.y + TOWER.balconyHeight + 0.2, yaw: -PI / 2, label: 'Telescópio rúnico', tags: ['torre', 'sacada', 'missao'] });
-  addS(TOWER, 'torre_bau_sacada', 'chest', 0, -(TOWER.balconyRadius - 1.4), { y: TOWER.y + TOWER.balconyHeight + 0.2, yaw: 0, label: 'Baú da sacada', tags: ['torre', 'bau', 'voo'] });
+  addS(TOWER, 'torre_sacada', 'poi', TOWER.balconyRadius - 1.5, 0, { y: TOWER.floorY + TOWER.balconyHeight + 0.05, yaw: PI / 2, label: 'Sacada do Observador', tags: ['torre', 'sacada', 'voo'] });
+  addS(TOWER, 'torre_telescopio', 'quest', -(TOWER.balconyRadius - 1.6), 0, { y: TOWER.floorY + TOWER.balconyHeight + 0.05, yaw: -PI / 2, label: 'Telescópio rúnico', tags: ['torre', 'sacada', 'missao'] });
+  addS(TOWER, 'torre_bau_sacada', 'chest', 0, -(TOWER.balconyRadius - 1.4), { y: TOWER.floorY + TOWER.balconyHeight + 0.05, yaw: 0, label: 'Baú da sacada', tags: ['torre', 'bau', 'voo'] });
 }
 
 // --- Ferroluz ---

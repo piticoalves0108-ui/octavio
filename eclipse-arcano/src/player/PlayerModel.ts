@@ -16,14 +16,14 @@ import type { QualityPreset } from '../data/quality';
  */
 
 const C = {
-  coat: 0x1e2244,
-  coatDark: 0x141629,
-  coatInner: 0x3a1830,
-  tunic: 0x4c1d2e,
-  trousers: 0x25242b,
-  leather: 0x3d2b20,
-  leatherDark: 0x261b15,
-  skin: 0xb48a70,
+  coat: 0x2b3164,
+  coatDark: 0x1e2242,
+  coatInner: 0x4a2040,
+  tunic: 0x5c2438,
+  trousers: 0x302f38,
+  leather: 0x56402c,
+  leatherDark: 0x34261c,
+  skin: 0x84624e,
   beard: 0xdcd9d2,
   metal: 0x6f7886,
   metalDark: 0x3e444f,
@@ -56,6 +56,9 @@ export class PlayerModel {
   readonly cloakMaterial: THREE.MeshStandardMaterial;
   readonly cape: Cloth;
   readonly tabard: Cloth | null;
+  /** Dimensões da grade da capa (para emitir partículas na bainha). */
+  readonly capeCols: number;
+  readonly capeRows: number;
   /** Encaixe da arma na mão direita (eixo +Y do modelo da arma = para cima com o antebraço à frente). */
   readonly weaponSocket = new THREE.Group();
   readonly defaultStaff: THREE.Group;
@@ -162,6 +165,8 @@ export class PlayerModel {
     const chest = this.bones[B.chest];
     const capeCols = low ? 7 : 9;
     const capeRows = low ? 9 : 13;
+    this.capeCols = capeCols;
+    this.capeRows = capeRows;
     const capeAnchors: THREE.Vector3[] = [];
     for (let c = 0; c < capeCols; c++) {
       const a = -1.32 + (2.64 * c) / (capeCols - 1);
@@ -337,9 +342,9 @@ export class PlayerModel {
     // cabelo atrás
     mb.add(new THREE.ConeGeometry(0.09, 0.3, 10), T(0, -0.02, -0.07, P - 0.25, 0, 0, 1, 1, 0.6), { bone: H, color: C.beard });
     // capuz (aberto na frente) com forro escuro e ponta caída
-    const hgap = 1.75;
-    mb.add(new THREE.SphereGeometry(0.152, 20, 14, P / 2 + hgap / 2, P * 2 - hgap, 0, P * 0.7), T(0, 0.105, -0.012, 0, 0, 0, 1.02, 1.1, 1.13), { bone: H, color: C.coatDark });
-    mb.add(new THREE.SphereGeometry(0.147, 20, 14, P / 2 + hgap / 2, P * 2 - hgap, 0, P * 0.7), T(0, 0.105, -0.012, 0, 0, 0, 1.02, 1.1, 1.13), { bone: H, color: 0x07070c, flip: true });
+    const hgap = 1.5;
+    mb.add(new THREE.SphereGeometry(0.152, 20, 14, P / 2 + hgap / 2, P * 2 - hgap, 0, P * 0.7), T(0, 0.105, 0.004, 0, 0, 0, 1.04, 1.12, 1.24), { bone: H, color: C.coatDark });
+    mb.add(new THREE.SphereGeometry(0.147, 20, 14, P / 2 + hgap / 2, P * 2 - hgap, 0, P * 0.7), T(0, 0.105, 0.004, 0, 0, 0, 1.04, 1.12, 1.24), { bone: H, color: 0x07070c, flip: true });
     mb.add(new THREE.ConeGeometry(0.085, 0.3, 10), T(0, 0.17, -0.2, -2.25, 0, 0, 1, 1, 0.75), { bone: H, color: C.coatDark });
     // diadema de bronze com gema
     mb.add(new THREE.TorusGeometry(0.108, 0.007, 6, 22, P), T(0, 0.158, 0.0, P / 2, 0, 0, 0.92, 1.05, 1), { bone: H, color: C.bronze, metal: true });

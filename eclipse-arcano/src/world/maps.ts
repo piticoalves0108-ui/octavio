@@ -9,7 +9,7 @@ import { BIOME_INFO, ROADS, WATER_LEVEL, WORLD_HALF, WORLD_SIZE, type BiomeId } 
  *  - cor de bioma (macro-variação) → textura sRGB do terreno e base da cor da grama;
  *  - dados: R = estrada/terra batida, G = corrupção, B = densidade de grama, A = flores;
  *  - máscara de bloqueio (CPU) para a dispersão de vegetação (pegadas das estruturas);
- *  - altura (R16F com filtro linear, 1025²) para shaders de grama/água/partículas.
+ *  - altura exata (R32F, 1025²) e normais/cavidade (RGBA8) para terreno, grama, água e partículas.
  *
  * As estruturas registram pegadas/ruas aqui ANTES do upload (World.init cuida da ordem).
  */
@@ -30,6 +30,7 @@ export class WorldMaps {
   colorTex!: THREE.DataTexture;
   dataTex!: THREE.DataTexture;
   heightTex!: THREE.DataTexture;
+  normalTex!: THREE.DataTexture;
 
   private noise = new Simplex2(4242);
 
@@ -72,7 +73,7 @@ export class WorldMaps {
 
     // Campo de corrupção suavizado na grade de biomas (8 m) com blur separável.
     const br = hf.biomeRes;
-    let corr = new Float32Array(br * br);
+    let corr: Float32Array = new Float32Array(br * br);
     for (let k = 0; k < br * br; k++) corr[k] = hf.biomes[k] === corrIdx ? 1 : hf.biomes[k] === swampIdx ? 0.3 : 0;
     corr = blur(corr, br, 3);
     corr = blur(corr, br, 3);
@@ -115,8 +116,8 @@ export class WorldMaps {
           const m1 = n.noise(x / 70, z / 70);
           const m2 = n.noise(x / 17 + 31, z / 17 - 7);
           const dry = smoothstep(0.25, 0.75, m1) * (0.6 * meadow + 0.25);
-          r += dry * 0.12 + m2 * 0.02;
-          g += dry * 0.05 + m2 * 0.025;
+          r += dry * 0.07 + m2 * 0.02;
+          g += dry * 0.025 + m2 * 0.02;
           b -= dry * 0.04;
           const dark = smoothstep(0.1, -0.6, m1) * 0.12;
           r -= dark * 0.6;
@@ -256,23 +257,66 @@ export class WorldMaps {
       t.anisotropy = 4;
       t.needsUpdate = true;
     }
-    // Altura em meia precisão (filtrável em WebGL2).
+    // Altura exata (R32F, sem filtro): os shaders fazem a bilinear com texelFetch,
+    // idêntica à do Heightfield na CPU (física e visual batem).
     const hf = this.hf;
-    const half = new Uint16Array(hf.res * hf.res);
-    for (let k = 0; k < half.length; k++) half[k] = THREE.DataUtils.toHalfFloat(hf.data[k]);
-    this.heightTex = new THREE.DataTexture(half, hf.res, hf.res, THREE.RedFormat, THREE.HalfFloatType);
-    this.heightTex.internalFormat = 'R16F';
-    this.heightTex.magFilter = THREE.LinearFilter;
-    this.heightTex.minFilter = THREE.LinearFilter;
+    this.heightTex = new THREE.DataTexture(hf.data, hf.res, hf.res, THREE.RedFormat, THREE.FloatType);
+    this.heightTex.internalFormat = 'R32F';
+    this.heightTex.magFilter = THREE.NearestFilter;
+    this.heightTex.minFilter = THREE.NearestFilter;
     this.heightTex.generateMipmaps = false;
     this.heightTex.wrapS = this.heightTex.wrapT = THREE.ClampToEdgeWrapping;
     this.heightTex.needsUpdate = true;
+    // Normais + cavidade (RGBA8, filtro linear): R,G = normal xz; B = cavidade (0 vale, 1 crista).
+    const r = hf.res;
+    const nrm = new Uint8Array(r * r * 4);
+    const d = hf.data;
+    const s2 = hf.spacing * 2;
+    for (let j = 0; j < r; j++) {
+      const jm = j > 0 ? j - 1 : 0;
+      const jp = j < r - 1 ? j + 1 : r - 1;
+      for (let i = 0; i < r; i++) {
+        const im = i > 0 ? i - 1 : 0;
+        const ip = i < r - 1 ? i + 1 : r - 1;
+        const hl = d[j * r + im];
+        const hr = d[j * r + ip];
+        const hd = d[jm * r + i];
+        const hu = d[jp * r + i];
+        const nx = hl - hr;
+        const nz = hd - hu;
+        const inv = 1 / Math.sqrt(nx * nx + s2 * s2 + nz * nz);
+        const o = (j * r + i) * 4;
+        nrm[o] = (nx * inv * 0.5 + 0.5) * 255;
+        nrm[o + 1] = (nz * inv * 0.5 + 0.5) * 255;
+        // Laplaciano: positivo em vales (côncavo) → escurece.
+        const lap = (hl + hr + hd + hu) * 0.25 - d[j * r + i];
+        nrm[o + 2] = clamp(0.5 - lap * 0.35, 0, 1) * 255;
+        nrm[o + 3] = 255;
+      }
+    }
+    this.normalTex = new THREE.DataTexture(nrm, r, r, THREE.RGBAFormat, THREE.UnsignedByteType);
+    this.normalTex.magFilter = THREE.LinearFilter;
+    this.normalTex.minFilter = THREE.LinearMipmapLinearFilter;
+    this.normalTex.generateMipmaps = true;
+    this.normalTex.wrapS = this.normalTex.wrapT = THREE.ClampToEdgeWrapping;
+    this.normalTex.needsUpdate = true;
+  }
+
+  /** Uniforms compartilhados pelos shaders que leem os mapas (terreno, grama, água, partículas). */
+  uniforms() {
+    return {
+      tWorldColor: { value: this.colorTex },
+      tWorldData: { value: this.dataTex },
+      tWorldHeight: { value: this.heightTex },
+      tWorldNormal: { value: this.normalTex },
+    };
   }
 
   dispose() {
     this.colorTex?.dispose();
     this.dataTex?.dispose();
     this.heightTex?.dispose();
+    this.normalTex?.dispose();
   }
 }
 
@@ -280,12 +324,32 @@ export class WorldMaps {
 export const MAPS_GLSL = /* glsl */ `
 uniform sampler2D tWorldColor;
 uniform sampler2D tWorldData;
-uniform sampler2D tWorldHeight;
+uniform highp sampler2D tWorldHeight;
+uniform sampler2D tWorldNormal;
 vec2 worldMapUv(vec2 xz) { return (xz + ${WORLD_HALF.toFixed(1)}) / ${WORLD_SIZE.toFixed(1)}; }
-// Altura do relevo: a grade tem 1025 amostras com centro do texel i em x = -1024 + 2i.
+// A grade de altura tem 1025 amostras; a amostra i fica em x = -1024 + 2i.
+float worldHeightTexel(ivec2 ij) { return texelFetch(tWorldHeight, clamp(ij, ivec2(0), ivec2(1024)), 0).r; }
 float worldHeight(vec2 xz) {
-  vec2 uv = ((xz + ${WORLD_HALF.toFixed(1)}) * 0.5 + 0.5) / 1025.0;
-  return texture(tWorldHeight, uv).r;
+  vec2 f = clamp((xz + ${WORLD_HALF.toFixed(1)}) * 0.5, vec2(0.0), vec2(1023.999));
+  ivec2 i = ivec2(floor(f));
+  vec2 t = f - vec2(i);
+  float a = worldHeightTexel(i);
+  float b = worldHeightTexel(i + ivec2(1, 0));
+  float c = worldHeightTexel(i + ivec2(0, 1));
+  float d = worldHeightTexel(i + ivec2(1, 1));
+  return mix(mix(a, b, t.x), mix(c, d, t.x), t.y);
+}
+vec2 worldNormalUv(vec2 xz) { return ((xz + ${WORLD_HALF.toFixed(1)}) * 0.5 + 0.5) / 1025.0; }
+// Normal do relevo (xyz) e cavidade (w).
+vec4 worldNormal(vec2 xz) {
+  vec3 t = texture(tWorldNormal, worldNormalUv(xz)).rgb;
+  vec2 nxz = t.rg * 2.0 - 1.0;
+  return vec4(nxz.x, sqrt(max(0.0, 1.0 - dot(nxz, nxz))), nxz.y, t.b);
+}
+vec4 worldNormalLod(vec2 xz) {
+  vec3 t = textureLod(tWorldNormal, worldNormalUv(xz), 0.0).rgb;
+  vec2 nxz = t.rg * 2.0 - 1.0;
+  return vec4(nxz.x, sqrt(max(0.0, 1.0 - dot(nxz, nxz))), nxz.y, t.b);
 }
 `;
 

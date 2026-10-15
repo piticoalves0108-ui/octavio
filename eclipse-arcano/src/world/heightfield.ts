@@ -73,7 +73,7 @@ export function generateHeight(x: number, z: number): number {
   const edgeF = smoothstep(PLAYABLE_HALF - 200, PLAYABLE_HALF + 40, edge);
   const northF = smoothstep(-640, -900, z) * 0.7;
   const mF = Math.max(edgeF, northF);
-  if (mF > 0) h += mF * (70 + nA.ridged(x / 260, z / 260, 5) * 260);
+  if (mF > 0) h += mF * (60 + nA.ridged(x / 340, z / 340, 5) * 210 + nB.fbm(x / 120, z / 120, 3) * 12);
 
   // Desfiladeiro: paredes altas com corredor central
   const dc = Math.hypot(x - CANYON.x, z - CANYON.z);

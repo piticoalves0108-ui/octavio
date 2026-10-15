@@ -22,15 +22,15 @@ export const HEIGHTFIELD_RES = 1025;
 export type BiomeId = 'meadow' | 'forest' | 'swamp' | 'ruins' | 'mountain' | 'shore' | 'village' | 'rocky' | 'corrupted';
 
 export const BIOME_INFO: Record<BiomeId, { name: string; grass: number; trees: number; color: [number, number, number]; surface: 'grass' | 'dirt' | 'stone' | 'mud' | 'sand' }> = {
-  meadow: { name: 'Campos', grass: 1.0, trees: 0.08, color: [0.36, 0.55, 0.22], surface: 'grass' },
-  forest: { name: 'Floresta', grass: 0.7, trees: 1.0, color: [0.2, 0.4, 0.18], surface: 'grass' },
-  swamp: { name: 'Pântano', grass: 0.5, trees: 0.35, color: [0.25, 0.3, 0.18], surface: 'mud' },
+  meadow: { name: 'Campos', grass: 1.0, trees: 0.08, color: [0.34, 0.47, 0.21], surface: 'grass' },
+  forest: { name: 'Floresta', grass: 0.7, trees: 1.0, color: [0.22, 0.34, 0.16], surface: 'grass' },
+  swamp: { name: 'Pântano', grass: 0.5, trees: 0.35, color: [0.24, 0.27, 0.17], surface: 'mud' },
   ruins: { name: 'Ruínas', grass: 0.35, trees: 0.05, color: [0.45, 0.45, 0.35], surface: 'stone' },
   mountain: { name: 'Montanhas', grass: 0.1, trees: 0.04, color: [0.42, 0.42, 0.4], surface: 'stone' },
   shore: { name: 'Margem', grass: 0.3, trees: 0.02, color: [0.62, 0.58, 0.42], surface: 'sand' },
-  village: { name: 'Vila', grass: 0.4, trees: 0.03, color: [0.42, 0.52, 0.25], surface: 'dirt' },
-  rocky: { name: 'Desfiladeiro', grass: 0.15, trees: 0.02, color: [0.55, 0.4, 0.3], surface: 'stone' },
-  corrupted: { name: 'Terra Corrompida', grass: 0.25, trees: 0.15, color: [0.3, 0.2, 0.32], surface: 'dirt' },
+  village: { name: 'Vila', grass: 0.55, trees: 0.03, color: [0.38, 0.45, 0.24], surface: 'dirt' },
+  rocky: { name: 'Desfiladeiro', grass: 0.15, trees: 0.02, color: [0.5, 0.41, 0.33], surface: 'stone' },
+  corrupted: { name: 'Terra Corrompida', grass: 0.25, trees: 0.15, color: [0.27, 0.23, 0.27], surface: 'dirt' },
 };
 
 export type LocationKind = 'settlement' | 'dungeon' | 'ruins' | 'landmark' | 'camp' | 'tower' | 'region' | 'secret' | 'arena';
@@ -310,27 +310,32 @@ export const BOSS_ARENAS: Record<string, { x: number; z: number; radius: number;
 // Ajustes do sistema de mundo (terreno, vegetação, água, portões).
 // ---------------------------------------------------------------------------
 
-/** Terreno em chunks com LOD (quadtree de 3 tamanhos: 512 → 256 → 128 m). */
+/**
+ * Terreno: quadtree de nós (512 → 256 → 128 → 64 m) que compartilham UMA malha de
+ * 32×32 segmentos, deslocada na GPU pela grade de altura exata (R32F). Resolução:
+ * 64 m → 2 m/vértice (igual ao heightfield), 128 m → 4 m, 256 m → 8 m, 512 m → 16 m.
+ * Tudo sai em 1 draw call instanciada; não há geometria para construir em runtime.
+ */
 export const TERRAIN = {
-  /** Tamanho do chunk base (m). */
+  /** Tamanho (m) do chunk de streaming (vegetação, colisores de troncos/pedras). */
   chunkSize: 128,
+  /** Segmentos por lado de cada nó (todos os níveis usam a mesma malha). */
+  nodeSegments: 32,
+  /** Nó mais fino (m). */
+  minNodeSize: 64,
+  /** Raiz do quadtree (m) — 16 raízes cobrem o mapa. */
+  rootSize: 512,
   /**
-   * Distâncias (m, antes de multiplicar por q.lodBias) a partir das quais cada nível
-   * é usado: < [0] → L0 (2 m/vértice); < [1] → L1 (4 m); < [2] → L2 (nós de 256 m, 8 m);
-   * além disso → L3 (nós de 512 m, 16 m).
+   * Distâncias (m, × q.lodBias) abaixo das quais um nó de 128 / 256 / 512 m é
+   * subdividido. A distância é 3D até a caixa do nó (voar alto reduz o detalhe).
    */
-  lodDistances: [150, 340, 680] as const,
-  /** Profundidade das saias (m) por nível — escondem rachaduras entre LODs. */
-  skirtDepth: [2.5, 5, 10, 22] as const,
-  /** Orçamento de construção de nós por quadro. */
-  maxBuildsPerFrame: 2,
-  buildBudgetMs: 4,
-  /** Intervalo (s) entre recálculos da seleção de LOD. */
-  selectInterval: 0.2,
-  /** Nós fora de uso por mais que isso (s) são descartados (exceto as raízes). */
-  evictAfter: 20,
+  lodDistances: [110, 240, 480] as const,
+  /** Profundidade das saias (m) por nível (64, 128, 256, 512 m) — escondem rachaduras entre LODs. */
+  skirtDepth: [1.5, 3, 7, 16] as const,
+  /** Nós além de viewDistance + margem são descartados. */
+  viewMargin: 250,
   /** Anel de montanhas além da borda do mundo (horizonte). */
-  horizonExtent: 2600,
+  horizonExtent: 2624,
   horizonCell: 64,
 };
 
@@ -338,14 +343,17 @@ export const TERRAIN = {
 export const VEGETATION = {
   /** Tufos de grama por m² (× q.grassDensity × densidade do bioma). */
   grassClumpsPerM2: 1.1,
-  bladesPerClump: 7,
-  bladeHeight: [0.38, 0.8] as const,
+  bladesPerClump: 5,
+  bladeHeight: [0.35, 0.75] as const,
   /** Flores mágicas por m² nos campos/floresta (× q.grassDensity). */
-  flowersPerM2: 0.035,
+  flowersPerM2: 0.02,
   /** Espaçamento base (m) das grades de dispersão por chunk. */
   treeSpacing: 8.5,
   bushSpacing: 6,
   rockSpacing: 13,
+  /** Distância (m × lodBias) máxima de desenho dos arbustos e das pedras. */
+  bushDistance: 95,
+  rockDistance: 380,
   /** Até esta distância (m × lodBias) as árvores usam a malha completa. */
   treeFullDistance: 95,
   /** Até esta distância (m) as árvores projetam sombra (limitada por q.shadowDistance). */

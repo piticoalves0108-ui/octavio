@@ -54,8 +54,9 @@ float eaGlyph(vec2 p, float id) {
   return r;
 }
 float eaRunes(vec2 uv) {
-  float id = floor(uv.x);
-  vec2 p = vec2(fract(uv.x), clamp(uv.y, 0.0, 1.0));
+  // cada célula (1 x 1 em UV) é um glifo; várias fileiras quando v > 1
+  float id = floor(uv.x) + floor(uv.y) * 7.0;
+  vec2 p = vec2(fract(uv.x), uv.y >= 1.0 ? fract(uv.y) : max(uv.y, 0.0));
   vec2 gp = vec2((p.x - 0.14) / 0.72, (p.y - 0.22) / 0.56);
   float inside = step(0.0, gp.x) * step(gp.x, 1.0) * step(0.0, gp.y) * step(gp.y, 1.0);
   float g = eaGlyph(gp, id) * inside;
@@ -154,7 +155,10 @@ vRuneY = position.y;`,
     `#include <emissivemap_fragment>
 ${emissiveCode}
 float eaWave = 0.72 + 0.28 * sin(vRuneY * 5.0 - uRuneTime * (2.2 + 3.0 * uAscend));
-totalEmissiveRadiance += uRuneColor * eaPat * uRuneIntensity * eaWave;`,
+totalEmissiveRadiance += uRuneColor * eaPat * uRuneIntensity * eaWave;
+// contorno (fresnel) frio tingido pela energia: separa a silhueta escura do cenário
+float eaRim = pow(1.0 - clamp(abs(dot(normal, normalize(vViewPosition))), 0.0, 1.0), 3.0);
+totalEmissiveRadiance += mix(vec3(0.42, 0.5, 0.7), uRuneColor, 0.45) * eaRim * (0.16 + 0.1 * uRuneIntensity);`,
   );
   shader.fragmentShader = frag;
 }
@@ -164,16 +168,16 @@ export function createBodyMaterial(): THREE.MeshStandardMaterial {
   const m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.84, metalness: 0.04 });
   m.name = 'ea-mago-corpo';
   m.onBeforeCompile = (s) => inject(s, false);
-  m.customProgramCacheKey = () => 'ea-rune-body-v1';
+  m.customProgramCacheKey = () => 'ea-rune-body-v2';
   return m;
 }
 
 /** Material da capa (dupla face: forro colorido por dentro, runas por fora). */
 export function createCloakMaterial(): THREE.MeshStandardMaterial {
-  const m = new THREE.MeshStandardMaterial({ color: 0x191b33, roughness: 0.9, metalness: 0.0, side: THREE.DoubleSide });
+  const m = new THREE.MeshStandardMaterial({ color: 0x252a4c, roughness: 0.88, metalness: 0.0, side: THREE.DoubleSide });
   m.name = 'ea-mago-capa';
   m.onBeforeCompile = (s) => inject(s, true);
-  m.customProgramCacheKey = () => 'ea-rune-cloak-v1';
+  m.customProgramCacheKey = () => 'ea-rune-cloak-v2';
   return m;
 }
 

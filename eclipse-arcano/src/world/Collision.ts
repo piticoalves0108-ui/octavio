@@ -76,12 +76,17 @@ export interface PushResult {
 
 const CELL = 16;
 const key = (cx: number, cz: number) => `${cx},${cz}`;
+/** Chave numérica da célula (consultas por quadro sem alocar strings). */
+const nkey = (cx: number, cz: number) => (cx + 4096) * 8192 + (cz + 4096);
 
 export class CollisionWorld {
   private colliders = new Map<number, Collider>();
   private grid = new Map<string, Set<Collider>>();
+  /** Espelho do grid com chaves numéricas (usado nas consultas quentes). */
+  private gridN = new Map<number, Set<Collider>>();
   private nextId = 1;
   private tmpSet = new Set<Collider>();
+  private seenSet = new Set<Collider>();
   readonly push: PushResult = { collided: false, normal: new THREE.Vector3(), climbable: false };
 
   constructor(readonly heightfield: Heightfield) {}
@@ -149,6 +154,7 @@ export class CollisionWorld {
         if (!s) {
           s = new Set();
           this.grid.set(k, s);
+          this.gridN.set(nkey(cx, cz), s);
         }
         s.add(c);
         c.cells.push(k);
@@ -182,7 +188,7 @@ export class CollisionWorld {
     out.clear();
     for (let cx = Math.floor((x - r) / CELL); cx <= Math.floor((x + r) / CELL); cx++) {
       for (let cz = Math.floor((z - r) / CELL); cz <= Math.floor((z + r) / CELL); cz++) {
-        const s = this.grid.get(key(cx, cz));
+        const s = this.gridN.get(nkey(cx, cz));
         if (s) for (const c of s) if (c.enabled) out.add(c);
       }
     }
@@ -362,10 +368,11 @@ export class CollisionWorld {
       const maxX = Math.max(origin.x, ex);
       const minZ = Math.min(origin.z, ez);
       const maxZ = Math.max(origin.z, ez);
-      const seen = new Set<Collider>();
+      const seen = this.seenSet;
+      seen.clear();
       for (let cx = Math.floor(minX / CELL); cx <= Math.floor(maxX / CELL); cx++) {
         for (let cz = Math.floor(minZ / CELL); cz <= Math.floor(maxZ / CELL); cz++) {
-          const s = this.grid.get(key(cx, cz));
+          const s = this.gridN.get(nkey(cx, cz));
           if (!s) continue;
           for (const c of s) {
             if (!c.enabled || seen.has(c)) continue;

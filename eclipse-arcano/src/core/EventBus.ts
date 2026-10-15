@@ -30,6 +30,9 @@ export interface GameEvents {
   'player:landed': { impactSpeed: number };
   'player:footstep': { surface: SurfaceType; running: boolean };
   'player:attack': { weaponId: string; heavy: boolean };
+  'player:jump': {};
+  /** Alvo travado mudou (null = soltou). */
+  'player:lockOn': { target: Entity | null };
 
   'ability:cast': { abilityId: string; caster: Entity; position: Vector3 };
   'ability:fail': { abilityId: string; reason: 'cooldown' | 'energy' | 'locked' | 'state' };

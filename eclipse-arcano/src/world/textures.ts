@@ -406,9 +406,9 @@ function paintRoof(g: CanvasRenderingContext2D, rng: RNG) {
 
 function paintPlaster(g: CanvasRenderingContext2D, rng: RNG) {
   fill(g, '#e6dccb');
-  for (let i = 0; i < 70; i++) {
-    g.fillStyle = `rgba(${150 + rng.next() * 50},${130 + rng.next() * 40},${100 + rng.next() * 30},${0.05 + rng.next() * 0.1})`;
-    ellipse(g, rng.next() * LS, rng.next() * LS, 8 + rng.next() * 30, 6 + rng.next() * 20);
+  for (let i = 0; i < 90; i++) {
+    g.fillStyle = `rgba(${150 + rng.next() * 50},${130 + rng.next() * 40},${100 + rng.next() * 30},${0.02 + rng.next() * 0.04})`;
+    ellipse(g, rng.next() * LS, rng.next() * LS, 6 + rng.next() * 18, 4 + rng.next() * 12);
   }
   // pedras aparentes
   for (let i = 0; i < 5; i++) {

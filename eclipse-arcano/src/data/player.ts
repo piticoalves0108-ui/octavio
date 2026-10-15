@@ -57,9 +57,9 @@ export const FALL_DAMAGE = {
   /** Abaixo desta velocidade de impacto (m/s) não há dano (≈6 m de queda). */
   minSpeed: 17,
   /** Dano por m/s acima do mínimo. */
-  perSpeed: 4,
+  perSpeed: 3,
   /** Dano máximo como fração da vida máxima (queda nunca mata: deixa ao menos 1 de vida). */
-  maxFraction: 0.6,
+  maxFraction: 0.45,
 };
 
 export const DODGE = {
@@ -142,10 +142,10 @@ export const FLIGHT = {
   /** Inclinação máxima nas curvas (graus). */
   bankMaxDeg: 38,
   /** Inclinação do corpo para frente: cruzeiro / turbo (graus). */
-  pitchCruiseDeg: 62,
-  pitchBoostDeg: 80,
+  pitchCruiseDeg: 42,
+  pitchBoostDeg: 64,
   /** Aumento de FOV (graus) na velocidade máxima. */
-  fovBoost: 14,
+  fovBoost: 11,
   /** Distância da borda do mapa para mostrar aviso (m). */
   edgeWarnDistance: 45,
   /** Margem abaixo do teto de voo para começar a frear a subida (m). */
@@ -181,9 +181,9 @@ export const CAMERA = {
   indoorDistance: 3.2,
   combatDistance: 6.2,
   bossDistance: 8.8,
-  flightDistance: 7.4,
+  flightDistance: 5.8,
   /** Distância extra por m/s de velocidade no voo. */
-  flightDistancePerSpeed: 0.07,
+  flightDistancePerSpeed: 0.035,
   dialogueDistance: 2.6,
   /** Trava de alvo: alcance, cone (graus) e distância em que solta. */
   lockOnRange: 30,
@@ -235,3 +235,19 @@ export const ANIM_COMMIT: Partial<Record<PlayerAnim, number>> = {
 
 /** Tempo de morte até o estado de jogo 'dead' (tela de derrota). */
 export const DEATH_DELAY = 2.0;
+
+/** Partículas próprias do personagem (centelhas e rastros de vento). */
+export const PLAYER_FX = {
+  /** Capacidade do pool por preset (baixo / médio / alto+). */
+  capacityLow: 96,
+  capacityMedium: 192,
+  capacityHigh: 320,
+  /** Centelhas por segundo no voo (escala com a velocidade e o turbo). */
+  flightSparkRate: 26,
+  /** Rastros de vento por segundo na velocidade máxima. */
+  windRate: 55,
+  /** Centelhas por segundo nas mãos com aura máxima (conjurando). */
+  handRate: 30,
+  /** Centelhas subindo do corpo na Forma Ascendente. */
+  ascendRate: 18,
+};
