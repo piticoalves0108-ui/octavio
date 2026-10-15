@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { JumpAssist, accelerateXZ, approach, bankFromTurn, fallDamage, flightEnergyCost, pickLockTarget, wrapAngle } from '../src/player/locomotion';
 import { FALL_DAMAGE, FLIGHT, JUMP, ANIM_DURATION } from '../src/data/player';
 import { CollisionWorld } from '../src/world/Collision';
+import { WATER_LEVEL } from '../src/data/world';
 import { sphereCast, pointInCollider, colliderAt, ceilingAbove, colliderTop } from '../src/player/probe';
 
 /** Heightfield falso e plano (evita gerar o relevo inteiro no teste). */
@@ -169,5 +170,14 @@ describe('consultas de colisão sem alocação (probe)', () => {
     w2.addCylinder(0, 5, 0.5, 0, 6, 'tree');
     expect(sphereCast(w2, o, fwd, 10, 0.25, { ignoreTrees: true })).toBe(10);
     expect(sphereCast(w2, o, fwd, 10, 0.25)).toBeCloseTo(4.25, 2);
+  });
+
+  it('sphereCast trata a superfície da água como chão quando pedido', () => {
+    // terreno em 0 (abaixo de WATER_LEVEL): com `water`, para na superfície
+    const w = flatWorld(0);
+    const o = new THREE.Vector3(0, WATER_LEVEL + 3, 0);
+    const down = new THREE.Vector3(0, -1, 0);
+    expect(sphereCast(w, o, down, 20, 0.25, { water: true })).toBeCloseTo(2.75, 1);
+    expect(sphereCast(w, o, down, 20, 0.25)).toBeCloseTo(WATER_LEVEL + 2.75, 1);
   });
 });

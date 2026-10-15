@@ -36,6 +36,14 @@ export interface GameEvents {
 
   'ability:cast': { abilityId: string; caster: Entity; position: Vector3 };
   'ability:fail': { abilityId: string; reason: 'cooldown' | 'energy' | 'locked' | 'state' };
+  /** Habilidade aprendida (desbloqueio por nível/história) ou rank aumentado. */
+  'ability:unlocked': { abilityId: string; rank: number };
+  /** Combinação entre magias (Estilhaçar, Sobrecarga, Colapso Dimensional...). */
+  'combat:combo': { comboId: string; name: string; position: Vector3 };
+  /** Parry bem-sucedido do jogador (ou de qualquer defensor). */
+  'combat:parry': { defender: Entity; attacker?: Entity };
+  /** Carga Arcana mudou (0..100) — para a UI. */
+  'ultimate:charge': { value: number; max: number };
 
   'item:pickup': { defId: string; qty: number; uniqueId?: string };
   'inventory:changed': {};

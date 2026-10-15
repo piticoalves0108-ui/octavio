@@ -3,7 +3,6 @@ import type { GameContext, GameSystem } from '../core/context';
 import type { Entity } from '../core/Entity';
 import { clamp, damp, dampAngle, angleDiff } from '../core/math';
 import { CAMERA, FLIGHT, LOCOMOTION } from '../data/player';
-import { WATER_LEVEL } from '../data/world';
 import { sphereCast, ceilingAbove } from './probe';
 import { pickLockTarget, type LockCandidate } from './locomotion';
 
@@ -52,6 +51,7 @@ export class CameraRig implements GameSystem {
   private indoor = 0;
   private indoorTimer = 0;
   private combatW = 0;
+  private bossW = 0;
   /** Lista reutilizada nas consultas de alvo. */
   private list: Entity[] = [];
   private cands: LockCandidate[] = [];
@@ -130,10 +130,15 @@ export class CameraRig implements GameSystem {
     const flying = player.isFlying();
     const lock = player.lockTarget && player.lockTarget.alive ? player.lockTarget : null;
     let mode: CameraMode = this.forcedMode ?? (lock ? 'combat' : flying ? 'flight' : 'explore');
-    if (!this.forcedMode) {
-      const boss = (ctx.sys.ai as { activeBoss?: () => Entity | null }).activeBoss?.();
-      if (boss && boss.alive && !lock && boss.position.distanceToSquared(pp) < 90 * 90) mode = 'boss';
+    let boss: Entity | null = null;
+    if (!this.forcedMode || this.forcedMode === 'boss') {
+      const b = (ctx.sys.ai as { activeBoss?: () => Entity | null }).activeBoss?.() ?? null;
+      if (b && b.alive && !lock && b.position.distanceToSquared(pp) < 90 * 90) {
+        boss = b;
+        if (!this.forcedMode) mode = 'boss';
+      }
     }
+    this.bossW = damp(this.bossW, boss && mode === 'boss' ? 1 : 0, 3, dt);
     if (ctx.state === 'dialogue' && this.dialogueFocus) mode = 'dialogue';
     this.mode = mode;
 
@@ -219,6 +224,15 @@ export class CameraRig implements GameSystem {
       this.v1.sub(this.focus);
       const len = this.v1.length();
       if (len > 0.1) look.addScaledVector(this.v1, (Math.min(len, 18) / len) * 0.28 * this.combatW);
+    } else if (boss && this.bossW > 0.01) {
+      // chefe sem trava: puxa o enquadramento para ele quando está à frente da câmera
+      boss.getCenter(this.v1);
+      this.v1.sub(this.focus);
+      const len = this.v1.length();
+      if (len > 0.1) {
+        const front = clamp((this.v1.x * dir.x + this.v1.z * dir.z) / len, 0, 1);
+        look.addScaledVector(this.v1, (Math.min(len, 25) / len) * 0.18 * this.bossW * front);
+      }
     }
 
     const camPos = this.v2;
@@ -241,7 +255,7 @@ export class CameraRig implements GameSystem {
       camPos.copy(origin).addScaledVector(back, this.curDist).addScaledVector(right, this.shoulder * 0.5);
       // acima do terreno e da água
       const ground = ctx.physics.terrainHeight(camPos.x, camPos.z);
-      const floor = Math.max(ground, ctx.physics.waterSurface(camPos.x, camPos.z) !== null ? WATER_LEVEL : -Infinity) + 0.3;
+      const floor = Math.max(ground, ctx.physics.waterSurface(camPos.x, camPos.z) ?? -Infinity) + 0.3;
       if (camPos.y < floor) camPos.y = floor;
     }
 

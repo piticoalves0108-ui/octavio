@@ -200,20 +200,17 @@ export function sphereCast(world: CollisionWorld, o: THREE.Vector3, dir: THREE.V
   // Terreno: marcha + refinamento
   const step = opts.step ?? 0.6;
   let prevT = 0;
-  const groundAt = (x: number, z: number) => {
-    const h = hf.heightAt(x, z);
-    return opts.water && h < WATER_LEVEL ? WATER_LEVEL : h;
-  };
-  if (oy - r > groundAt(ox, oz)) {
+  const water = !!opts.water;
+  if (oy - r > castGround(hf, ox, oz, water)) {
     for (let t = step; t <= maxDist + 1e-6; t += step) {
       const x = ox + dx * t;
       const z = oz + dz * t;
-      if (oy + dy * t - r <= groundAt(x, z)) {
+      if (oy + dy * t - r <= castGround(hf, x, z, water)) {
         let lo = prevT;
         let hi = t;
         for (let k = 0; k < 6; k++) {
           const mid = (lo + hi) * 0.5;
-          if (oy + dy * mid - r <= groundAt(ox + dx * mid, oz + dz * mid)) hi = mid;
+          if (oy + dy * mid - r <= castGround(hf, ox + dx * mid, oz + dz * mid, water)) hi = mid;
           else lo = mid;
         }
         best = lo;
@@ -236,3 +233,9 @@ export function sphereCast(world: CollisionWorld, o: THREE.Vector3, dir: THREE.V
   return best < 0 ? 0 : best;
 }
 const NO_OPTS: CastOptions = {};
+
+/** Altura do "chão" para o sphere cast (terreno ou superfície da água). Sem closures por chamada. */
+function castGround(hf: CollisionWorld['heightfield'], x: number, z: number, water: boolean): number {
+  const h = hf.heightAt(x, z);
+  return water && h < WATER_LEVEL ? WATER_LEVEL : h;
+}

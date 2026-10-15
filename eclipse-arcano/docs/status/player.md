@@ -96,6 +96,7 @@ Acréscimos fora da área (permitidos): eventos `player:jump` e `player:lockOn` 
 - Modos `explore`, `combat`, `flight`, `dialogue`, `boss` e `cinematic`:
   - o modo é automático (estado do jogador, trava de alvo, `ai.activeBoss?.()`);
   - `setMode` força `dialogue`, `cinematic` ou `boss`;
+  - no modo `boss`, a câmera se afasta (8,8 m) e, sem trava, puxa o ponto olhado em direção ao chefe quando ele está à frente;
   - `setCinematicShot(pos, look)` define um plano fixo;
   - `setDialogueFocus` enquadra o rosto do NPC por cima do ombro do jogador.
 - Trava de alvo (ação `lockOn`):
@@ -135,73 +136,75 @@ Acréscimos fora da área (permitidos): eventos `player:jump` e `player:lockOn` 
 Eventos: `player:jump` e `player:lockOn { target }`.
 
 ## Validação realizada
-- `npx tsc --noEmit`: 0 erros no projeto inteiro na última checagem (incluindo os arquivos do módulo).
-- `npx vitest run tests/player`: **26 testes passando**. Cobrem:
-  - lógica: aceleração, coyote/buffer, dano de queda, custo do voo, inclinação, trava de alvo, consultas de colisão sem alocação e sphere cast;
+Última rodada completa: 15/10/2026, após a revisão desta sessão (câmera de chefe, sphere cast sem closure, piso de água da câmera).
+
+- `npx tsc --noEmit`: **0 erros** no projeto inteiro (inclui todos os arquivos do módulo).
+- `npx vitest run tests/player`: **27 testes passando**. Cobrem:
+  - lógica: aceleração, coyote/buffer, dano de queda, custo do voo, inclinação, trava de alvo, consultas de colisão sem alocação e sphere cast (inclusive com a superfície da água como chão);
   - animação: clipes completos, mola estável a 10 FPS, rolamento sem "desgirar", passos por distância, pose da morte, pitch/bank do voo;
   - capa Verlet;
-  - construção do modelo, posição das mãos e troca de arma.
-- Playwright próprio (`/tmp/claude-0/player-checks/`, esperas em **tempo de simulação**):
-  - `moves.mjs`: **21/21 OK**.
+  - construção do modelo, posição das mãos e troca de arma (qualidade média e baixa).
+- Playwright próprio (`/tmp/claude-0/player-checks/`, esperas em **tempo de simulação**, build em `.smoke/player`):
+  - `moves.mjs`: **21/21 OK**, sem erros de console.
 
     | Teste | Resultado |
     |---|---|
     | Andar | 2,3 m/s |
     | Correr | 5,4 m/s |
     | Disparar | 8,6 m/s |
-    | Passos | com superfície |
-    | Pulo | 1,03 m |
-    | Esquiva | custo 12, i-frames |
-    | Decolagem | +2,1 m |
-    | Subir | +12,6 m |
+    | Passos | 25 eventos, superfície `stone` |
+    | Pulo | 1,02 m |
+    | Esquiva | custo 12, i-frames 0,22 s restantes na checagem |
+    | Decolagem | +2,17 m |
+    | Subir (Espaço) | +12,7 m |
     | Cruzeiro | 18 m/s |
-    | Turbo | 36 m/s, FOV +10,9° |
-    | Energia no voo | 92,7 → 73,1 |
-    | Pouso | eventos corretos |
-    | Escalada e borda | topo exato |
-    | Queda de 40 m | 100 → 55 de vida |
-    | Nado | 2,6 m/s |
-    | Trava de alvo | modo combat, mira exata, solta ao matar |
-    | Mira no centro da tela | ok |
-    | Animações de ação | ok |
-    | Save/load e validação | ok |
-    | Morte e renascimento | eventos e estados corretos |
+    | Turbo | 36 m/s, FOV +10,9°, inclinação −0,41 rad, 53 partículas |
+    | Energia no voo | 92,9 → 73,2 |
+    | Pouso | `flightStart`/`flightEnd`/`landed` corretos |
+    | Escalada e borda | subiu 2,6 m; transpôs no topo exato (23,61) |
+    | Queda de 40 m | 100 → 55 de vida (impacto 42 m/s) |
+    | Nado | 2,6 m/s em 2,9 m de profundidade |
+    | Trava de alvo | modo `combat`, mira exata (dot 1,0), solta ao matar |
+    | Mira no centro da tela | ponto mirado sobre o raio central (dot 1,0) |
+    | Animações de ação | durações certas, `speed` 2 → metade |
+    | Save/load e validação | ok, dados inválidos lançam erro |
+    | Morte e renascimento | 1 `player:death`, 1 `player:respawn`, estados corretos |
 
   - `collide.mjs`: **7/7 OK**.
 
     | Teste | Resultado |
     |---|---|
-    | Pousar em plataforma | ok |
+    | Pousar em plataforma | topo exato |
     | Cair da borda | ok |
-    | Subir degrau de 0,4 m | ok |
-    | Turbo contra parede | não atravessa |
-    | Subir sob ilha | para na base |
+    | Subir degrau | ok |
+    | Turbo contra parede | não atravessa (para 0,9 m antes) |
+    | Subir sob ilha | cabeça para na base |
     | Teto de voo | ok |
-    | Planar sem energia | cerca de 3,25 m/s |
+    | Planar sem energia | desce 3,25 m/s |
 
+  - `boss.mjs` (novo, chefe simulado com `ai.activeBoss`): **5/5 OK**.
+    - Modo `boss` ativa; distância 5,2 → 8,8 m.
+    - O chefe fica mais centralizado: dot da direção da câmera 0,928 → 0,976.
+    - Travar o chefe: modo `combat` com dot 0,997. Ao derrotá-lo, volta a `explore`.
   - `scenes.mjs`: tudo ok.
-    - Escalada e transposição de parede visível: ok.
-    - Câmera com parede atrás: 1,4 m.
-    - Interior: distância de 3,3 m.
+    - Escalada e transposição de parede visível: topo exato.
+    - Câmera com parede atrás: 1,43 m.
+    - Interior: distância de 3,28 m.
     - Diálogo: modo `dialogue`, que volta a `explore`.
-- Capturas avaliadas (`bench-results/player-*.png`): frente, costas, perfil, retratos, correr, disparar, decolagem, pairar, cruzeiro, turbo, curva, esquiva, escalada, borda, nado, conjurar, Forma Ascendente, diálogo e câmera com parede.
-- Custo de CPU a 60 Hz (chamando `update` direto, com o mundo carregado):
+- Capturas avaliadas (`bench-results/player-*.png`): frente, costas, perfil, retratos, correr, disparar, decolagem, pairar, cruzeiro (lado e costas), turbo, curva, esquiva, escalada, borda, nado, conjurar, Forma Ascendente, diálogo, câmera com parede e câmera de chefe.
+- Custo de CPU a 60 Hz (`bench.mjs`, chamando `update` direto, com o mundo carregado, qualidade média):
 
-  | Situação | Jogador | Câmera |
-  |---|---|---|
-  | Parado | 0,15–0,22 ms/frame | 0,005–0,015 ms |
-  | Correndo | 0,15 ms/frame | 0,005–0,015 ms |
-  | Turbo | 0,18–0,21 ms/frame | 0,005–0,015 ms |
+  | Situação | Jogador | Câmera | Capa + tabardo |
+  |---|---|---|---|
+  | Parado | 0,18 ms/frame | 0,011 ms | 0,14 ms |
+  | Correndo | 0,22 ms/frame | 0,011 ms | 0,23 ms |
+  | Turbo | 0,17 ms/frame | 0,005 ms | 0,21 ms |
 
-  A capa e o tabardo custam cerca de 0,12 ms e a animação cerca de 0,002 ms.
+  A animação custa de 0,001 a 0,009 ms.
 
-  No loop real headless (0,6–5 FPS, com dt preso em 0,1), o perf monitor mostra o jogador em 0,63–0,88 ms. A capa roda até 4 subpassos por frame quando o FPS é baixo.
+  No loop real headless (1–5 FPS, com dt preso em 0,1), o perf monitor mostra o jogador em 0,66–1,07 ms, porque a capa roda até 4 subpassos por frame. A câmera aparece em 0,06–0,07 ms depois de alguns segundos. Nos primeiros segundos, a média móvel do monitor ainda carrega a compilação do JIT, e a câmera aparece em 0,3–0,65 ms.
 - Renderização do personagem: cerca de 9,7 mil triângulos e 8 chamadas de desenho (corpo, cajado, anel, capa, tabardo, 2 olhos e cristal), mais 1 para as partículas quando ativas.
-- `scripts/smoke.mjs --port=4192 --out=.smoke/player`:
-  - build ok, o jogo entra em `playing` e não há erros de console;
-  - o único aviso é `toNonIndexed`, de `src/world/vegetation`;
-  - a captura de tela do script estourou o limite de 30 s, porque o mundo completo renderiza a cerca de 0,6 FPS no SwiftShader em 1280×720. Isso é limite do ambiente, não erro do módulo.
-  - As capturas próprias em 800×450 e 1280×720 funcionaram.
+- `scripts/smoke.mjs --port=4192 --out=.smoke/player`: build ok, jogo em `playing`, **0 erros e 0 avisos de console**, nas qualidades padrão e `low`.
 
 ## Pendente / limitações conhecidas
 - **Rosto estilizado e simples** (esfera, cones e caixas): lê bem dentro do capuz com os olhos brilhando, mas não tem detalhe facial.
@@ -209,7 +212,9 @@ Eventos: `player:jump` e `player:lockOn { target }`.
 - **Escalada**: só funciona em colisores marcados `climbable`. Paredes de terreno muito íngremes não são escaláveis. Não há custo de vigor (`CLIMB.energyPerSecond = 0`, ajustável).
 - **Golpes e conjurações** são clipes de poses-chave. O módulo de combate decide o quadro de impacto usando a duração retornada por `playAnimation`.
 - **Rastros de vento**: são riscos estacionários sem colisão; a quantidade é limitada pelo pool.
-- **Câmera de chefe**: só aparece se `ai.activeBoss?.()` existir ou se `setMode('boss')` for chamado. Enquadra afastando a câmera, sem mirar o chefe explicitamente quando não há alvo travado.
+- **Câmera de chefe**: só aparece se `ai.activeBoss?.()` existir (hoje o stub da IA retorna `null`) ou se `setMode('boss')` for chamado. Sem alvo travado, ela se afasta e puxa o enquadramento em direção ao chefe quando ele está à frente da câmera, mas não gira a câmera sozinha; para girar e enquadrar os dois, é preciso travar o alvo (Tab).
+- **Colisão da câmera só vê colisores**: peças visuais sem colisor podem ser atravessadas pela câmera. Exemplo: o entablamento e o frontão do pórtico da cripta, perto do início do jogo, quando a câmera recua 8,8 m ou mais. Árvores são ignoradas de propósito, para a copa não empurrar a câmera.
+- **Mira sem retículo**: `getAimPoint` devolve exatamente o ponto sob o centro da tela, mas a UI (stub) ainda não desenha um retículo. Na inclinação padrão da câmera, o centro da tela toca o chão cerca de 6–7 m à frente; para alvos distantes, o jogador ergue a câmera ou trava o alvo.
 - **Diálogo**: `setDialogueFocus` recebe uma posição. Se ela estiver perto do chão, é tratada como os pés do NPC e sobe para a altura do rosto (+1,6 m).
 - **FPS absoluto não medido** neste ambiente (renderização por software). As métricas válidas são o tempo de CPU por sistema acima.
 
@@ -220,10 +225,15 @@ Eventos: `player:jump` e `player:lockOn { target }`.
   - usar `player.getWeaponTipWorldPosition()` e `player.getHandWorldPosition('left')` como origem de projéteis e `player.getAimRay()` para a direção;
   - o jogador já aplica `health.blocking` em `setBlocking`; a janela de parry continua com o combate.
 - **ui**:
+  - desenhar um retículo fixo no centro da tela (é para lá que `getAimRay`/`getAimPoint` miram);
   - ouvir `player:lockOn` para o retículo do alvo;
   - chamar `player.respawn()` na tela de derrota (ele mesmo volta o estado para `'playing'`).
 - **audio**:
   - ouvir `player:jump` (o jogador também toca `'jump'` direto, então ouvir os dois duplicaria o som);
   - `player:footstep` traz `surface`; `player:flightStart` e `player:flightEnd` marcam o loop de voo.
+- **ai**: fazer `activeBoss()` retornar o chefe em combate; a câmera entra sozinha no modo `boss` quando ele está a menos de 90 m.
 - **story/npc**: usar `camera.setDialogueFocus(posNPC)` / `setDialogueFocus(null)` e `camera.setCinematicShot(...)` com `setMode('explore')` para devolver a câmera.
-- **world**: marcar como `climbable` as paredes que devem ser escaláveis (torres em ruínas, penhascos construídos) e preencher `surface` nos colisores (madeira em pontes etc.) para os passos.
+- **world**:
+  - pôr colisor no entablamento e no frontão do pórtico da cripta (`structures/crypt.ts`, `b.box(0, dh + 0.75, t.z0 - 0.45, ...)` e o `b.tri` do frontão); hoje só as colunas têm colisor e a câmera afastada entra na pedra;
+  - marcar como `climbable` as paredes que devem ser escaláveis (torres em ruínas, penhascos construídos);
+  - preencher `surface` nos colisores (madeira em pontes etc.) para os passos.
