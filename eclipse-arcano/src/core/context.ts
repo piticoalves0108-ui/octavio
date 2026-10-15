@@ -15,6 +15,7 @@ import type { Combat } from '../combat/Combat';
 import type { Abilities } from '../combat/Abilities';
 import type { VFX } from '../combat/VFX';
 import type { AI } from '../ai/AI';
+import type { NPCs } from '../npc/NPCs';
 import type { Inventory } from '../rpg/Inventory';
 import type { Progression } from '../rpg/Progression';
 import type { Quests } from '../rpg/Quests';
@@ -62,6 +63,7 @@ export interface Systems {
   abilities: Abilities;
   vfx: VFX;
   ai: AI;
+  npcs: NPCs;
   inventory: Inventory;
   progression: Progression;
   quests: Quests;

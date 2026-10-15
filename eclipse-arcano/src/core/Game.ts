@@ -16,6 +16,7 @@ import { Combat } from '../combat/Combat';
 import { Abilities } from '../combat/Abilities';
 import { VFX } from '../combat/VFX';
 import { AI } from '../ai/AI';
+import { NPCs } from '../npc/NPCs';
 import { Inventory } from '../rpg/Inventory';
 import { Progression } from '../rpg/Progression';
 import { Quests } from '../rpg/Quests';
@@ -128,6 +129,7 @@ export class Game {
       abilities: new Abilities(),
       vfx: new VFX(),
       ai: new AI(),
+      npcs: new NPCs(),
       inventory: new Inventory(),
       progression: new Progression(),
       quests: new Quests(),
@@ -158,6 +160,7 @@ export class Game {
       sys.camera,
       sys.abilities,
       sys.ai,
+      sys.npcs,
       sys.quests,
       sys.dialogue,
       sys.interaction,
@@ -171,6 +174,7 @@ export class Game {
       sys.player,
       sys.abilities,
       sys.ai,
+      sys.npcs,
       sys.combat,
       sys.vfx,
       sys.interaction,
@@ -184,7 +188,7 @@ export class Game {
     this.lateOrder = [sys.camera, sys.ui, sys.audio, sys.perf];
 
     // Registro de saves (ordem importa: progressão/inventário antes do jogador).
-    for (const s of [clock, sys.story, sys.progression, sys.inventory, sys.abilities, sys.world, sys.env, sys.ai, sys.quests, sys.player]) sys.save.register(s);
+    for (const s of [clock, sys.story, sys.progression, sys.inventory, sys.abilities, sys.world, sys.env, sys.ai, sys.npcs, sys.quests, sys.player]) sys.save.register(s);
 
     for (let i = 0; i < this.all.length; i++) {
       const s = this.all[i];
