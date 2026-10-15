@@ -1,7 +1,7 @@
 // Teste de fumaça: compila (se preciso), sobe o preview, abre o jogo no Chromium
 // headless, inicia um novo jogo, simula alguns segundos de entrada e coleta erros,
 // métricas e uma captura de tela.
-// Uso: node scripts/smoke.mjs [--no-build] [--seconds=8] [--shot=bench-results/smoke.png] [--query=autostart] [--port=4180] [--out=dist]
+// Uso: node scripts/smoke.mjs [--quality=low|medium|high|ultra] [--no-build] [--seconds=8] [--shot=bench-results/smoke.png] [--query=autostart] [--port=4180] [--out=dist]
 // Em paralelo com outros agentes, use --port e --out exclusivos (ex.: --port=4191 --out=.smoke/world).
 import { spawn, execSync } from 'node:child_process';
 import { mkdirSync } from 'node:fs';
@@ -22,7 +22,8 @@ const outDir = args.out ?? 'dist';
 if (!args['no-build']) execSync(`npx vite build --outDir ${outDir} --emptyOutDir`, { stdio: 'inherit' });
 mkdirSync('bench-results', { recursive: true });
 
-const server = spawn('npx', ['vite', 'preview', '--port', String(port), '--strictPort', '--outDir', outDir], { stdio: 'pipe' });
+const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'preview', '--port', String(port), '--strictPort', '--outDir', outDir], { stdio: 'pipe' });
+process.on('exit', () => server.kill());
 await new Promise((resolve, reject) => {
   const t = setTimeout(() => reject(new Error('preview não subiu')), 20000);
   server.stdout.on('data', (d) => {
@@ -46,6 +47,15 @@ try {
     else if (args.verbose) console.log('[page]', t);
   });
   page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
+  if (args.quality) {
+    await page.addInitScript((q) => {
+      try {
+        const k = 'eclipse-arcano:settings';
+        const cur = JSON.parse(localStorage.getItem(k) || '{}');
+        localStorage.setItem(k, JSON.stringify({ ...cur, quality: q, overrides: {} }));
+      } catch {}
+    }, args.quality);
+  }
   await page.goto(`http://localhost:${port}/?${query}`);
   await page.waitForFunction(() => window.__game && window.__game.state === 'playing', null, { timeout: 120000 });
   // Entrada simulada: andar, correr, girar câmera, pular, atacar
@@ -67,8 +77,8 @@ try {
     const p = g.sys.player.entity.position;
     return { state: g.state, player: { x: +p.x.toFixed(1), y: +p.y.toFixed(1), z: +p.z.toFixed(1), state: g.sys.player.state }, perf: g.sys.perf.report() };
   });
-  await page.screenshot({ path: shot });
   console.log(JSON.stringify(report, null, 2));
+  await page.screenshot({ path: shot, timeout: 120000 });
   console.log(`Captura: ${shot}`);
 } catch (err) {
   exitCode = 1;
