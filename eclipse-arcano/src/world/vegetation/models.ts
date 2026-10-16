@@ -182,7 +182,7 @@ function pine(lod: 0 | 1): THREE.BufferGeometry {
       // fundo da camada (sombra interna)
       const disc = new THREE.CircleGeometry(r * 0.95, 9);
       disc.rotateX(Math.PI / 2);
-      parts.push(part(disc, M(0, y0 + 0.05, 0), () => [0.06, 0.13, 0.08], windBy(H, 0.3)));
+      parts.push(part(disc, M(0, y0 + 0.05, 0), () => [0.11, 0.21, 0.13], windBy(H, 0.3)));
     }
   }
   return finish(parts);

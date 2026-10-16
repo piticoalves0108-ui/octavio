@@ -177,6 +177,13 @@ function createWaterMaterial(maps: WorldMaps, normalTex: THREE.Texture) {
       varying vec3 vWorld;
       varying vec2 vFlow;
       vec3 sampleN(vec2 uv) { return texture(tWaterNormal, uv).xyz * 2.0 - 1.0; }
+      float vhash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float vnoise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(vhash(i), vhash(i + vec2(1.0, 0.0)), f.x), mix(vhash(i + vec2(0.0, 1.0)), vhash(i + vec2(1.0, 1.0)), f.x), f.y);
+      }
       void main() {
         vec2 xz = vWorld.xz;
         float ground = worldHeight(xz);
@@ -205,7 +212,11 @@ function createWaterMaterial(maps: WorldMaps, normalTex: THREE.Texture) {
         vec3 body = mix(uShallow, uDeep, smoothstep(0.2, 6.0, depth));
         body = mix(body, uSwamp, swamp);
         body *= dayK * (0.55 + 0.45 * max(uSunDir.y, 0.0));
-        vec3 col = mix(body, sky, fres * mix(0.85, 0.18, swamp));
+        vec3 col = mix(body, sky, fres * mix(0.85, 0.5, swamp));
+        // pântano: lentilhas-d'água/limo boiando em manchas (paradas, só ondulam)
+        float scumN = vnoise(xz * 0.09 + vec2(uTime * 0.01, 0.0)) * 0.7 + vnoise(xz * 0.37) * 0.3;
+        float scum = smoothstep(0.58, 0.72, scumN) * swamp;
+        col = mix(col, vec3(0.16, 0.22, 0.08) * dayK * (0.6 + 0.4 * max(uSunDir.y, 0.0)), scum * 0.85);
         // brilho do sol
         float sp = pow(max(dot(R, normalize(uSunDir)), 0.0), mix(220.0, 60.0, swamp));
         col += uSunColor * sp * 2.2 * (1.0 - uNight) * (1.0 - swamp * 0.6);

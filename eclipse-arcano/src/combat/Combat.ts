@@ -54,6 +54,11 @@ export interface SweepOptions {
   verticalReach?: number;
   /** Filtro extra. */
   filter?: (e: Entity) => boolean;
+  /**
+   * Ajuste por alvo logo antes do dano, numa cópia própria de `info` (crítico condicional,
+   * bônus contra um tipo de inimigo, estados extras...). Pode alterar amount/crit/statuses.
+   */
+  modify?: (e: Entity, info: DamageInfo) => void;
 }
 
 export interface BeamOptions {
@@ -244,7 +249,9 @@ export class Combat implements GameSystem {
       // Não acerta através de paredes
       const tc = e.getCenter(this.tmp);
       if (!this.ctx.physics.lineOfSight(eye, tc)) continue;
-      const res = this.applyDamage(e, { ...info, statuses: info.statuses?.slice(), direction: forward.clone(), point: info.point ? info.point.clone() : undefined });
+      const hitInfo: DamageInfo = { ...info, statuses: info.statuses?.slice(), direction: forward.clone(), point: info.point ? info.point.clone() : undefined };
+      opts.modify?.(e, hitInfo);
+      const res = this.applyDamage(e, hitInfo);
       if (res) {
         hits.push(e);
         opts.alreadyHit?.add(e.id);

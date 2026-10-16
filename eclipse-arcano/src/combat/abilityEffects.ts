@@ -740,7 +740,7 @@ export class AbilityEffects {
       }
     }
     for (const s of this.stormClouds) {
-      const z = this.storms.find((q) => q.cloud === s);
+      const z = this.stormOf(s);
       if (z) V2.set(z.center.x, z.ground + 13, z.center.z);
       s.update(dt, z ? V2 : s.mesh.position, z ? z.radius : s.mesh.scale.x / 1.35);
     }
@@ -785,7 +785,7 @@ export class AbilityEffects {
       vfx.sprite(r.center, 1.2 + Math.sin(ctx.elapsed * 9) * 0.15, 0x9b4dff, 0.8);
     }
     for (const v of this.riftVisuals) {
-      const r = this.rifts.find((q) => q.visual === v);
+      const r = this.riftOf(v);
       v.update(dt, r ? r.center : v.group.position, r ? r.ground : 0, r ? r.radius : 1, 1, ctx.camera);
     }
 
@@ -810,6 +810,16 @@ export class AbilityEffects {
       }
     }
     void UP;
+  }
+
+  // buscas sem closures (rodam a cada quadro)
+  private stormOf(c: StormCloud): StormZone | null {
+    for (let i = 0; i < this.storms.length; i++) if (this.storms[i].cloud === c) return this.storms[i];
+    return null;
+  }
+  private riftOf(v: RiftVisual): RiftZone | null {
+    for (let i = 0; i < this.rifts.length; i++) if (this.rifts[i].visual === v) return this.rifts[i];
+    return null;
   }
 
   /** Limpa tudo (novo jogo/carregamento). */

@@ -99,9 +99,10 @@ function makeCanvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingCo
  * R = ruído fino (solo/grama), G = rocha (rachaduras Voronoi), B = ruído médio, A = pedriscos.
  */
 export function terrainDetailTexture(): THREE.Texture {
+  // DataTexture (e não canvas): o canvas 2D guarda as cores pré-multiplicadas pelo
+  // alfa, então texels com A = 0 perderiam R/G/B — e aqui A é um canal de dados.
   const S = 512;
-  const [canvas, g] = makeCanvas(S, S);
-  const img = g.createImageData(S, S);
+  const data = new Uint8Array(S * S * 4);
   const n = new TileNoise(11);
   const rng = new RNG(5);
   const cells = 12;
@@ -117,15 +118,13 @@ export function terrainDetailTexture(): THREE.Texture {
       const crack = Math.min(1, (f2 - f1) * 4.5);
       const rock = crack * (0.65 + 0.35 * n.fbm(u, v, 16, 3));
       const o = (y * S + x) * 4;
-      img.data[o] = fine * 255;
-      img.data[o + 1] = rock * 255;
-      img.data[o + 2] = mid * 255;
-      img.data[o + 3] = 0;
+      data[o] = fine * 255;
+      data[o + 1] = rock * 255;
+      data[o + 2] = mid * 255;
+      data[o + 3] = 0;
     }
   }
-  g.putImageData(img, 0, 0);
-  // Pedriscos: elipses desenhadas no canal A (via composição manual).
-  const peb = g.getImageData(0, 0, S, S);
+  // Pedriscos: elipses no canal A.
   for (let i = 0; i < 900; i++) {
     const cx = rng.next() * S;
     const cy = rng.next() * S;
@@ -137,22 +136,22 @@ export function terrainDetailTexture(): THREE.Texture {
         const px = (Math.floor(cx + xx) + S) % S;
         const py = (Math.floor(cy + yy) + S) % S;
         const o = (py * S + px) * 4 + 3;
-        peb.data[o] = Math.max(peb.data[o], (1 - d * d) * 255);
+        data[o] = Math.max(data[o], (1 - d * d) * 255);
       }
     }
   }
-  g.putImageData(peb, 0, 0);
-  const tex = new THREE.CanvasTexture(canvas);
+  const tex = new THREE.DataTexture(data, S, S, THREE.RGBAFormat, THREE.UnsignedByteType);
   tex.colorSpace = THREE.NoColorSpace;
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
   tex.anisotropy = 8;
-  tex.generateMipmaps = true;
+  tex.magFilter = THREE.LinearFilter;
   tex.minFilter = THREE.LinearMipmapLinearFilter;
-  tex.premultiplyAlpha = false;
+  tex.generateMipmaps = true;
+  tex.needsUpdate = true;
   return tex;
 }
 
-/** Normal map tileável para a água (256²). */
+/** Normal map tileável para a água (256²): R/G = normal XZ, B = altura (ruído de espuma). */
 export function waterNormalTexture(): THREE.Texture {
   const S = 256;
   const [canvas, g] = makeCanvas(S, S);
@@ -168,14 +167,14 @@ export function waterNormalTexture(): THREE.Texture {
       const d = h[((y + 1) % S) * S + x];
       let nx = (l - r) * 6;
       let ny = (u - d) * 6;
-      const nz = 1;
-      const len = Math.hypot(nx, ny, nz);
+      const len = Math.hypot(nx, ny, 1);
       nx /= len;
       ny /= len;
       const o = (y * S + x) * 4;
       img.data[o] = (nx * 0.5 + 0.5) * 255;
       img.data[o + 1] = (ny * 0.5 + 0.5) * 255;
-      img.data[o + 2] = (nz / len * 0.5 + 0.5) * 255;
+      // B = altura (fBm) — a normal é reconstruída de R/G no shader; B serve de ruído de espuma
+      img.data[o + 2] = h[y * S + x] * 255;
       img.data[o + 3] = 255;
     }
   }
@@ -216,7 +215,7 @@ export const LAYER_PBR: { rough: number; metal: number }[] = [
   { rough: 0.82, metal: 0 }, // madeira
   { rough: 0.7, metal: 0 }, // telha
   { rough: 0.95, metal: 0 }, // reboco
-  { rough: 0.42, metal: 0.75 }, // metal
+  { rough: 0.45, metal: 0.55 }, // metal
   { rough: 0.12, metal: 0.1 }, // cristal
   { rough: 0.88, metal: 0 }, // calçamento
   { rough: 0.95, metal: 0 }, // tecido
@@ -245,7 +244,11 @@ export function structureLayersTexture(): THREE.DataArrayTexture {
       fine[y * LS + x] = n.fbm(x / LS, y / LS, 32, 2);
     }
   }
-  const painters: ((g: CanvasRenderingContext2D, rng: RNG) => void)[] = [
+  // Cada pintor desenha a cor (opaca) no canvas e pode devolver uma máscara de
+  // emissão (LS², 0..255) que vai para o canal A. Sem máscara, A = 255. A máscara
+  // fica fora do canvas porque o canvas 2D pré-multiplica cor × alfa (texels com
+  // alfa 0 perderiam a cor).
+  const painters: ((g: CanvasRenderingContext2D, rng: RNG) => Uint8Array | void)[] = [
     paintStone,
     paintWood,
     paintRoof,
@@ -267,7 +270,7 @@ export function structureLayersTexture(): THREE.DataArrayTexture {
     g.globalAlpha = 1;
     g.clearRect(0, 0, LS, LS);
     const rng = new RNG(100 + layer);
-    paint(g, rng);
+    const mask = paint(g, rng);
     const img = g.getImageData(0, 0, LS, LS);
     const off = layer * LS * LS * 4;
     // Ruído de sujeira por cima (multiplicativo), com deslocamento por camada.
@@ -281,7 +284,7 @@ export function structureLayersTexture(): THREE.DataArrayTexture {
         data[off + o] = Math.min(255, img.data[o] * m);
         data[off + o + 1] = Math.min(255, img.data[o + 1] * m);
         data[off + o + 2] = Math.min(255, img.data[o + 2] * m);
-        data[off + o + 3] = img.data[o + 3];
+        data[off + o + 3] = mask ? mask[y * LS + x] : 255;
       }
     }
   });
@@ -300,16 +303,9 @@ export function structureLayersTexture(): THREE.DataArrayTexture {
 
 // --- pintores (cada um desenha 256x256, alfa 255 = emissão total permitida) ---
 
-function fill(g: CanvasRenderingContext2D, c: string, alpha = 255) {
+function fill(g: CanvasRenderingContext2D, c: string) {
   g.fillStyle = c;
   g.fillRect(0, 0, LS, LS);
-  if (alpha !== 255) setAlpha(g, alpha);
-}
-
-function setAlpha(g: CanvasRenderingContext2D, a: number) {
-  const img = g.getImageData(0, 0, LS, LS);
-  for (let i = 3; i < img.data.length; i += 4) img.data[i] = a;
-  g.putImageData(img, 0, 0);
 }
 
 function shade(base: number, rng: RNG, amount: number) {
@@ -418,9 +414,9 @@ function paintPlaster(g: CanvasRenderingContext2D, rng: RNG) {
   speckle(g, rng, 1600, 0.06);
 }
 
-function paintMetal(g: CanvasRenderingContext2D, rng: RNG) {
-  // Painéis metálicos escuros; ALFA = trilhas de circuito luminosas.
-  fill(g, '#9aa3ad', 0);
+function paintMetal(g: CanvasRenderingContext2D, rng: RNG): Uint8Array {
+  // Painéis metálicos; máscara (A) = trilhas de circuito luminosas.
+  fill(g, '#5d646d');
   const panels = 4;
   const pw = LS / panels;
   for (let i = 0; i < panels; i++) {
@@ -438,9 +434,9 @@ function paintMetal(g: CanvasRenderingContext2D, rng: RNG) {
         g.fillRect(i * pw + rx, j * pw + ry, 3, 3);
     }
   }
-  // circuitos (alfa)
+  // circuitos (máscara)
   const img = g.getImageData(0, 0, LS, LS);
-  for (let k = 3; k < img.data.length; k += 4) img.data[k] = 0;
+  const mask = new Uint8Array(LS * LS);
   const line = (x0: number, y0: number, x1: number, y1: number, w: number) => {
     const steps = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0));
     for (let s = 0; s <= steps; s++) {
@@ -451,7 +447,8 @@ function paintMetal(g: CanvasRenderingContext2D, rng: RNG) {
           const px = (x + a + LS) % LS;
           const py = (y + b + LS) % LS;
           const o = (py * LS + px) * 4;
-          img.data[o + 3] = 255;
+          if (mask[py * LS + px]) continue;
+          mask[py * LS + px] = 255;
           img.data[o] = img.data[o] * 0.6 + 70;
           img.data[o + 1] = img.data[o + 1] * 0.6 + 90;
           img.data[o + 2] = img.data[o + 2] * 0.6 + 100;
@@ -471,12 +468,13 @@ function paintMetal(g: CanvasRenderingContext2D, rng: RNG) {
       y = ny;
     }
     // nó
-    for (let a = -3; a <= 3; a++) for (let b = -3; b <= 3; b++) if (a * a + b * b <= 9) img.data[(((y + b + LS) % LS) * LS + ((x + a + LS) % LS)) * 4 + 3] = 255;
+    for (let a = -3; a <= 3; a++) for (let b = -3; b <= 3; b++) if (a * a + b * b <= 9) mask[((y + b + LS) % LS) * LS + ((x + a + LS) % LS)] = 255;
   }
   g.putImageData(img, 0, 0);
+  return mask;
 }
 
-function paintCrystal(g: CanvasRenderingContext2D, rng: RNG) {
+function paintCrystal(g: CanvasRenderingContext2D, rng: RNG): Uint8Array {
   fill(g, '#cfe6ff');
   for (let i = 0; i < 40; i++) {
     g.strokeStyle = `rgba(255,255,255,${0.2 + rng.next() * 0.4})`;
@@ -492,11 +490,11 @@ function paintCrystal(g: CanvasRenderingContext2D, rng: RNG) {
     g.fillStyle = `rgba(${120 + rng.next() * 60},${150 + rng.next() * 60},255,0.25)`;
     tri(g, rng.next() * LS, rng.next() * LS, 20 + rng.next() * 40, rng);
   }
-  // alfa parcial: brilho interno variável
-  const img = g.getImageData(0, 0, LS, LS);
+  // máscara parcial: brilho interno variável
+  const mask = new Uint8Array(LS * LS);
   const n = new TileNoise(3);
-  for (let y = 0; y < LS; y++) for (let x = 0; x < LS; x++) img.data[(y * LS + x) * 4 + 3] = 120 + n.fbm(x / LS, y / LS, 4, 3) * 135;
-  g.putImageData(img, 0, 0);
+  for (let y = 0; y < LS; y++) for (let x = 0; x < LS; x++) mask[y * LS + x] = 120 + n.fbm(x / LS, y / LS, 4, 3) * 135;
+  return mask;
 }
 
 function paintCobble(g: CanvasRenderingContext2D, rng: RNG) {
@@ -536,8 +534,8 @@ function paintFabric(g: CanvasRenderingContext2D, rng: RNG) {
   }
 }
 
-function paintRune(g: CanvasRenderingContext2D, rng: RNG) {
-  // Pedra escura com runas (ALFA = runas luminosas).
+function paintRune(g: CanvasRenderingContext2D, rng: RNG): Uint8Array {
+  // Pedra escura com runas (máscara = runas luminosas).
   fill(g, '#3d3b44');
   const rows = 4;
   const rh = LS / rows;
@@ -547,9 +545,6 @@ function paintRune(g: CanvasRenderingContext2D, rng: RNG) {
     g.fillRect(0, r * rh + 2, LS, rh - 4);
   }
   speckle(g, rng, 800, 0.1);
-  const img = g.getImageData(0, 0, LS, LS);
-  for (let k = 3; k < img.data.length; k += 4) img.data[k] = 0;
-  g.putImageData(img, 0, 0);
   // glifos: traços retos e arcos numa faixa
   const glyphLayer = document.createElement('canvas');
   glyphLayer.width = glyphLayer.height = LS;
@@ -576,16 +571,18 @@ function paintRune(g: CanvasRenderingContext2D, rng: RNG) {
   }
   const gl = gg.getImageData(0, 0, LS, LS);
   const img2 = g.getImageData(0, 0, LS, LS);
+  const mask = new Uint8Array(LS * LS);
   for (let k = 0; k < gl.data.length; k += 4) {
     const a = gl.data[k + 3];
     if (a > 0) {
-      img2.data[k + 3] = a;
+      mask[k >> 2] = a;
       img2.data[k] = Math.min(255, img2.data[k] + a * 0.5);
       img2.data[k + 1] = Math.min(255, img2.data[k + 1] + a * 0.5);
       img2.data[k + 2] = Math.min(255, img2.data[k + 2] + a * 0.6);
     }
   }
   g.putImageData(img2, 0, 0);
+  return mask;
 }
 
 function paintPlain(g: CanvasRenderingContext2D, rng: RNG) {

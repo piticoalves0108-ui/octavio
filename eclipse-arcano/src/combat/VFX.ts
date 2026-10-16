@@ -123,6 +123,20 @@ export class VFX implements GameSystem {
     this.sprites = new DynamicSprites(192, this.uTime);
     this.root.add(this.smokePool.mesh, this.add.mesh, this.segments.mesh, this.rings.rings, this.rings.shells, this.telegraphs.group, this.trails.mesh, this.sprites.mesh);
     this.targets = { add: this.add, smoke: this.smokePool, rings: this.rings, lights: this.lights, countMul: Math.max(0.4, Math.min(1.6, maxP / 1500)) };
+    ctx.events.on('settings:changed', () => this.applyQuality());
+  }
+
+  /**
+   * Troca de qualidade em tempo real: reduz (ou restaura, até o alocado no início) o limite de
+   * partículas e a densidade dos presets. Luzes e demais pools mantêm o tamanho do início
+   * (mudar o número de luzes recompilaria todos os shaders da cena).
+   */
+  applyQuality() {
+    if (!this.targets) return;
+    const maxP = Math.max(200, this.ctx.settings.q.maxParticles);
+    this.add.setLimit(maxP * 0.72);
+    this.smokePool.setLimit(maxP * 0.28);
+    this.targets.countMul = Math.max(0.4, Math.min(1.6, maxP / 1500));
   }
 
   update(dt: number, ctx: GameContext) {
@@ -366,7 +380,7 @@ export class VFX implements GameSystem {
     return {
       particlesAdd: this.add?.countAlive() ?? 0,
       particlesSmoke: this.smokePool?.countAlive() ?? 0,
-      particleCapacity: (this.add?.capacity ?? 0) + (this.smokePool?.capacity ?? 0),
+      particleCapacity: (this.add?.effectiveLimit ?? 0) + (this.smokePool?.effectiveLimit ?? 0),
       lights: this.lights?.active() ?? 0,
       lightCapacity: this.lights?.count ?? 0,
       telegraphs: this.telegraphs?.activeCount() ?? 0,

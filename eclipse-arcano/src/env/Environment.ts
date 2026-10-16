@@ -129,6 +129,7 @@ export class Environment implements GameSystem, Saveable {
   private fogSampler!: GroundFogSampler;
   private groundFn = (x: number, z: number) => this.splashGround(x, z);
   private splashP = { x: 0, y: 0, z: 0 };
+  private splashFromY = 0;
   private lastBiome: BiomeId = 'meadow';
 
   constructor() {
@@ -279,6 +280,7 @@ export class Environment implements GameSystem, Saveable {
     const wv = RAIN.windSpeed * this.windStrength;
     this.rain.update(dt, this.rainIntensity * outside, this.windDir.x * wv, this.windDir.y * wv, pixelAngle);
     const highUp = cam.position.y - ctx.heightfield.heightAt(cam.position.x, cam.position.z) > 70;
+    this.splashFromY = p.y + 2;
     this.rain.updateSplashes(dt, highUp ? 0 : this.rainIntensity * outside, p.x, p.z, this.groundFn, this.rnd);
     this.groundFog.update(dt, p.x, p.z, 1 - this.indoorK, this.fogSampler);
   }
@@ -286,7 +288,8 @@ export class Environment implements GameSystem, Saveable {
   /** Altura do chão para um respingo (NaN = não respingar: interior/fora do mundo). */
   private splashGround(x: number, z: number): number {
     if (Math.abs(x) > WORLD_HALF - 4 || Math.abs(z) > WORLD_HALF - 4) return NaN;
-    const h = this.ctx.heightfield.heightAt(x, z);
+    // chão real: terreno ou topo de estrutura caminhável (muralha, ponte, praça) abaixo do jogador
+    const h = this.ctx.physics.groundHeight(x, z, this.splashFromY, 0, 0);
     const sp = this.splashP;
     sp.x = x;
     sp.y = Math.max(h, WATER_LEVEL) + 1;
@@ -387,12 +390,14 @@ export class Environment implements GameSystem, Saveable {
     desaturate(this.hemi.color.copy(S.hemiSky), desat * 0.7, this.gray);
     this.hemi.color.multiplyScalar(1 - dark * 0.25);
     this.hemi.groundColor.copy(S.hemiGround);
-    this.hemi.intensity = S.hemiIntensity * (1 + 0.22 * dim) + flash * 2.4;
+    this.hemi.intensity = S.hemiIntensity * DAY_CYCLE.hemiScale * (1 + DAY_CYCLE.overcastHemiBoost * dim) + flash * 4;
 
     // --- névoa: cor sincronizada com o horizonte do céu
     const fc = this.fogColor.copy(S.fog);
     desaturate(fc, desat, this.gray);
-    fc.multiplyScalar(1 - dark * 0.42);
+    fc.multiplyScalar(1 - dark * 0.5);
+    // sob nuvens a névoa puxa para o tom das nuvens (montanhas enevoadas casam com o céu)
+    fc.lerp(this.tmpC.copy(this.hemi.color).multiplyScalar(S.hemiIntensity * 0.9), mix.cloudCover * FOG.cloudTone);
     if (this.tintAmt > 0.001) fc.lerp(this.tmpC.copy(this.tintColor).multiplyScalar(0.25 + 0.75 * (1 - this.night * 0.85)), this.tintAmt);
     if (flash > 0.01) fc.lerp(this.tmpC.setRGB(0.55, 0.6, 0.75), flash * 0.35);
     this.fog.color.copy(fc);
@@ -433,7 +438,7 @@ export class Environment implements GameSystem, Saveable {
     u.uCloudDark.value = dark;
     u.uDesat.value = desat * 0.8;
     const ratio = this.fogDensity / baseFogDensity(vd);
-    u.uHorizonBand.value = 0.05 + 0.45 * smoothstep(1.2, 7, ratio);
+    u.uHorizonBand.value = 0.08 + 0.72 * smoothstep(1.1, 6, ratio);
     const cs = (CLOUDS.baseSpeed + CLOUDS.speed * this.wind.strength) * dt;
     this.cloudOffset.x = (this.cloudOffset.x + this.wind.dir.x * cs) % 1000;
     this.cloudOffset.y = (this.cloudOffset.y + this.wind.dir.z * cs) % 1000;
@@ -450,7 +455,7 @@ export class Environment implements GameSystem, Saveable {
     // --- chuva: cor iluminada pelo céu
     this.rain.dropUniforms.uColor.value
       .copy(this.hemi.color)
-      .multiplyScalar(0.35 + 0.45 * S.hemiIntensity)
+      .multiplyScalar(0.55 + 0.6 * S.hemiIntensity)
       .add(this.tmpC.setRGB(0.6, 0.65, 0.8).multiplyScalar(flash * 1.5));
 
     // --- exposição e pós

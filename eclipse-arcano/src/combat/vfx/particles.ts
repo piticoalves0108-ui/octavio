@@ -149,6 +149,8 @@ void main() {
 export class GpuParticles {
   readonly mesh: THREE.Mesh;
   readonly capacity: number;
+  /** Limite efetivo (≤ capacity): o buffer circular só usa os primeiros `limit` slots (qualidade em tempo real). */
+  private limit: number;
   /** Rascunho reutilizável para `emit`. */
   readonly p: ParticleSpec = {
     x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, life: 1, r: 1, g: 1, b: 1, a: 1,
@@ -167,6 +169,7 @@ export class GpuParticles {
 
   constructor(capacity: number, additive: boolean, uTime: { value: number }) {
     this.capacity = Math.max(16, Math.floor(capacity));
+    this.limit = this.capacity;
     this.uTime = uTime;
     const geo = new THREE.InstancedBufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute([-0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0], 3));
@@ -204,7 +207,7 @@ export class GpuParticles {
   emit() {
     const p = this.p;
     const i = this.head;
-    this.head = (this.head + 1) % this.capacity;
+    this.head = (this.head + 1) % this.limit;
     const o = i * STRIDE;
     const d = this.data;
     const t0 = this.uTime.value + p.delay;
@@ -231,7 +234,7 @@ export class GpuParticles {
     if (this.dirtyFrom < 0) {
       this.dirtyFrom = i;
       this.dirtyCount = 1;
-    } else if (this.dirtyCount < this.capacity) {
+    } else if (this.dirtyCount < this.limit) {
       this.dirtyCount++;
     }
     const end = t0 + p.life;
@@ -263,20 +266,42 @@ export class GpuParticles {
     if (this.dirtyFrom < 0) return;
     const b = this.buffer;
     b.clearUpdateRanges();
-    if (this.dirtyCount >= this.capacity) {
-      b.addUpdateRange(0, this.capacity * STRIDE);
+    const lim = this.limit;
+    if (this.dirtyCount >= lim) {
+      b.addUpdateRange(0, lim * STRIDE);
     } else {
       const start = this.dirtyFrom;
       const end = start + this.dirtyCount;
-      if (end <= this.capacity) b.addUpdateRange(start * STRIDE, this.dirtyCount * STRIDE);
+      if (end <= lim) b.addUpdateRange(start * STRIDE, this.dirtyCount * STRIDE);
       else {
-        b.addUpdateRange(start * STRIDE, (this.capacity - start) * STRIDE);
-        b.addUpdateRange(0, (end - this.capacity) * STRIDE);
+        b.addUpdateRange(start * STRIDE, (lim - start) * STRIDE);
+        b.addUpdateRange(0, (end - lim) * STRIDE);
       }
     }
     b.needsUpdate = true;
     this.dirtyFrom = -1;
     this.dirtyCount = 0;
+  }
+
+  /**
+   * Muda o limite efetivo em tempo real (troca de qualidade). Só reduz/restaura até a
+   * capacidade alocada no início; não realoca buffers.
+   */
+  setLimit(n: number) {
+    const lim = Math.max(16, Math.min(this.capacity, Math.floor(n)));
+    if (lim === this.limit) return;
+    this.limit = lim;
+    if (this.head >= lim) this.head = 0;
+    (this.mesh.geometry as THREE.InstancedBufferGeometry).instanceCount = lim;
+    // a faixa suja pendente pode passar do novo limite: reenvia tudo o que está em uso
+    if (this.dirtyFrom >= 0) {
+      this.dirtyFrom = 0;
+      this.dirtyCount = lim;
+    }
+  }
+
+  get effectiveLimit() {
+    return this.limit;
   }
 
   /** Mata todas as partículas (novo jogo / teleporte de cena). */

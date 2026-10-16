@@ -230,6 +230,8 @@ export interface HouseParams {
   style: number;
   /** Interior acessível: paredes ocas, piso e forro com colisores. */
   interior?: boolean;
+  /** Id da zona de interior (World.indoorId), ex.: 'taverna', 'arquivo'. */
+  interiorId?: string;
   /** Paredes térreas de pedra (senão reboco com enxaimel). */
   stoneBase?: boolean;
   thatch?: boolean;
@@ -289,7 +291,7 @@ export function house(b: GeoBuilder, kit: SiteKit, p: HouseParams, foundationDep
     kit.box(b, 0, H1 + 0.2, 0, w, 0.4, d, 'building', { walkable: false });
     const [fx, fy, fz] = b.toWorld(0, 0, 0);
     kit.surface(b, 'wood', 0, 0, w - 2 * t, d - 2 * t, fy - 0.5, fy + H1, 0, 'piso');
-    kit.indoor(b, 'interior', 0, 0, w - 2 * t, d - 2 * t, fy - 0.5, fy + H1 + 0.2);
+    kit.indoor(b, p.interiorId ?? 'interior', 0, 0, w - 2 * t, d - 2 * t, fy - 0.5, fy + H1 + 0.2);
     void fx;
     void fz;
   }
@@ -478,7 +480,11 @@ export function brazier(b: GeoBuilder, kit: SiteKit | null, x: number, y: number
     b.strut([x + Math.sin(a) * 0.45, y, z + Math.cos(a) * 0.45], [x + Math.sin(a) * 0.2, y + 1.1, z + Math.cos(a) * 0.2], 0.07, iron);
   }
   b.cylinder(x, y + 1.05, z, 0.25, 0.45, 0.3, 8, iron, false, true);
-  b.cone(x, y + 1.25, z, 0.32, 0.7, 5, P(LAYER.PLAIN, [1, 0.7, 0.3], emit));
+  // chama com a cor da emissão (fogo laranja, chama arcana azul...), núcleo mais claro
+  const m = Math.max(emit[0], emit[1], emit[2], 1e-3);
+  const flame: RGB = [0.35 + 0.65 * (emit[0] / m), 0.35 + 0.65 * (emit[1] / m), 0.35 + 0.65 * (emit[2] / m)];
+  b.cone(x, y + 1.25, z, 0.32, 0.7, 5, P(LAYER.PLAIN, flame, emit));
+  b.cone(x + 0.05, y + 1.25, z - 0.04, 0.16, 0.95, 4, P(LAYER.PLAIN, [1, 1, 0.95], [emit[0] * 0.6, emit[1] * 0.6, emit[2] * 0.6, emit[3]]), false, 0.8);
   if (kit) kit.cyl(b, x, y, z, 0.4, 1.3, 'prop');
 }
 

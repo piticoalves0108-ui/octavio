@@ -59,6 +59,8 @@ export class Rain {
       vertexShader: DROP_VERT,
       fragmentShader: DROP_FRAG,
       transparent: true,
+      // o quad é orientado no vertex shader: sem culling (a ordem dos vértices não importa)
+      side: THREE.DoubleSide,
       depthWrite: false,
       fog: false,
     });
@@ -92,6 +94,8 @@ export class Rain {
       vertexShader: SPLASH_VERT,
       fragmentShader: SPLASH_FRAG,
       transparent: true,
+      // anel deitado (visto de cima) e coroa em pé: sem culling
+      side: THREE.DoubleSide,
       depthWrite: false,
       fog: false,
     });
@@ -154,7 +158,7 @@ export class Rain {
     u.uWindOff.value.set(this.windOffX, this.windOffZ);
     u.uWindVel.value.set(windX, windZ);
     u.uPixelAngle.value = pixelAngle;
-    u.uOpacity.value = 0.18 + 0.2 * intensity;
+    u.uOpacity.value = 0.2 + 0.26 * intensity;
   }
 
   /**

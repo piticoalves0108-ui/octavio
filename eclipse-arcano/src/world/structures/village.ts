@@ -257,7 +257,7 @@ function goods(b: GeoBuilder, style: number, w: number, d: number) {
 // ---------------------------------------------------------------------------
 
 function tavern(kit: SiteKit, b: GeoBuilder, def: BuildingDef, depth: number) {
-  house(b, kit, { w: def.w, d: def.d, floors: 2, style: 0, interior: true, stoneBase: true, seed: 3 }, depth);
+  house(b, kit, { w: def.w, d: def.d, floors: 2, style: 0, interior: true, interiorId: 'taverna', stoneBase: true, seed: 3 }, depth);
   const { w, d } = def;
   const t = 0.35;
   const wood = P(LAYER.WOOD, [0.7, 0.52, 0.36]);
@@ -337,7 +337,7 @@ function tavern(kit: SiteKit, b: GeoBuilder, def: BuildingDef, depth: number) {
 }
 
 function archive(kit: SiteKit, b: GeoBuilder, def: BuildingDef, depth: number) {
-  house(b, kit, { w: def.w, d: def.d, floors: 1, style: 4, interior: true, stoneBase: true, seed: 11 }, depth);
+  house(b, kit, { w: def.w, d: def.d, floors: 1, style: 4, interior: true, interiorId: 'arquivo', stoneBase: true, seed: 11 }, depth);
   const { w, d } = def;
   const t = 0.35;
   // estantes nas paredes laterais (âncora arquivo_estante)

@@ -3,7 +3,6 @@ import type { GameContext, GameSystem, Saveable } from '../core/context';
 import type { Action } from '../core/Input';
 import {
   ABILITIES,
-  ABILITY_FAIL_TEXT,
   ABILITY_IDS,
   MAX_RANK,
   STARTING_ABILITY,
@@ -464,5 +463,3 @@ export class Abilities implements GameSystem, Saveable {
     };
   }
 }
-
-void ABILITY_FAIL_TEXT;

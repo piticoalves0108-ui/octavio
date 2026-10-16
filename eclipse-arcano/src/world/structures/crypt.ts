@@ -77,7 +77,7 @@ export function buildCrypt(kit: SiteKit, gates: GateSystem) {
     [c.x1 - 1.4, c.z0 + 1.4],
     [c.x0 + 1.4, c.z1 - 1.6],
     [c.x1 - 1.4, c.z1 - 1.6],
-  ]) brazier(b, kit, x, 0, z, [0.6, 1.4, 3.2, 3]);
+  ]) brazier(b, kit, x, 0, z, [0.35, 0.95, 2.4, 3]);
   // pedras caídas e musgo
   for (let i = 0; i < 9; i++) {
     const x = c.x0 + 1 + rng.next() * (cw - 2);
@@ -86,10 +86,16 @@ export function buildCrypt(kit: SiteKit, gates: GateSystem) {
     const s = 0.3 + rng.next() * 0.5;
     b.box(x, s / 2, z, s * 1.4, s, s, stone, rng.next() * 3);
   }
-  for (let i = 0; i < 14; i++) {
-    const x = c.x0 + rng.next() * cw;
-    const z = c.z0 + rng.next() * cd;
-    b.box(x, 0.01, z, 0.6 + rng.next() * 1.4, 0.02, 0.6 + rng.next() * 1.4, moss, rng.next() * 3);
+  // manchas de musgo irregulares entre as lajotas (aglomerados de discos baixos)
+  const mossFloor = P(LAYER.MOSS, [0.46, 0.58, 0.36]);
+  for (let i = 0; i < 12; i++) {
+    const x = c.x0 + 1 + rng.next() * (cw - 2);
+    const z = c.z0 + 1 + rng.next() * (cd - 2);
+    const blobs = 3 + Math.floor(rng.next() * 4);
+    for (let k = 0; k < blobs; k++) {
+      const r = 0.18 + rng.next() * 0.42;
+      b.cylinder(x + (rng.next() - 0.5) * 1.6, 0, z + (rng.next() - 0.5) * 1.6, r * 1.08, r, 0.025 + rng.next() * 0.03, 7, mossFloor, true, false, false, rng.next() * 6);
+    }
   }
 
   // --- mausoléu ---

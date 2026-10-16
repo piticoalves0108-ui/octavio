@@ -124,7 +124,14 @@ export class PostFX {
       this.lastH = this.size.y;
       this.composer.setSize(Math.max(1, this.lastW), Math.max(1, this.lastH));
     }
+    // vários renderer.render() por quadro: soma as estatísticas (draw calls/triângulos)
+    // de todos os passes em vez de ficar só com o último (o monitor de desempenho lê info)
+    const info = this.renderer.info;
+    const auto = info.autoReset;
+    info.autoReset = false;
+    info.reset();
     this.composer.render();
+    info.autoReset = auto;
   }
 
   dispose() {

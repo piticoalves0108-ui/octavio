@@ -250,6 +250,42 @@ function auraTexture(): THREE.Texture {
   return t;
 }
 
+let envCube: THREE.CubeTexture | null | undefined;
+/**
+ * Reflexo procedural mínimo (céu claro em cima, horizonte azulado, chão escuro embaixo),
+ * compartilhado por todas as armas: sem mapa de ambiente na cena, metal "puro" sai preto.
+ * O renderer pré-processa (PMREM) uma única vez. null fora do navegador (testes).
+ */
+function weaponEnv(): THREE.CubeTexture | null {
+  if (envCube !== undefined) return envCube;
+  if (typeof document === 'undefined') return (envCube = null);
+  const S = 32;
+  const face = (stops: [number, string][]) => {
+    const c = document.createElement('canvas');
+    c.width = c.height = S;
+    const g = c.getContext('2d');
+    if (!g) return c;
+    const gr = g.createLinearGradient(0, 0, 0, S);
+    for (const [t, col] of stops) gr.addColorStop(t, col);
+    g.fillStyle = gr;
+    g.fillRect(0, 0, S, S);
+    return c;
+  };
+  const side = face([
+    [0, '#dbe8f8'],
+    [0.46, '#a9bed2'],
+    [0.54, '#5d6450'],
+    [1, '#2c2e24'],
+  ]);
+  const top = face([[0, '#eef4ff'], [1, '#eef4ff']]);
+  const bottom = face([[0, '#2a2c22'], [1, '#2a2c22']]);
+  // ordem do cubo: +x, -x, +y, -y, +z, -z
+  envCube = new THREE.CubeTexture([side, side, top, bottom, side, side]);
+  envCube.colorSpace = THREE.SRGBColorSpace;
+  envCube.needsUpdate = true;
+  return envCube;
+}
+
 /** Cria (ou reaproveita do cache) o modelo da arma. */
 export function getWeaponModel(def: WeaponDef): WeaponModel {
   const hit = cache.get(def.id);
@@ -260,11 +296,15 @@ export function getWeaponModel(def: WeaponDef): WeaponModel {
   const bodyGeo = mergeGeometries(body.map((p) => tint(p.geo, p.color)))!;
   bodyGeo.computeBoundingSphere();
   const rare = RARITIES[def.rarity];
-  // metalness moderada: sem mapa de ambiente, metal "puro" fica preto
+  // metal reflete o ambiente procedural (gume claro contra o céu); madeira quase não reflete
+  const wood = def.type === 'staff';
+  const env = weaponEnv();
   const bodyMat = new THREE.MeshStandardMaterial({
     vertexColors: true,
-    metalness: def.type === 'staff' ? 0.1 : 0.35,
-    roughness: def.type === 'staff' ? 0.6 : 0.38 - rare.order * 0.03,
+    metalness: wood ? 0.1 : env ? 0.55 : 0.35,
+    roughness: wood ? 0.6 : 0.36 - rare.order * 0.03,
+    envMap: env,
+    envMapIntensity: wood ? 0.35 : 1.0,
   });
   const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
   bodyMesh.castShadow = true;

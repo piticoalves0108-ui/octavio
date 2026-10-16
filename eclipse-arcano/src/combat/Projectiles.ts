@@ -57,10 +57,21 @@ const VIS: Record<string, ProjectileVisual> = {
 };
 const FALLBACK: ProjectileVisual = { core: 0xffffff, coreSize: 0.6, trail: { color: 0xffffff, width: 0.12, life: 0.2 }, emitRate: 15, emitColor: 0xffffff, emitSize: 0.1, impact: 'impact', impactScale: 0.8, sound: 'hit_magic' };
 
-/** Visual registrado (outros módulos podem acrescentar tipos via Projectiles.registerVisual). */
+/** Visual registrado de um tipo de projétil (FALLBACK se desconhecido). */
 export function projectileVisual(kind: string): ProjectileVisual {
   return VIS[kind] ?? FALLBACK;
 }
+
+/**
+ * Registra (ou substitui) o visual de um tipo de projétil — para outros módulos (ex.: IA)
+ * criarem projéteis próprios: `registerProjectileVisual('poisonSpit', { core: 0x80ff40, ... })`.
+ * Também disponível como `ctx.sys.combat.projectiles.registerVisual(...)`.
+ */
+export function registerProjectileVisual(kind: string, vis: ProjectileVisual): void {
+  VIS[kind] = vis;
+}
+
+export type { ProjectileVisual };
 
 const TREE_TAGS: ColliderTag[] = ['tree'];
 const MAX_PROJECTILES = 128;
@@ -569,6 +580,11 @@ export class Projectiles {
       }
     }
     this.meshes.end();
+  }
+
+  /** Registra o visual de um novo tipo de projétil (ver `registerProjectileVisual`). */
+  registerVisual(kind: string, vis: ProjectileVisual) {
+    registerProjectileVisual(kind, vis);
   }
 
   /** Remove todos (novo jogo). */

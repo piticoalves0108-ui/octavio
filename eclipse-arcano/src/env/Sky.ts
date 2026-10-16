@@ -263,7 +263,8 @@ void main() {
     cc = mix(cc, uStormColor * (0.25 + 0.75 * (1.0 - uNight * 0.85)), uCloudDark * smoothstep(0.15, 0.9, c) * 0.85);
     cc += uGlow * pow(sd, 6.0) * (1.0 - c) * 1.6 * sunUp;
     cc += vec3(0.75, 0.82, 1.0) * uFlash * (0.5 + 1.6 * pow(max(dot(d, uFlashDir), 0.0), 3.0));
-    float a = c * smoothstep(0.0, 0.14, h) * 0.97;
+    // as nuvens rareiam perto do horizonte (a camada de nuvens fica "acima" da névoa)
+    float a = c * smoothstep(0.01, 0.2, h) * 0.97;
     col = mix(col, cc, a);
   }
 

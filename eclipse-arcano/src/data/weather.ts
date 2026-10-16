@@ -103,7 +103,14 @@ export const DAY_CYCLE = {
   moonTiltSouth: 0.35,
   /** Intensidades da luz direcional. */
   sunIntensity: 3.1,
-  moonIntensity: 0.55,
+  moonIntensity: 0.8,
+  /**
+   * Escala da luz hemisférica (céu/chão). Com luzes físicas o preenchimento indireto
+   * sai dividido por π: sem esta escala, sombras/noite/tempestade ficam pretas.
+   */
+  hemiScale: 2.3,
+  /** Céu encoberto espalha a luz: preenchimento extra com o sol bloqueado (fração). */
+  overcastHemiBoost: 0.45,
   /** Polo celeste (estrelas giram em volta): ângulo de elevação ao norte (graus). */
   poleElevationDeg: 38,
 };
@@ -126,16 +133,16 @@ export interface SkyKey {
 }
 
 export const SKY_KEYS: readonly SkyKey[] = [
-  { hour: 0, zenith: 0x02040c, horizon: 0x0b1226, fog: 0x0b1222, sun: 0x9fb6ff, glow: 0x101830, hemiSky: 0x4a5c94, hemiGround: 0x161a24, hemiIntensity: 0.62, exposure: 1.3 },
-  { hour: 4.6, zenith: 0x03060f, horizon: 0x101830, fog: 0x0e1626, sun: 0x9fb6ff, glow: 0x141c38, hemiSky: 0x4a5c94, hemiGround: 0x161a24, hemiIntensity: 0.6, exposure: 1.3 },
+  { hour: 0, zenith: 0x02040c, horizon: 0x0b1226, fog: 0x0b1222, sun: 0x9fb6ff, glow: 0x101830, hemiSky: 0x52669e, hemiGround: 0x181c28, hemiIntensity: 0.62, exposure: 1.3 },
+  { hour: 4.6, zenith: 0x03060f, horizon: 0x101830, fog: 0x0e1626, sun: 0x9fb6ff, glow: 0x141c38, hemiSky: 0x52669e, hemiGround: 0x181c28, hemiIntensity: 0.6, exposure: 1.3 },
   { hour: 5.5, zenith: 0x141c46, horizon: 0x5a4266, fog: 0x3e3654, sun: 0xff8a5a, glow: 0x8a4a5a, hemiSky: 0x5a5a90, hemiGround: 0x241e26, hemiIntensity: 0.62, exposure: 1.2 },
-  { hour: 6.25, zenith: 0x3c5a9c, horizon: 0xf0a072, fog: 0xc89a86, sun: 0xffa868, glow: 0xff9a5a, hemiSky: 0x8aa0d0, hemiGround: 0x4a3a30, hemiIntensity: 0.75, exposure: 1.05 },
-  { hour: 7.4, zenith: 0x3f7bc4, horizon: 0xc6d6e6, fog: 0xb4c4d6, sun: 0xffe2bc, glow: 0xffd4a0, hemiSky: 0xa8c4ec, hemiGround: 0x5a5236, hemiIntensity: 0.88, exposure: 1.0 },
-  { hour: 12, zenith: 0x2f6fc4, horizon: 0xb4d0ee, fog: 0xa6c0dc, sun: 0xfff3e2, glow: 0xfff0d8, hemiSky: 0xb4d0f4, hemiGround: 0x5a5a38, hemiIntensity: 0.95, exposure: 0.95 },
-  { hour: 16.4, zenith: 0x3a74c0, horizon: 0xc8d4e0, fog: 0xb6c2d2, sun: 0xffe6c4, glow: 0xffd8a8, hemiSky: 0xacc4e8, hemiGround: 0x5a5236, hemiIntensity: 0.9, exposure: 0.98 },
-  { hour: 17.7, zenith: 0x34569a, horizon: 0xf09056, fog: 0xc88a6e, sun: 0xff9a52, glow: 0xff8a40, hemiSky: 0x8a90c0, hemiGround: 0x4a3426, hemiIntensity: 0.78, exposure: 1.02 },
-  { hour: 18.5, zenith: 0x1c2456, horizon: 0x8a4868, fog: 0x5a3e5c, sun: 0xff6a48, glow: 0xb04a5a, hemiSky: 0x5a5a92, hemiGround: 0x2a2028, hemiIntensity: 0.66, exposure: 1.15 },
-  { hour: 19.4, zenith: 0x060a1e, horizon: 0x1e2442, fog: 0x161c32, sun: 0x9fb6ff, glow: 0x1c2040, hemiSky: 0x4a5c94, hemiGround: 0x181a24, hemiIntensity: 0.62, exposure: 1.28 },
+  { hour: 6.25, zenith: 0x3c5a9c, horizon: 0xf0a072, fog: 0xc89a86, sun: 0xffa868, glow: 0xff9a5a, hemiSky: 0x8aa0d0, hemiGround: 0x4a3a30, hemiIntensity: 0.85, exposure: 1.05 },
+  { hour: 7.4, zenith: 0x3f7bc4, horizon: 0xc6d6e6, fog: 0xb4c4d6, sun: 0xffe2bc, glow: 0xffd4a0, hemiSky: 0xa8c4ec, hemiGround: 0x5a5236, hemiIntensity: 0.88, exposure: 0.94 },
+  { hour: 12, zenith: 0x2f6fc4, horizon: 0xb4d0ee, fog: 0xa6c0dc, sun: 0xfff3e2, glow: 0xfff0d8, hemiSky: 0xb4d0f4, hemiGround: 0x5a5a38, hemiIntensity: 0.95, exposure: 0.89 },
+  { hour: 16.4, zenith: 0x3a74c0, horizon: 0xc8d4e0, fog: 0xb6c2d2, sun: 0xffe6c4, glow: 0xffd8a8, hemiSky: 0xacc4e8, hemiGround: 0x5a5236, hemiIntensity: 0.9, exposure: 0.92 },
+  { hour: 17.7, zenith: 0x34569a, horizon: 0xf09056, fog: 0xc88a6e, sun: 0xff9a52, glow: 0xff8a40, hemiSky: 0x9aa0cc, hemiGround: 0x4a3426, hemiIntensity: 0.92, exposure: 1.08 },
+  { hour: 18.5, zenith: 0x1c2456, horizon: 0x8a4868, fog: 0x5a3e5c, sun: 0xff6a48, glow: 0xb04a5a, hemiSky: 0x5e60a0, hemiGround: 0x2a2028, hemiIntensity: 0.74, exposure: 1.18 },
+  { hour: 19.4, zenith: 0x060a1e, horizon: 0x1e2442, fog: 0x161c32, sun: 0x9fb6ff, glow: 0x1c2040, hemiSky: 0x52669e, hemiGround: 0x181c28, hemiIntensity: 0.62, exposure: 1.28 },
 ];
 
 /** O "Eclipse Arcano": anel rúnico/lua eclipsada sempre presente no céu do norte. */
@@ -251,6 +258,8 @@ export const FOG = {
   tint: { swamp: [0x5c6a4a, 0.4], corrupted: [0x5a3a6e, 0.45] } as Partial<Record<BiomeId, readonly [number, number]>>,
   /** Interiores: névoa reduzida a esta fração. */
   indoorFactor: 0.35,
+  /** Quanto a cor da névoa puxa para o tom das nuvens (× cobertura de nuvens). */
+  cloudTone: 0.4,
 };
 
 /** Névoa rasteira (sprites baratos) no pântano/floresta. */

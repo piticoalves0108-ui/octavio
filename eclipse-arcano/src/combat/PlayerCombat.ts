@@ -111,6 +111,8 @@ export class PlayerCombat implements CombatApi {
   private v2 = new THREE.Vector3();
   private v3 = new THREE.Vector3();
   private list: Entity[] = [];
+  /** Ajuste por alvo do golpe atual (gancho onBeforeHit da arma) — criado uma vez, sem alocar por golpe. */
+  private beforeHit = (e: Entity, info: DamageInfo) => this.behavior?.onBeforeHit?.(this.runtime, e, info, this.swing);
   /** Estatísticas (testes automatizados). */
   readonly stats = { swings: 0, hits: 0, shots: 0, heavies: 0, chargedShots: 0, parries: 0, blocks: 0, guardBreaks: 0, crits: 0, kills: 0, ripostes: 0, lastDamage: 0 };
 
@@ -528,7 +530,12 @@ export class PlayerCombat implements CombatApi {
     this.behavior?.onSwing?.(this.runtime, s);
     const arc = this.def.arc * (heavy ? H.arcMul : step!.arcMul);
     this.collect = [];
-    const hits = ctx.sys.combat.meleeSweep(this.player, s.origin, s.forward, s.range, arc, s.info, { alreadyHit: this.alreadyHit, maxTargets: MELEE_GENERAL.maxTargets, verticalReach: MELEE_GENERAL.verticalReach });
+    const hits = ctx.sys.combat.meleeSweep(this.player, s.origin, s.forward, s.range, arc, s.info, {
+      alreadyHit: this.alreadyHit,
+      maxTargets: MELEE_GENERAL.maxTargets,
+      verticalReach: MELEE_GENERAL.verticalReach,
+      modify: this.behavior?.onBeforeHit ? this.beforeHit : undefined,
+    });
     const results = this.collect;
     this.collect = null;
     let anyCrit = false;

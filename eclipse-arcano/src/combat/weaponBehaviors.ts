@@ -61,6 +61,8 @@ export interface WeaponBehavior {
   onUnequip?(w: WeaponRuntime): void;
   /** Antes do golpe corpo a corpo: pode alterar o dano (tipo, estados, valor). */
   onSwing?(w: WeaponRuntime, s: SwingContext): void;
+  /** Golpe corpo a corpo: ajusta o dano de UM alvo antes de aplicá-lo (cópia própria de `info`). */
+  onBeforeHit?(w: WeaponRuntime, target: Entity, info: DamageInfo, s: SwingContext): void;
   /** Para cada alvo atingido (corpo a corpo ou disparo). */
   onHit?(w: WeaponRuntime, target: Entity, info: DamageInfo, result: DamageResult, s: SwingContext | null): void;
   /** Depois do golpe (com ou sem acertos) — finalizadores e golpes carregados. */
@@ -139,18 +141,21 @@ const BEHAVIORS: Record<WeaponBehaviorId, WeaponBehavior> = {
 
   /** Espada Rúnica (bônus contra constructos/corrompidos) e Adaga Arcana (crítico em alvos indefesos). */
   runic: {
-    onHit(w, target, info, result, s) {
+    /** Alvo atordoado/enraizado/cambaleando: o golpe vira crítico (um único número de dano). */
+    onBeforeHit(w, target, info) {
+      if (P(w, 'critOnDisabled', 0) <= 0 || info.crit) return;
+      const h = target.health;
+      if (!h || !(h.has('root') || h.has('stun') || h.staggered)) return;
+      info.amount *= Math.max(1, w.api.ctx.sys.progression.getStat('critMultiplier'));
+      info.crit = true;
+    },
+    onHit(w, target, info, result) {
       const api = w.api;
       const bonus = P(w, 'bonusVsFactionMul', 0);
       if (bonus > 0 && (target.faction === 'construct' || target.faction === 'corrupted') && result.dealt > 0) {
         api.ctx.sys.combat.applyDamage(target, { amount: info.amount * bonus, type: 'arcane', source: api.player, poiseDamage: 0, tag: 'runic' });
         api.ctx.sys.vfx.burst('arcaneSpark', target.getCenter(V1), { color: 0x58d8ff, count: 8 });
       }
-      if (P(w, 'critOnDisabled', 0) > 0 && !info.crit && target.health && (target.health.has('root') || target.health.has('stun') || target.health.staggered) && result.dealt > 0) {
-        const mul = api.ctx.sys.progression.getStat('critMultiplier');
-        api.ctx.sys.combat.applyDamage(target, { amount: info.amount * Math.max(0, mul - 1), type: info.type, source: api.player, crit: true, poiseDamage: 0, tag: 'crit' });
-      }
-      void s;
     },
   },
 
