@@ -214,9 +214,10 @@ function createWaterMaterial(maps: WorldMaps, normalTex: THREE.Texture) {
         body *= dayK * (0.55 + 0.45 * max(uSunDir.y, 0.0));
         vec3 col = mix(body, sky, fres * mix(0.85, 0.5, swamp));
         // pântano: lentilhas-d'água/limo boiando em manchas (paradas, só ondulam)
-        float scumN = vnoise(xz * 0.09 + vec2(uTime * 0.01, 0.0)) * 0.7 + vnoise(xz * 0.37) * 0.3;
-        float scum = smoothstep(0.58, 0.72, scumN) * swamp;
-        col = mix(col, vec3(0.16, 0.22, 0.08) * dayK * (0.6 + 0.4 * max(uSunDir.y, 0.0)), scum * 0.85);
+        float scumN = vnoise(xz * 0.09 + vec2(uTime * 0.01, 0.0)) * 0.6 + vnoise(xz * 0.37) * 0.25 + vnoise(xz * 1.9) * 0.15;
+        float scum = smoothstep(0.6, 0.7, scumN) * swamp;
+        vec3 scumCol = mix(vec3(0.1, 0.15, 0.05), vec3(0.2, 0.26, 0.09), vnoise(xz * 3.1));
+        col = mix(col, scumCol * dayK * (0.6 + 0.4 * max(uSunDir.y, 0.0)), scum * 0.8);
         // brilho do sol
         float sp = pow(max(dot(R, normalize(uSunDir)), 0.0), mix(220.0, 60.0, swamp));
         col += uSunColor * sp * 2.2 * (1.0 - uNight) * (1.0 - swamp * 0.6);
@@ -229,8 +230,11 @@ function createWaterMaterial(maps: WorldMaps, normalTex: THREE.Texture) {
         col *= 1.0 - uWetness * 0.12;
         float alpha = mix(0.35, 0.93, smoothstep(0.0, 2.2, depth));
         alpha = max(alpha, fres * 0.9);
-        alpha = mix(alpha, 0.97, swamp * 0.8);
+        alpha = mix(alpha, 0.97, swamp * 0.8 * smoothstep(0.0, 0.5, depth));
         alpha = max(alpha, foam * 0.85);
+        // linha d'água: some suavemente onde o relevo encosta na superfície (esconde o
+        // serrilhado da interseção do plano com a malha triangulada do terreno)
+        alpha *= smoothstep(0.0, 0.12, depth + 0.015);
         gl_FragColor = vec4(col, alpha);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>

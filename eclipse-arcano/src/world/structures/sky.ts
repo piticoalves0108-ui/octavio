@@ -16,7 +16,7 @@ export function buildIslands(kit: SiteKit) {
   const b = kit.g('ilhas');
   const noise = new Simplex2(5150);
   const rock = P(LAYER.ROCK, [0.78, 0.74, 0.7]);
-  const grass = P(LAYER.MOSS, [0.75, 0.95, 0.6]);
+  const grass = P(LAYER.MOSS, [0.66, 0.86, 0.52]);
   const ico = new THREE.IcosahedronGeometry(1, 1);
   for (const isl of FLOATING_ISLANDS) {
     const rng = new RNG(Math.round(isl.x * 7 + isl.z * 13));
@@ -39,11 +39,37 @@ export function buildIslands(kit: SiteKit) {
       const rr = edge(i % n) * rings[k].s * (k > 1 ? 0.85 + 0.3 * (noise.noise(i * 0.7 + k * 3, isl.z) * 0.5 + 0.5) : 1);
       return [Math.cos(a) * rr, -rings[k].d - (k > 1 ? noise.noise(i * 0.5, k + isl.x) * 2 : 0), Math.sin(a) * rr];
     };
-    // topo (leque) com leve abaulado
-    for (let i = 0; i < n; i++) {
-      const p0 = ringPt(0, i);
-      const p1 = ringPt(0, i + 1);
-      b.tri([0, 0.25, 0], [p1[0], 0, p1[2]], [p0[0], 0, p0[2]], grass);
+    // topo: anéis concêntricos com leve abaulado, UV planar contínuo e tons de
+    // grama variando por vértice (manchas claras/secas, borda mais escura)
+    const TR = [0, 0.2, 0.4, 0.6, 0.8, 1];
+    const topPt = (k: number, i: number): V3 => {
+      const e = ringPt(0, i);
+      const f = TR[k];
+      return [e[0] * f, 0.25 * (1 - f * f), e[2] * f];
+    };
+    const topTint = (p: V3, f: number): [number, number, number] => {
+      const v = noise.noise(p[0] * 0.18 + isl.x, p[2] * 0.18 + isl.z) * 0.5 + 0.5;
+      const dry = Math.max(0, noise.noise(p[0] * 0.07 - isl.z, p[2] * 0.07 + isl.x)) * 0.6;
+      const k = (0.62 + 0.55 * v) * (1 - 0.22 * f * f);
+      return [k * (1 + dry * 0.9), k * (1 - dry * 0.1), k * (1 - dry * 0.6)];
+    };
+    for (let k = 0; k < TR.length - 1; k++) {
+      for (let i = 0; i < n; i++) {
+        const a0 = topPt(k, i);
+        const a1 = topPt(k, i + 1);
+        const b0 = topPt(k + 1, i);
+        const b1 = topPt(k + 1, i + 1);
+        const ta0 = topTint(a0, TR[k]);
+        const ta1 = topTint(a1, TR[k]);
+        const tb0 = topTint(b0, TR[k + 1]);
+        const tb1 = topTint(b1, TR[k + 1]);
+        if (k === 0) {
+          b.triPlanar(a0, b1, b0, grass, [ta0, tb1, tb0]);
+        } else {
+          b.triPlanar(a0, b1, b0, grass, [ta0, tb1, tb0]);
+          b.triPlanar(a0, a1, b1, grass, [ta0, ta1, tb1]);
+        }
+      }
     }
     // laterais rochosas
     for (let k = 0; k < rings.length - 1; k++) {
@@ -99,6 +125,18 @@ export function buildIslands(kit: SiteKit) {
         b.addGeometry(ico, P(LAYER.MOSS, [0.55 + rng.next() * 0.2, 0.85, 0.65]), x + ox, h + rng.next() * 1.2, z + oz, s, s * 0.85, s);
       }
       kit.cyl(b, x, 0, z, 0.35, h, 'tree');
+    }
+    // arbustos e tufos (aglomerados baixos de verde-escuro)
+    for (let i = 0; i < Math.round(r / 2.2); i++) {
+      const a = rng.next() * Math.PI * 2;
+      const rr = r * (0.2 + rng.next() * 0.65);
+      const x = Math.cos(a) * rr;
+      const z = Math.sin(a) * rr;
+      const tint: [number, number, number] = [0.38 + rng.next() * 0.15, 0.58 + rng.next() * 0.15, 0.32];
+      for (let k = 0; k < 3; k++) {
+        const s = 0.45 + rng.next() * 0.45;
+        b.addGeometry(ico, P(LAYER.MOSS, tint), x + (rng.next() - 0.5) * 1.2, s * 0.35, z + (rng.next() - 0.5) * 1.2, s * 1.2, s * 0.75, s * 1.1, rng.next() * 3);
+      }
     }
     if (isl.id === 'elyra_1') {
       // ruínas: anel de colunas, arco e altar

@@ -626,9 +626,18 @@ function paintThatch(g: CanvasRenderingContext2D, rng: RNG) {
 
 function paintRock(g: CanvasRenderingContext2D, rng: RNG) {
   fill(g, '#8a847a');
+  // manchas claras/escuras em tons de cinza quente (um único sorteio por mancha:
+  // canais sorteados separadamente geravam manchas vermelhas/verdes)
   for (let i = 0; i < 120; i++) {
-    g.fillStyle = `rgba(${rng.next() < 0.5 ? 40 : 200},${rng.next() < 0.5 ? 40 : 190},${rng.next() < 0.5 ? 40 : 170},${0.05 + rng.next() * 0.08})`;
+    const dark = rng.next() < 0.5;
+    const v = dark ? 40 + rng.next() * 25 : 185 + rng.next() * 30;
+    g.fillStyle = `rgba(${v | 0},${(v * 0.96) | 0},${(v * 0.9) | 0},${0.05 + rng.next() * 0.08})`;
     ellipse(g, rng.next() * LS, rng.next() * LS, 6 + rng.next() * 40, 4 + rng.next() * 24);
+  }
+  // estratos horizontais suaves (rocha sedimentar)
+  for (let y = 0; y < LS; y += 6 + Math.floor(rng.next() * 18)) {
+    g.fillStyle = `rgba(${rng.next() < 0.5 ? '30,26,22' : '220,210,195'},${0.04 + rng.next() * 0.06})`;
+    g.fillRect(0, y, LS, 2 + rng.next() * 5);
   }
   for (let i = 0; i < 25; i++) {
     g.strokeStyle = `rgba(30,25,20,${0.2 + rng.next() * 0.3})`;

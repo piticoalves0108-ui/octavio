@@ -321,10 +321,10 @@ nonPerturbedNormal = normal;`,
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
-totalEmissiveRadiance += vec3(0.55, 0.12, 0.95) * tVein * (0.15 + 0.85 * uNight) * (0.65 + 0.35 * sin(uTime * 1.3 + vTerrainPos.x * 0.07 + vTerrainPos.z * 0.05));`,
+totalEmissiveRadiance += vec3(0.55, 0.12, 0.95) * tVein * (0.04 + 0.96 * uNight) * (0.65 + 0.35 * sin(uTime * 1.3 + vTerrainPos.x * 0.07 + vTerrainPos.z * 0.05));`,
       );
   };
-  mat.customProgramCacheKey = () => 'terrain-v1';
+  mat.customProgramCacheKey = () => 'terrain-v2';
   return mat;
 }
 
@@ -353,22 +353,30 @@ col = mix(col, soil, soilW);
 float road = smoothstep(0.18, 0.62, wdat.r + (d1.b - 0.5) * 0.35);
 vec3 roadCol = mix(vec3(0.42, 0.34, 0.24), vec3(0.55, 0.5, 0.43), smoothstep(0.3, 0.8, d1.a)) * (0.82 + 0.32 * d2.r);
 col = mix(col, roadCol, road);
-// rocha nas encostas (projeção lateral para não esticar)
+// rocha nas encostas: projeção triplanar (sem costura nem esticamento), fendas
+// suaves em duas escalas e estratos horizontais (não pode parecer calçamento)
 float rockW = smoothstep(0.24, 0.42, slope + (d2.b - 0.5) * 0.2);
+vec3 tw = pow(abs(tN), vec3(4.0));
+tw /= tw.x + tw.y + tw.z;
+vec4 r1 = texture(tDetail, vTerrainPos.zy * (1.0 / 11.0)) * tw.x + texture(tDetail, vTerrainPos.xy * (1.0 / 11.0)) * tw.z + texture(tDetail, wxz * (1.0 / 11.0) + 0.21) * tw.y;
 vec2 ruv = abs(tN.x) > abs(tN.z) ? vTerrainPos.zy : vTerrainPos.xy;
-vec4 r1 = texture(tDetail, ruv * (1.0 / 9.0));
-vec4 r2 = texture(tDetail, ruv * (1.0 / 31.0) + 0.5);
-vec3 rockCol = mix(vec3(0.4, 0.38, 0.35), vec3(0.58, 0.55, 0.5), r2.b) * (0.62 + 0.5 * r1.g);
-rockCol *= mix(vec3(1.0), clamp(base * 2.3, vec3(0.55), vec3(1.45)), 0.45);
+vec4 r2 = texture(tDetail, ruv * (1.0 / 37.0) + 0.5);
+float crackM = smoothstep(0.0, 0.32, r1.g) * 0.7 + smoothstep(0.0, 0.25, r2.g) * 0.3;
+float strata = 1.0 - 0.08 * (1.0 - farF) * (0.5 + 0.5 * sin(vTerrainPos.y * 1.1 + r2.b * 5.0)); // some ao longe (evita moiré)
+vec3 rockCol = mix(vec3(0.38, 0.36, 0.33), vec3(0.6, 0.57, 0.52), r2.b * 0.75 + r1.b * 0.25) * (0.76 + 0.26 * crackM) * (0.9 + 0.2 * r1.r) * strata;
+rockCol *= mix(vec3(1.0), clamp(base * 2.3, vec3(0.55), vec3(1.45)), 0.4);
 col = mix(col, rockCol, rockW);
 // neve nos picos
 float snow = smoothstep(160.0, 215.0, vTerrainPos.y + (d2.r - 0.5) * 45.0) * smoothstep(0.62, 0.3, slope);
 col = mix(col, vec3(0.86, 0.89, 0.95) * (0.92 + 0.08 * d1.r), snow);
-// terra corrompida: tons arroxeados e veios que brilham à noite
+// terra corrompida: tons arroxeados em manchas (multiplicativos — um acréscimo
+// fixo saturava demais o solo escuro) e veios em rede só em parte do chão
 float corr = wdat.g;
-col = mix(col, col * vec3(0.78, 0.62, 0.88) + vec3(0.03, 0.0, 0.045), corr * 0.75);
-float tVein = smoothstep(0.16, 0.03, d1.g) * smoothstep(0.4, 0.85, corr) * (1.0 - farF * 0.8);
-col = mix(col, vec3(0.1, 0.02, 0.14), tVein * 0.7);
+float corrPatch = 0.55 + 0.45 * smoothstep(0.25, 0.75, d2.r);
+col = mix(col, col * vec3(0.86, 0.74, 0.96), corr * 0.8 * corrPatch);
+col = mix(col, vec3(0.1, 0.08, 0.09), corr * 0.18);
+float tVein = smoothstep(0.12, 0.02, d1.g) * smoothstep(0.45, 0.9, corr) * smoothstep(0.5, 0.72, d2.b + d2.r * 0.3) * (1.0 - farF * 0.8);
+col = mix(col, vec3(0.1, 0.03, 0.13), tVein * 0.5);
 // cavidade (vales mais escuros)
 col *= mix(0.82, 1.05, smoothstep(0.25, 0.62, wn.w));
 // umidade: escurece e deixa mais liso

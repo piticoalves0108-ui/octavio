@@ -41,8 +41,12 @@ export function buildCamp(kit: SiteKit, gates: GateSystem) {
     const z = Math.sin(a) * R;
     const g = H(x, z) - 0.5;
     const h = 4.2 + rng.next() * 0.8;
-    b.cylinder(x, g, z, 0.32, 0.3, h, 6, log, false, false, false, a);
-    b.cone(x, g + h, z, 0.3, 0.6, 6, log, false, a);
+    // troncos com tons variados (madeira nova, velha e acinzentada)
+    const tone = 0.85 + rng.next() * 0.3;
+    const aged = rng.next() * 0.25;
+    const post = P(LAYER.LOG, [(1.0 - aged * 0.3) * tone, (0.84 - aged * 0.1) * tone, (0.66 + aged * 0.15) * tone]);
+    b.cylinder(x, g, z, 0.3, 0.27, h, 6, post, false, false, false, a);
+    b.cone(x, g + h, z, 0.27, 0.6, 6, post, false, a);
   }
   // colisores da paliçada em trechos de ~4 m
   const nSeg = 40;

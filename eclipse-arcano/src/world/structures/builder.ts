@@ -136,6 +136,36 @@ export class GeoBuilder {
   }
 
   /** Triângulo plano. */
+  /**
+   * Triângulo com UV planar no plano XZ local (ladrilho contínuo entre triângulos
+   * vizinhos — pisos/topos irregulares) e cor opcional por vértice (multiplica a tinta).
+   */
+  triPlanar(p0: V3, p1: V3, p2: V3, o: PieceOpts, tints?: readonly [readonly [number, number, number], readonly [number, number, number], readonly [number, number, number]]) {
+    const ux = p1[0] - p0[0];
+    const uy = p1[1] - p0[1];
+    const uz = p1[2] - p0[2];
+    const vx = p2[0] - p0[0];
+    const vy = p2[1] - p0[1];
+    const vz = p2[2] - p0[2];
+    let nx = uy * vz - uz * vy;
+    let ny = uz * vx - ux * vz;
+    let nz = ux * vy - uy * vx;
+    const nl = Math.hypot(nx, ny, nz) || 1;
+    nx /= nl;
+    ny /= nl;
+    nz /= nl;
+    const base = o.color ?? WHITE;
+    const pts = [p0, p1, p2];
+    const ids: number[] = [];
+    for (let k = 0; k < 3; k++) {
+      const p = pts[k];
+      const t = tints?.[k];
+      const oo = t ? { ...o, color: [base[0] * t[0], base[1] * t[1], base[2] * t[2]] as const } : o;
+      ids.push(this.vert(p[0], p[1], p[2], nx, ny, nz, p[0], p[2], oo));
+    }
+    this.idx.push(ids[0], ids[1], ids[2]);
+  }
+
   tri(p0: V3, p1: V3, p2: V3, o: PieceOpts) {
     const ux = p1[0] - p0[0];
     const uy = p1[1] - p0[1];
