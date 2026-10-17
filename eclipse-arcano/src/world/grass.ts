@@ -205,7 +205,7 @@ vec4 gData = texture(tWorldData, gUv);
 float gDist = length(gRoot - cameraPosition.xz);
 float gGround = worldHeight(gRoot);
 float gKeep = step(gh3, gData.a * 1.4) * step(${(WATER_LEVEL + 0.3).toFixed(2)}, gGround);
-float gScale = gKeep * (1.0 - smoothstep(uRadius * 0.75, uRadius, gDist)) * (0.75 + 0.5 * gh2);
+float gScale = gKeep * (1.0 - smoothstep(uRadius * 0.75, uRadius, gDist)) * (0.85 + 0.5 * gh2);
 vec3 objectNormal = vec3(0.0, 1.0, 0.0);`,
         )
         .replace(
@@ -215,7 +215,7 @@ float gc = cos(gAng);
 float gs = sin(gAng);
 vec3 gp = position * gScale;
 gp.xz = vec2(gp.x * gc - gp.z * gs, gp.x * gs + gp.z * gc);
-float gH = clamp(position.y / 0.55, 0.0, 1.0);
+float gH = clamp(position.y / 0.68, 0.0, 1.0);
 float gPhase = dot(gRoot, uWindDir) * 0.2 - uTime * 1.6;
 gp.xz += uWindDir * sin(gPhase + gh1 * 6.0) * (0.1 + uWindStrength * 0.25) * gH * gH;
 vec2 gPd = gRoot - uPlayerPos.xz;
@@ -231,9 +231,9 @@ pal[1] = vec3(0.7, 0.4, 1.0);
 pal[2] = vec3(1.0, 0.8, 0.3);
 pal[3] = vec3(1.0, 0.45, 0.65);
 vFlowerCol = pal[int(gh3 * 3.99)];
-vGlow = color.r * (0.12 + 1.3 * uNight + 1.1 * gNear) * (0.8 + 0.2 * sin(uTime * 2.0 + gh1 * 20.0));`,
+// brilho: fraco de dia, forte à noite e perto do jogador (sem estourar no tone mapping)
+vGlow = color.r * (0.05 + 0.85 * uNight + 0.55 * gNear) * (0.8 + 0.2 * sin(uTime * 2.0 + gh1 * 20.0));`,
         )
-        .replace('#include <color_vertex>', '')
         .replace('#include <project_vertex>', 'vec4 mvPosition = viewMatrix * vec4(transformed, 1.0);\ngl_Position = projectionMatrix * mvPosition;')
         .replace('#include <worldpos_vertex>', '#if defined( USE_SHADOWMAP )\nvec4 worldPosition = vec4(transformed, 1.0);\n#endif');
       shader.fragmentShader = shader.fragmentShader
@@ -242,7 +242,7 @@ vGlow = color.r * (0.12 + 1.3 * uNight + 1.1 * gNear) * (0.8 + 0.2 * sin(uTime *
         .replace('#include <color_fragment>', 'diffuseColor.rgb *= mix(vec3(0.25, 0.5, 0.2), vFlowerCol, step(0.5, vColor.g));')
         .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += vFlowerCol * vGlow;');
     };
-    mat.customProgramCacheKey = () => 'flowers-v1';
+    mat.customProgramCacheKey = () => 'flowers-v2';
     return mat;
   }
 
@@ -307,7 +307,7 @@ function buildGrassGeometry(cell: number, radius: number): THREE.InstancedBuffer
   return g;
 }
 
-/** Flor: caule + duas corolas cruzadas (estrela de 5 pétalas) + miolo. color.r = intensidade do brilho, color.g = pétala. */
+/** Flor: caule + folha + corola em taça (5 pétalas) + miolo luminoso. color.r = intensidade do brilho, color.g = pétala. */
 function buildFlowerGeometry(cell: number, radius: number): THREE.InstancedBufferGeometry {
   const pos: number[] = [];
   const nrm: number[] = [];
@@ -322,25 +322,33 @@ function buildFlowerGeometry(cell: number, radius: number): THREE.InstancedBuffe
   // caule
   const s0 = v(-0.02, 0, 0, 0, 0);
   const s1 = v(0.02, 0, 0, 0, 0);
-  const s2 = v(0.02, 0.5, 0, 0, 0);
-  const s3 = v(-0.02, 0.5, 0, 0, 0);
+  const s2 = v(0.02, 0.62, 0, 0, 0);
+  const s3 = v(-0.02, 0.62, 0, 0, 0);
   idx.push(s0, s1, s2, s0, s2, s3);
   // folhas
   const l0 = v(0, 0.12, 0, 0, 0);
   const l1 = v(0.16, 0.22, 0.05, 0, 0);
   const l2 = v(0.02, 0.26, 0, 0, 0);
   idx.push(l0, l1, l2);
-  // corola (estrela) levemente em taça
-  const cy = 0.52;
-  const c = v(0, cy + 0.02, 0, 1, 1);
-  const n = 10;
-  const ring: number[] = [];
-  for (let i = 0; i < n; i++) {
-    const a = (i / n) * Math.PI * 2;
-    const r = i % 2 === 0 ? 0.13 : 0.05;
-    ring.push(v(Math.cos(a) * r, cy + (i % 2 === 0 ? 0.05 : 0.0), Math.sin(a) * r, i % 2 === 0 ? 0.5 : 0.8, 1));
+  // corola em taça: 5 pétalas abertas para cima (legíveis de lado e de cima)
+  const cy = 0.6;
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2;
+    const base = v(Math.cos(a) * 0.025, cy, Math.sin(a) * 0.025, 0.7, 1);
+    const sl = v(Math.cos(a - 0.45) * 0.1, cy + 0.07, Math.sin(a - 0.45) * 0.1, 0.55, 1);
+    const sr = v(Math.cos(a + 0.45) * 0.1, cy + 0.07, Math.sin(a + 0.45) * 0.1, 0.55, 1);
+    const tip = v(Math.cos(a) * 0.2, cy + 0.17, Math.sin(a) * 0.2, 0.4, 1);
+    idx.push(base, sr, sl, sl, sr, tip);
   }
-  for (let i = 0; i < n; i++) idx.push(c, ring[(i + 1) % n], ring[i]);
+  // miolo luminoso (pequena pirâmide dupla)
+  const top = v(0, cy + 0.1, 0, 1.2, 1);
+  const bot = v(0, cy - 0.02, 0, 1.2, 1);
+  const mid: number[] = [];
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2;
+    mid.push(v(Math.cos(a) * 0.045, cy + 0.04, Math.sin(a) * 0.045, 1.2, 1));
+  }
+  for (let i = 0; i < 4; i++) idx.push(top, mid[(i + 1) % 4], mid[i], bot, mid[i], mid[(i + 1) % 4]);
   const g = new THREE.InstancedBufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
   g.setAttribute('normal', new THREE.Float32BufferAttribute(nrm, 3));

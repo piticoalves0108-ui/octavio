@@ -365,9 +365,12 @@ export class Scatter {
         if (this.maps.blockedAt(x, z)) continue;
         const y = hf.heightAt(x, z);
         if (y < WATER_LEVEL + 0.35) continue;
-        if (hf.slopeAt(x, z) > 38) continue;
+        if (hf.slopeAt(x, z) > VEGETATION.treeMaxSlope) continue;
         const sp = this.pickSpecies(biome, x, z, hash2(gx, gz, 4));
         const s = 0.75 + hash2(gx, gz, 5) * 0.6;
+        // cristas agudas: o relevo dos nós de LOD distantes fica abaixo do real e a
+        // árvore pareceria flutuar de longe — não planta aí
+        if (hf.lodSag(x, z) > 0.45 + 0.3 * s) continue;
         const tint = 0.85 + hash2(gx, gz, 6) * 0.3;
         const autumn = sp === 'oak' && this.noise.noise(x / 160 + 40, z / 160) > 0.55 ? 1 : 0;
         lists[SP_INDEX[sp]].push({ x, y: y - 0.1, z, yaw: hash2(gx, gz, 7) * Math.PI * 2, s, sy: s * (0.9 + hash2(gx, gz, 8) * 0.25), r: tint * (autumn ? 1.45 : 1), g: tint * (autumn ? 0.95 : 1), b: tint * (autumn ? 0.6 : 1), h: hash2(gx, gz, 9) });
@@ -389,6 +392,7 @@ export class Scatter {
         if (this.maps.blockedAt(x, z)) continue;
         const y = hf.heightAt(x, z);
         if (y < WATER_LEVEL + 0.3) continue;
+        if (hf.slopeAt(x, z) > VEGETATION.bushMaxSlope) continue; // nada de arbusto grudado em paredão
         const s = 0.7 + hash2(gx, gz, 14) * 0.8;
         const [r, g, b] = biome === 'swamp' || biome === 'corrupted' ? [0.75, 0.75, 0.6] : biome === 'forest' ? [0.85, 1.0, 0.85] : [1, 1.05, 0.9];
         lists[SP_INDEX.bush].push({ x, y: y - 0.15, z, yaw: hash2(gx, gz, 15) * 6.28, s, sy: s, r, g, b, h: hash2(gx, gz, 16) });
@@ -407,8 +411,11 @@ export class Scatter {
         if (h0 > (base[biome] ?? 0.1) * pd) continue;
         if (this.maps.blockedAt(x, z)) continue;
         const y = hf.heightAt(x, z);
+        if (hf.slopeAt(x, z) > VEGETATION.rockMaxSlope) continue;
         const big = hash2(gx, gz, 24);
         const s = 0.4 + big * big * 2.6;
+        // idem para pedras (visíveis até ~380 m, sobre nós de 8–16 m)
+        if (hf.lodSag(x, z) > 0.5 * s) continue;
         const tint = biome === 'rocky' ? [1.25, 0.95, 0.8] : biome === 'swamp' || biome === 'corrupted' ? [0.75, 0.72, 0.8] : biome === 'mountain' ? [1.05, 1.05, 1.05] : [1, 1, 0.95];
         lists[SP_INDEX.rock].push({ x, y: y - 0.25 * s, z, yaw: hash2(gx, gz, 25) * 6.28, s, sy: s * (0.6 + hash2(gx, gz, 26) * 0.6), r: tint[0], g: tint[1], b: tint[2], h: 1 - big });
         if (s > 1.3) cols.push(x, z, s * 0.95, y - 1, y + s * 0.55, 1);

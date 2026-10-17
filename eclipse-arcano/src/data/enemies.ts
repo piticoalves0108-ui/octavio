@@ -820,7 +820,7 @@ export const AI_RULES = {
   barRange: 40,
   barLinger: 6,
   /** Adaptação ao estilo do jogador: decaimento por segundo e pesos. */
-  adapt: { decay: 0.02, blockGain: 0.08, rangedGain: 0.03, repeatGain: 0.2, repeatDecay: 0.05 },
+  adapt: { decay: 0.015, blockGain: 0.08, rangedGain: 0.06, repeatGain: 0.2, repeatDecay: 0.05 },
   /** Separação entre inimigos (m). */
   separation: 1.3,
   /** Inimigos "circulam" (strafe) a esta velocidade relativa enquanto esperam token. */

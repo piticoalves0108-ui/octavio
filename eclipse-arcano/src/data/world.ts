@@ -45,6 +45,11 @@ export interface LocationDef {
   radius: number;
   /** Se definido, o terreno é aplainado para esta altura dentro do raio. */
   flattenTo?: number;
+  /**
+   * Raio externo (m) da transição do aplainamento para o relevo natural
+   * (padrão: 1,5 × radius). Maior = encosta mais suave (acesso a pé).
+   */
+  flattenOuter?: number;
   /** Raio para "descobrir" o local (marca no mapa + XP). */
   discoverRadius: number;
   biome?: BiomeId;
@@ -144,6 +149,8 @@ export const LOCATIONS: LocationDef[] = [
     z: 220,
     radius: 26,
     flattenTo: 34,
+    // colina suave (≤ ~30°) para a trilha chegar a pé até a porta
+    flattenOuter: 80,
     discoverRadius: 50,
     description: 'Torre de mago com uma biblioteca proibida. A porta só abre para quem fala a língua antiga.',
   },
@@ -199,6 +206,8 @@ export const LOCATIONS: LocationDef[] = [
     z: -640,
     radius: 36,
     flattenTo: 40,
+    // encosta suave para chegar a pé pela frente (sem paredão de 20 m)
+    flattenOuter: 75,
     discoverRadius: 50,
     biome: 'ruins',
     description: 'Máquinas silenciosas e tubos de cristal partidos. Alguém esteve aqui recentemente.',
@@ -210,7 +219,9 @@ export const LOCATIONS: LocationDef[] = [
     x: -820,
     z: 60,
     radius: 30,
-    flattenTo: 48,
+    flattenTo: 38,
+    // promontório com encosta suave a leste/norte (acesso a pé) e a serra a sudoeste
+    flattenOuter: 90,
     discoverRadius: 45,
     description: 'Um círculo de cristais que ainda pulsa com energia pura.',
   },
@@ -346,11 +357,15 @@ export const VEGETATION = {
   bladesPerClump: 5,
   bladeHeight: [0.35, 0.75] as const,
   /** Flores mágicas por m² nos campos/floresta (× q.grassDensity). */
-  flowersPerM2: 0.02,
+  flowersPerM2: 0.03,
   /** Espaçamento base (m) das grades de dispersão por chunk. */
   treeSpacing: 8.5,
   bushSpacing: 6,
   rockSpacing: 13,
+  /** Inclinação máxima (graus) do relevo onde nascem árvores / arbustos / pedras. */
+  treeMaxSlope: 38,
+  bushMaxSlope: 34,
+  rockMaxSlope: 44,
   /** Distância (m × lodBias) máxima de desenho dos arbustos e das pedras. */
   bushDistance: 95,
   rockDistance: 380,

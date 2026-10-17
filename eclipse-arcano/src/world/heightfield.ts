@@ -109,7 +109,7 @@ export function generateHeight(x: number, z: number): number {
   // Aplainar assentamentos / arenas
   for (const l of FLATTEN) {
     const d = Math.hypot(x - l.x, z - l.z);
-    const outer = l.radius * 1.5;
+    const outer = l.flattenOuter ?? l.radius * 1.5;
     if (d < outer) {
       const f = smoothstep(outer, l.radius * 0.85, d);
       h = lerp(h, l.flattenTo! + nC.noise(x / 25, z / 25) * 0.3, f);
@@ -222,6 +222,40 @@ export class Heightfield {
     const c = d[(j + 1) * r + i];
     const e = d[(j + 1) * r + i + 1];
     return a + (b - a) * tx + (c - a) * tz + (a - b - c + e) * tx * tz;
+  }
+
+  /**
+   * Altura bilinear numa grade MAIS GROSSA (espaçamento múltiplo de 2 m, alinhada em
+   * -WORLD_HALF), igual à que um nó de LOD distante do terreno desenha. Útil para
+   * saber o quanto o relevo visível "afunda" longe da câmera (cristas agudas).
+   */
+  coarseHeightAt(x: number, z: number, spacing: number): number {
+    const step = Math.max(1, Math.round(spacing / this.spacing));
+    const cells = (this.res - 1) / step;
+    const fx = clamp((x + WORLD_HALF) / (this.spacing * step), 0, cells - 1e-3);
+    const fz = clamp((z + WORLD_HALF) / (this.spacing * step), 0, cells - 1e-3);
+    const i = Math.floor(fx);
+    const j = Math.floor(fz);
+    const tx = fx - i;
+    const tz = fz - j;
+    const r = this.res;
+    const d = this.data;
+    const i0 = i * step;
+    const j0 = j * step;
+    const a = d[j0 * r + i0];
+    const b = d[j0 * r + i0 + step];
+    const c = d[(j0 + step) * r + i0];
+    const e = d[(j0 + step) * r + i0 + step];
+    return a + (b - a) * tx + (c - a) * tz + (a - b - c + e) * tx * tz;
+  }
+
+  /**
+   * Quanto (m) o relevo real fica ACIMA do relevo dos nós de LOD grossos (4, 8 e 16 m)
+   * em (x,z). Objetos apoiados no relevo real "flutuam" isso quando vistos de longe.
+   */
+  lodSag(x: number, z: number): number {
+    const h = this.heightAt(x, z);
+    return Math.max(0, h - this.coarseHeightAt(x, z, 4), h - this.coarseHeightAt(x, z, 8), h - this.coarseHeightAt(x, z, 16));
   }
 
   /** Normal do terreno (diferenças centrais). */
