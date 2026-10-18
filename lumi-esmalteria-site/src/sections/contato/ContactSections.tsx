@@ -12,6 +12,8 @@ import { HoursTable } from "./HoursTable";
 import { LazyMap } from "./LazyMap";
 
 const hello = "Olá, Lumi! Vim pelo site.";
+/** Cores do mini feed do Instagram */
+const feed = ["nude-lumi", "cereja", "cromado-rose"];
 
 /** WhatsApp em destaque: número grande, botões e uma conversa ilustrada. */
 export function WhatsAppHighlight() {
@@ -27,7 +29,7 @@ export function WhatsAppHighlight() {
               <SectionLabel light index="01">
                 Atendimento pelo WhatsApp
               </SectionLabel>
-              <h2 id="contato-whatsapp" className="mt-6 max-w-lg font-display text-3xl leading-tight text-blush md:text-4xl">
+              <h2 id="contato-whatsapp" className="mt-6 max-w-xl text-balance font-display text-3xl leading-tight text-blush md:text-4xl">
                 O jeito mais rápido de <span className="serif-accent text-cream">falar com a gente.</span>
               </h2>
               <a
@@ -43,8 +45,8 @@ export function WhatsAppHighlight() {
                 Agendamentos, dúvidas sobre serviços, valores e cuidados: respondemos com carinho dentro do horário de atendimento.
               </p>
               <div className="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-                <Button href={whatsappLink(hello)} external variant="light" size="lg" icon={<WhatsAppIcon className="h-[18px] w-[18px]" />}>
-                  Conversar no WhatsApp
+                <Button href={whatsappLink(hello)} external variant="light" size="lg" icon={<WhatsAppIcon className="h-[18px] w-[18px]" />} className="whitespace-nowrap">
+                  Chamar no WhatsApp
                 </Button>
                 <Button href="/agendamento" variant="coral" size="lg">
                   Escolher dia e horário
@@ -121,7 +123,20 @@ export function HoursAndSocial() {
                 <InstagramIcon className="h-5 w-5" />
               </span>
             </div>
-            <div className="mt-10">
+            {/* Mini "feed" com cores da casa */}
+            <div className="mt-8 grid grid-cols-3 gap-2.5" aria-hidden>
+              {feed.map((id, i) => {
+                const p = getPolish(id);
+                return (
+                  <span
+                    key={id}
+                    className="gloss aspect-square rounded-2xl shadow-[0_14px_30px_-18px_rgba(139,41,66,0.5)] transition-transform duration-700 ease-out-expo group-hover:-translate-y-1"
+                    style={{ background: `radial-gradient(120% 90% at 30% 20%, #ffffff66 0%, transparent 45%), ${p.hex}`, transitionDelay: `${i * 60}ms` }}
+                  />
+                );
+              })}
+            </div>
+            <div className="mt-8">
               <p className="font-display text-[clamp(2.2rem,4.4vw,3.6rem)] leading-none tracking-[-0.02em] text-ink transition-colors duration-500 group-hover:text-wine">
                 @{brand.contact.instagram}
               </p>
@@ -217,7 +232,10 @@ export function ContactCTA() {
   const polish = getPolish("rose-seda");
   return (
     <section aria-labelledby="contato-cta" className="container-x pb-24 pt-24 md:pb-32 md:pt-32">
-      <div className="relative grid overflow-hidden rounded-[32px] bg-sand md:rounded-[40px] lg:grid-cols-12">
+      <div
+        className="relative grid overflow-hidden rounded-[32px] bg-sand md:rounded-[40px] lg:grid-cols-12"
+        style={{ background: `radial-gradient(70% 80% at 82% 105%, ${polish.hex}70 0%, transparent 70%), radial-gradient(40% 50% at 100% 0%, #FF6B7A1f 0%, transparent 70%), var(--color-sand)` }}
+      >
         <div className="relative z-10 px-6 py-12 sm:px-10 md:px-14 md:py-20 lg:col-span-7">
           <SectionLabel>Agendamento online</SectionLabel>
           <h2 id="contato-cta" className="display-lg mt-6 text-balance text-ink">
@@ -230,9 +248,9 @@ export function ContactCTA() {
             </Button>
           </div>
         </div>
-        <div className="relative min-h-[300px] lg:col-span-5 lg:min-h-0" style={{ background: `radial-gradient(90% 70% at 50% 100%, ${polish.hex}66, transparent 70%)` }}>
-          <div className="absolute inset-0 flex items-center justify-center px-8 pb-6 pt-4 lg:px-10">
-            <NailArt design="french" shape="amendoada" length="longa" colors={[polish.hex, "#FAF7F2"]} paint label={`Ilustração de unhas amendoadas em ${polish.name}`} className="h-full max-h-[380px] w-full" />
+        <div className="relative min-h-[280px] lg:col-span-5 lg:min-h-0">
+          <div className="absolute inset-0 flex items-end justify-center px-6 pb-8 pt-2 lg:items-center lg:px-10 lg:py-12">
+            <NailArt design="french" shape="amendoada" length="longa" colors={[polish.hex, "#FAF7F2"]} paint label={`Ilustração de unhas amendoadas em ${polish.name}`} />
           </div>
         </div>
       </div>

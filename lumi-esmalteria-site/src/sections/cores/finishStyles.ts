@@ -1,5 +1,19 @@
 import type { Finish } from "@/data/colors";
 import type { NailDesign } from "@/data/gallery";
+import { hash01, r2 } from "@/lib/random";
+
+/** Ladrilho SVG de glitter: partículas em posições pseudoaleatórias estáveis (mesmo resultado no servidor e no navegador) */
+const glitterTile = (() => {
+  const tones = ["#ffffff", "#fff4f7", "#f1d9b8", "#ffffff", "#ffe3ea"];
+  const dots = Array.from({ length: 70 }, (_, i) => {
+    const x = r2(hash01(i * 3 + 1) * 90);
+    const y = r2(hash01(i * 3 + 2) * 90);
+    const r = r2(0.35 + hash01(i * 3 + 3) * 0.95);
+    const o = r2(0.45 + hash01(i * 7 + 5) * 0.55);
+    return `<circle cx='${x}' cy='${y}' r='${r}' fill='${tones[i % tones.length]}' fill-opacity='${o}'/>`;
+  }).join("");
+  return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'>${dots}</svg>`)}`;
+})();
 
 /** Fundo CSS que simula cada acabamento sobre a cor do esmalte (amostras desenhadas, sem foto). */
 export function finishBackground(finish: Finish, hex: string) {
@@ -16,13 +30,7 @@ export function finishBackground(finish: Finish, hex: string) {
         hex,
       ].join(", ");
     case "glitter":
-      return [
-        "radial-gradient(circle at 30% 40%, rgba(255,255,255,0.95) 0 0.8px, transparent 1.4px) 0 0 / 11px 13px",
-        "radial-gradient(circle at 70% 20%, rgba(255,236,242,0.8) 0 0.6px, transparent 1.1px) 3px 7px / 17px 11px",
-        "radial-gradient(circle at 50% 80%, rgba(232,206,170,0.9) 0 0.9px, transparent 1.5px) 6px 2px / 23px 19px",
-        "radial-gradient(circle at 20% 70%, rgba(255,255,255,0.7) 0 1.1px, transparent 1.8px) 9px 4px / 29px 31px",
-        `linear-gradient(165deg, rgba(255,255,255,0.4), rgba(255,255,255,0) 40%, rgba(255,255,255,0.18) 70%, rgba(0,0,0,0.05)), ${hex}`,
-      ].join(", ");
+      return [`url("${glitterTile}") 0 0 / 90px 90px`, `linear-gradient(165deg, rgba(255,255,255,0.4), rgba(255,255,255,0) 40%, rgba(255,255,255,0.18) 70%, rgba(0,0,0,0.05)), ${hex}`].join(", ");
     default:
       return `radial-gradient(120% 80% at 30% 15%, rgba(255,255,255,0.4), rgba(255,255,255,0) 55%), ${hex}`;
   }

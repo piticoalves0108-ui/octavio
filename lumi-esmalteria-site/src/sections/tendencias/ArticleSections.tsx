@@ -18,7 +18,7 @@ export function ArticleHeader({ post }: { post: Post }) {
     <header className="pb-12 pt-36 md:pb-16 md:pt-44">
       <div className="container-x">
         <nav aria-label="Trilha de navegação" className="mb-8">
-          <ol className="flex flex-wrap items-center gap-2 text-xs text-muted">
+          <ol className="flex items-center gap-2 whitespace-nowrap text-xs text-muted">
             <li>
               <TransitionLink href="/" className="hover:text-wine">
                 Início
@@ -32,7 +32,7 @@ export function ArticleHeader({ post }: { post: Post }) {
             </li>
             <li className="flex min-w-0 items-center gap-2" aria-current="page">
               <span aria-hidden>/</span>
-              <span className="max-w-[16rem] truncate text-ink sm:max-w-none">{post.title}</span>
+              <span className="truncate text-ink">{post.title}</span>
             </li>
           </ol>
         </nav>
@@ -143,7 +143,7 @@ export function PaletteStrip({ post }: { post: Post }) {
             const href = polish ? `/cores?cor=${polish.id}` : "/cores";
             return (
               <li key={hex}>
-                <TransitionLink href={href} className="group block rounded-[24px] bg-cream p-3 transition-shadow duration-500 hover:shadow-[0_30px_60px_-35px_rgba(139,41,66,0.35)]">
+                <TransitionLink href={href} className="group block h-full rounded-[24px] bg-cream p-3 transition-shadow duration-500 hover:shadow-[0_30px_60px_-35px_rgba(139,41,66,0.35)]">
                   <span
                     aria-hidden
                     className="relative block h-32 overflow-hidden rounded-[18px] ring-1 ring-black/5 md:h-40"

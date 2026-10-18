@@ -472,7 +472,7 @@ export function BookingWizard() {
           </button>
         </div>
       </div>
-      <div ref={stripRef} className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-2.5 overflow-x-auto px-5 pb-4 pt-1 sm:-mx-8 sm:px-8 md:-mx-12 md:px-12" data-lenis-prevent>
+      <div ref={stripRef} className="no-scrollbar -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-2.5 overflow-x-auto px-5 pb-4 pt-1 sm:-mx-8 sm:scroll-px-8 sm:px-8 md:-mx-12 md:scroll-px-12 md:px-12" data-lenis-prevent>
         {days.length === 0
           ? Array.from({ length: 7 }, (_, i) => <span key={i} className="h-[118px] w-[78px] shrink-0 animate-pulse rounded-[22px] bg-cream/70" />)
           : days.map((d) => {
@@ -795,8 +795,8 @@ export function BookingWizard() {
       <dl className="divide-y divide-wine/10 overflow-hidden rounded-[24px] bg-cream ring-1 ring-ink/[0.06]">
         {summaryRows.map((r) => (
           <div key={r.label} className="grid grid-cols-[1fr_auto] items-start gap-x-4 gap-y-1 px-5 py-4 sm:grid-cols-[10rem_1fr_auto] sm:px-6">
-            <dt className="eyebrow col-span-1 pt-1 text-muted sm:col-span-1">{r.label}</dt>
-            <dd className="col-span-2 row-start-2 min-w-0 break-words text-[0.97rem] text-ink sm:col-span-1 sm:row-start-1">{r.value || <span className="text-muted">—</span>}</dd>
+            <dt className="eyebrow col-start-1 row-start-1 pt-1 text-muted">{r.label}</dt>
+            <dd className="col-span-2 col-start-1 row-start-2 min-w-0 break-words text-[0.97rem] text-ink sm:col-span-1 sm:col-start-2 sm:row-start-1">{r.value || <span className="text-muted">—</span>}</dd>
             <dd className="col-start-2 row-start-1 sm:col-start-3">
               <button type="button" onClick={() => goTo(r.step)} className="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-xs text-wine transition-colors hover:bg-blush/40" aria-label={`Alterar ${r.label.toLowerCase()}`}>
                 <PencilLine className="h-3.5 w-3.5" strokeWidth={1.6} aria-hidden /> Alterar
@@ -907,7 +907,7 @@ export function BookingWizard() {
                     custom={dir}
                     initial={{ opacity: 0, x: dir * 28 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: dir * -28 }}
+                    exit={{ opacity: 0, x: dir * -20, transition: { duration: 0.22, ease: [0.76, 0, 0.24, 1] } }}
                     transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                     className="mt-8 md:mt-12"
                   >
