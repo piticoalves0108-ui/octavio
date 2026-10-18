@@ -7,6 +7,7 @@
 //                    [--width=800 --height=450] [--seed=1337] [--label=antes]
 //                    [--gputimer] (tempo de GPU por EXT_disjoint_timer_query; ligado no --gpu)
 //                    [--draws] (atribui as draw calls de 1 quadro por dono) [--shots] [--autoscale[=fps]]
+//                    [--query=rigmerge=0&prewarm=0] (parâmetros extras na URL, para comparações A/B)
 //   npm run bench:gpu   → modo --gpu: janela visível, SEM SwiftShader, usando a GPU real do PC
 //                         (opcional: --channel=chrome para usar o Chrome instalado; --vsync para manter o vsync)
 //
@@ -96,7 +97,7 @@ try {
           else if (args.verbose) console.log('[page]', m.text());
         });
         page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
-        const extra = `${gpu || args.gputimer ? '&gputimer' : ''}${args.draws ? '&draws' : ''}${args.autoscale ? `&autoscale=${args.autoscale === true ? 45 : args.autoscale}` : ''}`;
+        const extra = `${gpu || args.gputimer ? '&gputimer' : ''}${args.draws ? '&draws' : ''}${args.autoscale ? `&autoscale=${args.autoscale === true ? 45 : args.autoscale}` : ''}${typeof args.query === 'string' ? '&' + args.query.replace(/^[?&]/, '') : ''}`;
         const url = `http://localhost:${port}/?bench=${scenario}&secs=${secs}&warmup=${warmup}&quality=${quality}&seed=${seed}${extra}`;
         const t0 = Date.now();
         process.stdout.write(`→ ${scenario} @ ${quality} (exec. ${run}/${runs})… `);
@@ -169,6 +170,7 @@ const meta = {
   warmup,
   runs,
   seed,
+  query: typeof args.query === 'string' ? args.query : '',
   renderer: first?.renderer ?? null,
   userAgent: first?.userAgent ?? null,
 };

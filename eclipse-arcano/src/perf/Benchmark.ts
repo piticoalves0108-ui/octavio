@@ -19,7 +19,7 @@ import { mulberry32, round, summarize, type FrameSummary } from './stats';
  * e segue.
  */
 
-export const BENCH_VERSION = 2;
+export const BENCH_VERSION = 3;
 export const BENCH_SCENARIOS = ['vila_chuva', 'voo_floresta', 'combate', 'chefe', 'tempestade', 'stress'] as const;
 export type BenchScenario = (typeof BENCH_SCENARIOS)[number];
 
@@ -656,6 +656,8 @@ export async function runBenchmark(ctx: GameContext, scenario: string): Promise<
     await wait(warmup * 1000);
     const info = ctx.renderer.info;
     const before = { geometries: info.memory.geometries, textures: info.memory.textures, programs: info.programs?.length ?? 0, heapMB: heap() };
+    // programas de shader já prontos: os que surgirem durante a medição são compilações no meio do jogo (travadas)
+    const progBefore = new Set<unknown>(info.programs ?? []);
     sampleCounts();
     const perf = ctx.sys.perf;
     perf.resetSamples();
@@ -679,6 +681,13 @@ export async function runBenchmark(ctx: GameContext, scenario: string): Promise<
       }
     }
     ctx.render = origRender;
+    const newPrograms = (info.programs ?? [])
+      .filter((p) => !progBefore.has(p))
+      .map((p) => {
+        const pp = p as unknown as { name?: string; cacheKey?: string };
+        const key = String(pp.cacheKey ?? '');
+        return `${pp.name ?? '?'}${key ? ' [' + key.slice(key.lastIndexOf(',') + 1).slice(0, 40) + ']' : ''}`;
+      });
 
     const n = rec?.frames ?? 0;
     const scratch = new Float32Array(Math.max(1, n));
@@ -731,6 +740,9 @@ export async function runBenchmark(ctx: GameContext, scenario: string): Promise<
         before,
         after: { geometries: info.memory.geometries, textures: info.memory.textures, programs: info.programs?.length ?? 0, heapMB: heap() },
         heapMaxMB: heapMax || null,
+        /** Programas de shader compilados DURANTE a medição (cada um é uma travada no quadro em que aparece). */
+        programsCompiled: newPrograms.length,
+        newPrograms: newPrograms.slice(0, 20),
       },
       entities: sampled
         ? { total: round(totalSum / sampled, 1), tier0: round(tierSum0 / sampled, 1), tier1: round(tierSum1 / sampled, 1), tier2: round(tierSum2 / sampled, 1), tier3: round(tierSum3 / sampled, 1) }
