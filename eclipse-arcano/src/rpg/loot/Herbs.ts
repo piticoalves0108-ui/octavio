@@ -148,7 +148,7 @@ export class HerbField {
     const k = 0.55 + night * 1.1;
     (this.bulbs.material as THREE.MeshBasicMaterial).color.setRGB(this.bulbBase.r * k, this.bulbBase.g * k, this.bulbBase.b * k);
     const pp = ctx.sys.player.position;
-    const cam = ctx.camera.position;
+    const cam = ctx.camera ? ctx.camera.position : pp;
     if (this.frame % 20 === 0) {
       const f = LOCATION_BY_ID['floresta_lumen'];
       const dx = cam.x - (f?.x ?? 0);

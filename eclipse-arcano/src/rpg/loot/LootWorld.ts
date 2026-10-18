@@ -35,7 +35,7 @@ export class LootWorld {
   private respecArmedUntil = -1;
   private counters: Interactable[] = [];
   private tmp = new THREE.Vector3();
-  readonly stats = { kills: 0, xpFromKills: 0, goldDropped: 0, itemsDropped: 0 };
+  readonly stats = { kills: 0, xpFromKills: 0, goldDropped: 0, itemsDropped: 0, buildMs: 0 };
 
   constructor(private ctx: GameContext, private inv: Inventory) {
     this.chests = new ChestField(ctx, inv);
@@ -53,10 +53,12 @@ export class LootWorld {
   build() {
     if (this.built) return;
     this.built = true;
+    const t0 = performance.now();
     this.chests.build();
     this.pickups.build();
     this.herbs.build();
     this.buildCounters();
+    this.stats.buildMs = performance.now() - t0;
   }
 
   private buildCounters() {
@@ -193,7 +195,7 @@ export class LootWorld {
 
   update(dt: number, ctx: GameContext) {
     if (!this.built) this.build();
-    this.chests.update(dt, ctx.camera.position);
+    this.chests.update(dt, ctx.camera ? ctx.camera.position : ctx.sys.player.position);
     this.pickups.update(dt, ctx);
     this.herbs.update(dt, ctx);
   }
