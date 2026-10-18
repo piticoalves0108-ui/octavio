@@ -11,7 +11,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "bench": "node scripts/benchmark.mjs",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "bench:gpu": "node scripts/benchmark.mjs --gpu",
+    "bench:memory": "node tests/perf.memory.mjs"
   },
   "dependencies": {
     "three": "0.180.0"

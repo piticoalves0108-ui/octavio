@@ -89,6 +89,8 @@ export interface Rig {
   muzzle(out: import('three').Vector3): import('three').Vector3;
   /** Liga/desliga sombras (qualidade). */
   setShadows(on: boolean): void;
+  /** Libera recursos por instância (ex.: textura de ossos da malha fundida). Opcional. */
+  dispose?(): void;
 }
 
 export const easeOut = (t: number) => 1 - (1 - t) * (1 - t);

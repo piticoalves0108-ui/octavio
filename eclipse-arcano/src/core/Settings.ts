@@ -22,6 +22,8 @@ export interface SettingsData {
   hudScale: number;
   /** Mostrar marcadores de objetivo (bússola/minimapa). */
   questMarkers: boolean;
+  /** Pausar automaticamente ao perder o foco / ocultar a aba / perder o pointer lock. */
+  pauseOnFocusLoss: boolean;
   bindings: Partial<Record<Action, string[]>>;
 }
 
@@ -44,6 +46,7 @@ export const DEFAULT_SETTINGS: SettingsData = {
   showFps: false,
   hudScale: 1,
   questMarkers: true,
+  pauseOnFocusLoss: true,
   bindings: {},
 };
 

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { cachedGeometry, type PartBuilder } from './parts';
+import { disposeMergedRig, mergeRigMeshes } from './merged';
 import { easeIn, easeOut, type AnimInput, type Rig } from './anim';
 
 /**
@@ -191,6 +192,21 @@ export class QuadrupedRig implements Rig {
       b[QB.BODY].add(b[QB.WR]);
       b[QB.WR].position.set(-L.bodyW * 0.35, L.bodyH * 0.35, L.bodyL * 0.15);
     }
+    // desempenho: malhas por osso → 1 SkinnedMesh rígida (1 draw + 1 de sombra)
+    const merged = mergeRigMeshes(`q:${lookId}`, this.root, this.meshes, material);
+    if (merged) {
+      this.meshes.length = 0;
+      this.meshes.push(merged);
+      this.merged = merged;
+    }
+  }
+
+  /** Malha fundida (null se a fusão estiver desligada: ?rigmerge=0). */
+  merged: THREE.SkinnedMesh | null = null;
+
+  /** Libera os recursos por instância (textura de ossos da malha fundida). */
+  dispose() {
+    disposeMergedRig(this.merged);
   }
 
   setShadows(on: boolean) {

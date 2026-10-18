@@ -3,7 +3,7 @@ import type { GameContext, GameSystem, Saveable } from '../core/context';
 import type { SurfaceType } from '../core/EventBus';
 import { GLOBAL_UNIFORMS } from '../core/uniforms';
 import { damp } from '../core/math';
-import { LOCATIONS, LOCATION_BY_ID, BIOME_INFO, GATES, PLAYABLE_HALF, WATER_LEVEL, type BiomeId, type LocationDef } from '../data/world';
+import { LOCATIONS, LOCATION_BY_ID, BIOME_INFO, GATES, PLAYABLE_HALF, WATER_LEVEL, LOCATION_CHECKPOINTS, type BiomeId, type LocationDef } from '../data/world';
 import { PLACES } from '../data/places';
 import { WorldMaps } from './maps';
 import { Terrain } from './terrain';
@@ -238,7 +238,14 @@ export class World implements GameSystem, Saveable {
     }
     if (found !== this.currentLocation) {
       this.currentLocation = found;
-      if (found) ctx.events.emit('location:entered', { locationId: found.id, name: found.name });
+      if (found) {
+        ctx.events.emit('location:entered', { locationId: found.id, name: found.name });
+        // checkpoint automático (ponto seguro do local) — só com o jogador vivo
+        const cpId = LOCATION_CHECKPOINTS[found.id];
+        const cp = cpId ? PLACES[cpId] : undefined;
+        const pl = ctx.sys.player;
+        if (cp && pl.state !== 'dead' && pl.entity.alive) pl.setCheckpoint(cp.x, cp.z, cp.yaw ?? pl.entity.yaw);
+      }
     }
     // corrupção perto do jogador (para efeitos de tela/terreno de outros módulos)
     this.corruption = damp(this.corruption, this.maps.corruptionAt(p.x, p.z), 1.5, dt);

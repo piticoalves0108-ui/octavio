@@ -33,6 +33,9 @@ export class EntityManager {
   tiers: TierConfig = { near: 70, mid: 160, far: 320, midEvery: 3, farEvery: 15 };
   /** Estatísticas para o monitor de desempenho. */
   stats = { total: 0, tier0: 0, tier1: 0, tier2: 0, tier3: 0 };
+  /** Erros isolados em update/farUpdate de entidades (a entidade com erro não derruba as outras). */
+  errorCount = 0;
+  private lastErrorLog = -1e9;
 
   constructor(private ctx: GameContext) {}
 
@@ -151,17 +154,25 @@ export class EntityManager {
       if (tier === 0 || (tier === 1 && (this.frame + e.id) % t.midEvery === 0)) {
         const step = Math.min(e.pendingDt, 0.25);
         e.pendingDt = 0;
-        if (e.health && e.alive) {
-          this.dotBuffer.length = 0;
-          e.health.update(step, this.dotBuffer);
-          for (const d of this.dotBuffer) combat.applyDamage(e, d);
+        try {
+          if (e.health && e.alive) {
+            this.dotBuffer.length = 0;
+            e.health.update(step, this.dotBuffer);
+            for (const d of this.dotBuffer) combat.applyDamage(e, d);
+          }
+          e.update(step, this.ctx);
+        } catch (err) {
+          this.entityError(e, err);
         }
-        e.update(step, this.ctx);
         tier === 0 ? st.tier0++ : st.tier1++;
       } else if (tier === 2 && (this.frame + e.id) % t.farEvery === 0) {
         const step = Math.min(e.pendingDt, 2);
         e.pendingDt = 0;
-        e.farUpdate(step, this.ctx);
+        try {
+          e.farUpdate(step, this.ctx);
+        } catch (err) {
+          this.entityError(e, err);
+        }
         st.tier2++;
       } else if (tier === 3) {
         e.pendingDt = 0;
@@ -180,6 +191,16 @@ export class EntityManager {
         e.dispose();
       }
       this.toRemove.length = 0;
+    }
+  }
+
+  /** Isola o erro de uma entidade (registro limitado a 1 a cada 5 s). */
+  private entityError(e: Entity, err: unknown) {
+    this.errorCount++;
+    const now = performance.now();
+    if (now - this.lastErrorLog > 5000) {
+      this.lastErrorLog = now;
+      console.error(`[Entities] erro em ${e.kind}:${e.typeId || e.name || e.id}`, err);
     }
   }
 

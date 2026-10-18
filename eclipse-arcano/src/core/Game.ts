@@ -48,6 +48,15 @@ export class Game {
   private frame = 0;
   private errorThrottle = new Map<string, number>();
   private menuOrbit = 0;
+  /** Próximo quadro descarta o dt acumulado (volta de aba oculta / pausa automática). */
+  private resetDt = false;
+  /** Transição de jogo em andamento (novo jogo / continuar): ignora pedidos repetidos. */
+  private transitioning = false;
+  private wasPointerLocked = false;
+  /** Sistemas cujo init falhou (o jogo segue sem eles). */
+  readonly failedInit: string[] = [];
+  /** Diagnóstico de robustez (e2e/testes). */
+  readonly robustness = { autoPauses: 0, renderErrors: 0, entityErrors: 0, initErrors: 0, ignoredTransitions: 0, lastAutoPause: '' as '' | 'blur' | 'hidden' | 'pointerlock' };
 
   constructor(private canvas: HTMLCanvasElement, private uiRoot: HTMLElement) {}
 
@@ -111,6 +120,8 @@ export class Game {
     };
     this.ctx = ctx;
     (window as any).__game = ctx;
+    // diagnóstico do núcleo (robustez, sistemas com init falho) para testes automatizados
+    (window as any).__gameCore = this;
     ctx.entities = new EntityManager(ctx);
     (ctx as any).uiRootReady = true;
     ui.showLoading(0, 'Despertando o mundo…');
@@ -194,7 +205,14 @@ export class Game {
       const s = this.all[i];
       ui.showLoading(0.45 + (i / this.all.length) * 0.55, `Carregando ${s.name}…`);
       const ts = performance.now();
-      await s.init?.(ctx);
+      try {
+        await s.init?.(ctx);
+      } catch (err) {
+        // Isola falhas de init: o jogo continua com os outros sistemas (o erro fica no log).
+        this.failedInit.push(s.name);
+        this.robustness.initErrors++;
+        console.error(`[Boot] falha no init de ${s.name}`, err);
+      }
       const ms = performance.now() - ts;
       if (ms > 30) console.info(`[Boot] ${s.name} init ${ms.toFixed(0)} ms`);
     }
@@ -202,6 +220,7 @@ export class Game {
     window.addEventListener('resize', () => this.applyRenderSettings());
     events.on('settings:changed', () => this.applyRenderSettings());
     this.applyRenderSettings();
+    this.installFocusHandlers();
     // Destrava áudio no primeiro gesto do usuário.
     const unlock = () => {
       sys.audio.unlock();
@@ -228,8 +247,42 @@ export class Game {
     }
   }
 
+  /**
+   * Pausa automática ao perder o foco (blur), ao ocultar a aba (visibilitychange) e ao perder o
+   * pointer lock sem menu aberto (ex.: Esc do navegador). Ao voltar, o primeiro quadro não carrega
+   * o tempo em que a aba ficou parada (sem salto de dt).
+   */
+  private installFocusHandlers() {
+    const ctx = this.ctx;
+    window.addEventListener('blur', () => this.autoPause('blur'));
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') this.autoPause('hidden');
+      this.resetDt = true;
+    });
+    window.addEventListener('focus', () => (this.resetDt = true));
+    document.addEventListener('pointerlockchange', () => {
+      const locked = document.pointerLockElement === this.canvas;
+      if (this.wasPointerLocked && !locked && this.state === 'playing' && !ctx.sys.ui.isMenuOpen()) this.autoPause('pointerlock');
+      this.wasPointerLocked = locked;
+    });
+  }
+
+  /** Entra em pausa por perda de foco (só a partir de 'playing'; respeita a configuração). */
+  autoPause(reason: 'blur' | 'hidden' | 'pointerlock') {
+    const ctx = this.ctx;
+    // solta teclas presas (o keyup não chega com a janela sem foco)
+    ctx.input.releaseAll();
+    this.resetDt = true;
+    if (this.state !== 'playing' || ctx.settings.data.pauseOnFocusLoss === false) return;
+    this.robustness.autoPauses++;
+    this.robustness.lastAutoPause = reason;
+    this.setState('paused');
+  }
+
   applyRenderSettings() {
     const { renderer, camera, settings, input } = this.ctx;
+    // janela minimizada / contêiner sem tamanho: não gera aspecto NaN na câmera
+    if (innerWidth <= 0 || innerHeight <= 0) return;
     const q = settings.q;
     const pr = Math.min(window.devicePixelRatio || 1, q.maxPixelRatio) * q.renderScale;
     renderer.setPixelRatio(pr);
@@ -277,36 +330,72 @@ export class Game {
 
   async newGame() {
     const { sys, events } = this.ctx;
-    await sys.ui.fadeOut(0.6);
-    if (sys.ui.isMenuOpen()) sys.ui.closeMenu();
-    this.resetAll();
-    this.setState('playing');
-    events.emit('game:newGame', {});
-    sys.player.refreshStats();
+    if (this.transitioning) {
+      this.robustness.ignoredTransitions++;
+      return;
+    }
+    this.transitioning = true;
+    try {
+      await sys.ui.fadeOut(0.6);
+      if (sys.ui.isMenuOpen()) sys.ui.closeMenu();
+      this.resetAll();
+      this.setState('playing');
+      events.emit('game:newGame', {});
+      sys.player.refreshStats();
+      this.resetDt = true;
+    } finally {
+      this.transitioning = false;
+    }
     await sys.ui.fadeIn(1.2);
   }
 
   async continueGame(slot?: string): Promise<boolean> {
     const { sys } = this.ctx;
+    if (this.transitioning) {
+      this.robustness.ignoredTransitions++;
+      return false;
+    }
     const target = slot ?? sys.save.latestSlot();
     if (!target) return false;
-    await sys.ui.fadeOut(0.4);
-    if (sys.ui.isMenuOpen()) sys.ui.closeMenu();
-    this.resetAll();
-    const ok = sys.save.load(target);
+    // save ilegível (checksum/versão): avisa e NÃO derruba o jogo em andamento
+    if (!sys.save.isLoadable(target)) {
+      sys.ui.notify('Não há um salvamento válido para carregar.', 'warning');
+      return false;
+    }
+    const inGame = this.state !== 'menu' && this.state !== 'boot';
+    // em jogo (F9): guarda o estado atual para voltar a ele se o save for rejeitado
+    const before = inGame ? sys.save.serializeAll() : null;
+    this.transitioning = true;
+    let ok = false;
+    try {
+      await sys.ui.fadeOut(0.4);
+      if (sys.ui.isMenuOpen()) sys.ui.closeMenu();
+      this.resetAll();
+      ok = sys.save.load(target);
+      this.resetDt = true;
+      if (ok) this.setState('playing');
+    } finally {
+      this.transitioning = false;
+    }
     if (!ok) {
       sys.ui.notify(`Falha ao carregar: ${sys.save.lastError ?? 'erro desconhecido'}`, 'warning');
-      this.setState('menu');
-      sys.ui.showMainMenu();
+      if (inGame && before) {
+        // save rejeitado por algum sistema: restaura o jogo de antes do F9 e continua jogando
+        sys.save.restoreSnapshot(before);
+        this.setState('playing');
+      } else {
+        this.setState('menu');
+        sys.ui.showMainMenu();
+      }
       await sys.ui.fadeIn(0.3);
       return false;
     }
-    this.setState('playing');
     await sys.ui.fadeIn(0.6);
     return true;
   }
 
   quitToMenu() {
+    this.ctx.timeScale = 1;
     this.setState('menu');
     this.ctx.sys.ui.showMainMenu();
   }
@@ -319,19 +408,30 @@ export class Game {
       f.call(s, dt, this.ctx);
     } catch (err) {
       // Isola falhas: um sistema com erro não derruba o jogo inteiro.
-      const now = performance.now();
-      const last = this.errorThrottle.get(s.name) ?? -1e9;
-      if (now - last > 5000) {
-        console.error(`[Game] erro em ${s.name}.${fn}`, err);
-        this.errorThrottle.set(s.name, now);
-      }
+      this.logThrottled(s.name, `[Game] erro em ${s.name}.${fn}`, err);
     }
     this.ctx.sys.perf.measure(s.name, performance.now() - t);
+  }
+
+  /** Registra o erro no máximo uma vez a cada 5 s por chave (evita inundar o console). */
+  private logThrottled(key: string, msg: string, err: unknown) {
+    const now = performance.now();
+    const last = this.errorThrottle.get(key) ?? -1e9;
+    if (now - last > 5000) {
+      console.error(msg, err);
+      this.errorThrottle.set(key, now);
+    }
   }
 
   private loop = (now: number) => {
     requestAnimationFrame(this.loop);
     const ctx = this.ctx;
+    if (this.resetDt) {
+      // volta de aba oculta/pausa automática: descarta o tempo parado
+      this.resetDt = false;
+      this.lastTime = now - 1000 / 60;
+      this.accumForLimit = 0;
+    }
     let realDt = (now - this.lastTime) / 1000;
     const limit = ctx.settings.data.fpsLimit;
     if (limit > 0) {
@@ -343,7 +443,8 @@ export class Game {
     } else {
       this.lastTime = now;
     }
-    realDt = Math.min(realDt, 0.1);
+    // clamp: nenhum quadro simula mais que 0,1 s (travadas, depurador, aba em segundo plano)
+    realDt = realDt > 0 ? Math.min(realDt, 0.1) : 0;
     this.elapsed += realDt;
     this.frame++;
 
@@ -360,7 +461,7 @@ export class Game {
       try {
         ctx.entities.update(dt);
       } catch (err) {
-        console.error('[Game] erro em entities.update', err);
+        this.logThrottled('entities', '[Game] erro em entities.update', err);
       }
       perf.measure('entities', performance.now() - t);
     } else if (this.state === 'menu') {
@@ -374,10 +475,26 @@ export class Game {
 
     if (this.state !== 'boot' && this.state !== 'loading') {
       const t = performance.now();
-      ctx.render();
+      try {
+        ctx.render();
+      } catch (err) {
+        // pipeline de pós com erro: registra e cai para o render direto (o jogo continua visível)
+        this.robustness.renderErrors++;
+        this.logThrottled('render', '[Game] erro em render', err);
+        try {
+          ctx.renderer.render(ctx.scene, ctx.camera);
+        } catch {
+          /* sem contexto WebGL: nada a fazer neste quadro */
+        }
+      }
       perf.measure('render', performance.now() - t);
     }
-    perf.endFrame();
+    try {
+      perf.endFrame();
+    } catch (err) {
+      this.logThrottled('perf', '[Game] erro em perf.endFrame', err);
+    }
+    // sempre limpa as bordas de entrada (senão um 'pressed' se repetiria em todo quadro)
     ctx.input.endFrame();
   };
 

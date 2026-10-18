@@ -874,12 +874,12 @@ export class Player implements GameSystem, Saveable {
     if (this.state === 'flight' || this.state === 'dead' || this.state === 'stagger') return false;
     if (!this.health.canAct()) return false;
     const ctx = this.ctx;
-    if (this.energy.current < FLIGHT.minEnergyToStart) {
+    if (this.energy.current < FLIGHT.minEnergyToStart && !ctx.sys.abilities?.ascended) {
       this.warn('Energia arcana insuficiente para voar.');
       ctx.sys.audio.play('ui_error');
       return false;
     }
-    this.spendEnergy(FLIGHT.takeoffCost * this.stats.flightCost);
+    if (!ctx.sys.abilities?.ascended) this.spendEnergy(FLIGHT.takeoffCost * this.stats.flightCost);
     this.flightV.set(this.hv.x, Math.max(this.vy, 0), this.hv.z);
     if (fromGround || this.state === 'swim') {
       this.flightV.y = FLIGHT.takeoffImpulse;
@@ -961,7 +961,7 @@ export class Player implements GameSystem, Saveable {
       return;
     }
 
-    const hasEnergy = this.energy.current > 0.01;
+    const hasEnergy = this.energy.current > 0.01 || !!ctx.sys.abilities?.ascended;
     this.gliding = !hasEnergy;
     const up = this.held('jump') && hasEnergy;
     const down = this.held('descend');
@@ -1044,7 +1044,8 @@ export class Player implements GameSystem, Saveable {
     if (edge < F.edgeWarnDistance) this.warn('Uma barreira arcana marca o limite do mundo conhecido.');
 
     // Energia
-    if (!inTakeoff || this.takeoffT > 0.2) {
+    // Forma Ascendente: voo gratuito (o custo não é cobrado enquanto `abilities.ascended`).
+    if ((!inTakeoff || this.takeoffT > 0.2) && !ctx.sys.abilities?.ascended) {
       const cost = flightEnergyCost(dt, moving, this.boosting, up, this.stats.flightCost);
       if (cost > 0) {
         this.energy.current = Math.max(0, this.energy.current - cost);

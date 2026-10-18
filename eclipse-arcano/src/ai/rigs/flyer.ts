@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { cachedGeometry, type PartBuilder } from './parts';
+import { disposeMergedRig, mergeRigMeshes } from './merged';
 import { easeIn, type AnimInput, type Rig } from './anim';
 
 /**
@@ -141,6 +142,21 @@ export class FlyerRig implements Rig {
     b[FB.WR2].position.set(-L.span * 0.5, 0, 0);
     b[FB.BODY].add(b[FB.TAIL]);
     b[FB.TAIL].position.set(0, 0, -L.bodyL * 0.45);
+    // desempenho: malhas por osso → 1 SkinnedMesh rígida (1 draw + 1 de sombra)
+    const merged = mergeRigMeshes(`f:${lookId}`, this.root, this.meshes, material);
+    if (merged) {
+      this.meshes.length = 0;
+      this.meshes.push(merged);
+      this.merged = merged;
+    }
+  }
+
+  /** Malha fundida (null se a fusão estiver desligada: ?rigmerge=0). */
+  merged: THREE.SkinnedMesh | null = null;
+
+  /** Libera os recursos por instância (textura de ossos da malha fundida). */
+  dispose() {
+    disposeMergedRig(this.merged);
   }
 
   setShadows(on: boolean) {

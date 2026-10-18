@@ -69,8 +69,10 @@ export class Abilities implements GameSystem, Saveable {
   private lastChargeEmit = -1;
   private ascendBonus = 0;
   private tmp = new THREE.Vector3();
+  /** Marcador de mira no chão (Tempestade/Fenda) enquanto a magia de área está sendo conjurada. */
+  private zoneMarker: { cancel(): void } | null = null;
   /** Estatísticas (testes). */
-  readonly stats = { casts: 0, fails: 0, unlocks: 0, byId: {} as Record<string, number> };
+  readonly stats = { casts: 0, fails: 0, unlocks: 0, zoneMarkers: 0, byId: {} as Record<string, number> };
 
   init(ctx: GameContext) {
     this.ctx = ctx;
@@ -173,6 +175,7 @@ export class Abilities implements GameSystem, Saveable {
 
   private execute(c: Casting) {
     this.casting = null;
+    this.zoneMarker = null; // o telegraph termina sozinho no instante do impacto
     // a Forma Ascendente começa antes do pulso (o dano dele não recarrega a Carga Arcana)
     if (c.id === ULTIMATE_ID) this.startAscension(c.rank);
     const pos = this.effects.execute({ id: c.id, rank: c.rank, charge: c.charge, power: this.spellPower() });
@@ -187,6 +190,8 @@ export class Abilities implements GameSystem, Saveable {
     const c = this.casting;
     if (!c) return;
     this.casting = null;
+    this.zoneMarker?.cancel();
+    this.zoneMarker = null;
     // interrompida: recarga curta em vez da completa
     const cd = this.cooldowns.get(c.id) ?? 0;
     if (cd > 1.5) {
@@ -243,6 +248,15 @@ export class Abilities implements GameSystem, Saveable {
     const impactAt = def.castTime / Math.max(0.1, actMul);
     if (def.anim === 'castHeavy' && !p.isFlying()) p.lockMovement(impactAt + 0.15);
     this.casting = { id: abilityId, def, rank, t: 0, impactAt, channel, action, charge: 0 };
+    // magias de área: marca no chão onde a zona vai surgir (mesma regra de mira dos efeitos)
+    if (def.category === 'zona' && !channel && impactAt > 0) {
+      this.zoneMarker?.cancel();
+      const lt = p.lockTarget;
+      const range = abilityValue(def, 'range', rank);
+      const at = lt && lt.alive && !lt.removed && lt.position.distanceTo(p.entity.position) <= range + 2 ? this.tmp.copy(lt.position) : p.getAimPoint(range, this.tmp);
+      this.zoneMarker = ctx.sys.vfx.telegraph({ type: 'circle', position: at, radius: abilityValue(def, 'radius', rank), duration: impactAt, color: def.color });
+      this.stats.zoneMarkers++;
+    }
     this.stats.casts++;
     this.stats.byId[abilityId] = (this.stats.byId[abilityId] ?? 0) + 1;
     if (impactAt <= 0 && !channel) this.execute(this.casting);
@@ -412,6 +426,8 @@ export class Abilities implements GameSystem, Saveable {
       unlocked: [...this.unlocked],
       ranks: Object.fromEntries(this.ranks),
       ultimateCharge: Math.round(this.ultimateCharge * 10) / 10,
+      // recargas em andamento (salvar/carregar não zera recargas)
+      cooldowns: Object.fromEntries([...this.cooldowns].filter(([, v]) => v > 0.05).map(([k, v]) => [k, [Math.round(v * 100) / 100, Math.round((this.cooldownTotals.get(k) ?? v) * 100) / 100]])),
     };
   }
 
@@ -430,7 +446,20 @@ export class Abilities implements GameSystem, Saveable {
     this.ultimateCharge = isFinite(ch) ? Math.max(0, Math.min(ULTIMATE.max, ch)) : 0;
     this.cooldowns.clear();
     this.cooldownTotals.clear();
+    const cds = data?.cooldowns;
+    if (cds && typeof cds === 'object') {
+      for (const [k, v] of Object.entries(cds as Record<string, unknown>)) {
+        if (!isAbilityId(k) || !Array.isArray(v)) continue;
+        const rem = Number(v[0]);
+        const tot = Number(v[1]);
+        if (!isFinite(rem) || rem <= 0 || rem > 600) continue;
+        this.cooldowns.set(k, rem);
+        this.cooldownTotals.set(k, isFinite(tot) && tot >= rem ? tot : rem);
+      }
+    }
     this.casting = null;
+    this.zoneMarker?.cancel();
+    this.zoneMarker = null;
     this.ascended = false;
     this.ascendedTime = 0;
     this.ascendBonus = 0;

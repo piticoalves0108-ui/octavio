@@ -312,6 +312,21 @@ export const FLOATING_ISLANDS: { id: string; x: number; y: number; z: number; ra
  */
 export const PLAYER_START = { x: -520, z: 553, yaw: Math.PI };
 
+/**
+ * Pontos de renascimento automáticos: ao ENTRAR no local, o checkpoint do jogador passa a ser
+ * a âncora indicada (ids de src/data/places.ts), sempre num ponto seguro fora do perigo
+ * (ex.: diante do portão selado da Câmara do Guardião). Santuários da história podem
+ * sobrescrever com `player.setCheckpoint`.
+ */
+export const LOCATION_CHECKPOINTS: Record<string, string> = {
+  cripta_despertar: 'cripta_saida',
+  vila_brumafria: 'poco',
+  ruinas_aeternum: 'ruinas_entrada',
+  camara_guardiao: 'pedestal_cristal_ruinas',
+  laboratorio_abandonado: 'laboratorio_entrada',
+  santuario_cristal: 'santuario_cristal_altar',
+};
+
 /** Área da arena do chefe (usada para travar a luta, câmera de combate e música). */
 export const BOSS_ARENAS: Record<string, { x: number; z: number; radius: number; locationId: string }> = {
   guardiao_mecanico: { x: 500, z: -380, radius: 36, locationId: 'camara_guardiao' },

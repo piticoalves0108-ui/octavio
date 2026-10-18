@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { cachedGeometry, type PartBuilder } from './parts';
+import { disposeMergedRig, mergeRigMeshes } from './merged';
 import { HUMANOID_LOOKS, COLORS, type BuildId, type HumanoidLook } from './looks';
 import type { RigMaterial } from './material';
 import { easeIn, easeInOut, easeOut, type AnimInput, type ExtraAnim, type Rig } from './anim';
@@ -477,6 +478,21 @@ export class HumanoidRig implements Rig {
       this.muzzleLocal.set(0, -B.fore, 0.2);
     }
     this.cur.set(RELAX);
+    // desempenho: as 11 malhas (uma por osso) viram 1 SkinnedMesh rígida (1 draw + 1 de sombra)
+    const merged = mergeRigMeshes(`h:${lookId}`, this.root, this.meshes, material);
+    if (merged) {
+      this.meshes.length = 0;
+      this.meshes.push(merged);
+      this.merged = merged;
+    }
+  }
+
+  /** Malha fundida (null se a fusão estiver desligada: ?rigmerge=0). */
+  merged: THREE.SkinnedMesh | null = null;
+
+  /** Libera os recursos por instância (textura de ossos da malha fundida). */
+  dispose() {
+    disposeMergedRig(this.merged);
   }
 
   setShadows(on: boolean) {

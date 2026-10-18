@@ -139,4 +139,12 @@ export class EventBus<E extends object = GameEvents> {
   clear(): void {
     this.handlers.clear();
   }
+
+  /** Quantidade de handlers inscritos (de um evento ou de todos) — diagnóstico de vazamento de listeners. */
+  listenerCount(type?: keyof E): number {
+    if (type !== undefined) return this.handlers.get(type)?.size ?? 0;
+    let n = 0;
+    for (const set of this.handlers.values()) n += set.size;
+    return n;
+  }
 }

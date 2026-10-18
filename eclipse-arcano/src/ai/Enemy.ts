@@ -14,6 +14,11 @@ import { beginAttackImpact, updateAttackActive, cancelAttackVisuals, attackDamag
 import { specialsThink, specialsUpdate, onSpecialDamaged, type SpecialState, makeSpecialState } from './enemySpecials';
 import { findCover } from './tactics';
 import type { AI } from './AI';
+import { VILLAGE } from '../data/places';
+
+/** Temporários da navegação (sem alocação por quadro). */
+const NAV_A = new THREE.Vector3();
+const NAV_B = new THREE.Vector3();
 
 export type EnemyState = 'idle' | 'patrol' | 'investigate' | 'alert' | 'combat' | 'search' | 'return' | 'flee' | 'surrender' | 'dead';
 export type EnemyAction = 'none' | 'attack' | 'dodge' | 'block' | 'special' | 'overheat';
@@ -158,6 +163,11 @@ export class Enemy extends Entity {
   retreated = false;
   fleeT = 0;
   airY = 0;
+  /** Navegação pelo grafo da vila (`world.findPath`): caminho atual, waypoint e temporizador de recálculo. */
+  navPath: { x: number; z: number }[] | null = null;
+  navIdx = 0;
+  navT = Math.random() * 0.6;
+  readonly navPoint = new THREE.Vector3();
 
   // ---- visual ----
   hitFlash = 0;
@@ -1111,9 +1121,18 @@ export class Enemy extends Entity {
           const stopAt = this.moveMode === 'approach' ? Math.max(0.9, (t ? t.radius : 0.4) + this.radius + 0.4) : 0.3;
           if (d > stopAt) {
             const s = Math.min(spd, (d - stopAt) * 3 + 0.4);
-            vx = (dx / d) * s;
-            vz = (dz / d) * s;
-          }
+            // dentro da vila, com a reta bloqueada: segue o próximo ponto do grafo (só tier 0)
+            if (this.tier === 0 && this.updateNav(dt, ctx)) {
+              const wx = this.navPoint.x - p.x;
+              const wz = this.navPoint.z - p.z;
+              const wl = Math.hypot(wx, wz) || 1;
+              vx = (wx / wl) * s;
+              vz = (wz / wl) * s;
+            } else {
+              vx = (dx / d) * s;
+              vz = (dz / d) * s;
+            }
+          } else this.navPath = null;
           if (!this.facingTarget && d > 0.3) this.faceYaw = Math.atan2(dx, dz);
           break;
         }
@@ -1248,6 +1267,58 @@ export class Enemy extends Entity {
     this.object3d.rotation.y = this.yaw;
     void ox;
     void oz;
+  }
+
+  /**
+   * Navegação barata pelo grafo da vila: só dentro da muralha (onde o grafo existe), só quando a
+   * reta até o objetivo está bloqueada, recalculada a cada ~1,2 s. Escreve o waypoint em `navPoint`.
+   * Retorna false quando o movimento direto basta.
+   */
+  private updateNav(dt: number, ctx: GameContext): boolean {
+    const p = this.position;
+    const vdx = p.x - VILLAGE.x;
+    const vdz = p.z - VILLAGE.z;
+    const R = VILLAGE.wallRadius + 14;
+    if (this.isFlyer || vdx * vdx + vdz * vdz > R * R) {
+      this.navPath = null;
+      return false;
+    }
+    this.navT -= dt;
+    if (this.navT <= 0) {
+      this.navT = 1.1 + Math.random() * 0.4;
+      const gx = this.goal.x - p.x;
+      const gz = this.goal.z - p.z;
+      this.navPath = null;
+      if (gx * gx + gz * gz > 9) {
+        NAV_A.set(p.x, p.y + 1.1, p.z);
+        NAV_B.set(this.goal.x, this.goal.y + 1.1, this.goal.z);
+        if (!ctx.physics.lineOfSight(NAV_A, NAV_B, true)) {
+          const world = ctx.sys.world as { findPath?: (a: { x: number; z: number }, b: { x: number; z: number }) => { x: number; z: number }[] | null };
+          const path = world.findPath?.({ x: p.x, z: p.z }, { x: this.goal.x, z: this.goal.z }) ?? null;
+          if (path && path.length > 2) {
+            this.navPath = path;
+            this.navIdx = 1;
+          }
+        }
+      }
+    }
+    const path = this.navPath;
+    if (!path) return false;
+    // avança os waypoints já alcançados; o último ponto é o próprio objetivo (segue direto)
+    while (this.navIdx < path.length - 1) {
+      const w = path[this.navIdx];
+      const dx = w.x - p.x;
+      const dz = w.z - p.z;
+      if (dx * dx + dz * dz > 1.6 * 1.6) break;
+      this.navIdx++;
+    }
+    if (this.navIdx >= path.length - 1) {
+      this.navPath = null;
+      return false;
+    }
+    const w = path[this.navIdx];
+    this.navPoint.set(w.x, p.y, w.z);
+    return true;
   }
 
   /** Voadores: mantêm altitude acima do chão (ou na altura do alvo voador). */

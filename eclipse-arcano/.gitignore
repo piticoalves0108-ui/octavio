@@ -1,5 +1,5 @@
 node_modules
 dist
 *.log
-bench-results/*.png
+bench-results/**/*.png
 .smoke

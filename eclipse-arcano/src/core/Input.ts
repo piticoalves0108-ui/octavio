@@ -152,9 +152,16 @@ export class Input {
     this.releasedThisFrame.add(e.code);
   };
   private onBlur = () => {
+    this.releaseAll();
+  };
+
+  /** Solta todas as teclas/botões (perda de foco, pointer lock perdido, troca de estado). */
+  releaseAll() {
     for (const k of this.keys) this.releasedThisFrame.add(k);
     this.keys.clear();
-  };
+    this.mouseDX = 0;
+    this.mouseDY = 0;
+  }
   private onMouseDown = (e: MouseEvent) => {
     const code = `Mouse${e.button}`;
     if (!this.keys.has(code)) this.pressedThisFrame.add(code);
@@ -229,5 +236,6 @@ export class Input {
 
 /** Ações que funcionam mesmo com gameplay desativado (menus). */
 function isMetaAction(a: Action) {
-  return a === 'pause' || a === 'inventory' || a === 'skills' || a === 'journal' || a === 'map' || a === 'perf' || a === 'interact';
+  // quicksave/quickload: o SaveSystem decide em quais estados valem (F9 também na pausa e na tela de derrota)
+  return a === 'pause' || a === 'inventory' || a === 'skills' || a === 'journal' || a === 'map' || a === 'perf' || a === 'interact' || a === 'quicksave' || a === 'quickload';
 }

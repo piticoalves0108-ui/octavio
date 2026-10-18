@@ -1,0 +1,5821 @@
+{
+  "meta": {
+    "date": "2026-10-18T03:25:39.301Z",
+    "mode": "swiftshader",
+    "label": "antes",
+    "viewport": [
+      800,
+      450
+    ],
+    "secs": 10,
+    "warmup": 3,
+    "runs": 1,
+    "seed": 1337,
+    "renderer": {
+      "vendor": "Google Inc. (Google)",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36"
+  },
+  "results": [
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "vila_chuva",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 39,
+      "durationMs": 10000,
+      "gameSeconds": 3.6,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 3.9,
+      "low1Fps": 1.81,
+      "low01Fps": 1.81,
+      "frameMs": {
+        "mean": 258.55,
+        "p50": 258.5,
+        "p95": 544.09,
+        "p99": 550.58,
+        "min": 13,
+        "max": 552.4,
+        "worst1": 552.4,
+        "worst01": 552.4
+      },
+      "cpuMs": {
+        "mean": 2.43,
+        "p50": 2.2,
+        "p95": 3.46,
+        "p99": 6.85,
+        "min": 1.5,
+        "max": 7.5,
+        "worst1": 7.5,
+        "worst01": 7.5
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 1.67,
+        "p50": 1.4,
+        "p95": 2.42,
+        "p99": 4.96,
+        "min": 1.1,
+        "max": 6.4,
+        "worst1": 6.4,
+        "worst01": 6.4
+      },
+      "systems": {
+        "render": 1.672,
+        "player": 0.305,
+        "env": 0.159,
+        "world.render": 0.136,
+        "camera": 0.051,
+        "bench": 0.041,
+        "abilities": 0.033,
+        "world": 0.031,
+        "ai": 0.031,
+        "inventory": 0.023,
+        "interaction": 0.018,
+        "entities": 0.013,
+        "vfx": 0.013,
+        "clock": 0.005,
+        "ui": 0.003,
+        "combat": 0,
+        "progression": 0,
+        "save": 0,
+        "perf": 0,
+        "env.render": 0
+      },
+      "systemPeaks": {
+        "env": 1.2,
+        "player": 1.4,
+        "abilities": 0.1,
+        "interaction": 0.4,
+        "world.render": 1.1,
+        "render": 6.4,
+        "world": 0.1,
+        "inventory": 0.1,
+        "ai": 0.1,
+        "camera": 0.5,
+        "bench": 0.5,
+        "vfx": 0.2,
+        "entities": 0.1,
+        "clock": 0.1,
+        "ui": 0.1
+      },
+      "drawCalls": {
+        "mean": 54.1,
+        "p95": 55,
+        "max": 55
+      },
+      "triangles": {
+        "mean": 281935,
+        "p95": 283759,
+        "max": 283765
+      },
+      "memory": {
+        "before": {
+          "geometries": 71,
+          "textures": 11,
+          "programs": 25,
+          "heapMB": 61.8
+        },
+        "after": {
+          "geometries": 72,
+          "textures": 11,
+          "programs": 25,
+          "heapMB": 69.1
+        },
+        "heapMaxMB": 68.7
+      },
+      "entities": {
+        "total": 1,
+        "tier0": 1,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 0,
+        "particlesMax": 0,
+        "projectilesMax": 0,
+        "benchSpawned": 0,
+        "casts": 0,
+        "castFails": 0,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 20,
+        "terrainLevels": [
+          5,
+          10,
+          2,
+          3
+        ],
+        "scatterChunks": 69,
+        "scatterInstances": 1417,
+        "scatterDraws": 7,
+        "scatterPeakBuildMs": 2,
+        "scatterPeakAssembleMs": 0.6,
+        "vegColliders": 168,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 1668,
+        "grassInstances": 2198,
+        "peakPreMs": 2.1
+      },
+      "scene": {
+        "meshes": 84,
+        "visible": 84,
+        "casters": 43,
+        "instanced": 8,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 110,
+        "shadow": 0,
+        "triangles": 568142,
+        "groups": [
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 24,
+            "shadowDraws": 0,
+            "triangles": 9440,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 18996,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bau-pessoal",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 580,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_cercados",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4008,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_lampioes",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1792,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_casas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 50672,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_muralha",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 11304,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_mercado",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4454,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_praca",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4726,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_centro",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 35540,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_plantacoes",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 41684,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_torre_cristal",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1172,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/santuario_cristal",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2302,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 104,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 92160,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 42150,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 33306,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2912,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23892,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1736,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 71700,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 13600,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 14820,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 540,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 192,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 560,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "respingos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 312,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "chuva",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3444,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "rain",
+        "rain": 0.57,
+        "night": 0,
+        "visibility": 291
+      },
+      "notes": [
+        "sem NPCs no mundo (módulo npc ainda sem população): vila medida sem moradores"
+      ],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 17.8,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "voo_floresta",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 43,
+      "durationMs": 10000,
+      "gameSeconds": 4.38,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 4.3,
+      "low1Fps": 1.39,
+      "low01Fps": 1.39,
+      "frameMs": {
+        "mean": 244.26,
+        "p50": 220.3,
+        "p95": 426.37,
+        "p99": 622.57,
+        "min": 21.3,
+        "max": 720.3,
+        "worst1": 720.3,
+        "worst01": 720.3
+      },
+      "cpuMs": {
+        "mean": 3.52,
+        "p50": 2.7,
+        "p95": 6.89,
+        "p99": 8.52,
+        "min": 1.8,
+        "max": 8.6,
+        "worst1": 8.6,
+        "worst01": 8.6
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 2.73,
+        "p50": 1.9,
+        "p95": 6.08,
+        "p99": 7.76,
+        "min": 1.2,
+        "max": 7.8,
+        "worst1": 7.8,
+        "worst01": 7.8
+      },
+      "systems": {
+        "render": 2.733,
+        "world.render": 0.309,
+        "player": 0.309,
+        "env": 0.14,
+        "world": 0.056,
+        "bench": 0.049,
+        "vfx": 0.047,
+        "abilities": 0.047,
+        "camera": 0.037,
+        "ai": 0.035,
+        "entities": 0.016,
+        "perf": 0.012,
+        "combat": 0.009,
+        "inventory": 0.007,
+        "ui": 0.005,
+        "interaction": 0.002,
+        "progression": 0.002,
+        "save": 0.002,
+        "clock": 0.002,
+        "env.render": 0
+      },
+      "systemPeaks": {
+        "env": 0.4,
+        "player": 0.5,
+        "abilities": 0.1,
+        "ai": 0.2,
+        "interaction": 0.1,
+        "bench": 0.4,
+        "world.render": 1.6,
+        "render": 7.8,
+        "inventory": 0.1,
+        "camera": 0.2,
+        "perf": 0.1,
+        "world": 0.3,
+        "combat": 0.1,
+        "entities": 0.1,
+        "progression": 0.1,
+        "vfx": 1.3,
+        "clock": 0.1,
+        "save": 0.1,
+        "ui": 0.1
+      },
+      "drawCalls": {
+        "mean": 59.7,
+        "p95": 61,
+        "max": 62
+      },
+      "triangles": {
+        "mean": 293264,
+        "p95": 306086,
+        "max": 308406
+      },
+      "memory": {
+        "before": {
+          "geometries": 78,
+          "textures": 11,
+          "programs": 29,
+          "heapMB": 62.2
+        },
+        "after": {
+          "geometries": 81,
+          "textures": 11,
+          "programs": 29,
+          "heapMB": 73.7
+        },
+        "heapMaxMB": 72.6
+      },
+      "entities": {
+        "total": 1,
+        "tier0": 1,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 0,
+        "particlesMax": 0,
+        "projectilesMax": 0,
+        "benchSpawned": 0,
+        "casts": 0,
+        "castFails": 0,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 23,
+        "terrainLevels": [
+          6,
+          7,
+          4,
+          6
+        ],
+        "scatterChunks": 75,
+        "scatterInstances": 1913,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 1.7,
+        "scatterPeakAssembleMs": 0.8,
+        "vegColliders": 369,
+        "structureMeshes": 23,
+        "visibleStructures": 20,
+        "gates": 8,
+        "colliders": 1869,
+        "grassInstances": 2198,
+        "peakPreMs": 2.2
+      },
+      "scene": {
+        "meshes": 85,
+        "visible": 85,
+        "casters": 43,
+        "instanced": 12,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 124,
+        "shadow": 0,
+        "triangles": 591516,
+        "groups": [
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 10928,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 18996,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bau-pessoal",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/portao:portao_brumafria_leste",
+            "draws": 4,
+            "shadowDraws": 0,
+            "triangles": 240,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/portao:portao_brumafria_sul",
+            "draws": 4,
+            "shadowDraws": 0,
+            "triangles": 240,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/pontes",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1008,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 580,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_lampioes",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1792,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_casas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 50672,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_muralha",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 11304,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_praca",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4726,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_centro",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 35540,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_torre_cristal",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1172,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/santuario_cristal",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2302,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 104,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 105984,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 42150,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 33306,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1768,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 7440,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 94250,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 19280,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 10192,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 436,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:crystal:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 384,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 31130,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 22100,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 192,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ervas-folhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 640,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ervas-bulbos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1920,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 560,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-particulas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 24,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "nevoa_rasteira",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 112,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "clear",
+        "rain": 0,
+        "night": 0,
+        "visibility": 458
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 17.6,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "combate",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 33,
+      "durationMs": 10000,
+      "gameSeconds": 2.97,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 3.3,
+      "low1Fps": 0.89,
+      "low01Fps": 0.89,
+      "frameMs": {
+        "mean": 303.04,
+        "p50": 248.6,
+        "p95": 1030.82,
+        "p99": 1099.6,
+        "min": 3,
+        "max": 1129.2,
+        "worst1": 1129.2,
+        "worst01": 1129.2
+      },
+      "cpuMs": {
+        "mean": 90.22,
+        "p50": 5.7,
+        "p95": 732.48,
+        "p99": 771.05,
+        "min": 2.5,
+        "max": 771.5,
+        "worst1": 771.5,
+        "worst01": 771.5
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 88.33,
+        "p50": 3.8,
+        "p95": 729.16,
+        "p99": 769.01,
+        "min": 1.4,
+        "max": 769.3,
+        "worst1": 769.3,
+        "worst01": 769.3
+      },
+      "systems": {
+        "render": 88.33,
+        "entities": 0.733,
+        "bench": 0.536,
+        "player": 0.382,
+        "abilities": 0.212,
+        "world.render": 0.145,
+        "combat": 0.124,
+        "env": 0.106,
+        "world": 0.064,
+        "ai": 0.052,
+        "vfx": 0.045,
+        "camera": 0.045,
+        "inventory": 0.018,
+        "interaction": 0.009,
+        "perf": 0.006,
+        "env.render": 0.006,
+        "save": 0.003,
+        "ui": 0.003,
+        "clock": 0.003,
+        "progression": 0.003
+      },
+      "systemPeaks": {
+        "env": 0.3,
+        "world": 0.2,
+        "player": 1.8,
+        "vfx": 0.3,
+        "entities": 2.1,
+        "bench": 6.5,
+        "world.render": 2.5,
+        "render": 769.3,
+        "combat": 0.4,
+        "camera": 0.2,
+        "ai": 0.5,
+        "abilities": 1.4,
+        "ui": 0.1,
+        "env.render": 0.1,
+        "inventory": 0.1,
+        "progression": 0.1,
+        "interaction": 0.1,
+        "save": 0.1,
+        "perf": 0.1,
+        "clock": 0.1
+      },
+      "drawCalls": {
+        "mean": 141.8,
+        "p95": 154,
+        "max": 156
+      },
+      "triangles": {
+        "mean": 271155,
+        "p95": 279772,
+        "max": 280038
+      },
+      "memory": {
+        "before": {
+          "geometries": 121,
+          "textures": 11,
+          "programs": 31,
+          "heapMB": 69.1
+        },
+        "after": {
+          "geometries": 168,
+          "textures": 11,
+          "programs": 35,
+          "heapMB": 88.5
+        },
+        "heapMaxMB": 87.9
+      },
+      "entities": {
+        "total": 13.6,
+        "tier0": 13.5,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 11,
+        "particlesMax": 49,
+        "projectilesMax": 4,
+        "benchSpawned": 12,
+        "casts": 6,
+        "castFails": 8,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 26,
+        "terrainLevels": [
+          9,
+          9,
+          4,
+          4
+        ],
+        "scatterChunks": 70,
+        "scatterInstances": 1764,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 3.3,
+        "scatterPeakAssembleMs": 1.7,
+        "vegColliders": 383,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 1883,
+        "grassInstances": 2198,
+        "peakPreMs": 6
+      },
+      "scene": {
+        "meshes": 221,
+        "visible": 221,
+        "casters": 45,
+        "instanced": 13,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 310,
+        "shadow": 0,
+        "triangles": 535604,
+        "groups": [
+          {
+            "label": "enemy:corvo_saqueador",
+            "draws": 44,
+            "shadowDraws": 0,
+            "triangles": 5424,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:lobo_sombrio",
+            "draws": 36,
+            "shadowDraws": 0,
+            "triangles": 3408,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:corva_arqueira",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2264,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:mago_corrompido",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2464,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:cavaleiro_encantado",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2232,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:cacador_furtivo",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2072,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:espreitador",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2008,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 8900,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:automato_sentinela",
+            "draws": 18,
+            "shadowDraws": 0,
+            "triangles": 2072,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 16,
+            "shadowDraws": 0,
+            "triangles": 19004,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 580,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 104,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 119808,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 42150,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 33306,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2916,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 27940,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 84400,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 14400,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1564,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 14632,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3120,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 33488,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 18200,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 192,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "saque-moedas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 224,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 560,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-particulas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 32,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "nuvem-tempestade",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/telegraph-0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1764,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-aneis",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 160,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-particulas-aditivas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1728,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-rastros",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1824,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-feixes",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1320,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-nucleos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "clear",
+        "rain": 0,
+        "night": 0,
+        "visibility": 431
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 17.5,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "chefe",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 36,
+      "durationMs": 10000,
+      "gameSeconds": 3.3,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 3.6,
+      "low1Fps": 0.79,
+      "low01Fps": 0.79,
+      "frameMs": {
+        "mean": 269.09,
+        "p50": 248.3,
+        "p95": 782.77,
+        "p99": 1100.72,
+        "min": 2.7,
+        "max": 1264.7,
+        "worst1": 1264.7,
+        "worst01": 1264.7
+      },
+      "cpuMs": {
+        "mean": 56.2,
+        "p50": 3.35,
+        "p95": 432.23,
+        "p99": 813.19,
+        "min": 2.2,
+        "max": 966.6,
+        "worst1": 966.6,
+        "worst01": 966.6
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 54.84,
+        "p50": 2.05,
+        "p95": 430.18,
+        "p99": 811.65,
+        "min": 0.9,
+        "max": 965.4,
+        "worst1": 965.4,
+        "worst01": 965.4
+      },
+      "systems": {
+        "render": 54.839,
+        "player": 0.375,
+        "bench": 0.372,
+        "entities": 0.206,
+        "env": 0.197,
+        "world.render": 0.192,
+        "abilities": 0.161,
+        "vfx": 0.092,
+        "camera": 0.069,
+        "combat": 0.058,
+        "world": 0.056,
+        "ai": 0.022,
+        "inventory": 0.011,
+        "perf": 0.008,
+        "interaction": 0.006,
+        "save": 0.006,
+        "clock": 0.003,
+        "env.render": 0.003,
+        "progression": 0,
+        "ui": 0
+      },
+      "systemPeaks": {
+        "env": 1.1,
+        "world": 0.2,
+        "player": 0.9,
+        "abilities": 1.2,
+        "combat": 0.4,
+        "entities": 3.7,
+        "camera": 0.2,
+        "world.render": 1,
+        "render": 965.4,
+        "ai": 0.3,
+        "save": 0.1,
+        "perf": 0.1,
+        "bench": 10.2,
+        "vfx": 1.8,
+        "inventory": 0.1,
+        "clock": 0.1,
+        "interaction": 0.1,
+        "env.render": 0.1
+      },
+      "drawCalls": {
+        "mean": 49.8,
+        "p95": 56,
+        "max": 68
+      },
+      "triangles": {
+        "mean": 201758,
+        "p95": 207933,
+        "max": 212150
+      },
+      "memory": {
+        "before": {
+          "geometries": 92,
+          "textures": 11,
+          "programs": 33,
+          "heapMB": 61.7
+        },
+        "after": {
+          "geometries": 105,
+          "textures": 11,
+          "programs": 36,
+          "heapMB": 74.1
+        },
+        "heapMaxMB": 73.6
+      },
+      "entities": {
+        "total": 2.8,
+        "tier0": 2.7,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 2,
+        "particlesMax": 109,
+        "projectilesMax": 3,
+        "benchSpawned": 0,
+        "casts": 6,
+        "castFails": 0,
+        "bossPhase": 2,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 18,
+        "terrainLevels": [
+          9,
+          2,
+          7,
+          0
+        ],
+        "scatterChunks": 70,
+        "scatterInstances": 1176,
+        "scatterDraws": 8,
+        "scatterPeakBuildMs": 2.6,
+        "scatterPeakAssembleMs": 0.6,
+        "vegColliders": 146,
+        "structureMeshes": 23,
+        "visibleStructures": 20,
+        "gates": 8,
+        "colliders": 1646,
+        "grassInstances": 2198,
+        "peakPreMs": 2.9
+      },
+      "scene": {
+        "meshes": 163,
+        "visible": 163,
+        "casters": 53,
+        "instanced": 10,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 141,
+        "shadow": 0,
+        "triangles": 425056,
+        "groups": [
+          {
+            "label": "boss:guardiao_mecanico",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2488,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:automato_sentinela",
+            "draws": 16,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 14,
+            "shadowDraws": 0,
+            "triangles": 19000,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:pilar_cristal",
+            "draws": 14,
+            "shadowDraws": 0,
+            "triangles": 2352,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "projeteis-blade",
+            "draws": 4,
+            "shadowDraws": 0,
+            "triangles": 32,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 580,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ruinas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 20998,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/arena",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 6384,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/laboratorio",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2370,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 104,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 82944,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 42150,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 33306,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 18788,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 8840,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 57100,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 432,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:crystal:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1536,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 436,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 19360,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 496,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 192,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 172,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 560,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "nuvem-tempestade",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-aneis",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 160,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-particulas-fumaca",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 672,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-rastros",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1824,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-particulas-aditivas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1728,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-cascas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 15360,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-feixes",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1320,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-nucleos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "nevoa_rasteira",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 84,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "respingos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 312,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "chuva",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 5048,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "raio",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 160,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "storm",
+        "rain": 0.84,
+        "night": 1,
+        "visibility": 250
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 17.5,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "tempestade",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 35,
+      "durationMs": 10000,
+      "gameSeconds": 3.5,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 3.5,
+      "low1Fps": 1.61,
+      "low01Fps": 1.61,
+      "frameMs": {
+        "mean": 279.5,
+        "p50": 267.4,
+        "p95": 524.85,
+        "p99": 589.05,
+        "min": 6.5,
+        "max": 620.5,
+        "worst1": 620.5,
+        "worst01": 620.5
+      },
+      "cpuMs": {
+        "mean": 2.79,
+        "p50": 2.3,
+        "p95": 4.32,
+        "p99": 5.63,
+        "min": 1.8,
+        "max": 5.8,
+        "worst1": 5.8,
+        "worst01": 5.8
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 2.03,
+        "p50": 1.7,
+        "p95": 3.69,
+        "p99": 4.73,
+        "min": 1,
+        "max": 4.8,
+        "worst1": 4.8,
+        "worst01": 4.8
+      },
+      "systems": {
+        "render": 2.029,
+        "player": 0.334,
+        "env": 0.163,
+        "world.render": 0.069,
+        "bench": 0.063,
+        "world": 0.043,
+        "camera": 0.034,
+        "abilities": 0.031,
+        "vfx": 0.023,
+        "ai": 0.023,
+        "inventory": 0.023,
+        "combat": 0.009,
+        "clock": 0.006,
+        "save": 0.006,
+        "interaction": 0.006,
+        "entities": 0.006,
+        "perf": 0.006,
+        "ui": 0.003,
+        "env.render": 0.003,
+        "progression": 0.003
+      },
+      "systemPeaks": {
+        "env": 0.4,
+        "player": 0.6,
+        "abilities": 0.1,
+        "vfx": 0.1,
+        "bench": 0.3,
+        "world.render": 0.2,
+        "render": 4.8,
+        "camera": 0.1,
+        "perf": 0.1,
+        "clock": 0.1,
+        "interaction": 0.1,
+        "save": 0.1,
+        "inventory": 0.1,
+        "world": 0.1,
+        "ai": 0.1,
+        "ui": 0.1,
+        "combat": 0.1,
+        "entities": 0.1,
+        "env.render": 0.1,
+        "progression": 0.1
+      },
+      "drawCalls": {
+        "mean": 48.4,
+        "p95": 53,
+        "max": 53
+      },
+      "triangles": {
+        "mean": 268782,
+        "p95": 275409,
+        "max": 275412
+      },
+      "memory": {
+        "before": {
+          "geometries": 81,
+          "textures": 11,
+          "programs": 30,
+          "heapMB": 63.4
+        },
+        "after": {
+          "geometries": 81,
+          "textures": 11,
+          "programs": 30,
+          "heapMB": 68.1
+        },
+        "heapMaxMB": 67.8
+      },
+      "entities": {
+        "total": 1,
+        "tier0": 1,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 0,
+        "particlesMax": 30,
+        "projectilesMax": 0,
+        "benchSpawned": 0,
+        "casts": 0,
+        "castFails": 0,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 25,
+        "terrainLevels": [
+          10,
+          2,
+          9,
+          4
+        ],
+        "scatterChunks": 68,
+        "scatterInstances": 1949,
+        "scatterDraws": 10,
+        "scatterPeakBuildMs": 2.2,
+        "scatterPeakAssembleMs": 4.4,
+        "vegColliders": 443,
+        "structureMeshes": 23,
+        "visibleStructures": 20,
+        "gates": 8,
+        "colliders": 1943,
+        "grassInstances": 2198,
+        "peakPreMs": 4.9
+      },
+      "scene": {
+        "meshes": 88,
+        "visible": 88,
+        "casters": 43,
+        "instanced": 13,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 94,
+        "shadow": 0,
+        "triangles": 511766,
+        "groups": [
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 10068,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 18996,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 580,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 104,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 115200,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 42150,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 33306,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 31592,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 108,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 19360,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1248,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 13104,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 13392,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 95500,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 6256,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 20540,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:crystal:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 192,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 192,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ervas-folhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 640,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ervas-bulbos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1920,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 560,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-particulas-aditivas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1728,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "nevoa_rasteira",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 112,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "respingos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 312,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "chuva",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 5090,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "storm",
+        "rain": 0.85,
+        "night": 1,
+        "visibility": 200
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 17.9,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "stress",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 28,
+      "durationMs": 10446,
+      "gameSeconds": 2.35,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 2.68,
+      "low1Fps": 0.54,
+      "low01Fps": 0.54,
+      "frameMs": {
+        "mean": 383.98,
+        "p50": 254.1,
+        "p95": 1545.53,
+        "p99": 1800.2,
+        "min": 3.2,
+        "max": 1858.6,
+        "worst1": 1858.6,
+        "worst01": 1858.6
+      },
+      "cpuMs": {
+        "mean": 179.64,
+        "p50": 6,
+        "p95": 981.19,
+        "p99": 1419.54,
+        "min": 2.4,
+        "max": 1557,
+        "worst1": 1557,
+        "worst01": 1557
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 177.84,
+        "p50": 4,
+        "p95": 977.57,
+        "p99": 1416.81,
+        "min": 1.6,
+        "max": 1555,
+        "worst1": 1555,
+        "worst01": 1555
+      },
+      "systems": {
+        "render": 177.839,
+        "bench": 1.054,
+        "entities": 0.625,
+        "abilities": 0.346,
+        "player": 0.307,
+        "env": 0.154,
+        "world.render": 0.129,
+        "combat": 0.096,
+        "camera": 0.071,
+        "vfx": 0.054,
+        "inventory": 0.025,
+        "ai": 0.025,
+        "world": 0.025,
+        "interaction": 0.004,
+        "save": 0.004,
+        "env.render": 0.004,
+        "clock": 0,
+        "progression": 0,
+        "ui": 0,
+        "perf": 0
+      },
+      "systemPeaks": {
+        "env": 0.4,
+        "player": 0.5,
+        "combat": 0.2,
+        "entities": 3.1,
+        "bench": 14.4,
+        "world.render": 1,
+        "render": 1555,
+        "vfx": 0.2,
+        "camera": 0.2,
+        "abilities": 5.8,
+        "world": 0.1,
+        "ai": 0.1,
+        "inventory": 0.2,
+        "env.render": 0.1,
+        "save": 0.1,
+        "interaction": 0.1
+      },
+      "drawCalls": {
+        "mean": 147.1,
+        "p95": 158,
+        "max": 178
+      },
+      "triangles": {
+        "mean": 273154,
+        "p95": 278281,
+        "max": 282516
+      },
+      "memory": {
+        "before": {
+          "geometries": 134,
+          "textures": 11,
+          "programs": 33,
+          "heapMB": 61.4
+        },
+        "after": {
+          "geometries": 191,
+          "textures": 11,
+          "programs": 39,
+          "heapMB": 83.2
+        },
+        "heapMaxMB": 82.5
+      },
+      "entities": {
+        "total": 12.3,
+        "tier0": 12.4,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 10,
+        "particlesMax": 53,
+        "projectilesMax": 5,
+        "benchSpawned": 12,
+        "casts": 5,
+        "castFails": 16,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 29,
+        "terrainLevels": [
+          10,
+          10,
+          5,
+          4
+        ],
+        "scatterChunks": 71,
+        "scatterInstances": 1783,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 1.8,
+        "scatterPeakAssembleMs": 0.7,
+        "vegColliders": 453,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 1953,
+        "grassInstances": 2198,
+        "peakPreMs": 3.4
+      },
+      "scene": {
+        "meshes": 223,
+        "visible": 223,
+        "casters": 45,
+        "instanced": 16,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 354,
+        "shadow": 0,
+        "triangles": 559588,
+        "groups": [
+          {
+            "label": "enemy:corvo_saqueador",
+            "draws": 44,
+            "shadowDraws": 0,
+            "triangles": 5424,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:lobo_sombrio",
+            "draws": 36,
+            "shadowDraws": 0,
+            "triangles": 3408,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 24,
+            "shadowDraws": 0,
+            "triangles": 9476,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:corva_arqueira",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2264,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:automato_sentinela",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2456,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:mago_corrompido",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2464,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:cacador_furtivo",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2072,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:espreitador",
+            "draws": 22,
+            "shadowDraws": 0,
+            "triangles": 2008,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:cavaleiro_encantado",
+            "draws": 20,
+            "shadowDraws": 0,
+            "triangles": 2040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:golem_ruinas",
+            "draws": 20,
+            "shadowDraws": 0,
+            "triangles": 1768,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 16,
+            "shadowDraws": 0,
+            "triangles": 19004,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:corvo_cristal",
+            "draws": 14,
+            "shadowDraws": 0,
+            "triangles": 812,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "projeteis-blade",
+            "draws": 4,
+            "shadowDraws": 0,
+            "triangles": 96,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 580,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 104,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 133632,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 42150,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 33306,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 28292,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2916,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 84500,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 15520,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3128,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 36400,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3120,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 14880,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 17940,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "projeteis-arrow",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 132,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 192,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "saque-gemas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 16,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "saque-moedas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 224,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 560,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-particulas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 62,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "nuvem-tempestade",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-aneis",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 160,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "storm",
+        "rain": 0.83,
+        "night": 1,
+        "visibility": 203
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 17.7,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "vila_chuva",
+      "quality": "high",
+      "preset": {
+        "renderScale": 1,
+        "maxPixelRatio": 1.5,
+        "antialias": true,
+        "shadowMapSize": 2048,
+        "shadowDistance": 90,
+        "viewDistance": 1300,
+        "grassDensity": 0.85,
+        "grassRadius": 65,
+        "propDensity": 1,
+        "maxParticles": 3000,
+        "maxDynamicLights": 6,
+        "bloom": true,
+        "lodBias": 1,
+        "rainDrops": 6000,
+        "maxActiveEnemies": 22,
+        "maxActiveNpcs": 28
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 6,
+      "durationMs": 10001,
+      "gameSeconds": 0.8,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          800,
+          450
+        ],
+        "pixelRatio": 1
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": true,
+      "shadows": true,
+      "fps": 0.6,
+      "low1Fps": 0.49,
+      "low01Fps": 0.49,
+      "frameMs": {
+        "mean": 1488.98,
+        "p50": 1392.5,
+        "p95": 1896.27,
+        "p99": 2010.45,
+        "min": 1319.4,
+        "max": 2039,
+        "worst1": 2039,
+        "worst01": 2039
+      },
+      "cpuMs": {
+        "mean": 8.33,
+        "p50": 7.8,
+        "p95": 11.25,
+        "p99": 11.77,
+        "min": 6.4,
+        "max": 11.9,
+        "worst1": 11.9,
+        "worst01": 11.9
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 6.7,
+        "p50": 5.55,
+        "p95": 10.05,
+        "p99": 10.57,
+        "min": 5.1,
+        "max": 10.7,
+        "worst1": 10.7,
+        "worst01": 10.7
+      },
+      "systems": {
+        "render": 6.7,
+        "world.render": 1.467,
+        "player": 0.7,
+        "bench": 0.667,
+        "env": 0.5,
+        "camera": 0.1,
+        "world": 0.05,
+        "ai": 0.05,
+        "abilities": 0.033,
+        "vfx": 0.033,
+        "save": 0.033,
+        "interaction": 0.017,
+        "inventory": 0.017,
+        "env.render": 0.017,
+        "clock": 0,
+        "combat": 0,
+        "progression": 0,
+        "entities": 0,
+        "ui": 0,
+        "perf": 0
+      },
+      "systemPeaks": {
+        "env": 1.4,
+        "world": 0.2,
+        "player": 1,
+        "vfx": 0.2,
+        "camera": 0.2,
+        "world.render": 2.3,
+        "render": 10.7,
+        "ai": 0.1,
+        "interaction": 0.1,
+        "env.render": 0.1,
+        "abilities": 0.1,
+        "save": 0.1,
+        "bench": 3.9,
+        "inventory": 0.1
+      },
+      "drawCalls": {
+        "mean": 106,
+        "p95": 106,
+        "max": 106
+      },
+      "triangles": {
+        "mean": 735620,
+        "p95": 745811,
+        "max": 746711
+      },
+      "memory": {
+        "before": {
+          "geometries": 75,
+          "textures": 25,
+          "programs": 42,
+          "heapMB": 64.1
+        },
+        "after": {
+          "geometries": 75,
+          "textures": 25,
+          "programs": 42,
+          "heapMB": 73.6
+        },
+        "heapMaxMB": 71.4
+      },
+      "entities": {
+        "total": 1,
+        "tier0": 1,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 0,
+        "particlesMax": 0,
+        "projectilesMax": 0,
+        "benchSpawned": 0,
+        "casts": 0,
+        "castFails": 0,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 37,
+        "terrainLevels": [
+          14,
+          9,
+          9,
+          5
+        ],
+        "scatterChunks": 30,
+        "scatterInstances": 1809,
+        "scatterDraws": 7,
+        "scatterPeakBuildMs": 5,
+        "scatterPeakAssembleMs": 1.4,
+        "vegColliders": 329,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 1829,
+        "grassInstances": 19954,
+        "peakPreMs": 5.3
+      },
+      "scene": {
+        "meshes": 147,
+        "visible": 147,
+        "casters": 75,
+        "instanced": 10,
+        "lights": 10,
+        "shadowLights": 1
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 214,
+        "shadow": 48,
+        "triangles": 1338298,
+        "groups": [
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 10016,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "Mesh:ShaderMaterial",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 26,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bau-pessoal",
+            "draws": 12,
+            "shadowDraws": 6,
+            "triangles": 528,
+            "shadowTriangles": 256
+          },
+          {
+            "label": "player:player",
+            "draws": 12,
+            "shadowDraws": 4,
+            "triangles": 18996,
+            "shadowTriangles": 18088
+          },
+          {
+            "label": "rpg-baus/bau:bau_elyra_manto",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_tempestade",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 104,
+            "shadowTriangles": 104
+          },
+          {
+            "label": "mundo/vila_praca",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 4726,
+            "shadowTriangles": 4726
+          },
+          {
+            "label": "mundo/vila_centro",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 35540,
+            "shadowTriangles": 35540
+          },
+          {
+            "label": "mundo/vila_torre_cristal",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 1172,
+            "shadowTriangles": 1172
+          },
+          {
+            "label": "mundo/vila_casas",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 50672,
+            "shadowTriangles": 50672
+          },
+          {
+            "label": "mundo/vila_mercado",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 4454,
+            "shadowTriangles": 4454
+          },
+          {
+            "label": "mundo/vila_muralha",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 11304,
+            "shadowTriangles": 11304
+          },
+          {
+            "label": "mundo/vila_lampioes",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 1792,
+            "shadowTriangles": 1792
+          },
+          {
+            "label": "mundo/vila_cercados",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 4008,
+            "shadowTriangles": 4008
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 580,
+            "shadowTriangles": 580
+          },
+          {
+            "label": "mundo/portao:portao_brumafria_sul",
+            "draws": 0,
+            "shadowDraws": 4,
+            "triangles": 0,
+            "shadowTriangles": 240
+          },
+          {
+            "label": "mundo/portao:portao_brumafria_leste",
+            "draws": 0,
+            "shadowDraws": 4,
+            "triangles": 0,
+            "shadowTriangles": 240
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 1248,
+            "shadowTriangles": 1248
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 21576,
+            "shadowTriangles": 21576
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 17472,
+            "shadowTriangles": 17472
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 384,
+            "shadowTriangles": 384
+          },
+          {
+            "label": "mago-tabardo",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 48,
+            "shadowTriangles": 48
+          },
+          {
+            "label": "mundo/vila_plantacoes",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 41684,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/santuario_cristal",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2302,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 170496,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 384030,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 300426,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 25300,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 85800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 32160,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 14040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "respingos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 880,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "chuva",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 13160,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "rain",
+        "rain": 0.55,
+        "night": 0,
+        "visibility": 465
+      },
+      "notes": [
+        "sem NPCs no mundo (módulo npc ainda sem população): vila medida sem moradores"
+      ],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 22.3,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "voo_floresta",
+      "quality": "high",
+      "preset": {
+        "renderScale": 1,
+        "maxPixelRatio": 1.5,
+        "antialias": true,
+        "shadowMapSize": 2048,
+        "shadowDistance": 90,
+        "viewDistance": 1300,
+        "grassDensity": 0.85,
+        "grassRadius": 65,
+        "propDensity": 1,
+        "maxParticles": 3000,
+        "maxDynamicLights": 6,
+        "bloom": true,
+        "lodBias": 1,
+        "rainDrops": 6000,
+        "maxActiveEnemies": 22,
+        "maxActiveNpcs": 28
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 5,
+      "durationMs": 10001,
+      "gameSeconds": 0.7,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          800,
+          450
+        ],
+        "pixelRatio": 1
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": true,
+      "shadows": true,
+      "fps": 0.5,
+      "low1Fps": 0.44,
+      "low01Fps": 0.44,
+      "frameMs": {
+        "mean": 1756.1,
+        "p50": 1871.4,
+        "p95": 2202.28,
+        "p99": 2254.14,
+        "min": 1320.2,
+        "max": 2267.1,
+        "worst1": 2267.1,
+        "worst01": 2267.1
+      },
+      "cpuMs": {
+        "mean": 9.22,
+        "p50": 9.1,
+        "p95": 12.74,
+        "p99": 13.11,
+        "min": 6.3,
+        "max": 13.2,
+        "worst1": 13.2,
+        "worst01": 13.2
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 7.26,
+        "p50": 7.6,
+        "p95": 9.46,
+        "p99": 9.49,
+        "min": 4.7,
+        "max": 9.5,
+        "worst1": 9.5,
+        "worst01": 9.5
+      },
+      "systems": {
+        "render": 7.26,
+        "world.render": 2.94,
+        "player": 0.76,
+        "env": 0.72,
+        "camera": 0.08,
+        "world": 0.08,
+        "bench": 0.08,
+        "ai": 0.06,
+        "entities": 0.06,
+        "vfx": 0.04,
+        "abilities": 0.04,
+        "combat": 0.02,
+        "inventory": 0.02,
+        "clock": 0,
+        "interaction": 0,
+        "progression": 0,
+        "save": 0,
+        "ui": 0,
+        "perf": 0,
+        "env.render": 0
+      },
+      "systemPeaks": {
+        "env": 2.7,
+        "player": 0.9,
+        "ai": 0.1,
+        "vfx": 0.1,
+        "world.render": 5.4,
+        "render": 9.5,
+        "world": 0.1,
+        "combat": 0.1,
+        "entities": 0.2,
+        "camera": 0.2,
+        "bench": 0.2,
+        "abilities": 0.1,
+        "inventory": 0.1
+      },
+      "drawCalls": {
+        "mean": 108,
+        "p95": 109,
+        "max": 109
+      },
+      "triangles": {
+        "mean": 824770,
+        "p95": 839099,
+        "max": 839746
+      },
+      "memory": {
+        "before": {
+          "geometries": 85,
+          "textures": 25,
+          "programs": 46,
+          "heapMB": 59.7
+        },
+        "after": {
+          "geometries": 86,
+          "textures": 25,
+          "programs": 46,
+          "heapMB": 69.2
+        },
+        "heapMaxMB": 67.1
+      },
+      "entities": {
+        "total": 1,
+        "tier0": 1,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 0,
+        "particlesMax": 84,
+        "projectilesMax": 0,
+        "benchSpawned": 0,
+        "casts": 0,
+        "castFails": 0,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 33,
+        "terrainLevels": [
+          8,
+          8,
+          12,
+          5
+        ],
+        "scatterChunks": 28,
+        "scatterInstances": 1995,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 5.6,
+        "scatterPeakAssembleMs": 4.2,
+        "vegColliders": 541,
+        "structureMeshes": 23,
+        "visibleStructures": 20,
+        "gates": 8,
+        "colliders": 2041,
+        "grassInstances": 19954,
+        "peakPreMs": 7
+      },
+      "scene": {
+        "meshes": 146,
+        "visible": 146,
+        "casters": 74,
+        "instanced": 12,
+        "lights": 10,
+        "shadowLights": 1
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 213,
+        "shadow": 22,
+        "triangles": 1454568,
+        "groups": [
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 32,
+            "shadowDraws": 0,
+            "triangles": 11128,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "Mesh:ShaderMaterial",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 26,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 14,
+            "shadowDraws": 4,
+            "triangles": 19000,
+            "shadowTriangles": 18088
+          },
+          {
+            "label": "bau-pessoal",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_elyra_manto",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_tempestade",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 104,
+            "shadowTriangles": 104
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 580,
+            "shadowTriangles": 580
+          },
+          {
+            "label": "mundo/veg:lumen:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 6256,
+            "shadowTriangles": 6256
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 12168,
+            "shadowTriangles": 12168
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 127400,
+            "shadowTriangles": 127400
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 72044,
+            "shadowTriangles": 72044
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 384,
+            "shadowTriangles": 384
+          },
+          {
+            "label": "mago-tabardo",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 48,
+            "shadowTriangles": 48
+          },
+          {
+            "label": "mundo/portao:portao_brumafria_sul",
+            "draws": 4,
+            "shadowDraws": 0,
+            "triangles": 240,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/portao:portao_brumafria_leste",
+            "draws": 4,
+            "shadowDraws": 0,
+            "triangles": 240,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/acampamento",
+            "draws": 0,
+            "shadowDraws": 2,
+            "triangles": 0,
+            "shadowTriangles": 16678
+          },
+          {
+            "label": "mundo/pontes",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1008,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/desfiladeiro",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 5040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ruinas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 20998,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_lampioes",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1792,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_casas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 50672,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_muralha",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 11304,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_praca",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4726,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_centro",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 35540,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/vila_torre_cristal",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1172,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/santuario_cristal",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2302,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 152064,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 384030,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 300426,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 15080,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 36320,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 108,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 68400,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23078,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ervas-folhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 640,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "clear",
+        "rain": 0,
+        "night": 0,
+        "visibility": 835
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 24.3,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "combate",
+      "quality": "high",
+      "preset": {
+        "renderScale": 1,
+        "maxPixelRatio": 1.5,
+        "antialias": true,
+        "shadowMapSize": 2048,
+        "shadowDistance": 90,
+        "viewDistance": 1300,
+        "grassDensity": 0.85,
+        "grassRadius": 65,
+        "propDensity": 1,
+        "maxParticles": 3000,
+        "maxDynamicLights": 6,
+        "bloom": true,
+        "lodBias": 1,
+        "rainDrops": 6000,
+        "maxActiveEnemies": 22,
+        "maxActiveNpcs": 28
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 4,
+      "durationMs": 10004,
+      "gameSeconds": 0.52,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          800,
+          450
+        ],
+        "pixelRatio": 1
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": true,
+      "shadows": true,
+      "fps": 0.4,
+      "low1Fps": 0.12,
+      "low01Fps": 0.12,
+      "frameMs": {
+        "mean": 2836.05,
+        "p50": 1334.65,
+        "p95": 7756.75,
+        "p99": 8477.59,
+        "min": 17.1,
+        "max": 8657.8,
+        "worst1": 8657.8,
+        "worst01": 8657.8
+      },
+      "cpuMs": {
+        "mean": 2036.35,
+        "p50": 1332.8,
+        "p95": 5048.32,
+        "p99": 5386.86,
+        "min": 8.3,
+        "max": 5471.5,
+        "worst1": 5471.5,
+        "worst01": 5471.5
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 2031.65,
+        "p50": 1327.55,
+        "p95": 5041.56,
+        "p99": 5379.83,
+        "min": 7.1,
+        "max": 5464.4,
+        "worst1": 5464.4,
+        "worst01": 5464.4
+      },
+      "systems": {
+        "render": 2031.65,
+        "world.render": 2.025,
+        "player": 1.375,
+        "entities": 1.3,
+        "abilities": 0.65,
+        "combat": 0.55,
+        "env": 0.225,
+        "camera": 0.175,
+        "ai": 0.1,
+        "vfx": 0.1,
+        "world": 0.1,
+        "bench": 0.05,
+        "inventory": 0.025,
+        "env.render": 0.025,
+        "clock": 0,
+        "interaction": 0,
+        "progression": 0,
+        "save": 0,
+        "ui": 0,
+        "perf": 0
+      },
+      "systemPeaks": {
+        "env": 0.3,
+        "world": 0.2,
+        "player": 2.7,
+        "abilities": 2.4,
+        "ai": 0.2,
+        "combat": 1.7,
+        "vfx": 0.3,
+        "entities": 4.1,
+        "camera": 0.2,
+        "env.render": 0.1,
+        "world.render": 3.4,
+        "render": 5464.4,
+        "inventory": 0.1,
+        "bench": 0.1
+      },
+      "drawCalls": {
+        "mean": 139.3,
+        "p95": 142,
+        "max": 142
+      },
+      "triangles": {
+        "mean": 849138,
+        "p95": 860841,
+        "max": 861834
+      },
+      "memory": {
+        "before": {
+          "geometries": 106,
+          "textures": 25,
+          "programs": 42,
+          "heapMB": 74.1
+        },
+        "after": {
+          "geometries": 134,
+          "textures": 25,
+          "programs": 47,
+          "heapMB": 86.5
+        },
+        "heapMaxMB": 80.4
+      },
+      "entities": {
+        "total": 4.5,
+        "tier0": 4.3,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 3,
+        "particlesMax": 91,
+        "projectilesMax": 0,
+        "benchSpawned": 6,
+        "casts": 2,
+        "castFails": 0,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 33,
+        "terrainLevels": [
+          10,
+          10,
+          9,
+          4
+        ],
+        "scatterChunks": 22,
+        "scatterInstances": 2062,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 23.6,
+        "scatterPeakAssembleMs": 1.2,
+        "vegColliders": 741,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 2241,
+        "grassInstances": 19954,
+        "peakPreMs": 5
+      },
+      "scene": {
+        "meshes": 215,
+        "visible": 215,
+        "casters": 140,
+        "instanced": 12,
+        "lights": 10,
+        "shadowLights": 1
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 397,
+        "shadow": 148,
+        "triangles": 1417726,
+        "groups": [
+          {
+            "label": "enemy:corvo_saqueador",
+            "draws": 44,
+            "shadowDraws": 44,
+            "triangles": 5424,
+            "shadowTriangles": 5424
+          },
+          {
+            "label": "enemy:corva_arqueira",
+            "draws": 22,
+            "shadowDraws": 22,
+            "triangles": 2264,
+            "shadowTriangles": 2264
+          },
+          {
+            "label": "enemy:mago_corrompido",
+            "draws": 22,
+            "shadowDraws": 22,
+            "triangles": 2464,
+            "shadowTriangles": 2464
+          },
+          {
+            "label": "enemy:lobo_sombrio",
+            "draws": 18,
+            "shadowDraws": 18,
+            "triangles": 1704,
+            "shadowTriangles": 1704
+          },
+          {
+            "label": "Mesh:ShaderMaterial",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 26,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 24,
+            "shadowDraws": 0,
+            "triangles": 9476,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "enemy:automato_sentinela",
+            "draws": 0,
+            "shadowDraws": 22,
+            "triangles": 0,
+            "shadowTriangles": 2456
+          },
+          {
+            "label": "player:player",
+            "draws": 13,
+            "shadowDraws": 4,
+            "triangles": 18998,
+            "shadowTriangles": 18088
+          },
+          {
+            "label": "rpg-baus/bau:bau_elyra_manto",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_tempestade",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 104,
+            "shadowTriangles": 104
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 580,
+            "shadowTriangles": 580
+          },
+          {
+            "label": "mundo/veg:lumen:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 17204,
+            "shadowTriangles": 17204
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 15600,
+            "shadowTriangles": 15600
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 80724,
+            "shadowTriangles": 80724
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 186368,
+            "shadowTriangles": 186368
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 384,
+            "shadowTriangles": 384
+          },
+          {
+            "label": "mago-tabardo",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 48,
+            "shadowTriangles": 48
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 152064,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 384030,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 300426,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 21758,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 31680,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 65900,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 108,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 18850,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-particulas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 16,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-aneis",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 256,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-particulas-aditivas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 8640,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "nevoa_rasteira",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 56,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "Mesh:RawShaderMaterial",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-cascas",
+            "draws": 1,
+            "shadowDraws": 0,
+            "triangles": 7680,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-rastros",
+            "draws": 1,
+            "shadowDraws": 0,
+            "triangles": 1520,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "clear",
+        "rain": 0,
+        "night": 0,
+        "visibility": 780
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 31.8,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "chefe",
+      "quality": "high",
+      "preset": {
+        "renderScale": 1,
+        "maxPixelRatio": 1.5,
+        "antialias": true,
+        "shadowMapSize": 2048,
+        "shadowDistance": 90,
+        "viewDistance": 1300,
+        "grassDensity": 0.85,
+        "grassRadius": 65,
+        "propDensity": 1,
+        "maxParticles": 3000,
+        "maxDynamicLights": 6,
+        "bloom": true,
+        "lodBias": 1,
+        "rainDrops": 6000,
+        "maxActiveEnemies": 22,
+        "maxActiveNpcs": 28
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 6,
+      "durationMs": 10001,
+      "gameSeconds": 0.7,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          800,
+          450
+        ],
+        "pixelRatio": 1
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": true,
+      "shadows": true,
+      "fps": 0.6,
+      "low1Fps": 0.24,
+      "low01Fps": 0.24,
+      "frameMs": {
+        "mean": 1651.8,
+        "p50": 1560.55,
+        "p95": 3769.28,
+        "p99": 4110.74,
+        "min": 7.5,
+        "max": 4196.1,
+        "worst1": 4196.1,
+        "worst01": 4196.1
+      },
+      "cpuMs": {
+        "mean": 9.63,
+        "p50": 9.05,
+        "p95": 15.05,
+        "p99": 16.05,
+        "min": 5.7,
+        "max": 16.3,
+        "worst1": 16.3,
+        "worst01": 16.3
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 7.02,
+        "p50": 7.5,
+        "p95": 9.45,
+        "p99": 9.65,
+        "min": 4.2,
+        "max": 9.7,
+        "worst1": 9.7,
+        "worst01": 9.7
+      },
+      "systems": {
+        "render": 7.017,
+        "world.render": 2.617,
+        "player": 0.867,
+        "combat": 0.717,
+        "env": 0.4,
+        "camera": 0.15,
+        "entities": 0.083,
+        "world": 0.083,
+        "ai": 0.083,
+        "vfx": 0.067,
+        "bench": 0.067,
+        "abilities": 0.05,
+        "interaction": 0.033,
+        "env.render": 0.017,
+        "clock": 0,
+        "progression": 0,
+        "inventory": 0,
+        "save": 0,
+        "ui": 0,
+        "perf": 0
+      },
+      "systemPeaks": {
+        "env": 1.3,
+        "player": 1.5,
+        "abilities": 0.2,
+        "combat": 4.1,
+        "entities": 0.1,
+        "camera": 0.2,
+        "world.render": 3.8,
+        "render": 9.7,
+        "world": 0.1,
+        "ai": 0.2,
+        "vfx": 0.2,
+        "interaction": 0.1,
+        "env.render": 0.1,
+        "bench": 0.3
+      },
+      "drawCalls": {
+        "mean": 106.2,
+        "p95": 108,
+        "max": 108
+      },
+      "triangles": {
+        "mean": 594641,
+        "p95": 601149,
+        "max": 602313
+      },
+      "memory": {
+        "before": {
+          "geometries": 97,
+          "textures": 25,
+          "programs": 49,
+          "heapMB": 62
+        },
+        "after": {
+          "geometries": 98,
+          "textures": 25,
+          "programs": 50,
+          "heapMB": 70.9
+        },
+        "heapMaxMB": 68.7
+      },
+      "entities": {
+        "total": 2.5,
+        "tier0": 2.3,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 0,
+        "particlesMax": 140,
+        "projectilesMax": 1,
+        "benchSpawned": 0,
+        "casts": 2,
+        "castFails": 0,
+        "bossPhase": 1,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 22,
+        "terrainLevels": [
+          9,
+          8,
+          5,
+          0
+        ],
+        "scatterChunks": 27,
+        "scatterInstances": 1235,
+        "scatterDraws": 11,
+        "scatterPeakBuildMs": 3.4,
+        "scatterPeakAssembleMs": 2.5,
+        "vegColliders": 255,
+        "structureMeshes": 23,
+        "visibleStructures": 20,
+        "gates": 8,
+        "colliders": 1755,
+        "grassInstances": 19954,
+        "peakPreMs": 4.1
+      },
+      "scene": {
+        "meshes": 165,
+        "visible": 165,
+        "casters": 86,
+        "instanced": 14,
+        "lights": 10,
+        "shadowLights": 1
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 215,
+        "shadow": 68,
+        "triangles": 1085500,
+        "groups": [
+          {
+            "label": "boss:guardiao_mecanico",
+            "draws": 22,
+            "shadowDraws": 22,
+            "triangles": 2488,
+            "shadowTriangles": 2488
+          },
+          {
+            "label": "Mesh:ShaderMaterial",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 26,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 16,
+            "shadowDraws": 4,
+            "triangles": 19004,
+            "shadowTriangles": 18088
+          },
+          {
+            "label": "rpg-baus/bau:laboratorio_bau",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_ruinas_1",
+            "draws": 0,
+            "shadowDraws": 6,
+            "triangles": 0,
+            "shadowTriangles": 256
+          },
+          {
+            "label": "rpg-baus/bau:bau_ruinas_3",
+            "draws": 0,
+            "shadowDraws": 6,
+            "triangles": 0,
+            "shadowTriangles": 256
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 104,
+            "shadowTriangles": 104
+          },
+          {
+            "label": "mundo/ruinas",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 20998,
+            "shadowTriangles": 20998
+          },
+          {
+            "label": "mundo/arena",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 6384,
+            "shadowTriangles": 6384
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 48380,
+            "shadowTriangles": 48380
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 580,
+            "shadowTriangles": 580
+          },
+          {
+            "label": "mundo/portao:portao_ruinas",
+            "draws": 0,
+            "shadowDraws": 4,
+            "triangles": 0,
+            "shadowTriangles": 144
+          },
+          {
+            "label": "mundo/veg:dead:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 1308,
+            "shadowTriangles": 1308
+          },
+          {
+            "label": "mundo/veg:crystal:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 2112,
+            "shadowTriangles": 2112
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 15872,
+            "shadowTriangles": 15872
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 1456,
+            "shadowTriangles": 1456
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 624,
+            "shadowTriangles": 624
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 384,
+            "shadowTriangles": 384
+          },
+          {
+            "label": "mago-tabardo",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 48,
+            "shadowTriangles": 48
+          },
+          {
+            "label": "mundo/portao:arena_guardiao",
+            "draws": 0,
+            "shadowDraws": 2,
+            "triangles": 0,
+            "shadowTriangles": 592
+          },
+          {
+            "label": "mundo/laboratorio",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2370,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 101376,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 384030,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 300426,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 14124,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 49100,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:crystal:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1440,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 108,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 41520,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 7280,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 172,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-aneis",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 256,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-particulas-fumaca",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3360,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-particulas-aditivas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 8640,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-nucleos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "nevoa_rasteira",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 84,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "storm",
+        "rain": 0.81,
+        "night": 1,
+        "visibility": 391
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 26.8,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "tempestade",
+      "quality": "high",
+      "preset": {
+        "renderScale": 1,
+        "maxPixelRatio": 1.5,
+        "antialias": true,
+        "shadowMapSize": 2048,
+        "shadowDistance": 90,
+        "viewDistance": 1300,
+        "grassDensity": 0.85,
+        "grassRadius": 65,
+        "propDensity": 1,
+        "maxParticles": 3000,
+        "maxDynamicLights": 6,
+        "bloom": true,
+        "lodBias": 1,
+        "rainDrops": 6000,
+        "maxActiveEnemies": 22,
+        "maxActiveNpcs": 28
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 6,
+      "durationMs": 10000,
+      "gameSeconds": 0.72,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          800,
+          450
+        ],
+        "pixelRatio": 1
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": true,
+      "shadows": true,
+      "fps": 0.6,
+      "low1Fps": 0.2,
+      "low01Fps": 0.2,
+      "frameMs": {
+        "mean": 1508.9,
+        "p50": 1313.25,
+        "p95": 4076.62,
+        "p99": 4774.36,
+        "min": 8.7,
+        "max": 4948.8,
+        "worst1": 4948.8,
+        "worst01": 4948.8
+      },
+      "cpuMs": {
+        "mean": 486.75,
+        "p50": 12.45,
+        "p95": 2152.18,
+        "p99": 2722.52,
+        "min": 8.3,
+        "max": 2865.1,
+        "worst1": 2865.1,
+        "worst01": 2865.1
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 483.88,
+        "p50": 8.6,
+        "p95": 2150.23,
+        "p99": 2720.93,
+        "min": 5.2,
+        "max": 2863.6,
+        "worst1": 2863.6,
+        "worst01": 2863.6
+      },
+      "systems": {
+        "render": 483.883,
+        "world.render": 2.2,
+        "player": 1.95,
+        "env": 0.35,
+        "bench": 0.117,
+        "vfx": 0.1,
+        "inventory": 0.083,
+        "world": 0.067,
+        "camera": 0.067,
+        "abilities": 0.05,
+        "ai": 0.033,
+        "entities": 0.033,
+        "env.render": 0.033,
+        "interaction": 0.033,
+        "clock": 0.017,
+        "combat": 0,
+        "progression": 0,
+        "save": 0,
+        "ui": 0,
+        "perf": 0
+      },
+      "systemPeaks": {
+        "env": 0.5,
+        "world": 0.2,
+        "player": 6.6,
+        "vfx": 0.2,
+        "interaction": 0.1,
+        "camera": 0.1,
+        "env.render": 0.1,
+        "world.render": 4.8,
+        "render": 2863.6,
+        "inventory": 0.3,
+        "entities": 0.2,
+        "clock": 0.1,
+        "abilities": 0.1,
+        "ai": 0.1,
+        "bench": 0.5
+      },
+      "drawCalls": {
+        "mean": 113.7,
+        "p95": 117,
+        "max": 118
+      },
+      "triangles": {
+        "mean": 776597,
+        "p95": 797870,
+        "max": 799918
+      },
+      "memory": {
+        "before": {
+          "geometries": 80,
+          "textures": 25,
+          "programs": 45,
+          "heapMB": 138.3
+        },
+        "after": {
+          "geometries": 81,
+          "textures": 25,
+          "programs": 46,
+          "heapMB": 71.9
+        },
+        "heapMaxMB": 138.3
+      },
+      "entities": {
+        "total": 1,
+        "tier0": 1,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 0,
+        "particlesMax": 6,
+        "projectilesMax": 0,
+        "benchSpawned": 0,
+        "casts": 0,
+        "castFails": 0,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 36,
+        "terrainLevels": [
+          14,
+          10,
+          6,
+          6
+        ],
+        "scatterChunks": 29,
+        "scatterInstances": 2641,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 4.9,
+        "scatterPeakAssembleMs": 0.8,
+        "vegColliders": 895,
+        "structureMeshes": 23,
+        "visibleStructures": 20,
+        "gates": 8,
+        "colliders": 2395,
+        "grassInstances": 19954,
+        "peakPreMs": 4.8
+      },
+      "scene": {
+        "meshes": 148,
+        "visible": 148,
+        "casters": 74,
+        "instanced": 12,
+        "lights": 10,
+        "shadowLights": 1
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 228,
+        "shadow": 20,
+        "triangles": 1420690,
+        "groups": [
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 10068,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "Mesh:ShaderMaterial",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 26,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 12,
+            "shadowDraws": 4,
+            "triangles": 18996,
+            "shadowTriangles": 18088
+          },
+          {
+            "label": "rpg-baus/bau:bau_ruinas_1",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_ruinas_3",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_farol_celeste",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:laboratorio_bau",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_elyra_manto",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_tempestade",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 104,
+            "shadowTriangles": 104
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 580,
+            "shadowTriangles": 580
+          },
+          {
+            "label": "mundo/veg:lumen:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 39100,
+            "shadowTriangles": 39100
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 53816,
+            "shadowTriangles": 53816
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 9776,
+            "shadowTriangles": 9776
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 74256,
+            "shadowTriangles": 74256
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 384,
+            "shadowTriangles": 384
+          },
+          {
+            "label": "mago-tabardo",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 48,
+            "shadowTriangles": 48
+          },
+          {
+            "label": "mundo/portao:portao_ruinas",
+            "draws": 4,
+            "shadowDraws": 0,
+            "triangles": 144,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/desfiladeiro",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 5040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ruinas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 20998,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/portao:arena_guardiao",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 592,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/arena",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 6384,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/laboratorio",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2370,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 165888,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 384030,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 300426,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 35222,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 20540,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 112350,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 108,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 42400,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ervas-folhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 640,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ervas-bulbos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 1920,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-particulas-aditivas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 8640,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "storm",
+        "rain": 0.81,
+        "night": 1,
+        "visibility": 350
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 22.9,
+      "pageErrors": []
+    },
+    {
+      "version": 2,
+      "ok": true,
+      "scenario": "stress",
+      "quality": "high",
+      "preset": {
+        "renderScale": 1,
+        "maxPixelRatio": 1.5,
+        "antialias": true,
+        "shadowMapSize": 2048,
+        "shadowDistance": 90,
+        "viewDistance": 1300,
+        "grassDensity": 0.85,
+        "grassRadius": 65,
+        "propDensity": 1,
+        "maxParticles": 3000,
+        "maxDynamicLights": 6,
+        "bloom": true,
+        "lodBias": 1,
+        "rainDrops": 6000,
+        "maxActiveEnemies": 22,
+        "maxActiveNpcs": 28
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 5,
+      "durationMs": 10000,
+      "gameSeconds": 0.58,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          800,
+          450
+        ],
+        "pixelRatio": 1
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": true,
+      "shadows": true,
+      "fps": 0.5,
+      "low1Fps": 0.16,
+      "low01Fps": 0.16,
+      "frameMs": {
+        "mean": 1853.5,
+        "p50": 71.8,
+        "p95": 5577.84,
+        "p99": 6109.65,
+        "min": 14.7,
+        "max": 6242.6,
+        "worst1": 6242.6,
+        "worst01": 6242.6
+      },
+      "cpuMs": {
+        "mean": 769.38,
+        "p50": 16.4,
+        "p95": 3034.02,
+        "p99": 3637.44,
+        "min": 10.9,
+        "max": 3788.3,
+        "worst1": 3788.3,
+        "worst01": 3788.3
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 763.54,
+        "p50": 11.6,
+        "p95": 3024.04,
+        "p99": 3626.33,
+        "min": 6.4,
+        "max": 3776.9,
+        "worst1": 3776.9,
+        "worst01": 3776.9
+      },
+      "systems": {
+        "render": 763.54,
+        "world.render": 2.64,
+        "bench": 1.9,
+        "entities": 1.7,
+        "player": 1.3,
+        "env": 0.86,
+        "abilities": 0.76,
+        "combat": 0.6,
+        "env.render": 0.16,
+        "camera": 0.14,
+        "ai": 0.1,
+        "vfx": 0.1,
+        "world": 0.08,
+        "inventory": 0.08,
+        "clock": 0,
+        "interaction": 0,
+        "progression": 0,
+        "save": 0,
+        "ui": 0,
+        "perf": 0
+      },
+      "systemPeaks": {
+        "env": 2.8,
+        "world": 0.1,
+        "player": 2.6,
+        "abilities": 3.5,
+        "ai": 0.3,
+        "combat": 2.3,
+        "vfx": 0.3,
+        "entities": 4.7,
+        "camera": 0.2,
+        "bench": 5,
+        "world.render": 4.9,
+        "render": 3776.9,
+        "inventory": 0.3,
+        "env.render": 0.6
+      },
+      "drawCalls": {
+        "mean": 161,
+        "p95": 200,
+        "max": 213
+      },
+      "triangles": {
+        "mean": 878991,
+        "p95": 896755,
+        "max": 900536
+      },
+      "memory": {
+        "before": {
+          "geometries": 111,
+          "textures": 25,
+          "programs": 47,
+          "heapMB": 122.8
+        },
+        "after": {
+          "geometries": 137,
+          "textures": 25,
+          "programs": 50,
+          "heapMB": 74
+        },
+        "heapMaxMB": 122.8
+      },
+      "entities": {
+        "total": 4.4,
+        "tier0": 4.2,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 6,
+        "particlesMax": 123,
+        "projectilesMax": 0,
+        "benchSpawned": 6,
+        "casts": 2,
+        "castFails": 0,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 33,
+        "terrainLevels": [
+          10,
+          10,
+          9,
+          4
+        ],
+        "scatterChunks": 28,
+        "scatterInstances": 2549,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 4,
+        "scatterPeakAssembleMs": 3.6,
+        "vegColliders": 700,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 2200,
+        "grassInstances": 19954,
+        "peakPreMs": 4.9
+      },
+      "scene": {
+        "meshes": 219,
+        "visible": 219,
+        "casters": 140,
+        "instanced": 12,
+        "lights": 10,
+        "shadowLights": 1
+      },
+      "drawBreakdown": {
+        "frames": 1,
+        "total": 427,
+        "shadow": 150,
+        "triangles": 1473368,
+        "groups": [
+          {
+            "label": "enemy:corvo_saqueador",
+            "draws": 44,
+            "shadowDraws": 44,
+            "triangles": 5424,
+            "shadowTriangles": 5424
+          },
+          {
+            "label": "enemy:corva_arqueira",
+            "draws": 22,
+            "shadowDraws": 22,
+            "triangles": 2264,
+            "shadowTriangles": 2264
+          },
+          {
+            "label": "enemy:mago_corrompido",
+            "draws": 22,
+            "shadowDraws": 22,
+            "triangles": 2464,
+            "shadowTriangles": 2464
+          },
+          {
+            "label": "enemy:automato_sentinela",
+            "draws": 20,
+            "shadowDraws": 22,
+            "triangles": 2320,
+            "shadowTriangles": 2456
+          },
+          {
+            "label": "enemy:lobo_sombrio",
+            "draws": 18,
+            "shadowDraws": 18,
+            "triangles": 1704,
+            "shadowTriangles": 1704
+          },
+          {
+            "label": "Mesh:ShaderMaterial",
+            "draws": 26,
+            "shadowDraws": 0,
+            "triangles": 26,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/agua_bloco",
+            "draws": 24,
+            "shadowDraws": 0,
+            "triangles": 9476,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "player:player",
+            "draws": 16,
+            "shadowDraws": 4,
+            "triangles": 19004,
+            "shadowTriangles": 18088
+          },
+          {
+            "label": "rpg-baus/bau:bau_elyra_manto",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "rpg-baus/bau:bau_tempestade",
+            "draws": 12,
+            "shadowDraws": 0,
+            "triangles": 528,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/placas_texto",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 104,
+            "shadowTriangles": 104
+          },
+          {
+            "label": "mundo/placas",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 580,
+            "shadowTriangles": 580
+          },
+          {
+            "label": "mundo/veg:lumen:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 20332,
+            "shadowTriangles": 20332
+          },
+          {
+            "label": "mundo/veg:oak:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 180544,
+            "shadowTriangles": 180544
+          },
+          {
+            "label": "mundo/veg:bush:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 81964,
+            "shadowTriangles": 81964
+          },
+          {
+            "label": "mundo/veg:pine:0",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 15184,
+            "shadowTriangles": 15184
+          },
+          {
+            "label": "mago-capa",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 384,
+            "shadowTriangles": 384
+          },
+          {
+            "label": "mago-tabardo",
+            "draws": 2,
+            "shadowDraws": 2,
+            "triangles": 48,
+            "shadowTriangles": 48
+          },
+          {
+            "label": "mundo/desfiladeiro",
+            "draws": 0,
+            "shadowDraws": 2,
+            "triangles": 0,
+            "shadowTriangles": 5040
+          },
+          {
+            "label": "mundo/pantano",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/ilhas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 48380,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/terreno",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 152064,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/horizonte",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 23296,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/grama",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 384030,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/flores",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 300426,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:pine:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 29414,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:lumen:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 21450,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:rock:0",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 36000,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:oak:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 93850,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/veg:dead:1",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 108,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "bird-flocks",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 0,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "ceu",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 3040,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mundo/particulas_ambiente",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 2800,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "mago-particulas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 78,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-aneis",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 256,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-particulas-aditivas",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 8640,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "vfx/vfx-nucleos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 4,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "nevoa_rasteira",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 104,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "respingos",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 880,
+            "shadowTriangles": 0
+          },
+          {
+            "label": "chuva",
+            "draws": 2,
+            "shadowDraws": 0,
+            "triangles": 19312,
+            "shadowTriangles": 0
+          }
+        ]
+      },
+      "env": {
+        "weather": "storm",
+        "rain": 0.8,
+        "night": 1,
+        "visibility": 354
+      },
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 22.6,
+      "pageErrors": []
+    }
+  ]
+}

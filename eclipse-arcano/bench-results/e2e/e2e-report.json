@@ -1,0 +1,859 @@
+{
+ "startedAt": "2026-10-18T03:23:15.250Z",
+ "quality": "low",
+ "viewport": "800x450",
+ "steps": [
+  {
+   "step": "boot",
+   "ok": true,
+   "checks": [
+    {
+     "name": "jogo carrega e abre o menu principal",
+     "ok": true,
+     "info": {
+      "state": "menu",
+      "ms": 4490
+     }
+    },
+    {
+     "name": "nenhum sistema falhou no init",
+     "ok": true,
+     "info": []
+    },
+    {
+     "name": "canvas com o tamanho da janela",
+     "ok": true,
+     "info": {
+      "w": 600,
+      "h": 337
+     }
+    }
+   ],
+   "shortcuts": [],
+   "shots": [
+    "bench-results/e2e/01-menu.png"
+   ],
+   "ms": 10014,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "newgame",
+   "ok": true,
+   "checks": [
+    {
+     "name": "botão \"Novo jogo\" existe e foi clicado (UI)",
+     "ok": true
+    },
+    {
+     "name": "estado 'playing' após o novo jogo",
+     "ok": true,
+     "info": {
+      "intro": "playing"
+     }
+    },
+    {
+     "name": "jogador começa no pátio da cripta",
+     "ok": true,
+     "info": {
+      "x": -520,
+      "y": 22.39,
+      "z": 553,
+      "st": "ground",
+      "hp": 100,
+      "hpMax": 100,
+      "en": 100,
+      "hag": 0,
+      "alive": true,
+      "d": 0
+     }
+    },
+    {
+     "name": "evento 'game:newGame' emitido",
+     "ok": true
+    },
+    {
+     "name": "menu fechado durante o jogo",
+     "ok": true
+    }
+   ],
+   "shortcuts": [],
+   "shots": [
+    "bench-results/e2e/02-novo-jogo.png"
+   ],
+   "ms": 10902,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "walk",
+   "ok": true,
+   "checks": [
+    {
+     "name": "W anda para fora da cripta",
+     "ok": true,
+     "info": {
+      "moved": 13.61,
+      "walkMax": 5.4
+     }
+    },
+    {
+     "name": "Shift+W corre mais rápido que andar",
+     "ok": true,
+     "info": {
+      "walkMax": 5.4,
+      "runMax": 8.6
+     }
+    },
+    {
+     "name": "Espaço pula (evento + estado no ar)",
+     "ok": true,
+     "info": {}
+    },
+    {
+     "name": "Q esquiva",
+     "ok": true
+    }
+   ],
+   "shortcuts": [],
+   "shots": [
+    "bench-results/e2e/03-andar-cripta.png"
+   ],
+   "ms": 12068,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "flight",
+   "ok": true,
+   "checks": [
+    {
+     "name": "F decola (estado flight + evento)",
+     "ok": true,
+     "info": {
+      "x": -520,
+      "y": 19.15,
+      "z": 512.94,
+      "st": "flight",
+      "hp": 100,
+      "hpMax": 100,
+      "en": 90.5,
+      "hag": 2.11,
+      "alive": true
+     }
+    },
+    {
+     "name": "Espaço sobe no voo",
+     "ok": true,
+     "info": {
+      "hag": 14.3
+     }
+    },
+    {
+     "name": "W+Shift voa para a frente (turbo)",
+     "ok": true,
+     "info": {
+      "dist": 91,
+      "st": "flight"
+     }
+    },
+    {
+     "name": "voo consome energia",
+     "ok": true,
+     "info": {
+      "antes": 96,
+      "depois": 73.2
+     }
+    },
+    {
+     "name": "pousa (C desce até o chão) e volta a andar",
+     "ok": true,
+     "info": {
+      "st": "ground",
+      "landedByC": true
+     }
+    }
+   ],
+   "shortcuts": [],
+   "shots": [
+    "bench-results/e2e/04-voo.png"
+   ],
+   "ms": 13445,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "combat",
+   "ok": false,
+   "checks": [
+    {
+     "name": "acampamento populado ao se aproximar",
+     "ok": true,
+     "info": [
+      "corvo_saqueador",
+      "corvo_saqueador",
+      "corvo_saqueador",
+      "corvo_saqueador",
+      "corva_arqueira",
+      "corva_arqueira"
+     ]
+    },
+    {
+     "name": "ataques (botão esquerdo) acertam inimigos",
+     "ok": false,
+     "info": {
+      "attacks": 0,
+      "hits": 0,
+      "dealt": 0
+     }
+    },
+    {
+     "name": "defesa (botão direito) ativa o bloqueio",
+     "ok": false
+    },
+    {
+     "name": "habilidades 1–4 conjuradas com as teclas",
+     "ok": false,
+     "info": {
+      "casts": [],
+      "fails": []
+     }
+    },
+    {
+     "name": "marcador de mira no chão (Tempestade/Fenda)",
+     "ok": true,
+     "info": {
+      "markers": 0
+     }
+    },
+    {
+     "name": "R ativa a Forma Ascendente",
+     "ok": false,
+     "info": {
+      "asc": false
+     }
+    },
+    {
+     "name": "travar alvo (Tab)",
+     "ok": false
+    },
+    {
+     "name": "luta terminou (tempo)",
+     "ok": true,
+     "info": {
+      "kills": 6,
+      "taken": 0
+     }
+    }
+   ],
+   "shortcuts": [
+    "hora do jogo 11h (acampamento ativo de dia)",
+    "teleporte para (362, 540) — ida da cripta ao Acampamento dos Corvos (~750 m)",
+    "habilidades desbloqueadas e Carga Arcana cheia: {\"slots\":[\"arcaneOrb\",\"runicBlast\",\"lightningStorm\",\"dimensionalRift\"],\"ultimate\":\"ascendantForm\",\"charge\":100}",
+    "luta encerrada com dano de depuração após 70 s de jogo (SwiftShader lento)"
+   ],
+   "shots": [
+    "bench-results/e2e/05-acampamento.png",
+    "bench-results/e2e/06-combate-fim.png"
+   ],
+   "ms": 91326,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "death",
+   "ok": true,
+   "checks": [
+    {
+     "name": "morte: 'player:death' e estado 'dead'",
+     "ok": true,
+     "info": {
+      "state": "dead"
+     }
+    },
+    {
+     "name": "renasce no checkpoint com vida cheia",
+     "ok": true,
+     "info": {
+      "x": -520,
+      "y": 21.85,
+      "z": 541,
+      "st": "ground",
+      "hp": 124,
+      "hpMax": 124,
+      "en": 112,
+      "hag": 0,
+      "alive": true,
+      "cp": {
+       "x": -520,
+       "z": 541,
+       "yaw": 3.142
+      },
+      "d": 0
+     }
+    },
+    {
+     "name": "evento 'player:respawn'",
+     "ok": true
+    }
+   ],
+   "shortcuts": [
+    "dano de depuração no jogador (morte imediata)",
+    "tela de derrota sem botão (UI stub) — player.respawn()"
+   ],
+   "shots": [
+    "bench-results/e2e/07-morte.png",
+    "bench-results/e2e/08-renascer.png"
+   ],
+   "ms": 16184,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "boss",
+   "ok": true,
+   "checks": [
+    {
+     "name": "antes de entrar: sem chefe e portão aberto",
+     "ok": true,
+     "info": {
+      "boss": false,
+      "gate": true
+     }
+    },
+    {
+     "name": "entrar na arena desperta o Guardião",
+     "ok": true,
+     "info": {
+      "boss": "guardiao_mecanico",
+      "kind": "boss",
+      "gate": false,
+      "active": true,
+      "cp": {
+       "x": 457.2,
+       "z": -331.08,
+       "yaw": 2.423
+      }
+     }
+    },
+    {
+     "name": "portão da arena fecha durante a luta",
+     "ok": true
+    },
+    {
+     "name": "checkpoint movido para fora da arena (pedestal)",
+     "ok": true,
+     "info": {
+      "cp": {
+       "x": 457.2,
+       "z": -331.08,
+       "yaw": 2.423
+      },
+      "centro": [
+       500,
+       -380
+      ]
+     }
+    },
+    {
+     "name": "golpes do jogador ferem o chefe",
+     "ok": true,
+     "info": {
+      "vida": 0.969
+     }
+    },
+    {
+     "name": "fases avançam ('boss:phase' 2 e 3)",
+     "ok": true,
+     "info": {
+      "ph2": 2,
+      "ph3": 3,
+      "phases": [
+       2,
+       3
+      ]
+     }
+    },
+    {
+     "name": "'boss:defeated' emitido",
+     "ok": true
+    },
+    {
+     "name": "portão reabre após a vitória",
+     "ok": true
+    },
+    {
+     "name": "chefe derrotado não renasce",
+     "ok": true,
+     "info": {
+      "boss": false,
+      "defeated": true,
+      "spawn": false
+     }
+    }
+   ],
+   "shortcuts": [
+    "teleporte para (470, -346) — viagem até a Câmara do Guardião",
+    "jogador imortal durante a luta do chefe",
+    "fases 2 e 3 e derrota aceleradas com dano de depuração",
+    "teleporte para (469, -345) — sair da arena para testar o renascimento do chefe"
+   ],
+   "shots": [
+    "bench-results/e2e/09-chefe-inicio.png",
+    "bench-results/e2e/10-chefe-fase2.png",
+    "bench-results/e2e/11-chefe-derrotado.png"
+   ],
+   "ms": 46749,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "save",
+   "ok": false,
+   "checks": [
+    {
+     "name": "F5 salva no slot 'quick' (evento + localStorage)",
+     "ok": true,
+     "info": {
+      "keys": [
+       "clock",
+       "story",
+       "progression",
+       "inventory",
+       "abilities",
+       "world",
+       "env",
+       "ai",
+       "npcs",
+       "quests",
+       "player",
+       "__save"
+      ]
+     }
+    },
+    {
+     "name": "save inclui todos os sistemas registrados",
+     "ok": true,
+     "info": [
+      "clock",
+      "story",
+      "progression",
+      "inventory",
+      "abilities",
+      "world",
+      "env",
+      "ai",
+      "npcs",
+      "quests",
+      "player",
+      "__save"
+     ]
+    },
+    {
+     "name": "save guarda recargas em andamento",
+     "ok": false,
+     "info": {}
+    }
+   ],
+   "shortcuts": [],
+   "shots": [
+    "bench-results/e2e/12-salvo.png"
+   ],
+   "ms": 10574,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "reload",
+   "ok": true,
+   "checks": [
+    {
+     "name": "recarregar a página volta ao menu",
+     "ok": true,
+     "info": {
+      "ms": 6509
+     }
+    },
+    {
+     "name": "existe save para continuar",
+     "ok": true,
+     "info": {
+      "slot": "quick"
+     }
+    },
+    {
+     "name": "botão \"Continuar\" no menu",
+     "ok": true
+    },
+    {
+     "name": "continuar: estado 'playing'",
+     "ok": true,
+     "info": {
+      "slot": "quick",
+      "src": "main"
+     }
+    },
+    {
+     "name": "posição restaurada",
+     "ok": true,
+     "info": {
+      "dp": 0,
+      "dy": 0
+     }
+    },
+    {
+     "name": "vida e energia restauradas",
+     "ok": true,
+     "info": {
+      "hp": [
+       86.13997666666666,
+       86
+      ],
+      "en": [
+       124,
+       124
+      ]
+     }
+    },
+    {
+     "name": "checkpoint restaurado",
+     "ok": true,
+     "info": {
+      "cp": {
+       "x": 457.2,
+       "z": -331.08,
+       "yaw": 2.423
+      },
+      "salvo": {
+       "x": 457.2,
+       "z": -331.08,
+       "yaw": 2.423
+      }
+     }
+    },
+    {
+     "name": "chefe derrotado persiste (e não renasce)",
+     "ok": true,
+     "info": {
+      "bosses": [
+       "guardiao_mecanico"
+      ]
+     }
+    },
+    {
+     "name": "locais descobertos persistem",
+     "ok": true,
+     "info": {
+      "n": 5,
+      "salvo": 5
+     }
+    },
+    {
+     "name": "portões persistem",
+     "ok": true,
+     "info": {
+      "diff": []
+     }
+    },
+    {
+     "name": "habilidades e slots persistem",
+     "ok": true,
+     "info": {
+      "unlocked": [
+       "arcaneChains",
+       "arcaneOrb",
+       "ascendantForm",
+       "blink",
+       "dimensionalRift",
+       "energyLance",
+       "lightningStorm",
+       "runicBlast"
+      ],
+      "slots": [
+       "arcaneOrb",
+       "runicBlast",
+       "lightningStorm",
+       "dimensionalRift"
+      ]
+     }
+    },
+    {
+     "name": "recargas persistem",
+     "ok": true,
+     "info": {
+      "salvo": {},
+      "agora": {
+       "arcaneOrb": 0,
+       "runicBlast": 0,
+       "lightningStorm": 0,
+       "dimensionalRift": 0
+      }
+     }
+    },
+    {
+     "name": "hora e dia persistem",
+     "ok": true,
+     "info": {
+      "agora": {
+       "day": 1,
+       "hours": 15.604149444444268
+      },
+      "salvo": {
+       "day": 1,
+       "hours": 15.600816666666493
+      }
+     }
+    },
+    {
+     "name": "clima persiste",
+     "ok": true,
+     "info": {
+      "agora": "clear",
+      "salvo": "clear"
+     }
+    }
+   ],
+   "shortcuts": [],
+   "shots": [
+    "bench-results/e2e/13-continuar.png"
+   ],
+   "ms": 12977,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "quickload",
+   "ok": true,
+   "checks": [
+    {
+     "name": "F9 carrega o salvamento rápido",
+     "ok": true,
+     "info": {
+      "antes": {
+       "x": 492.6,
+       "z": -370.43
+      },
+      "depois": {
+       "x": 485.47,
+       "z": -362.29
+      },
+      "d": 0
+     }
+    },
+    {
+     "name": "F9 não duplica listeners/entidades",
+     "ok": true,
+     "info": {
+      "antes": {
+       "entities": 8,
+       "sceneChildren": 36,
+       "objects": 419,
+       "listeners": 58,
+       "geometries": 75,
+       "textures": 11,
+       "interactables": 49
+      },
+      "depois": {
+       "entities": 8,
+       "sceneChildren": 36,
+       "objects": 419,
+       "listeners": 58,
+       "geometries": 75,
+       "textures": 11,
+       "interactables": 49
+      }
+     }
+    },
+    {
+     "name": "F9 funciona a partir da pausa",
+     "ok": true,
+     "info": {
+      "paused": true
+     }
+    }
+   ],
+   "shortcuts": [],
+   "shots": [
+    "bench-results/e2e/14-carregamento-rapido.png"
+   ],
+   "ms": 8777,
+   "error": null,
+   "consoleErrors": 0
+  },
+  {
+   "step": "robust",
+   "ok": true,
+   "checks": [
+    {
+     "name": "perder o foco (blur) pausa o jogo",
+     "ok": true,
+     "info": {
+      "autoPauses": 1,
+      "renderErrors": 0,
+      "entityErrors": 0,
+      "initErrors": 0,
+      "ignoredTransitions": 0,
+      "lastAutoPause": "blur"
+     }
+    },
+    {
+     "name": "aba oculta (visibilitychange) pausa o jogo",
+     "ok": true
+    },
+    {
+     "name": "travada longa não gera salto de dt (clamp)",
+     "ok": true,
+     "info": {
+      "dt": 0.133
+     }
+    },
+    {
+     "name": "perder o pointer lock pausa o jogo",
+     "ok": true
+    },
+    {
+     "name": "resize atualiza câmera e canvas",
+     "ok": true,
+     "info": {
+      "aspect": 1.7777777777777777,
+      "w": 1024,
+      "h": 576
+     }
+    },
+    {
+     "name": "erro em npcs.update não derruba o jogo",
+     "ok": true,
+     "info": {
+      "frames": 62
+     }
+    },
+    {
+     "name": "erro no render não para o loop",
+     "ok": true
+    },
+    {
+     "name": "novo jogo repetido não duplica listeners",
+     "ok": true,
+     "info": {
+      "c1": 58,
+      "c2": 58
+     }
+    },
+    {
+     "name": "novo jogo repetido não acumula entidades/objetos/malhas",
+     "ok": true,
+     "info": {
+      "c1": {
+       "entities": 3,
+       "sceneChildren": 31,
+       "objects": 315,
+       "listeners": 58,
+       "geometries": 75,
+       "textures": 11,
+       "interactables": 31
+      },
+      "c2": {
+       "entities": 3,
+       "sceneChildren": 31,
+       "objects": 315,
+       "listeners": 58,
+       "geometries": 75,
+       "textures": 11,
+       "interactables": 31
+      }
+     }
+    },
+    {
+     "name": "novo jogo volta ao início com vida cheia",
+     "ok": true,
+     "info": {
+      "x": -520,
+      "y": 22.39,
+      "z": 553,
+      "st": "ground",
+      "hp": 100,
+      "hpMax": 100,
+      "en": 100,
+      "hag": 0,
+      "alive": true
+     }
+    },
+    {
+     "name": "novo jogo concorrente é ignorado (1 início)",
+     "ok": true,
+     "info": {
+      "inicios": 1
+     }
+    }
+   ],
+   "shortcuts": [
+    "pointerlockchange sintético (sem pointer lock real no headless)",
+    "sem botão \"Sair para o menu\" (UI stub) — ctx.quitToMenu()"
+   ],
+   "shots": [
+    "bench-results/e2e/15-robustez.png"
+   ],
+   "ms": 9207,
+   "error": null,
+   "consoleErrors": 0
+  }
+ ],
+ "console": {
+  "errors": [],
+  "warnings": [],
+  "expectedErrors": [
+   "[robust] [Game] erro em npcs.update Error: e2e: falha injetada no sistema\n    at s.update (eval at evaluate (:290:30), <anonymous>:6:15)\n    at zg.runSystem (http://localhost:4311/assets/index-Clo0WkMH.js:1685:6633)\n    at loop (http://localhost:4311/assets/index-Clo0WkMH.js:1685:7448)",
+   "[robust] [Game] erro em render Error: e2e: falha injetada no render\n    at g.render (eval at evaluate (:290:30), <anonymous>:6:28)\n    at loop (http://localhost:4311/assets/index-Clo0WkMH.js:1685:7936)"
+  ],
+  "uniqueWarnings": []
+ },
+ "ok": false,
+ "finishedAt": "2026-10-18T03:27:18.801Z",
+ "perf": {
+  "fps": 50.1,
+  "avgFrameMs": 19.98,
+  "avgCpuMs": 0.97,
+  "low1Fps": 3,
+  "maxFrameMs": 560.9,
+  "p50FrameMs": 16.7,
+  "p95FrameMs": 18.4,
+  "p99FrameMs": 86.18,
+  "p95CpuMs": 2.5,
+  "drawCalls": 84,
+  "triangles": 307281,
+  "memoryMB": 82.3974609375,
+  "geometries": 86,
+  "textures": 11,
+  "programs": 28,
+  "dynamicScale": 1,
+  "entities": {
+   "total": 3,
+   "tier0": 1,
+   "tier1": 1,
+   "tier2": 0,
+   "tier3": 0
+  },
+  "systems": {
+   "save": 0.001,
+   "ui": 0,
+   "perf": 0,
+   "env.render": 0.008,
+   "world.render": 0.657,
+   "render": 2.052,
+   "clock": 0.004,
+   "env": 0.07,
+   "world": 0.025,
+   "player": 0.185,
+   "abilities": 0.026,
+   "ai": 0.018,
+   "combat": 0.01,
+   "vfx": 0.023,
+   "interaction": 0.003,
+   "progression": 0,
+   "inventory": 0.006,
+   "entities": 0.03,
+   "camera": 0.029,
+   "npcs": 0.122
+  }
+ }
+}
