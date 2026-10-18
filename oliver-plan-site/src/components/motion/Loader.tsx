@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
 import { gsap } from "@/lib/gsap";
-import { brand } from "@/data/brand";
+import { brand, brandSince } from "@/data/brand";
 
 const KEY = "op-loaded";
 
@@ -94,7 +94,7 @@ export function Loader() {
     >
       <div data-fade className="flex items-center justify-between text-concrete">
         <span className="eyebrow">{brand.descriptor}</span>
-        <span className="eyebrow">Desde {brand.founded}</span>
+        <span className="eyebrow">{brandSince}</span>
       </div>
 
       <div className="flex flex-col items-center">

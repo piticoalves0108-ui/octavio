@@ -84,7 +84,7 @@ export function Hero() {
             className="eyebrow mb-6 flex items-center gap-3 text-stone"
           >
             <span className="h-px w-8 bg-wood" />
-            {brand.descriptor} · desde {brand.founded}
+            {brand.descriptor} · {brand.founded ? `desde ${brand.founded}` : brand.showroom.city}
           </motion.p>
           <RevealText as="h1" text={"Arquitetura\n*sob medida*\npara viver."} trigger="loaded" delay={0.15} className="display-xl max-w-[11ch] text-graphite" />
           <motion.div

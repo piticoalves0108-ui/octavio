@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { brand } from "@/data/brand";
+import { brand, brandSince } from "@/data/brand";
 
 export const alt = `${brand.name} · ${brand.tagline}`;
 export const size = { width: 1200, height: 630 };
@@ -25,7 +25,7 @@ export default function OgImage() {
       >
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, letterSpacing: 6, color: "#6f685f" }}>
           <span>{brand.descriptor.toUpperCase()}</span>
-          <span>DESDE {brand.founded}</span>
+          <span>{brandSince.toUpperCase()}</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 120, lineHeight: 1, letterSpacing: -4 }}>{brand.name}</div>

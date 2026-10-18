@@ -69,15 +69,17 @@ export default function ContatoPage() {
                   ))}
                 </span>
               </li>
-              <li className="flex gap-4">
-                <Mail className="mt-0.5 h-5 w-5 shrink-0 text-wood" strokeWidth={1.5} />
-                <span>
-                  <span className="eyebrow block text-stone">E-mail</span>
-                  <a href={`mailto:${brand.contact.email}`} className="mt-1 block hover:text-wood-deep">
-                    {brand.contact.email}
-                  </a>
-                </span>
-              </li>
+              {brand.contact.email && (
+                <li className="flex gap-4">
+                  <Mail className="mt-0.5 h-5 w-5 shrink-0 text-wood" strokeWidth={1.5} />
+                  <span>
+                    <span className="eyebrow block text-stone">E-mail</span>
+                    <a href={`mailto:${brand.contact.email}`} className="mt-1 block hover:text-wood-deep">
+                      {brand.contact.email}
+                    </a>
+                  </span>
+                </li>
+              )}
             </ul>
           </Reveal>
 

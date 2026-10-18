@@ -24,7 +24,7 @@ const icons = { PenTool, Leaf, ShieldCheck, HeartHandshake };
 export default function SobrePage() {
   return (
     <>
-      <PageHeader eyebrow="Sobre" title="Uma marcenaria que *pensa como arquiteto*." intro={`Desde ${brand.founded}, unimos projeto autoral, fábrica própria e montagem impecável para criar ambientes que duram gerações.`} />
+      <PageHeader eyebrow="Sobre" title="Uma marcenaria que *pensa como arquiteto*." intro={`${brand.founded ? `Desde ${brand.founded}, unimos` : "Unimos"} projeto autoral, fábrica própria e montagem impecável para criar ambientes que duram gerações.`} />
 
       {/* História */}
       <section className="container-x grid gap-14 pb-24 md:pb-36 lg:grid-cols-12">

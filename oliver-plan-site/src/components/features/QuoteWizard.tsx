@@ -407,13 +407,13 @@ export function QuoteWizard() {
                     <input id="nome" autoComplete="name" value={data.nome} onChange={(e) => set("nome", e.target.value)} aria-invalid={!!errors.nome} aria-describedby={errors.nome ? "nome-erro" : undefined} className={inputCls} placeholder="Seu nome" />
                   </Field>
                   <Field id="whatsapp" label="WhatsApp *" error={errors.whatsapp}>
-                    <input id="whatsapp" type="tel" inputMode="tel" autoComplete="tel-national" value={data.whatsapp} onChange={(e) => set("whatsapp", maskPhone(e.target.value))} aria-invalid={!!errors.whatsapp} aria-describedby={errors.whatsapp ? "whatsapp-erro" : undefined} className={inputCls} placeholder="(11) 90000-0000" />
+                    <input id="whatsapp" type="tel" inputMode="tel" autoComplete="tel-national" value={data.whatsapp} onChange={(e) => set("whatsapp", maskPhone(e.target.value))} aria-invalid={!!errors.whatsapp} aria-describedby={errors.whatsapp ? "whatsapp-erro" : undefined} className={inputCls} placeholder="(61) 90000-0000" />
                   </Field>
                   <Field id="email" label="E-mail" error={errors.email}>
                     <input id="email" type="email" autoComplete="email" value={data.email} onChange={(e) => set("email", e.target.value)} aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-erro" : undefined} className={inputCls} placeholder="voce@email.com" />
                   </Field>
                   <Field id="cidade" label="Cidade / bairro">
-                    <input id="cidade" autoComplete="address-level2" value={data.cidade} onChange={(e) => set("cidade", e.target.value)} className={inputCls} placeholder="Ex.: Alphaville, Barueri" />
+                    <input id="cidade" autoComplete="address-level2" value={data.cidade} onChange={(e) => set("cidade", e.target.value)} className={inputCls} placeholder="Ex.: Lago Sul, Brasília" />
                   </Field>
                   <fieldset className="md:col-span-2">
                     <legend className="eyebrow mb-3 text-[0.62rem] text-stone">Prefiro contato por</legend>
@@ -446,7 +446,7 @@ export function QuoteWizard() {
             {step === 4 && (
               <div>
                 <h3 className="font-display text-3xl font-light md:text-4xl">Tudo certo, {data.nome.split(" ")[0] || "vamos lá"}?</h3>
-                <p className="mt-2 text-sm text-stone">Revise o resumo e escolha por onde prefere enviar.</p>
+                <p className="mt-2 text-sm text-stone">{brand.contact.email ? "Revise o resumo e escolha por onde prefere enviar." : "Revise o resumo e envie pelo WhatsApp: a mensagem já vai pronta."}</p>
                 <dl className="mt-8 divide-y divide-graphite/10 rounded-2xl border border-graphite/10 px-5 text-sm">
                   {[...summary, ["Contato", [data.nome, data.whatsapp, data.email].filter(Boolean).join(" · ")]].map(([k, v]) => (
                     <div key={k} className="flex flex-col gap-1 py-3 sm:flex-row sm:justify-between sm:gap-6">
@@ -455,13 +455,15 @@ export function QuoteWizard() {
                     </div>
                   ))}
                 </dl>
-                <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                <div className={cn("mt-8 grid gap-3", brand.contact.email && "sm:grid-cols-2")}>
                   <a href={whatsappLink(message)} target="_blank" rel="noopener noreferrer" onClick={() => register("whatsapp")} className="flex h-14 items-center justify-center gap-3 rounded-full bg-[#1f7a4d] font-medium text-paper transition-colors hover:bg-[#186540]">
                     <WhatsAppIcon className="h-5 w-5" /> Enviar pelo WhatsApp
                   </a>
-                  <a href={mailtoLink(`Orçamento · ${data.ambientes.map(labelOf).join(", ")}`, message)} onClick={() => register("email")} className="flex h-14 items-center justify-center gap-3 rounded-full border border-graphite/20 font-medium transition-colors hover:border-graphite">
-                    <Mail className="h-5 w-5" strokeWidth={1.5} /> Enviar por e-mail
-                  </a>
+                  {brand.contact.email && (
+                    <a href={mailtoLink(`Orçamento · ${data.ambientes.map(labelOf).join(", ")}`, message)} onClick={() => register("email")} className="flex h-14 items-center justify-center gap-3 rounded-full border border-graphite/20 font-medium transition-colors hover:border-graphite">
+                      <Mail className="h-5 w-5" strokeWidth={1.5} /> Enviar por e-mail
+                    </a>
+                  )}
                 </div>
               </div>
             )}

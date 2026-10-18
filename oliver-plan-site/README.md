@@ -137,12 +137,13 @@ node scripts/render-stills.mjs http://localhost:3000
 
 ## Antes de publicar
 
-O Instagram da Oliver Plan não pôde ser acessado durante a criação, então alguns dados são provisórios e estão marcados com `CONFIRMAR` no código:
+O WhatsApp **(61) 99639-9819** veio do link da bio do Instagram da empresa. O resto ainda precisa ser confirmado (marcado com `CONFIRMAR` em `src/data/brand.ts`). Campos opcionais vazios não aparecem no site:
 
-- [ ] **WhatsApp e telefone**: hoje `(11) 90000-0000`, um número provisório (`src/data/brand.ts`). Até ser trocado, os botões de WhatsApp não chegam à empresa.
-- [ ] **E-mail** `contato@oliverplan.com.br`.
-- [ ] **Endereço do showroom e ano de fundação**: vieram de um cadastro público de "Oliver Planejados" em Barueri - SP (Solutudo). Confirme se é a mesma empresa do @oliverplanoficial.
-- [ ] **Horários do showroom**.
+- [ ] **Endereço do showroom**: hoje o site mostra só "Brasília - DF" (o DDD 61 indica Brasília). Preencha `street` e `district` e ajuste o `mapQuery` do mapa.
+- [ ] **Horários do showroom**: os atuais são provisórios.
+- [ ] **E-mail**: está vazio, então o orçamento é enviado só pelo WhatsApp. Ao preencher `contact.email`, o botão "Enviar por e-mail" e o e-mail no rodapé voltam a aparecer.
+- [ ] **Ano de fundação**: vazio. Com `founded`, o site volta a mostrar "desde 20xx" no lugar da cidade.
+- [ ] **Pinterest**: vazio (o ícone some). Preencha `contact.pinterest` se houver perfil.
 - [ ] **Projetos, depoimentos, time e números** (1.200+ ambientes, 98% etc.) são **ilustrativos**. Troque pelos reais, com fotos autorizadas pelos clientes.
 - [ ] **Fotos**: as do Unsplash são de uso livre, mas não são da empresa. Substitua pelas fotos dos projetos reais.
 - [ ] Configure `NEXT_PUBLIC_SITE_URL` e, se quiser receber os leads num CRM, `LEADS_WEBHOOK_URL` e `NEWSLETTER_WEBHOOK_URL`. **Sem `NEXT_PUBLIC_SITE_URL` o site se comporta como prévia**: usa o endereço da Vercel nos links de compartilhamento e pede aos buscadores para não indexar (`noindex` e `robots.txt` bloqueando tudo).

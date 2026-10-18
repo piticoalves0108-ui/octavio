@@ -1,4 +1,4 @@
-import { brand, fullAddress, navigation } from "@/data/brand";
+import { brand, brandSince, fullAddress, navigation } from "@/data/brand";
 import { categories } from "@/data/categories";
 import { instagramUrl, whatsappLink } from "@/lib/whatsapp";
 import { TransitionLink } from "@/components/ui/TransitionLink";
@@ -80,9 +80,11 @@ export function Footer() {
             ))}
           </address>
           <div className="mt-5 space-y-1 text-sm">
-            <a href={`mailto:${brand.contact.email}`} className="block hover:text-wood-light">
-              {brand.contact.email}
-            </a>
+            {brand.contact.email && (
+              <a href={`mailto:${brand.contact.email}`} className="block hover:text-wood-light">
+                {brand.contact.email}
+              </a>
+            )}
             <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="block hover:text-wood-light">
               WhatsApp {brand.contact.whatsappDisplay}
             </a>
@@ -110,7 +112,7 @@ export function Footer() {
           </span>
         </div>
         <span>
-          {brand.tagline} · Desde {brand.founded}
+          {brand.tagline} · {brandSince}
         </span>
       </div>
     </footer>

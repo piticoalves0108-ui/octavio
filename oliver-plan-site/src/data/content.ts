@@ -8,35 +8,35 @@ export const testimonials = [
       "Recebemos o projeto 3D com cada gaveta já pensada para os nossos utensílios. Na montagem, nada precisou ser adaptado: tudo encaixou ao milímetro.",
     name: "Mariana e Rafael T.",
     project: "Cozinha Jacarandá",
-    location: "Alphaville",
+    location: "Lago Sul",
   },
   {
     quote:
       "O closet virou o meu lugar preferido da casa. A iluminação que acende quando abro as portas parece coisa de loja de grife.",
     name: "Camila R.",
     project: "Closet Âmbar",
-    location: "Alphaville",
+    location: "Lago Sul",
   },
   {
     quote:
       "Como arquiteta, o que mais valorizo é o detalhamento executivo. A equipe respeitou o desenho e ainda sugeriu ferragens melhores.",
     name: "Helena M.",
     project: "Parceira · Estúdio Lume",
-    location: "São Paulo",
+    location: "Brasília",
   },
   {
     quote:
       "Prazo cumprido, obra limpa e um pós-venda que realmente responde. Já estamos fazendo o segundo ambiente.",
     name: "Eduardo S.",
     project: "Estúdio Cumaru",
-    location: "Pinheiros",
+    location: "Águas Claras",
   },
   {
     quote:
       "O painel ripado escondeu a porta do lavabo de um jeito que as visitas sempre perguntam onde fica o banheiro.",
     name: "Família Andrade",
     project: "Living Ripado",
-    location: "Alphaville",
+    location: "Jardim Botânico",
   },
 ];
 
