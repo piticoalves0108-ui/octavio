@@ -127,8 +127,12 @@ export class Enemy extends Entity {
   reactT = -1;
   reactKind: 'dodge' | 'block' = 'dodge';
   readonly reactDir = new THREE.Vector3();
-  /** Projéteis já avaliados (id) para não decidir duas vezes. */
+  /**
+   * Projéteis já avaliados para não decidir duas vezes. Os projéteis vêm de um pool (o id se
+   * repete entre disparos), então a chave é (id, instante do disparo).
+   */
   readonly seenProjectiles: number[] = [];
+  readonly seenProjT: number[] = [];
   seenProjIdx = 0;
   projScanT = Math.random() * 0.1;
 
@@ -225,7 +229,7 @@ export class Enemy extends Entity {
 
   /** Engajado em combate (música, save, tokens). */
   get engaged(): boolean {
-    return this.alive && (this.state === 'combat' || this.state === 'alert');
+    return this.alive && (this.state === 'combat' || this.state === 'alert' || (this.state === 'flee' && !this.sp.standDown));
   }
 
   override onAdded(ctx: GameContext): void {
@@ -349,7 +353,7 @@ export class Enemy extends Entity {
     const dy = tgt.position.y - p.y;
     const d = Math.sqrt(dx * dx + dz * dz + dy * dy * 0.6);
     let see = false;
-    const engaged = this.state === 'combat' || this.state === 'alert' || this.state === 'search';
+    const engaged = this.state === 'combat' || this.state === 'alert' || this.state === 'search' || this.state === 'flee';
     if (d < P.awareness * (engaged ? 1.6 : 1)) see = true;
     else {
       const night = ctx.clock.isNight() ? AI_RULES.nightSight : 1;
@@ -505,6 +509,8 @@ export class Enemy extends Entity {
         break;
       case 'flee': {
         this.fleeT -= dt;
+        // recuando ainda esquiva (espreitador/arqueiros)
+        if (this.pendingReaction(dt)) break;
         const t = this.target;
         if (!t || !t.alive) {
           this.disengage();
@@ -589,14 +595,14 @@ export class Enemy extends Entity {
       return;
     }
     // reação agendada (esquiva/bloqueio) — pode abortar a antecipação de um golpe
-    if (this.reactT >= 0) {
-      this.reactT -= dt;
-      if (this.reactT < 0 && (this.act === 'none' || (this.act === 'attack' && this.phase === 0) || this.act === 'block')) {
-        if (this.act === 'attack') this.cancelAction();
-        if (this.reactKind === 'dodge') this.startDodge(this.reactDir.x, this.reactDir.z);
-        else if (this.act !== 'block') this.startBlock();
-        return;
-      }
+    if (this.pendingReaction(dt)) return;
+    // atirador pressionado: aborta o disparo e salta para trás (o chute vem no próximo pensar)
+    const rangedArch = this.def.archetype === 'archer' || this.def.archetype === 'caster';
+    if (rangedArch && this.act === 'attack' && this.phase === 0 && this.atk?.kind === 'projectile' && dist < this.def.preferredRange[0] * 0.3) {
+      this.cancelAction();
+      this.thinkT = 0;
+      if (this.dodgeCd <= 0 && Math.random() < 0.7) this.startDodge(p.x - t.position.x, p.z - t.position.z);
+      return;
     }
     // durante uma ação, o movimento é controlado pela ação
     if (this.act !== 'none') {
@@ -641,7 +647,12 @@ export class Enemy extends Entity {
         c.flyer = this.isFlyer;
         let idx = chooseAttack(this.def.attacks, this.cooldowns, c);
         const ranged = this.def.archetype === 'archer' || this.def.archetype === 'caster';
-        if (idx >= 0 && ranged && this.def.attacks[idx].kind === 'projectile' && dist < this.def.preferredRange[0] * 0.55 && this.unstickT <= 0 && Math.random() > 0.12) idx = -1;
+        if (idx >= 0 && ranged && this.def.attacks[idx].kind === 'projectile' && dist < this.def.preferredRange[0] * 0.55 && this.unstickT <= 0) {
+          // perto demais: se o alvo está avançando, recua em vez de parar para atirar
+          const tv = this.ai.targetVelocity(t, V3);
+          const closing = (tv.x * (p.x - t.position.x) + tv.z * (p.z - t.position.z)) / Math.max(0.1, dist);
+          if (closing > 1.2 || Math.random() < 0.5) idx = -1;
+        }
         if (idx >= 0) {
           const a = this.def.attacks[idx];
           const melee = needsMeleeToken(a);
@@ -654,6 +665,32 @@ export class Enemy extends Entity {
       }
     }
     this.tactics(dist, dt, ctx);
+  }
+
+  /** Executa a reação agendada (esquiva/bloqueio) quando o atraso de reação vence. */
+  private pendingReaction(dt: number): boolean {
+    if (this.reactT < 0) return false;
+    this.reactT -= dt;
+    if (this.reactT >= 0) return false;
+    if (this.act === 'none' || (this.act === 'attack' && this.phase === 0) || this.act === 'block') {
+      if (this.act === 'attack') this.cancelAction();
+      if (this.reactKind === 'dodge') this.startDodge(this.reactDir.x, this.reactDir.z);
+      else if (this.act !== 'block' && this.state === 'combat') this.startBlock();
+      return true;
+    }
+    return false;
+  }
+
+  /** Já avaliou este disparo (`stamp` = instante do disparo no relógio da IA)? */
+  sawProjectile(id: number, stamp: number): boolean {
+    for (let i = 0; i < this.seenProjectiles.length; i++) if (this.seenProjectiles[i] === id && Math.abs(this.seenProjT[i] - stamp) < 0.1) return true;
+    return false;
+  }
+
+  markProjectile(id: number, stamp: number) {
+    this.seenProjectiles[this.seenProjIdx] = id;
+    this.seenProjT[this.seenProjIdx] = stamp;
+    this.seenProjIdx = (this.seenProjIdx + 1) % 8;
   }
 
   /** Assassinos furtivos só atacam quando chegam perto (ou já revelados). */
@@ -864,7 +901,8 @@ export class Enemy extends Entity {
    * com atraso de reação humano. `chanceMul` vem da adaptação.
    */
   threat(kind: 'melee' | 'projectile', fromX: number, fromZ: number, chanceMul = 1) {
-    if (this.state !== 'combat' || this.act === 'dodge' || this.act === 'special' || this.act === 'overheat' || this.reactT >= 0 || !this.health.canAct()) return;
+    const fleeing = this.state === 'flee' && !this.sp.standDown;
+    if ((this.state !== 'combat' && !fleeing) || this.act === 'dodge' || this.act === 'special' || this.act === 'overheat' || this.reactT >= 0 || !this.health.canAct()) return;
     if (this.act === 'attack' && this.phase !== 0) return; // golpe saindo/recuperação: janela do jogador
     const arch = this.def.archetype;
     const agile = arch === 'ravena' || arch === 'assassin';
@@ -887,7 +925,7 @@ export class Enemy extends Entity {
     const delay = rand(AI_RULES.reactionDelay[0], AI_RULES.reactionDelay[1]);
     if (kind === 'melee') {
       // bloqueio frontal primeiro (quem tem escudo/guarda)
-      if (d.block > 0 && (this.act === 'none' || this.act === 'attack') && Math.random() < d.block * chanceMul) {
+      if (d.block > 0 && !fleeing && (this.act === 'none' || this.act === 'attack') && Math.random() < d.block * chanceMul) {
         this.reactKind = 'block';
         this.reactT = delay * 0.6;
         return;
@@ -1352,7 +1390,7 @@ export class Enemy extends Entity {
     if (this.act === 'attack' && this.phase === 0 && this.atk && (this.atk.anim === 'cast' || this.atk.anim === 'castUp') && this.health.has('shock')) this.cancelAction();
     if (this.stealthed) this.setStealth(false);
     // agressão: quem bateu vira alvo
-    if (src && src !== this && src.alive && ctx.sys.combat.isHostile(this, src) && this.state !== 'surrender') {
+    if (src && src !== this && src.alive && ctx.sys.combat.isHostile(this, src)) {
       if (this.state !== 'combat' && this.state !== 'alert') this.engage(src, true, 0.1);
       else if (this.target !== src && src.kind === 'player' && Math.random() < 0.5) this.target = src;
       if (this.state === 'search') this.setState('combat');

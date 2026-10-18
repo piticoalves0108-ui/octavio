@@ -310,7 +310,8 @@ function rock(): THREE.BufferGeometry {
     part(flat, M(0, 0.25, 0, 1.3, 0.75, 1.0), (p, n) => {
       const v = 0.75 + 0.25 * noise.noise(p.x * 2, p.z * 2 + p.y);
       const mossK = THREE.MathUtils.smoothstep(n.y, 0.55, 0.85);
-      return [0.5 * v * (1 - mossK) + 0.3 * mossK, 0.48 * v * (1 - mossK) + 0.42 * mossK, 0.45 * v * (1 - mossK) + 0.2 * mossK];
+      // cores lineares: pedra cinza média e musgo escuro (valores altos estouravam ao sol)
+      return [0.32 * v * (1 - mossK) + 0.13 * mossK, 0.31 * v * (1 - mossK) + 0.2 * mossK, 0.29 * v * (1 - mossK) + 0.08 * mossK];
     }, () => [0, 0, 0]),
   ]);
 }

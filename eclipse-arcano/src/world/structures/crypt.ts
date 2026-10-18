@@ -163,6 +163,40 @@ export function buildCrypt(kit: SiteKit, gates: GateSystem) {
   b.box(sx, 1.02, sz, 1.3, 0.06, 2.5, P(LAYER.PLAIN, [0.05, 0.05, 0.08]));
   b.box(sx + 0.9, 1.0, sz + 0.3, 1.7, 0.18, 2.9, P(LAYER.RUNE, [0.9, 0.9, 1], EMIT.rune), 0.35);
   kit.box(b, sx, 0.55, sz, 1.6, 1.1, 2.8, 'prop');
+  // pedestal em degrau e faixas de runas entalhadas nas laterais do sarcófago
+  b.box(sx, 0.08, sz, 2.3, 0.16, 3.5, dark);
+  for (const s of [-1, 1]) b.box(sx + s * 0.81, 0.62, sz, 0.02, 0.14, 2.4, rune);
+  b.box(sx, 0.62, sz - 1.41, 1.2, 0.14, 0.02, rune);
+  // círculo de selamento no chão (o selo que prendeu o mago por milênios)
+  b.ring(sx, 0.012, sz, 2.25, 2.4, 40, rune);
+  b.ring(sx, 0.012, sz, 1.95, 2.0, 40, rune);
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2;
+    b.box(sx + Math.cos(a) * 2.12, 0.014, sz + Math.sin(a) * 2.12, 0.08, 0.02, 0.22, rune, -a);
+  }
+  // velas no chão em volta do selo e ao lado do altar
+  const wax = P(LAYER.PLAIN, [0.92, 0.88, 0.78]);
+  const flame = P(LAYER.PLAIN, [1, 0.8, 0.45], EMIT.candle);
+  const candle = (x: number, z: number, h: number) => {
+    b.cylinder(x, 0, z, 0.05, 0.045, h, 6, wax);
+    b.cone(x, h, z, 0.03, 0.08, 4, flame);
+  };
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + 0.26;
+    const x = sx + Math.cos(a) * 2.75;
+    const z = sz + Math.sin(a) * 2.75;
+    candle(x, z, 0.18 + rng.next() * 0.16);
+    candle(x + 0.13, z + 0.09, 0.1 + rng.next() * 0.1);
+  }
+  for (const s of [-1, 1]) for (let k = 0; k < 3; k++) candle(s * (1.5 + k * 0.17), 11.6 + k * 0.12, 0.2 + k * 0.08);
+  // entulho junto às paredes (o teto cedeu um pouco ao longo das eras)
+  for (let i = 0; i < 10; i++) {
+    const sideX = i % 2 ? 1 : -1;
+    const x = sideX * (6.2 + rng.next() * 0.7);
+    const z = 3.6 + rng.next() * 11;
+    const s = 0.18 + rng.next() * 0.32;
+    b.box(x, s / 2, z, s * 1.5, s, s * 1.2, stone, rng.next() * 3);
+  }
   b.box(0, 0.6, 11.9, 2.4, 1.2, 1.0, dark);
   b.box(0, 1.25, 11.9, 2.6, 0.1, 1.2, P(LAYER.RUNE, [0.9, 0.9, 1], EMIT.rune));
   crystal(b, 0, 1.3, 12.0, 0.22, 0.9, [0.6, 0.85, 1], EMIT.crystalBlue);

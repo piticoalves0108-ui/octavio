@@ -82,6 +82,7 @@ export class Guardian extends Entity {
   private charge = 0;
   private chargeColor = 0xff6a1a;
   deadT = -1;
+  private dissolving = false;
   private outsideT = 0;
   private sweepHit = new Set<number>();
   /** Estatísticas para testes. */
@@ -227,31 +228,27 @@ export class Guardian extends Entity {
     }
     const d = distXZ(this.position, pl.position);
     const facing = Math.abs(angleDiff(this.yaw, yawTo(this.position.x, this.position.z, pl.position.x, pl.position.z)));
-    // escolha ponderada com anti-repetição
+    // escolha ponderada com anti-repetição (sem alocar: pesos em arrays fixos)
     let choice: GAttack | null = null;
-    const w: [GAttack, number][] = [];
-    const add = (a: GAttack, weight: number) => {
-      if (this.cds[a] > 0 || weight <= 0) return;
-      w.push([a, this.lastAttack === a ? weight * 0.3 : weight]);
-    };
-    add('sweep', d < G.sweep.radius - 0.5 && facing < 0.9 ? 3 : 0);
-    add('stomp', d < 13 ? 2 : 0);
-    add('charge', d > 9 && d < G.charge.length ? (d > 15 ? 3 : 1.2) : 0);
-    if (this.phase >= 2) add('laser', d > 5 ? 2.2 : 0.8);
+    this.wN = 0;
+    this.addChoice('sweep', d < G.sweep.radius - 0.5 && facing < 0.9 ? 3 : 0);
+    this.addChoice('stomp', d < 13 ? 2 : 0);
+    this.addChoice('charge', d > 9 && d < G.charge.length ? (d > 15 ? 3 : 1.2) : 0);
+    if (this.phase >= 2) this.addChoice('laser', d > 5 ? 2.2 : 0.8);
     if (this.combo > 0) {
       // fase 3: combo rápido (varrida/pisão alternados)
       const k = this.lastAttack === 'sweep' ? 'stomp' : 'sweep';
       if (k === 'sweep' && d < G.sweep.radius + 2) choice = 'sweep';
       else if (k === 'stomp' && d < 14) choice = 'stomp';
     }
-    if (!choice && w.length > 0 && this.stateT > (this.phase === 3 ? 0.35 : 0.8)) {
+    if (!choice && this.wN > 0 && this.stateT > (this.phase === 3 ? 0.35 : 0.8)) {
       let tot = 0;
-      for (const [, x] of w) tot += x;
+      for (let i = 0; i < this.wN; i++) tot += this.wW[i];
       let r = Math.random() * tot;
-      for (const [a, x] of w) {
-        r -= x;
+      for (let i = 0; i < this.wN; i++) {
+        r -= this.wW[i];
         if (r <= 0) {
-          choice = a;
+          choice = this.wA[i];
           break;
         }
       }
@@ -263,6 +260,16 @@ export class Guardian extends Entity {
     // aproxima-se
     this.faceTarget(dt, 1);
     this.moveSpeed = d > 7 ? (d > 18 ? G.run * 0.75 : G.walk) : 0;
+  }
+
+  private readonly wA: GAttack[] = ['sweep', 'sweep', 'sweep', 'sweep'];
+  private readonly wW = new Float32Array(4);
+  private wN = 0;
+  private addChoice(a: GAttack, weight: number) {
+    if (this.cds[a] > 0 || weight <= 0) return;
+    this.wA[this.wN] = a;
+    this.wW[this.wN] = this.lastAttack === a ? weight * 0.3 : weight;
+    this.wN++;
   }
 
   private beginAttack(a: GAttack, ctx: GameContext) {
@@ -759,9 +766,9 @@ export class Guardian extends Entity {
     }
     // o corpo fica alguns minutos (a narrativa usa o núcleo); some quando o jogador se afasta
     const pl = ctx.sys.player.entity;
-    if ((this.deadT > 180 || (this.deadT > 20 && distXZ(pl.position, this.position) > 140)) && !this.removed) {
+    if (!this.dissolving && (this.deadT > 180 || (this.deadT > 20 && distXZ(pl.position, this.position) > 140)) && !this.removed) {
+      this.dissolving = true;
       ctx.sys.vfx.dissolve(this.object3d, { duration: 2.5, color: 0x7ff8ff, height: this.height, onDone: () => ctx.entities.remove(this) });
-      this.deadT = -1e9;
     }
     void V4;
   }

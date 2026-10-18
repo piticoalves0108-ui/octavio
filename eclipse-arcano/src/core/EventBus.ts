@@ -49,10 +49,20 @@ export interface GameEvents {
   'inventory:changed': {};
   'equip:changed': { slot: string; defId: string | null };
   'gold:changed': { gold: number };
+  /** Consumível usado (o rpg já toca o som 'potion'). */
+  'item:used': { defId: string };
+  /** Baú do mundo aberto (o rpg já toca 'chest_open'). */
+  'chest:opened': { chestId: string; position: Vector3 };
+  /** Compra/venda/recompra/aprimoramento numa loja (o ouro também emite 'gold:changed'). */
+  'shop:transaction': { shopId: string; kind: 'buy' | 'sell' | 'buyback' | 'upgrade'; itemId: string; qty: number; gold: number };
+  /** Erva colhida no mundo. */
+  'herb:harvested': { spotId: string; itemId: string; qty: number };
 
   'xp:gained': { amount: number; reason: string };
   'level:up': { level: number };
   'talent:unlocked': { talentId: string; rank: number };
+  /** Talentos redistribuídos no santuário. */
+  'talent:respec': { refunded: number; cost: number };
 
   'quest:started': { questId: string };
   'quest:updated': { questId: string };

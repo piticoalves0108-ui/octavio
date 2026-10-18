@@ -251,7 +251,7 @@ const LIST: EnemyDef[] = [
       { id: 'golpe_pesado', anim: 'overhead', kind: 'melee', damage: 16, type: 'physical', minRange: 0, maxRange: 3, reach: 2.6, arc: 60, windup: 0.85, active: 0.12, recovery: 0.85, cooldown: 6, weight: 1, poise: 24, knockback: 4, heavy: true, telegraph: 'cone', lunge: 0.9 },
       { id: 'riposta', anim: 'thrust', kind: 'melee', damage: 11, type: 'physical', minRange: 0, maxRange: 2.6, reach: 2.4, arc: 60, windup: 0.18, active: 0.1, recovery: 0.5, cooldown: 0, weight: 0, poise: 14, knockback: 2, lunge: 0.7, counterOnly: true, token: false },
     ],
-    defense: { dodge: 0.15, dodgeProjectile: 0.15, dodgeCooldown: 3.5, dodgeDistance: 3, block: 0.45, counter: 0.6, blockReduction: 0.75 },
+    defense: { dodge: 0.15, dodgeProjectile: 0.15, dodgeCooldown: 3.5, dodgeDistance: 3, block: 0.5, counter: 0.6, blockReduction: 0.75 },
     retreatBelow: 0.2,
     xp: 25,
     gold: [4, 12],
@@ -726,7 +726,7 @@ const LIST: EnemyDef[] = [
     attacks: [
       { id: 'lamina_1', anim: 'dualSlash', kind: 'melee', damage: 9, type: 'physical', minRange: 0, maxRange: 2.8, reach: 2.4, arc: 110, windup: 0.3, active: 0.1, recovery: 0.3, cooldown: 1.1, weight: 3, poise: 10, knockback: 1, lunge: 0.8, next: 'lamina_2', comboChance: 0.75 },
       { id: 'lamina_2', anim: 'dualCross', kind: 'melee', damage: 10, type: 'physical', minRange: 0, maxRange: 2.8, reach: 2.4, arc: 120, windup: 0.22, active: 0.1, recovery: 0.3, cooldown: 1.1, weight: 0, poise: 10, knockback: 1.5, lunge: 0.7, next: 'lamina_3', comboChance: 0.55, comboOnly: true },
-      { id: 'lamina_3', anim: 'spin', kind: 'melee', damage: 14, type: 'physical', minRange: 0, maxRange: 2.8, reach: 2.6, arc: 360, windup: 0.4, active: 0.16, recovery: 0.8, cooldown: 1.1, weight: 0, poise: 18, knockback: 4, heavy: true, telegraph: 'circle', comboOnly: true },
+      { id: 'lamina_3', anim: 'spin', kind: 'melee', damage: 14, type: 'physical', minRange: 0, maxRange: 2.8, reach: 2.6, arc: 360, windup: 0.5, active: 0.16, recovery: 0.8, cooldown: 1.1, weight: 0, poise: 18, knockback: 4, heavy: true, telegraph: 'circle', comboOnly: true },
       { id: 'estocada_corva', anim: 'thrust', kind: 'melee', damage: 15, type: 'physical', minRange: 3, maxRange: 7, reach: 6, arc: 40, windup: 0.6, active: 0.15, recovery: 0.7, cooldown: 6, weight: 1.5, poise: 20, knockback: 3, heavy: true, unblockable: true, telegraph: 'line', lunge: 3.5 },
       { id: 'adagas', anim: 'volley', kind: 'projectile', damage: 7, type: 'physical', minRange: 6, maxRange: 22, reach: 0, arc: 0, windup: 0.45, active: 0.05, recovery: 0.5, cooldown: 5, weight: 1.5, poise: 6, projectile: { kind: 'crystalShard', speed: 30, count: 3, spread: 10, radius: 0.12, range: 30 }, token: false },
       { id: 'contra_corva', anim: 'dualCross', kind: 'melee', damage: 13, type: 'physical', minRange: 0, maxRange: 2.8, reach: 2.5, arc: 120, windup: 0.14, active: 0.1, recovery: 0.45, cooldown: 0, weight: 0, poise: 16, knockback: 2, lunge: 0.8, counterOnly: true, token: false },

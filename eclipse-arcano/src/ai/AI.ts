@@ -6,6 +6,7 @@ import { AI_RULES, getEnemyDef } from '../data/enemies';
 import { CREATURES, DISTANT_DRAGON } from '../data/creatures';
 import { GUARDIAN, BOSS_GATES } from '../data/bosses';
 import { PLACES } from '../data/places';
+import { BOSS_ARENAS } from '../data/world';
 import { getWeaponDef } from '../data/weapons';
 import { registerProjectileVisual } from '../combat/Projectiles';
 import { Enemy, type EnemySpawnOptions } from './Enemy';
@@ -397,9 +398,10 @@ export class AI implements GameSystem, Saveable {
     const pl = ctx.sys.player.entity;
     for (const p of list) {
       if (!p.active || p.owner !== pl) continue;
+      const stamp = this.time - p.age;
       for (const e of this.enemies) {
         if (!e.engaged || e.deadT >= 0 || e.tier !== 0) continue;
-        if (e.seenProjectiles.includes(p.id)) continue;
+        if (e.sawProjectile(p.id, stamp)) continue;
         const rx = p.position.x - e.position.x;
         const ry = p.position.y - (e.position.y + e.height * 0.5);
         const rz = p.position.z - e.position.z;
@@ -407,8 +409,7 @@ export class AI implements GameSystem, Saveable {
         closestApproach(rx, ry, rz, p.vel.x, p.vel.y, p.vel.z, 0.8, _ca);
         const hitR = e.radius + p.pradius + 0.35 + (p.explodeRadius > 0 ? p.explodeRadius * 0.6 : 0);
         if (_ca.d2 > hitR * hitR || _ca.t < 0.08) continue;
-        e.seenProjectiles[e.seenProjIdx] = p.id;
-        e.seenProjIdx = (e.seenProjIdx + 1) % 8;
+        e.markProjectile(p.id, stamp);
         const tag = p.damage?.tag ?? null;
         const mul = 1 + this.style.ranged * 0.8 + this.style.repeatOf(tag) * 0.7;
         e.threat('projectile', p.position.x, p.position.z, mul);
@@ -472,7 +473,7 @@ export class AI implements GameSystem, Saveable {
     if (this.defeatedBosses.has(id) || (this.boss && !this.boss.removed)) return;
     const pl = ctx.sys.player.entity;
     if (!pl.alive || ctx.state !== 'playing') return;
-    const R = 36 - 3;
+    const R = (BOSS_ARENAS[id]?.radius ?? 36) - 3;
     if (dist2XZ(pl.position, this.arenaCenter) < R * R && Math.abs(pl.position.y - this.arenaCenter.y) < 8) this.spawnBoss(id);
   }
 

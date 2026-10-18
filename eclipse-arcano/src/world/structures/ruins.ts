@@ -253,6 +253,76 @@ export function buildRuins(kit: SiteKit, gates: GateSystem) {
     [-60, 22],
   ]);
 
+  // --- fundações das casas da cidade antiga no anel externo (o planalto era um bairro) ---
+  {
+    const entA = Math.atan2(58, -46); // direção da avenida/estrada (fica livre)
+    const dAng = (a: number, c: number) => Math.abs(Math.atan2(Math.sin(a - c), Math.cos(a - c)));
+    const done: [number, number][] = [];
+    const low = P(LAYER.STONE, [0.7, 0.68, 0.62]);
+    for (let tries = 0; tries < 120 && done.length < 12; tries++) {
+      const a = rng.next() * Math.PI * 2;
+      const r = 74 + rng.next() * 34;
+      const x = Math.cos(a) * r;
+      const z = Math.sin(a) * r;
+      if (Math.hypot(x - 70, z + 80) < 66) continue; // arena e arquibancadas
+      if (dAng(a, entA) < 0.3) continue;
+      if (done.some(([px, pz]) => Math.hypot(px - x, pz - z) < 24)) continue;
+      done.push([x, z]);
+      const w = 8 + rng.next() * 6;
+      const d = 6 + rng.next() * 4;
+      const yaw = rng.next() * Math.PI;
+      const g = H(x, z) - 0.3;
+      b.push(x, 0, z, yaw);
+      // piso de lajotas gasto e muretas irregulares (porta voltada para o local +Z)
+      terrainRect(kit, b, 0, 0, w - 1, d - 1, P(LAYER.COBBLE, [0.62, 0.62, 0.58]), 0.04, 2.5);
+      kit.footprint(b, 0, 0, w + 1, d + 1, 0, 0.5, 0.15);
+      const hw = w / 2;
+      const hd = d / 2;
+      const sides: [number, number, number, number][] = [
+        [-hw, -hd, hw, -hd],
+        [hw, -hd, hw, hd],
+        [-hw, hd, -hw, -hd],
+        [-hw, hd, -1.1, hd],
+        [1.1, hd, hw, hd],
+      ];
+      for (const [ax, az, bx, bz] of sides) {
+        const len = Math.hypot(bx - ax, bz - az);
+        const n = Math.max(1, Math.round(len / 2.5));
+        for (let k = 0; k < n; k++) {
+          if (rng.next() < 0.22) continue; // trecho desabado
+          const t0 = k / n;
+          const t1 = (k + 1) / n;
+          const x0 = ax + (bx - ax) * t0;
+          const z0 = az + (bz - az) * t0;
+          const x1 = ax + (bx - ax) * t1;
+          const z1 = az + (bz - az) * t1;
+          const hh = 0.5 + rng.next() * (rng.next() < 0.3 ? 2.6 : 1.1);
+          b.beam(x0, z0, x1, z1, g, g + 0.3 + hh, 0.8, low);
+          if (rng.next() < 0.45) b.beam(x0, z0, x1, z1, g + 0.28 + hh, g + 0.36 + hh, 0.82, MOSSY, 4);
+          kit.wall(b, x0, z0, x1, z1, g, g + 0.3 + hh, 0.8, hh > 1.4 ? 'climbable' : 'wall', { walkable: true, surface: 'stone' });
+        }
+      }
+      // coluna partida, lajes caídas e (às vezes) um arco que resistiu
+      const cx = (rng.next() - 0.5) * (w - 3);
+      const cz = (rng.next() - 0.5) * (d - 3);
+      column(b, cx, g + 0.2, cz, 0.42, 5, OLD_STONE, 0.35 + rng.next() * 0.45);
+      kit.cyl(b, cx, g + 0.2, cz, 0.5, 2.2, 'prop', { walkable: true, surface: 'stone' });
+      for (let k = 0; k < 3; k++) b.box((rng.next() - 0.5) * (w - 2), g + 0.45, (rng.next() - 0.5) * (d - 2), 1.2 + rng.next(), 0.3, 0.8 + rng.next() * 0.6, OLD_STONE, rng.next() * 3);
+      if (rng.next() < 0.4) {
+        // arco ao longo da parede lateral (vão ao longo do X local do sub-quadro)
+        b.push(-hw + 0.4, 0, -1.2, Math.PI / 2);
+        for (const s of [-1, 1]) {
+          b.box(s * 1.6, g + 2.2, 0, 1.1, 4.4, 0.9, OLD_STONE);
+          kit.box(b, s * 1.6, g + 2.2, 0, 1.1, 4.4, 0.9, 'climbable', { walkable: true, surface: 'stone' });
+        }
+        b.arch(0, g + 4.4, 0, 2.1, 1.0, 0.55, 0.9, 8, OLD_STONE);
+        b.box(0, g + 6.0, 0, 4.3, 0.5, 0.95, RUNE_STONE);
+        b.pop();
+      }
+      b.pop();
+    }
+  }
+
   // entulho espalhado
   for (let i = 0; i < 70; i++) {
     const a = rng.next() * Math.PI * 2;
@@ -327,15 +397,17 @@ export function buildArena(kit: SiteKit, gates: GateSystem) {
   const segs = 32;
   const halfGap = (A.entranceWidth / 2 + 1.6) / A.wallRadius;
   const podH = 5;
-  for (let i = 0; i < segs; i++) {
-    const a0 = (i / segs) * Math.PI * 2;
-    const a1 = ((i + 1) / segs) * Math.PI * 2;
-    const am = (a0 + a1) / 2;
-    const inGap = angDiff(am, th) < halfGap + Math.PI / segs;
+  const r0 = A.wallRadius;
+  const r1 = A.wallRadius + 1.5;
+  const rOut = r1 + 12;
+  // Os blocos laterais do corredor cobrem a faixa |lateral| ∈ [largura/2, blockOuter] a partir do
+  // muro. Perto da entrada o anel é montado em subsetores e só fica o que sai dessa faixa: sem
+  // isso, sobrava um vão entre o bloco e as arquibancadas (dava para sair da arena por ali).
+  const blockOuter = A.entranceWidth / 2 + 6.5;
+  const reachesOut = (a0: number, a1: number, ro: number) => ro * Math.sin(Math.min(Math.PI / 2, Math.max(angDiff(a0, th), angDiff(a1, th)))) > blockOuter - 0.05;
+  const sector = (a0: number, a1: number, clip: boolean, pylon: boolean) => {
     // muro-pódio
-    const r0 = A.wallRadius;
-    const r1 = A.wallRadius + 1.5;
-    if (!inGap) {
+    if (!clip || reachesOut(a0, a1, r1)) {
       const [x0, z0] = pol(r0, a0);
       const [x1, z1] = pol(r0, a1);
       const [ox0, oz0] = pol(r1, a0);
@@ -343,39 +415,53 @@ export function buildArena(kit: SiteKit, gates: GateSystem) {
       b.quad([x0, fy - 0.5, z0], [x1, fy - 0.5, z1], [x1, fy + podH, z1], [x0, fy + podH, z0], runeMetal);
       b.quad([x0, fy + podH, z0], [x1, fy + podH, z1], [ox1, fy + podH, oz1], [ox0, fy + podH, oz0], P(LAYER.METAL, [0.55, 0.57, 0.65]));
       kit.wall(b, (x0 + ox0) / 2, (z0 + oz0) / 2, (x1 + ox1) / 2, (z1 + oz1) / 2, fy - 1, fy + podH, 1.6, 'wall', { walkable: true, surface: 'metal' });
-      // arquibancadas
-      for (let k = 0; k < 6; k++) {
-        const ri = r1 + k * 2;
-        const ro = ri + 2;
-        const ty = fy + podH + 0.6 + k * 1.2;
-        const py = k === 0 ? fy + podH : ty - 1.2;
-        const [ix0, iz0] = pol(ri, a0);
-        const [ix1, iz1] = pol(ri, a1);
-        const [ux0, uz0] = pol(ro, a0);
-        const [ux1, uz1] = pol(ro, a1);
-        b.quad([ix0, py, iz0], [ix1, py, iz1], [ix1, ty, iz1], [ix0, ty, iz0], stoneD);
-        b.quad([ix0, ty, iz0], [ix1, ty, iz1], [ux1, ty, uz1], [ux0, ty, uz0], P(LAYER.STONE, COL.stone));
-        const [mx0, mz0] = pol((ri + ro) / 2, a0);
-        const [mx1, mz1] = pol((ri + ro) / 2, a1);
-        kit.wall(b, mx0, mz0, mx1, mz1, fy - 1, ty, 2.05, 'wall', { walkable: true, surface: 'stone' });
-      }
-      // face externa
-      const rOut = r1 + 12;
+    }
+    // arquibancadas
+    for (let k = 0; k < 6; k++) {
+      const ri = r1 + k * 2;
+      const ro = ri + 2;
+      if (clip && !reachesOut(a0, a1, ro)) continue;
+      const ty = fy + podH + 0.6 + k * 1.2;
+      const py = k === 0 ? fy + podH : ty - 1.2;
+      const [ix0, iz0] = pol(ri, a0);
+      const [ix1, iz1] = pol(ri, a1);
+      const [ux0, uz0] = pol(ro, a0);
+      const [ux1, uz1] = pol(ro, a1);
+      b.quad([ix0, py, iz0], [ix1, py, iz1], [ix1, ty, iz1], [ix0, ty, iz0], stoneD);
+      b.quad([ix0, ty, iz0], [ix1, ty, iz1], [ux1, ty, uz1], [ux0, ty, uz0], P(LAYER.STONE, COL.stone));
+      const [mx0, mz0] = pol((ri + ro) / 2, a0);
+      const [mx1, mz1] = pol((ri + ro) / 2, a1);
+      kit.wall(b, mx0, mz0, mx1, mz1, fy - 1, ty, 2.05, 'wall', { walkable: true, surface: 'stone' });
+    }
+    // face externa
+    const topY = fy + podH + 0.6 + 5 * 1.2;
+    if (!clip || reachesOut(a0, a1, rOut)) {
       const [ex0, ez0] = pol(rOut, a0);
       const [ex1, ez1] = pol(rOut, a1);
-      const topY = fy + podH + 0.6 + 5 * 1.2;
       const g0 = kit.h(A.x + ex0, A.z + ez0) - 1;
       const g1 = kit.h(A.x + ex1, A.z + ez1) - 1;
       b.quad([ex1, Math.min(g0, g1), ez1], [ex0, Math.min(g0, g1), ez0], [ex0, topY + 1, ez0], [ex1, topY + 1, ez1], stoneD);
       b.quad([ex1, topY + 1, ez1], [ex0, topY + 1, ez0], [ex0 * 0.98, topY + 1, ez0 * 0.98], [ex1 * 0.98, topY + 1, ez1 * 0.98], P(LAYER.METAL, [0.55, 0.57, 0.65]));
-      // pilões tecnológicos com cristal
-      if (i % 4 === 0) {
-        const [px, pz] = pol(rOut - 0.6, a0);
-        b.box(px, topY + 2.5, pz, 1.2, 5, 1.2, TECH, -a0);
-        crystal(b, px, topY + 5, pz, 0.4, 1.8, [0.6, 0.85, 1], EMIT.crystalBlue);
-        kit.cyl(b, px, topY, pz, 0.8, 5, 'prop');
-      }
     }
+    // pilões tecnológicos com cristal
+    if (pylon) {
+      const [px, pz] = pol(rOut - 0.6, a0);
+      b.box(px, topY + 2.5, pz, 1.2, 5, 1.2, TECH, -a0);
+      crystal(b, px, topY + 5, pz, 0.4, 1.8, [0.6, 0.85, 1], EMIT.crystalBlue);
+      kit.cyl(b, px, topY, pz, 0.8, 5, 'prop');
+    }
+  };
+  for (let i = 0; i < segs; i++) {
+    const a0 = (i / segs) * Math.PI * 2;
+    const a1 = ((i + 1) / segs) * Math.PI * 2;
+    const am = (a0 + a1) / 2;
+    const inGap = angDiff(am, th) < halfGap + Math.PI / segs;
+    if (!inGap) {
+      sector(a0, a1, false, i % 4 === 0);
+      continue;
+    }
+    const sub = 6;
+    for (let k = 0; k < sub; k++) sector(a0 + ((a1 - a0) * k) / sub, a0 + ((a1 - a0) * (k + 1)) / sub, true, false);
   }
 
   // corredor de entrada (dromo) pelas arquibancadas
