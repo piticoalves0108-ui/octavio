@@ -19,7 +19,7 @@ import { mulberry32, round, summarize, type FrameSummary } from './stats';
  * e segue.
  */
 
-export const BENCH_VERSION = 3;
+export const BENCH_VERSION = 4;
 export const BENCH_SCENARIOS = ['vila_chuva', 'voo_floresta', 'combate', 'chefe', 'tempestade', 'stress'] as const;
 export type BenchScenario = (typeof BENCH_SCENARIOS)[number];
 
@@ -63,6 +63,8 @@ class BenchRuntime {
   castT = 0;
   castIdx = 0;
   respawnT = 0;
+  killT = 0;
+  kills = 0;
   strikeT = 0;
   spawnIdx = 0;
   casts = 0;
@@ -138,6 +140,11 @@ function castRotation(ctx: GameContext, b: BenchRuntime, dt: number, every: numb
   b.castT = every;
   const ab = ctx.sys.abilities;
   if (!ab?.tryCast) return;
+  // conjuração (ou carga) em andamento: tenta de novo logo depois, sem contar falha
+  if (ab.currentCast?.()) {
+    b.castT = 0.15;
+    return;
+  }
   sustainPlayer(ctx);
   (ab as unknown as { cooldowns?: Map<string, number> }).cooldowns?.clear?.();
   if (target && target.alive) ctx.sys.camera?.setLockTarget?.(target);
@@ -208,6 +215,29 @@ function maintainEnemies(ctx: GameContext, b: BenchRuntime, dt: number, count: n
       b.note(`spawnEnemy(${type}) lançou erro: ${(err as Error)?.message ?? err}`);
       return;
     }
+  }
+}
+
+/**
+ * Rotatividade do combate: a cada `every` s mata o inimigo mais antigo do benchmark (dano real via
+ * combat.applyDamage → morte, dissolução, saque, XP) para que mortes e reposições entrem na medição.
+ */
+function killChurn(ctx: GameContext, b: BenchRuntime, dt: number, every: number) {
+  b.killT -= dt;
+  if (b.killT > 0) return;
+  b.killT = every;
+  const combat = ctx.sys.combat;
+  if (!combat?.applyDamage) return;
+  for (const e of b.enemies) {
+    if (!e.alive || e.removed || !e.health) continue;
+    if (e.health.immortal) continue;
+    try {
+      combat.applyDamage(e, { amount: e.health.max * 4 + 1000, type: 'arcane', source: ctx.sys.player.entity, tag: 'bench', point: e.position });
+      b.kills++;
+    } catch (err) {
+      b.note(`applyDamage lançou erro: ${(err as Error)?.message ?? err}`);
+    }
+    return;
   }
 }
 
@@ -346,6 +376,7 @@ function makeDirector(name: BenchScenario, ctx: GameContext): Director {
         step(dt, t, ctx, b) {
           sustainPlayer(ctx);
           maintainEnemies(ctx, b, dt, 11, 8, 16);
+          killChurn(ctx, b, dt, 1.6);
           const target = nearestAlive(b.enemies, ctx.sys.player.position);
           castRotation(ctx, b, dt, 0.6, target);
           b.look.copy(ctx.sys.player.position);
@@ -440,6 +471,7 @@ function makeDirector(name: BenchScenario, ctx: GameContext): Director {
           sustainPlayer(ctx);
           ensureFlight(ctx, b);
           maintainEnemies(ctx, b, dt, max, 9, 22);
+          killChurn(ctx, b, dt, 1.2);
           // voo em círculo baixo sobre o campo de batalha
           const a = t * 0.35;
           const x = b.look.x + Math.cos(a) * 10;
@@ -596,6 +628,10 @@ export async function runBenchmark(ctx: GameContext, scenario: string): Promise<
     // diretor entre a câmera (lateUpdate) e o render
     // consulta de tempo de GPU: opcional (?gputimer), pois a leitura do GPU_DISJOINT pode sincronizar a CPU com a GPU
     const gpu = new GpuTimer(ctx.renderer, params.has('gputimer'));
+    // ?cpuonly: mede só a simulação (sem rasterização), isolando o custo de CPU dos sistemas do
+    // ruído do SwiftShader (que rasteriza na mesma CPU). Draw calls/triângulos ficam zerados.
+    const cpuOnly = params.has('cpuonly');
+    if (cpuOnly) b.note('modo cpuonly: sem renderização (draw calls e FPS não são de jogo real)');
     let t = 0;
     let last = ctx.elapsed;
     let recording = false;
@@ -623,6 +659,8 @@ export async function runBenchmark(ctx: GameContext, scenario: string): Promise<
       enemiesMax = Math.max(enemiesMax, ctx.sys.ai?.activeEnemyCount?.() ?? 0);
     };
     ctx.render = () => {
+      // cinemática/diálogo da narrativa não podem prender o cenário (?bench já as desliga; defensivo)
+      if (ctx.state === 'cinematic') (ctx.sys.quests as unknown as { cine?: { skip?: () => void } } | undefined)?.cine?.skip?.();
       const now = ctx.elapsed;
       const dt = Math.max(0, now - last);
       last = now;
@@ -648,6 +686,14 @@ export async function runBenchmark(ctx: GameContext, scenario: string): Promise<
         }
       }
       ctx.sys.perf.measure('bench', performance.now() - t0);
+      if (cpuOnly) {
+        // só CPU: atualiza matrizes e o pré-render do mundo (LOD/streaming), sem chamadas WebGL
+        ctx.scene.updateMatrixWorld();
+        if (!ctx.camera.parent) ctx.camera.updateMatrixWorld();
+        const sc = ctx.scene as unknown as { onBeforeRender: (...a: unknown[]) => void };
+        sc.onBeforeRender(ctx.renderer, ctx.scene, ctx.camera, null, null, null);
+        return;
+      }
       gpu.begin();
       origRender();
       gpu.end();
@@ -723,6 +769,7 @@ export async function runBenchmark(ctx: GameContext, scenario: string): Promise<
       hardwareConcurrency: navigator.hardwareConcurrency ?? null,
       renderer: rendererInfo(ctx),
       postFX: !!ctx.sys.env?.postEnabled,
+      cpuOnly,
       shadows: ctx.renderer.shadowMap.enabled,
       fps: round(fps, 2),
       low1Fps: frame ? round(1000 / Math.max(1e-3, frame.worst1), 2) : 0,
@@ -754,6 +801,7 @@ export async function runBenchmark(ctx: GameContext, scenario: string): Promise<
         benchSpawned: b.spawned,
         casts: b.casts,
         castFails: b.castFails,
+        kills: b.kills,
         bossPhase: (b.boss as unknown as { phase?: number } | null)?.phase ?? null,
         npcs: ctx.entities.ofKind('npc').length,
       },
@@ -764,6 +812,8 @@ export async function runBenchmark(ctx: GameContext, scenario: string): Promise<
         const e = ctx.sys.env;
         return { weather: e.weather, rain: round(e.rainIntensity ?? 0, 2), night: round((e as unknown as { night?: number }).night ?? 0, 2), visibility: round(e.visibility?.() ?? 0, 0) };
       }),
+      /** Pré-aquecimentos de shader feitos até aqui (src/perf/ShaderWarmup.ts; ?prewarm=0 desliga). */
+      warmups: safe(() => (ctx.sys.perf.warmup.enabled ? ctx.sys.perf.warmup.history.slice() : 'desligado')),
       notes: b.notes,
       errors,
     };

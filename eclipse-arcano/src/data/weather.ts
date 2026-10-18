@@ -255,7 +255,7 @@ export const FOG = {
   /** Névoa noturna leve nas baixadas. */
   nightExtra: { forest: 0.0012, swamp: 0.0015, shore: 0.001 } as Partial<Record<BiomeId, number>>,
   /** Tinta da névoa por bioma (mistura 0..1 com a cor). */
-  tint: { swamp: [0x5c6a4a, 0.4], corrupted: [0x5a3a6e, 0.45] } as Partial<Record<BiomeId, readonly [number, number]>>,
+  tint: { swamp: [0x5c6a4a, 0.4], corrupted: [0x564a62, 0.38] } as Partial<Record<BiomeId, readonly [number, number]>>,
   /** Interiores: névoa reduzida a esta fração. */
   indoorFactor: 0.35,
   /** Quanto a cor da névoa puxa para o tom das nuvens (× cobertura de nuvens). */
@@ -297,7 +297,7 @@ export const POST = {
   /** Vinheta/tinta extra com corrupção máxima. */
   corruptionVignette: 0.32,
   corruptionTint: 0x7a3cff,
-  corruptionTintAmount: 0.16,
+  corruptionTintAmount: 0.09,
   nightTint: 0x5a78c8,
   nightTintAmount: 0.08,
   saturation: 1.06,

@@ -1,0 +1,440 @@
+{
+  "date": "2026-10-18T12:01:04.564Z",
+  "quality": "low",
+  "viewport": [
+    400,
+    225
+  ],
+  "query": "",
+  "cycles": [
+    {
+      "label": "jogo 1",
+      "t": 1.3,
+      "state": "playing",
+      "geometries": 100,
+      "textures": 39,
+      "programs": 50,
+      "heapMB": 66.8,
+      "entities": 29,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2
+      },
+      "sceneObjects": 663,
+      "drv": null
+    },
+    {
+      "label": "jogo 2",
+      "t": 2.1,
+      "state": "playing",
+      "geometries": 100,
+      "textures": 41,
+      "programs": 50,
+      "heapMB": 67,
+      "entities": 29,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2
+      },
+      "sceneObjects": 663,
+      "drv": null
+    },
+    {
+      "label": "jogo 3",
+      "t": 2.9,
+      "state": "playing",
+      "geometries": 101,
+      "textures": 43,
+      "programs": 50,
+      "heapMB": 67.1,
+      "entities": 29,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2
+      },
+      "sceneObjects": 663,
+      "drv": null
+    },
+    {
+      "label": "jogo 4",
+      "t": 3.8,
+      "state": "playing",
+      "geometries": 101,
+      "textures": 45,
+      "programs": 50,
+      "heapMB": 67.2,
+      "entities": 29,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2
+      },
+      "sceneObjects": 663,
+      "drv": null
+    },
+    {
+      "label": "jogo 5",
+      "t": 4.6,
+      "state": "playing",
+      "geometries": 101,
+      "textures": 47,
+      "programs": 50,
+      "heapMB": 67.3,
+      "entities": 29,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2
+      },
+      "sceneObjects": 663,
+      "drv": null
+    },
+    {
+      "label": "jogo 6",
+      "t": 5.6,
+      "state": "playing",
+      "geometries": 101,
+      "textures": 49,
+      "programs": 50,
+      "heapMB": 67.3,
+      "entities": 29,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2
+      },
+      "sceneObjects": 663,
+      "drv": null
+    }
+  ],
+  "combat": [
+    {
+      "label": "combate 10s",
+      "t": 7.5,
+      "state": "playing",
+      "geometries": 130,
+      "textures": 52,
+      "programs": 50,
+      "heapMB": 69,
+      "entities": 34,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 5
+      },
+      "sceneObjects": 731,
+      "drv": {
+        "spawned": 5,
+        "killed": 0,
+        "casts": 3,
+        "errors": 0,
+        "alive": 5
+      }
+    },
+    {
+      "label": "combate 21s",
+      "t": 8.7,
+      "state": "playing",
+      "geometries": 138,
+      "textures": 55,
+      "programs": 50,
+      "heapMB": 69.8,
+      "entities": 39,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 7,
+        "projectile": 3
+      },
+      "sceneObjects": 762,
+      "drv": {
+        "spawned": 7,
+        "killed": 1,
+        "casts": 5,
+        "errors": 0,
+        "alive": 6
+      }
+    },
+    {
+      "label": "combate 32s",
+      "t": 10.1,
+      "state": "playing",
+      "geometries": 143,
+      "textures": 58,
+      "programs": 50,
+      "heapMB": 70.5,
+      "entities": 40,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 10,
+        "projectile": 1
+      },
+      "sceneObjects": 798,
+      "drv": {
+        "spawned": 10,
+        "killed": 2,
+        "casts": 7,
+        "errors": 0,
+        "alive": 8
+      }
+    },
+    {
+      "label": "combate 43s",
+      "t": 11.8,
+      "state": "playing",
+      "geometries": 145,
+      "textures": 61,
+      "programs": 50,
+      "heapMB": 70.7,
+      "entities": 40,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 10,
+        "projectile": 1
+      },
+      "sceneObjects": 798,
+      "drv": {
+        "spawned": 12,
+        "killed": 4,
+        "casts": 8,
+        "errors": 0,
+        "alive": 8
+      }
+    },
+    {
+      "label": "combate 54s",
+      "t": 13.6,
+      "state": "playing",
+      "geometries": 145,
+      "textures": 62,
+      "programs": 50,
+      "heapMB": 70.9,
+      "entities": 41,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 11,
+        "projectile": 1
+      },
+      "sceneObjects": 812,
+      "drv": {
+        "spawned": 14,
+        "killed": 5,
+        "casts": 10,
+        "errors": 0,
+        "alive": 8
+      }
+    },
+    {
+      "label": "combate 64s",
+      "t": 15.8,
+      "state": "playing",
+      "geometries": 145,
+      "textures": 65,
+      "programs": 50,
+      "heapMB": 71,
+      "entities": 40,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 10,
+        "projectile": 1
+      },
+      "sceneObjects": 798,
+      "drv": {
+        "spawned": 16,
+        "killed": 7,
+        "casts": 12,
+        "errors": 0,
+        "alive": 8
+      }
+    },
+    {
+      "label": "combate 74s",
+      "t": 17.9,
+      "state": "playing",
+      "geometries": 145,
+      "textures": 67,
+      "programs": 50,
+      "heapMB": 71.5,
+      "entities": 42,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 12,
+        "projectile": 1
+      },
+      "sceneObjects": 822,
+      "drv": {
+        "spawned": 20,
+        "killed": 9,
+        "casts": 15,
+        "errors": 0,
+        "alive": 8
+      }
+    },
+    {
+      "label": "combate 84s",
+      "t": 19.6,
+      "state": "playing",
+      "geometries": 145,
+      "textures": 70,
+      "programs": 50,
+      "heapMB": 71.3,
+      "entities": 45,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 12,
+        "projectile": 4
+      },
+      "sceneObjects": 825,
+      "drv": {
+        "spawned": 22,
+        "killed": 10,
+        "casts": 16,
+        "errors": 0,
+        "alive": 8
+      }
+    },
+    {
+      "label": "combate 95s",
+      "t": 21.4,
+      "state": "playing",
+      "geometries": 145,
+      "textures": 72,
+      "programs": 50,
+      "heapMB": 71.3,
+      "entities": 41,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 11,
+        "projectile": 1
+      },
+      "sceneObjects": 812,
+      "drv": {
+        "spawned": 24,
+        "killed": 11,
+        "casts": 17,
+        "errors": 0,
+        "alive": 8
+      }
+    },
+    {
+      "label": "combate 105s",
+      "t": 23.4,
+      "state": "playing",
+      "geometries": 145,
+      "textures": 75,
+      "programs": 50,
+      "heapMB": 71.4,
+      "entities": 41,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 10,
+        "projectile": 2
+      },
+      "sceneObjects": 799,
+      "drv": {
+        "spawned": 26,
+        "killed": 13,
+        "casts": 19,
+        "errors": 0,
+        "alive": 8
+      }
+    },
+    {
+      "label": "combate 116s",
+      "t": 25.3,
+      "state": "playing",
+      "geometries": 145,
+      "textures": 76,
+      "programs": 50,
+      "heapMB": 71.5,
+      "entities": 42,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 10,
+        "projectile": 3
+      },
+      "sceneObjects": 800,
+      "drv": {
+        "spawned": 28,
+        "killed": 15,
+        "casts": 20,
+        "errors": 0,
+        "alive": 8
+      }
+    },
+    {
+      "label": "combate 126s",
+      "t": 27.3,
+      "state": "playing",
+      "geometries": 145,
+      "textures": 78,
+      "programs": 50,
+      "heapMB": 71.5,
+      "entities": 39,
+      "kinds": {
+        "player": 1,
+        "npc": 26,
+        "creature": 2,
+        "enemy": 10
+      },
+      "sceneObjects": 797,
+      "drv": {
+        "spawned": 29,
+        "killed": 16,
+        "casts": 23,
+        "errors": 0,
+        "alive": 8
+      }
+    }
+  ],
+  "verdict": {
+    "cycles": {
+      "geometries": 1,
+      "textures": 8,
+      "programs": 0,
+      "heapMB": 0.3,
+      "entities": 0,
+      "sceneObjects": 0
+    },
+    "combat": {
+      "from": "combate 54s",
+      "to": "combate 126s",
+      "kills": 11,
+      "spawned": 15,
+      "geometries": 0,
+      "textures": 16,
+      "programs": 0,
+      "heapMB": 0.6,
+      "entities": -2,
+      "sceneObjects": -15
+    },
+    "problems": [
+      "ciclos: texturas +8",
+      "combate: texturas +16 em 11 mortes"
+    ]
+  },
+  "errors": []
+}

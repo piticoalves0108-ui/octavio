@@ -94,6 +94,9 @@ export const ACTION_LABELS: Record<Action, string> = {
   quickload: 'Carregamento rápido',
 };
 
+/** Teclas cujo comportamento padrão do navegador (rolar, trocar foco, recarregar) é bloqueado. */
+const NO_DEFAULT_KEYS: ReadonlySet<string> = new Set(['Tab', 'Space', 'F3', 'F5', 'F9', 'AltLeft', 'ArrowUp', 'ArrowDown']);
+
 export class Input {
   private keys = new Set<string>();
   private pressedThisFrame = new Set<string>();
@@ -142,7 +145,7 @@ export class Input {
 
   private onKeyDown = (e: KeyboardEvent) => {
     // Evita que Tab/F-keys/Espaço rolem a página ou troquem foco.
-    if (['Tab', 'Space', 'F3', 'F5', 'F9', 'AltLeft', 'ArrowUp', 'ArrowDown'].includes(e.code)) e.preventDefault();
+    if (NO_DEFAULT_KEYS.has(e.code)) e.preventDefault();
     if (!this.keys.has(e.code)) this.pressedThisFrame.add(e.code);
     this.keys.add(e.code);
     this.lastCode = e.code;
@@ -215,10 +218,19 @@ export class Input {
 
   /** Delta do mouse já escalado pela sensibilidade (radianos aproximados). */
   lookDelta(): { x: number; y: number } {
-    if (!this.gameplayEnabled) return { x: 0, y: 0 };
+    // objeto reutilizado (sem alocação por quadro): copie os valores se precisar guardá-los
+    const o = this.look;
+    if (!this.gameplayEnabled) {
+      o.x = 0;
+      o.y = 0;
+      return o;
+    }
     const s = 0.0022 * this.sensitivity;
-    return { x: this.mouseDX * s, y: this.mouseDY * s * (this.invertY ? -1 : 1) };
+    o.x = this.mouseDX * s;
+    o.y = this.mouseDY * s * (this.invertY ? -1 : 1);
+    return o;
   }
+  private readonly look = { x: 0, y: 0 };
 
   setBinding(a: Action, codes: string[]) {
     this.bindings[a] = codes.slice();

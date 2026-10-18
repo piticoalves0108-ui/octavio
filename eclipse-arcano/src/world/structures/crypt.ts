@@ -138,6 +138,8 @@ export function buildCrypt(kit: SiteKit, gates: GateSystem) {
     kit.cyl(b, s * (dw / 2 + 0.9), 0, t.z0 - 0.5, 0.36, dh + 0.6, 'prop');
   }
   b.box(0, dh + 0.75, t.z0 - 0.45, dw + 3, 0.35, 1.3, P(LAYER.STONE, COL.stoneWarm));
+  // colisor do entablamento + frontão (acima da porta): a câmera afastada não atravessa a pedra
+  kit.box(b, 0, dh + 1.4, t.z0 - 0.45, dw + 3, 1.65, 1.3, 'prop', { walkable: true, surface: 'stone' });
   b.push(0, dh + 0.92, t.z0 - 1.1, Math.PI);
   b.tri([-(dw + 3) / 2, 0, 0], [(dw + 3) / 2, 0, 0], [0, 1.3, 0], P(LAYER.STONE, COL.stone));
   b.box(0, 0.5, 0.02, 0.9, 0.5, 0.02, rune);

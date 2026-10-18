@@ -56,7 +56,7 @@ export class Game {
   /** Sistemas cujo init falhou (o jogo segue sem eles). */
   readonly failedInit: string[] = [];
   /** Diagnóstico de robustez (e2e/testes). */
-  readonly robustness = { autoPauses: 0, renderErrors: 0, entityErrors: 0, initErrors: 0, ignoredTransitions: 0, lastAutoPause: '' as '' | 'blur' | 'hidden' | 'pointerlock' };
+  readonly robustness = { autoPauses: 0, renderErrors: 0, entityErrors: 0, initErrors: 0, ignoredTransitions: 0, lastAutoPause: '' as '' | 'blur' | 'hidden' | 'pointerlock' | 'context', contextLost: 0 };
 
   constructor(private canvas: HTMLCanvasElement, private uiRoot: HTMLElement) {}
 
@@ -265,10 +265,21 @@ export class Game {
       if (this.wasPointerLocked && !locked && this.state === 'playing' && !ctx.sys.ui.isMenuOpen()) this.autoPause('pointerlock');
       this.wasPointerLocked = locked;
     });
+    // GPU reiniciada / driver: o three.js restaura o contexto; o jogo pausa e volta sem salto de dt
+    this.canvas.addEventListener('webglcontextlost', () => {
+      this.robustness.contextLost++;
+      console.warn('[Game] contexto WebGL perdido — jogo pausado até a restauração');
+      this.autoPause('context');
+    });
+    this.canvas.addEventListener('webglcontextrestored', () => {
+      console.info('[Game] contexto WebGL restaurado');
+      this.resetDt = true;
+      this.applyRenderSettings();
+    });
   }
 
   /** Entra em pausa por perda de foco (só a partir de 'playing'; respeita a configuração). */
-  autoPause(reason: 'blur' | 'hidden' | 'pointerlock') {
+  autoPause(reason: 'blur' | 'hidden' | 'pointerlock' | 'context') {
     const ctx = this.ctx;
     // solta teclas presas (o keyup não chega com a janela sem foco)
     ctx.input.releaseAll();
@@ -395,7 +406,13 @@ export class Game {
   }
 
   quitToMenu() {
+    // durante novo jogo/continuar (fade), sair agora deixaria o menu aberto com o jogo rodando
+    if (this.transitioning) {
+      this.robustness.ignoredTransitions++;
+      return;
+    }
     this.ctx.timeScale = 1;
+    this.ctx.input.releaseAll();
     this.setState('menu');
     this.ctx.sys.ui.showMainMenu();
   }
@@ -410,7 +427,16 @@ export class Game {
       // Isola falhas: um sistema com erro não derruba o jogo inteiro.
       this.logThrottled(s.name, `[Game] erro em ${s.name}.${fn}`, err);
     }
-    this.ctx.sys.perf.measure(s.name, performance.now() - t);
+    this.measure(s.name, performance.now() - t);
+  }
+
+  /** Mede o custo de um sistema; o próprio monitor de desempenho não pode derrubar o loop. */
+  private measure(name: string, ms: number) {
+    try {
+      this.ctx.sys.perf.measure(name, ms);
+    } catch (err) {
+      this.logThrottled('perf', '[Game] erro em perf.measure', err);
+    }
   }
 
   /** Registra o erro no máximo uma vez a cada 5 s por chave (evita inundar o console). */
@@ -449,7 +475,11 @@ export class Game {
     this.frame++;
 
     const perf = ctx.sys.perf;
-    perf.beginFrame();
+    try {
+      perf.beginFrame();
+    } catch (err) {
+      this.logThrottled('perf', '[Game] erro em perf.beginFrame', err);
+    }
     const sim = SIM_STATES.includes(this.state);
     const dt = realDt * ctx.timeScale;
 
@@ -463,7 +493,7 @@ export class Game {
       } catch (err) {
         this.logThrottled('entities', '[Game] erro em entities.update', err);
       }
-      perf.measure('entities', performance.now() - t);
+      this.measure('entities', performance.now() - t);
     } else if (this.state === 'menu') {
       this.updateMenuCamera(realDt);
     }
@@ -487,7 +517,7 @@ export class Game {
           /* sem contexto WebGL: nada a fazer neste quadro */
         }
       }
-      perf.measure('render', performance.now() - t);
+      this.measure('render', performance.now() - t);
     }
     try {
       perf.endFrame();

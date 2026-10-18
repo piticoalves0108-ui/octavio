@@ -132,6 +132,35 @@ describe('Saveables reais (ida e volta)', () => {
     expect([...b.discovered]).toEqual(['vila_brumafria']);
   });
 
+  it('player: posição, orientação, vida/energia, checkpoint e voo', async () => {
+    const { Player } = await import('../src/player/Player');
+    const make = () => new Player();
+    const a = make();
+    a.teleport(new THREE.Vector3(120.5, 33.25, -48), 1.25);
+    a.health.current = 61;
+    a.energy.current = 37.5;
+    a.checkpoint = { x: 100, z: -40, yaw: 0.5 };
+    const data = json(a.serialize());
+    const b = make();
+    des(b, json(data), undefined);
+    const back = json(b.serialize());
+    expect(back).toEqual(data);
+    expect(b.entity.position.x).toBeCloseTo(120.5);
+    expect(b.entity.yaw).toBeCloseTo(1.25);
+    expect(b.checkpoint).toEqual({ x: 100, z: -40, yaw: 0.5 });
+    // voando: volta em voo
+    des(b, { ...data, flying: true }, undefined);
+    expect(b.isFlying()).toBe(true);
+    // vida 0 no arquivo não ressuscita um mago morto: carrega com ao menos 1
+    des(b, { ...data, health: 0, energy: -5, flying: false }, undefined);
+    expect(b.health.current).toBe(1);
+    expect(b.energy.current).toBe(0);
+    expect(b.entity.alive).toBe(true);
+    // posição inválida é rejeitada (o SaveSystem faz o rollback)
+    expect(() => des(b, { ...data, x: NaN }, undefined)).toThrow();
+    expect(() => des(b, null, undefined)).toThrow();
+  });
+
   it('env: clima, umidade, eclipse e vento', () => {
     const ctx = fakeCtx();
     const make = () => new Environment();
@@ -146,6 +175,19 @@ describe('Saveables reais (ida e volta)', () => {
     expect(back.windAngle).toBeCloseTo(2.5);
     expect(back.weather).toEqual(base.weather);
     expect(() => des(b, null, ctx)).toThrow();
+  });
+});
+
+/** Todo Saveable registrado em Game.ts precisa de um teste de ida e volta neste arquivo. */
+describe('cobertura dos Saveables registrados', () => {
+  it('a lista de registro do Game.ts bate com os testes de ida e volta', async () => {
+    const { readFileSync } = await import('node:fs');
+    const src = readFileSync(new URL('../src/core/Game.ts', import.meta.url), 'utf8');
+    const m = src.match(/for \(const s of \[([^\]]+)\]\) sys\.save\.register\(s\)/);
+    expect(m, 'registro de saves não encontrado em Game.ts').toBeTruthy();
+    const registered = m![1].split(',').map((x) => x.trim().replace(/^sys\./, '')).sort();
+    const tested = ['clock', 'abilities', 'ai', 'world', 'env', 'player', 'story', 'progression', 'inventory', 'quests', 'npcs'].sort();
+    expect(registered).toEqual(tested);
   });
 });
 

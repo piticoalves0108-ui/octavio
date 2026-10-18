@@ -53,8 +53,13 @@ export class Entity {
   /** Empurra/é empurrada por outras entidades sólidas. */
   solid = true;
   tags = new Set<string>();
-  /** Célula atual no grid espacial (gerenciado pelo EntityManager). */
+  /**
+   * Obsoleto: o grid espacial agora usa `gridCell` (numérico, sem alocar strings por quadro).
+   * Mantido só por compatibilidade de contrato; não é mais atualizado.
+   */
   cellKey = '';
+  /** Célula atual no grid espacial (gerenciado pelo EntityManager; -1 = fora do grid). */
+  gridCell = -1;
 
   constructor(kind: EntityKind, faction: Faction, object3d: THREE.Object3D = new THREE.Group()) {
     this.kind = kind;

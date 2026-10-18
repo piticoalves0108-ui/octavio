@@ -55,6 +55,71 @@ describe('EntityManager: isolamento de erros', () => {
   });
 });
 
+describe('EntityManager: grid espacial numérico', () => {
+  const mk = () => new EntityManager({ scene: new THREE.Scene(), sys: { combat: { applyDamage() {} } } } as any);
+  const at = (x: number, z: number, r = 0.5) => {
+    const e = new Entity('enemy', 'bandit');
+    e.position.set(x, 0, z);
+    e.radius = r;
+    return e;
+  };
+
+  it('acha entidades nas células vizinhas e em coordenadas negativas', () => {
+    const em = mk();
+    const a = at(15.9, -0.1);
+    const b = at(16.1, 0.1);
+    const c = at(-16.2, -31.9);
+    for (const e of [a, b, c]) em.add(e);
+    const out: Entity[] = [];
+    expect(em.queryRadius(new THREE.Vector3(16, 0, 0), 1, out).sort((x, y) => x.id - y.id)).toEqual([a, b]);
+    expect(em.queryRadius(new THREE.Vector3(-16, 0, -32), 1, out)).toEqual([c]);
+  });
+
+  it('entidade grande (chefe) com o centro na célula vizinha entra na consulta', () => {
+    const em = mk();
+    const boss = at(36.5, 0, 6); // borda em x = 30,5; centro na célula 2
+    em.add(boss);
+    em.update(0);
+    // consulta de 1,5 m a partir de x = 29: alcança a borda do chefe, mas o centro está fora das células [0,1]
+    expect(em.queryRadius(new THREE.Vector3(29, 0, 0), 1.6)).toEqual([boss]);
+    expect(em.nearest(new THREE.Vector3(29, 0, 0), 1.6)).toBe(boss);
+  });
+
+  it('acompanha o movimento, posição NaN não quebra e raio inválido/enorme funciona', () => {
+    const em = mk();
+    const e = at(0, 0);
+    const other = at(500, 500);
+    em.add(e);
+    em.add(other);
+    e.position.set(100, 0, 100);
+    em.update(1 / 60);
+    expect(em.queryRadius(new THREE.Vector3(0, 0, 0), 2)).toEqual([]);
+    expect(em.queryRadius(new THREE.Vector3(100, 0, 100), 2)).toEqual([e]);
+    e.position.set(NaN, 0, NaN);
+    em.update(1 / 60);
+    expect(em.queryRadius(new THREE.Vector3(100, 0, 100), 2)).toEqual([]);
+    e.position.set(3, 0, 3);
+    em.update(1 / 60);
+    expect(em.queryRadius(new THREE.Vector3(3, 0, 3), 1)).toEqual([e]);
+    expect(em.queryRadius(new THREE.Vector3(0, 0, 0), NaN)).toEqual([]);
+    expect(em.queryRadius(new THREE.Vector3(0, 0, 0), 1e7).length).toBe(2);
+  });
+
+  it('remover limpa o grid (sem células órfãs) e não indexa entidades não consultáveis', () => {
+    const em = mk();
+    const list = Array.from({ length: 50 }, (_, i) => em.add(at(i * 20, -i * 20)));
+    const ghost = at(0, 0);
+    ghost.queryable = false;
+    em.add(ghost);
+    em.update(1 / 60);
+    expect(em.gridStats().indexed).toBe(50);
+    for (const e of list) em.remove(e);
+    em.update(1 / 60);
+    expect(em.gridStats()).toEqual({ cells: 0, indexed: 0 });
+    expect(em.queryRadius(new THREE.Vector3(0, 0, 0), 5)).toEqual([]);
+  });
+});
+
 describe('EventBus: diagnóstico de listeners', () => {
   it('listenerCount soma inscrições e acompanha off/once', () => {
     const bus = new EventBus();
@@ -96,6 +161,18 @@ describe('Input: foco e ações fora do gameplay', () => {
     (globalThis as any).window = target();
     (globalThis as any).document = { ...target(), pointerLockElement: null, exitPointerLock() {} };
     Input = (await import('../src/core/Input')).Input;
+  });
+
+  it('lookDelta reutiliza o mesmo objeto (sem alocar por quadro) e zera fora do gameplay', () => {
+    const input = new Input({ addEventListener() {} } as any);
+    const a = input.lookDelta();
+    const b = input.lookDelta();
+    expect(a).toBe(b);
+    input.mouseDX = 10;
+    input.gameplayEnabled = false;
+    expect(input.lookDelta()).toEqual({ x: 0, y: 0 });
+    input.gameplayEnabled = true;
+    expect(input.lookDelta().x).toBeCloseTo(0.022);
   });
 
   it('releaseAll solta teclas presas (blur) e gera "released"', () => {

@@ -14,11 +14,15 @@ import { beginAttackImpact, updateAttackActive, cancelAttackVisuals, attackDamag
 import { specialsThink, specialsUpdate, onSpecialDamaged, type SpecialState, makeSpecialState } from './enemySpecials';
 import { findCover } from './tactics';
 import type { AI } from './AI';
-import { VILLAGE } from '../data/places';
+import { VILLAGE, CAMP } from '../data/places';
 
 /** Temporários da navegação (sem alocação por quadro). */
 const NAV_A = new THREE.Vector3();
 const NAV_B = new THREE.Vector3();
+/** Paliçada do Acampamento dos Corvos: eixo da abertura (para fora) e meia largura útil do corredor. */
+const CAMP_UX = Math.cos(CAMP.gateAngle);
+const CAMP_UZ = Math.sin(CAMP.gateAngle);
+const CAMP_GATE_HALF = CAMP.gateWidth / 2 - 0.9;
 
 export type EnemyState = 'idle' | 'patrol' | 'investigate' | 'alert' | 'combat' | 'search' | 'return' | 'flee' | 'surrender' | 'dead';
 export type EnemyAction = 'none' | 'attack' | 'dodge' | 'block' | 'special' | 'overheat';
@@ -168,6 +172,13 @@ export class Enemy extends Entity {
   navIdx = 0;
   navT = Math.random() * 0.6;
   readonly navPoint = new THREE.Vector3();
+  /** Rota reutilizada pelo portal do portão da paliçada (sem alocar a cada recálculo). */
+  private readonly campPath: { x: number; z: number }[] = [
+    { x: 0, z: 0 },
+    { x: 0, z: 0 },
+    { x: 0, z: 0 },
+    { x: 0, z: 0 },
+  ];
 
   // ---- visual ----
   hitFlash = 0;
@@ -1279,6 +1290,13 @@ export class Enemy extends Entity {
     const vdx = p.x - VILLAGE.x;
     const vdz = p.z - VILLAGE.z;
     const R = VILLAGE.wallRadius + 14;
+    if (!this.isFlyer) {
+      // Acampamento dos Corvos: a paliçada só tem uma abertura — entra/sai pelo eixo do portão
+      const cdx = p.x - CAMP.x;
+      const cdz = p.z - CAMP.z;
+      const CR = CAMP.palisadeRadius + 14;
+      if (cdx * cdx + cdz * cdz < CR * CR) return this.updateCampNav(dt, ctx, cdx, cdz);
+    }
     if (this.isFlyer || vdx * vdx + vdz * vdz > R * R) {
       this.navPath = null;
       return false;
@@ -1302,6 +1320,83 @@ export class Enemy extends Entity {
         }
       }
     }
+    return this.followNavPath();
+  }
+
+  /**
+   * Portal do portão da paliçada do acampamento: inimigo e objetivo em lados opostos do muro, com a
+   * reta bloqueada → segue o ponto do corredor do seu lado, o do outro lado e então o objetivo.
+   * Recalculado a cada ~1,2 s (só tier 0); a rota é um array fixo reutilizado.
+   */
+  private updateCampNav(dt: number, ctx: GameContext, cdx: number, cdz: number): boolean {
+    const p = this.position;
+    this.navT -= dt;
+    if (this.navT <= 0) {
+      this.navT = 1.0 + Math.random() * 0.4;
+      this.navPath = null;
+      const PR = CAMP.palisadeRadius;
+      const gdx = this.goal.x - CAMP.x;
+      const gdz = this.goal.z - CAMP.z;
+      const meIn = cdx * cdx + cdz * cdz < PR * PR;
+      const goalIn = gdx * gdx + gdz * gdz < PR * PR;
+      const path = this.campPath;
+      if (!meIn && !goalIn) {
+        // os dois do lado de fora com a paliçada no meio: contorna pelo lado mais curto, ~40° por vez
+        const sx = gdx - cdx;
+        const sz = gdz - cdz;
+        const t = clamp(-(cdx * sx + cdz * sz) / (sx * sx + sz * sz || 1), 0, 1);
+        const qx = cdx + sx * t;
+        const qz = cdz + sz * t;
+        if (qx * qx + qz * qz < (PR + 1.5) * (PR + 1.5)) {
+          const a0 = Math.atan2(cdz, cdx);
+          let da = Math.atan2(gdz, gdx) - a0;
+          if (da > Math.PI) da -= Math.PI * 2;
+          else if (da < -Math.PI) da += Math.PI * 2;
+          const a1 = a0 + clamp(da, -0.7, 0.7);
+          const wx = CAMP.x + Math.cos(a1) * (PR + 5);
+          const wz = CAMP.z + Math.sin(a1) * (PR + 5);
+          path[0].x = p.x;
+          path[0].z = p.z;
+          path[1].x = path[2].x = wx;
+          path[1].z = path[2].z = wz;
+          path[3].x = this.goal.x;
+          path[3].z = this.goal.z;
+          this.navPath = path;
+          this.navIdx = 1;
+        }
+      } else if (meIn !== goalIn && ctx.sys.world.isGateOpen('portao_corvos')) {
+        NAV_A.set(p.x, p.y + 1.1, p.z);
+        NAV_B.set(this.goal.x, this.goal.y + 1.1, this.goal.z);
+        if (!ctx.physics.lineOfSight(NAV_A, NAV_B, true)) {
+          const along = cdx * CAMP_UX + cdz * CAMP_UZ;
+          const lat = Math.abs(cdx * CAMP_UZ - cdz * CAMP_UX);
+          // já no corredor da abertura: atravessa direto (o 1º ponto é a própria posição)
+          const inCorridor = lat < CAMP_GATE_HALF && along > PR - 6 && along < PR + 6;
+          const rNear = goalIn ? PR + 5 : PR - 5;
+          const rFar = goalIn ? PR - 5 : PR + 5;
+          path[0].x = p.x;
+          path[0].z = p.z;
+          path[1].x = inCorridor ? p.x : CAMP.x + CAMP_UX * rNear;
+          path[1].z = inCorridor ? p.z : CAMP.z + CAMP_UZ * rNear;
+          path[2].x = CAMP.x + CAMP_UX * rFar;
+          path[2].z = CAMP.z + CAMP_UZ * rFar;
+          path[3].x = this.goal.x;
+          path[3].z = this.goal.z;
+          this.navPath = path;
+          this.navIdx = 1;
+        }
+      }
+    } else if (this.navPath === this.campPath) {
+      // o objetivo (jogador) se move: o último ponto acompanha
+      this.campPath[3].x = this.goal.x;
+      this.campPath[3].z = this.goal.z;
+    }
+    return this.followNavPath();
+  }
+
+  /** Segue `navPath`: avança os waypoints alcançados e escreve o atual em `navPoint`. */
+  private followNavPath(): boolean {
+    const p = this.position;
     const path = this.navPath;
     if (!path) return false;
     // avança os waypoints já alcançados; o último ponto é o próprio objetivo (segue direto)
@@ -1314,6 +1409,8 @@ export class Enemy extends Entity {
     }
     if (this.navIdx >= path.length - 1) {
       this.navPath = null;
+      // fim da rota: reavalia logo (ex.: saiu pelo portão e o muro ainda separa do alvo)
+      if (this.navT > 0.15) this.navT = 0.15;
       return false;
     }
     const w = path[this.navIdx];
@@ -1533,6 +1630,8 @@ export class Enemy extends Entity {
     this.ai?.unregister(this);
     super.dispose();
     this.mat.dispose();
+    // textura de ossos da malha fundida (por instância): sem isto, cada inimigo removido vazava 1 textura
+    this.rig.dispose?.();
   }
 
   /** Para testes/depuração. */

@@ -201,6 +201,12 @@ const heartbeat: Recipe = (h, t, out) => {
   return 0.45;
 };
 
+/** Atualização de missão: carrilhão curto de duas notas. */
+const questUpdate: Recipe = (h, t, out) => {
+  bellArp(h, t, out, [81, 86], 0.09, 0.8, 0.22);
+  return 1;
+};
+
 // ------------------------------------------------------------------ jogador
 
 const footstep: Recipe = (h, t, out, p) => {
@@ -271,6 +277,34 @@ const footstep: Recipe = (h, t, out, p) => {
       return 0.12;
     }
   }
+};
+
+/** Jogador ferido: baque no corpo + expiração curta por formantes. */
+const hurt: Recipe = (h, t, out, p) => {
+  thump(h, t, 120 * p.pitch, 55, 0.16, 0.8, out);
+  const env = gain(h, 0, out);
+  adsr(env.gain, t + 0.01, 0.4 * Math.min(1.4, p.intensity), 0.015, 0.05, 0.5, 0.05, 0.13);
+  const src = gain(h, 0.6);
+  formants(h, src, env, VOWELS.a, 6, 2);
+  noise(h, h.pink, t, 0.3, src);
+  const o = osc(h, 'sawtooth', 150 * p.pitch, t + 0.01, 0.25, src);
+  o.frequency.exponentialRampToValueAtTime(95 * p.pitch, t + 0.22);
+  return 0.32;
+};
+
+/** Papel/pergaminho (ler placas, livros, cartas). */
+const page: Recipe = (h, t, out, p) => {
+  for (let i = 0; i < 2; i++) {
+    const tt = t + i * r(h, 0.07, 0.12);
+    const g = gain(h, 0, out);
+    g.gain.setValueAtTime(EPS, tt);
+    g.gain.linearRampToValueAtTime(0.45, tt + 0.03);
+    g.gain.exponentialRampToValueAtTime(EPS, tt + 0.16);
+    const f = filter(h, 'bandpass', r(h, 2800, 4200) * p.pitch, 1.4, g);
+    noise(h, h.white, tt, 0.18, f);
+  }
+  thump(h, t, 180, 120, 0.05, 0.12, out);
+  return 0.32;
 };
 
 const jump: Recipe = (h, t, out, p) => {
@@ -904,6 +938,9 @@ const flightLoopOneShot: Recipe = (h, t, out, p) => {
 
 export const RECIPES: Record<SfxId, Recipe> = {
   ui_click: uiClick,
+  quest_update: questUpdate,
+  hurt,
+  page,
   ui_hover: uiHover,
   ui_open: uiOpen,
   ui_close: uiClose,

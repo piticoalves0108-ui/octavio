@@ -8,6 +8,8 @@
 //                    [--gputimer] (tempo de GPU por EXT_disjoint_timer_query; ligado no --gpu)
 //                    [--draws] (atribui as draw calls de 1 quadro por dono) [--shots] [--autoscale[=fps]]
 //                    [--query=rigmerge=0&prewarm=0] (parâmetros extras na URL, para comparações A/B)
+//                    [--cpuonly] (só simulação, sem rasterizar: custo de CPU dos sistemas sem o ruído do SwiftShader)
+//                    [--overrides='{"shadowMapSize":0}'] (sobrescreve campos do preset: atribuição de custo por recurso)
 //   npm run bench:gpu   → modo --gpu: janela visível, SEM SwiftShader, usando a GPU real do PC
 //                         (opcional: --channel=chrome para usar o Chrome instalado; --vsync para manter o vsync)
 //
@@ -43,6 +45,7 @@ const height = Number(args.height ?? (gpu ? 720 : 450));
 const seed = Number(args.seed ?? 1337);
 const label = typeof args.label === 'string' ? args.label : '';
 const bootTimeout = Number(args['boot-timeout'] ?? 240) * 1000;
+const overrides = typeof args.overrides === 'string' ? JSON.parse(args.overrides) : {};
 
 if (!args['no-build']) execSync(`npx vite build --outDir ${outDir} --emptyOutDir`, { stdio: 'inherit' });
 mkdirSync('bench-results', { recursive: true });
@@ -85,11 +88,14 @@ try {
     for (const scenario of scenarios) {
       for (let run = 1; run <= runs; run++) {
         const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1 });
-        await context.addInitScript((q) => {
-          try {
-            localStorage.setItem('eclipse-arcano:settings', JSON.stringify({ quality: q, overrides: {}, showFps: false }));
-          } catch {}
-        }, quality);
+        await context.addInitScript(
+          ([q, ov]) => {
+            try {
+              localStorage.setItem('eclipse-arcano:settings', JSON.stringify({ quality: q, overrides: ov, showFps: false }));
+            } catch {}
+          },
+          [quality, overrides],
+        );
         const page = await context.newPage();
         const errors = [];
         page.on('console', (m) => {
@@ -97,7 +103,7 @@ try {
           else if (args.verbose) console.log('[page]', m.text());
         });
         page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
-        const extra = `${gpu || args.gputimer ? '&gputimer' : ''}${args.draws ? '&draws' : ''}${args.autoscale ? `&autoscale=${args.autoscale === true ? 45 : args.autoscale}` : ''}${typeof args.query === 'string' ? '&' + args.query.replace(/^[?&]/, '') : ''}`;
+        const extra = `${gpu || args.gputimer ? '&gputimer' : ''}${args.draws ? '&draws' : ''}${args.cpuonly ? '&cpuonly' : ''}${args.autoscale ? `&autoscale=${args.autoscale === true ? 45 : args.autoscale}` : ''}${typeof args.query === 'string' ? '&' + args.query.replace(/^[?&]/, '') : ''}`;
         const url = `http://localhost:${port}/?bench=${scenario}&secs=${secs}&warmup=${warmup}&quality=${quality}&seed=${seed}${extra}`;
         const t0 = Date.now();
         process.stdout.write(`→ ${scenario} @ ${quality} (exec. ${run}/${runs})… `);
@@ -142,7 +148,7 @@ for (const quality of qualities) {
   for (const scenario of scenarios) {
     const rs = results.filter((r) => r.ok && r.scenario === scenario && r.quality === quality);
     if (!rs.length) {
-      rows.push(`| ${scenario} | ${quality} | falhou | | | | | | | | | |`);
+      rows.push(`| ${scenario} | ${quality} | falhou | | | | | | | | | | | |`);
       continue;
     }
     const m = (fn) => median(rs.map(fn));
@@ -154,16 +160,16 @@ for (const quality of qualities) {
       .map(([k]) => `${k} ${f(m((r) => r.systems?.[k]), 2)}`)
       .join(', ');
     rows.push(
-      `| ${scenario} | ${quality} | ${f(fps)}${rs.length > 1 ? ` ±${f(sp / 2)}` : ''} | ${f(m((r) => r.frameMs?.p50))} | ${f(m((r) => r.frameMs?.p95))} | ${f(m((r) => r.frameMs?.p99))} | ${f(m((r) => r.low1Fps))} | ${f(m((r) => r.cpuMs?.mean), 2)} | ${f(m((r) => r.gpuMs?.mean), 2)} | ${f(m((r) => r.drawCalls?.mean), 0)} | ${f(m((r) => (r.triangles?.mean ?? NaN) / 1000), 0)}k | ${f(m((r) => r.renderSubmitMs?.p50), 2)} | ${top} |`,
+      `| ${scenario} | ${quality} | ${f(fps)}${rs.length > 1 ? ` ±${f(sp / 2)}` : ''} | ${f(m((r) => r.frameMs?.p50))} | ${f(m((r) => r.frameMs?.p95))} | ${f(m((r) => r.frameMs?.p99))} | ${f(m((r) => r.low1Fps))} | ${f(m((r) => r.cpuMs?.mean), 2)} | ${f(m((r) => r.gpuMs?.mean), 2)} | ${f(m((r) => r.drawCalls?.mean), 0)} | ${f(m((r) => (r.triangles?.mean ?? NaN) / 1000), 0)}k | ${f(m((r) => r.renderSubmitMs?.p50), 2)} | ${f(m((r) => r.memory?.programsCompiled), 0)} | ${top} |`,
     );
   }
 }
 const header =
-  '| cenário | qualidade | FPS | p50 ms | p95 ms | p99 ms | 1% low | CPU ms | GPU ms | draws | tris | render p50 ms | top sistemas (ms) |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|';
+  '| cenário | qualidade | FPS | p50 ms | p95 ms | p99 ms | 1% low | CPU ms | GPU ms | draws | tris | render p50 ms | shaders novos | top sistemas (ms) |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|';
 const first = results.find((r) => r.ok);
 const meta = {
   date: new Date().toISOString(),
-  mode: gpu ? 'gpu' : 'swiftshader',
+  mode: (gpu ? 'gpu' : 'swiftshader') + (args.cpuonly ? '-cpuonly' : ''),
   label,
   viewport: [width, height],
   secs,
@@ -171,6 +177,7 @@ const meta = {
   runs,
   seed,
   query: typeof args.query === 'string' ? args.query : '',
+  overrides,
   renderer: first?.renderer ?? null,
   userAgent: first?.userAgent ?? null,
 };

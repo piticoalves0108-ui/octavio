@@ -66,6 +66,8 @@ export function captureDrawCalls(ctx: GameContext, frames = 1): Promise<DrawCapt
   let total = 0;
   let shadow = 0;
   let tris = 0;
+  // conta os quadros realmente capturados (a ordem dos callbacks de rAF pode incluir 1 quadro a mais)
+  const frame0 = ctx.frame;
   r.renderBufferDirect = function (this: unknown, camera: unknown, scene: unknown, geometry: THREE.BufferGeometry, material: unknown, object: THREE.Object3D, group: { count: number } | null) {
     const isShadow = scene === null;
     const label = ownerLabel(ctx, object);
@@ -98,7 +100,7 @@ export function captureDrawCalls(ctx: GameContext, frames = 1): Promise<DrawCapt
       // espera o render deste quadro terminar (o rAF do Game roda antes do nosso)
       requestAnimationFrame(() => {
         r.renderBufferDirect = orig;
-        const n = Math.max(1, frames);
+        const n = Math.max(1, ctx.frame - frame0);
         const groups = [...map.values()]
           .map((g) => ({ ...g, draws: g.draws / n, shadowDraws: g.shadowDraws / n, triangles: Math.round(g.triangles / n), shadowTriangles: Math.round(g.shadowTriangles / n) }))
           .sort((a, b) => b.draws + b.shadowDraws - (a.draws + a.shadowDraws));

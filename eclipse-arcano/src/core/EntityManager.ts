@@ -4,7 +4,14 @@ import type { GameContext } from './context';
 import type { DamageInfo } from '../combat/Health';
 
 const CELL = 16;
-const cellKeyOf = (x: number, z: number) => `${Math.floor(x / CELL)},${Math.floor(z / CELL)}`;
+/** Sem célula (entidade fora das consultas espaciais). */
+const NO_CELL = -1;
+/**
+ * Chave numérica da célula (sem alocar strings por quadro): ±32768 células de 16 m em cada eixo.
+ * Posições não finitas caem numa célula própria (NaN) e não quebram o grid.
+ */
+const cellIndex = (cx: number, cz: number) => (cx + 0x8000) * 0x10000 + (cz + 0x8000);
+const cellKeyOf = (x: number, z: number) => cellIndex(Math.floor(x / CELL), Math.floor(z / CELL));
 
 export interface TierConfig {
   /** Até esta distância (m) do foco: tier 0 (todo frame). */
@@ -24,7 +31,7 @@ export interface TierConfig {
 export class EntityManager {
   readonly all: Entity[] = [];
   private byId = new Map<number, Entity>();
-  private grid = new Map<string, Set<Entity>>();
+  private grid = new Map<number, Set<Entity>>();
   private toRemove: Entity[] = [];
   private frame = 0;
   private dotBuffer: DamageInfo[] = [];
@@ -43,6 +50,7 @@ export class EntityManager {
     if (this.byId.has(e.id)) return e;
     this.all.push(e);
     this.byId.set(e.id, e);
+    if (e.radius > this.maxRadius) this.maxRadius = e.radius;
     if (!e.object3d.parent) this.ctx.scene.add(e.object3d);
     this.rehash(e);
     e.onAdded(this.ctx);
@@ -67,11 +75,12 @@ export class EntityManager {
   }
 
   private rehash(e: Entity) {
-    const key = e.queryable ? cellKeyOf(e.position.x, e.position.z) : '';
-    if (key === e.cellKey) return;
-    if (e.cellKey) this.grid.get(e.cellKey)?.delete(e);
-    e.cellKey = key;
-    if (!key) return;
+    const key = e.queryable ? cellKeyOf(e.position.x, e.position.z) : NO_CELL;
+    const cur = e.gridCell;
+    if (key === cur || (key !== key && cur !== cur)) return; // mesma célula (NaN incluso)
+    if (cur !== NO_CELL) this.grid.get(cur)?.delete(e);
+    e.gridCell = key;
+    if (key === NO_CELL) return;
     let set = this.grid.get(key);
     if (!set) {
       set = new Set();
@@ -86,27 +95,40 @@ export class EntityManager {
    */
   queryRadius(center: THREE.Vector3, radius: number, out: Entity[] = [], filter?: (e: Entity) => boolean): Entity[] {
     out.length = 0;
-    const minX = Math.floor((center.x - radius) / CELL);
-    const maxX = Math.floor((center.x + radius) / CELL);
-    const minZ = Math.floor((center.z - radius) / CELL);
-    const maxZ = Math.floor((center.z + radius) / CELL);
+    if (!(radius >= 0)) return out; // NaN/negativo: nada
+    // margem do maior raio de entidade: o centro de um chefe grande pode estar na célula vizinha
+    const reach = radius + this.maxRadius;
+    const minX = Math.floor((center.x - reach) / CELL);
+    const maxX = Math.floor((center.x + reach) / CELL);
+    const minZ = Math.floor((center.z - reach) / CELL);
+    const maxZ = Math.floor((center.z + reach) / CELL);
+    if ((maxX - minX + 1) * (maxZ - minZ + 1) > this.grid.size * 2) {
+      // raio enorme: percorrer as células ocupadas sai mais barato que varrer a área
+      for (const set of this.grid.values()) this.collect(set, center, radius, out, filter);
+      return out;
+    }
     for (let cx = minX; cx <= maxX; cx++) {
       for (let cz = minZ; cz <= maxZ; cz++) {
-        const set = this.grid.get(`${cx},${cz}`);
-        if (!set) continue;
-        for (const e of set) {
-          if (e.removed || !e.alive) continue;
-          const dx = e.position.x - center.x;
-          const dz = e.position.z - center.z;
-          const r = radius + e.radius;
-          if (dx * dx + dz * dz > r * r) continue;
-          if (filter && !filter(e)) continue;
-          out.push(e);
-        }
+        const set = this.grid.get(cellIndex(cx, cz));
+        if (set) this.collect(set, center, radius, out, filter);
       }
     }
     return out;
   }
+
+  private collect(set: Set<Entity>, center: THREE.Vector3, radius: number, out: Entity[], filter?: (e: Entity) => boolean) {
+    for (const e of set) {
+      if (e.removed || !e.alive) continue;
+      const dx = e.position.x - center.x;
+      const dz = e.position.z - center.z;
+      const r = radius + e.radius;
+      if (dx * dx + dz * dz > r * r) continue;
+      if (filter && !filter(e)) continue;
+      out.push(e);
+    }
+  }
+  /** Maior raio entre as entidades registradas (margem das consultas espaciais). */
+  private maxRadius = 0;
 
   nearest(center: THREE.Vector3, radius: number, filter?: (e: Entity) => boolean): Entity | null {
     const list = this.queryRadius(center, radius, this.tmpList, filter);
@@ -133,10 +155,12 @@ export class EntityManager {
     st.total = this.all.length;
     st.tier0 = st.tier1 = st.tier2 = st.tier3 = 0;
     const combat = this.ctx.sys.combat;
+    let maxR = 0;
 
     for (let i = 0; i < this.all.length; i++) {
       const e = this.all[i];
       if (e.removed) continue;
+      if (e.radius > maxR) maxR = e.radius;
       let tier: UpdateTier = 0;
       if (!e.alwaysActive) {
         const dx = e.position.x - this.focus.x;
@@ -180,17 +204,35 @@ export class EntityManager {
       }
       this.rehash(e);
     }
+    // limitado a 12 m: um raio absurdo não transforma toda consulta numa varredura do mapa
+    this.maxRadius = Math.min(maxR, 12);
 
     if (this.toRemove.length) {
       for (const e of this.toRemove) {
         const idx = this.all.indexOf(e);
         if (idx >= 0) this.all.splice(idx, 1);
-        this.byId.delete(e.id);
-        if (e.cellKey) this.grid.get(e.cellKey)?.delete(e);
-        e.cellKey = '';
-        e.dispose();
+        this.forget(e);
       }
       this.toRemove.length = 0;
+    }
+  }
+
+  /** Tira a entidade do registro e do grid e libera seus recursos. */
+  private forget(e: Entity) {
+    this.byId.delete(e.id);
+    const cell = e.gridCell;
+    if (cell !== NO_CELL) {
+      const set = this.grid.get(cell);
+      if (set) {
+        set.delete(e);
+        if (set.size === 0) this.grid.delete(cell);
+      }
+      e.gridCell = NO_CELL;
+    }
+    try {
+      e.dispose();
+    } catch (err) {
+      this.entityError(e, err);
     }
   }
 
@@ -211,11 +253,15 @@ export class EntityManager {
     for (const e of this.toRemove) {
       const idx = this.all.indexOf(e);
       if (idx >= 0) this.all.splice(idx, 1);
-      this.byId.delete(e.id);
-      if (e.cellKey) this.grid.get(e.cellKey)?.delete(e);
-      e.cellKey = '';
-      e.dispose();
+      this.forget(e);
     }
     this.toRemove.length = 0;
+  }
+
+  /** Diagnóstico (testes): células ocupadas no grid e entidades indexadas. */
+  gridStats() {
+    let indexed = 0;
+    for (const set of this.grid.values()) indexed += set.size;
+    return { cells: this.grid.size, indexed };
   }
 }

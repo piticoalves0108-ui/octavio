@@ -138,3 +138,12 @@ export class DissolveManager {
     this.jobs.length = 0;
   }
 }
+
+/**
+ * Variante "dissolução" de um material (gera o MESMO programa de shader das cópias usadas na
+ * morte). Usada pelo pré-aquecimento de shaders (src/perf/ShaderWarmup.ts): uma cópia mantida
+ * viva impede que o programa seja descartado (e recompilado) quando a última dissolução termina.
+ */
+export function dissolveVariant(src: THREE.Material): THREE.Material {
+  return makeClone(src, { value: 0 }, { value: new THREE.Color(0x9fd8ff) });
+}

@@ -714,5 +714,7 @@ export class Creature extends Entity {
     this.ai?.unregisterCreature(this);
     super.dispose();
     this.mat.dispose();
+    // textura de ossos da malha fundida (por instância)
+    this.rig.dispose?.();
   }
 }

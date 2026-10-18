@@ -420,7 +420,24 @@ const steps = {
     );
     await page.keyboard.up('KeyW');
     await page.keyboard.up('ShiftLeft');
-    const inside = (x, z) => Math.hypot(x - camp.x, z - camp.z) < 25;
+    // paliçada: raio = distância do marcador do portão ao centro − 2,5 m (o marcador fica fora do muro)
+    const RP = Math.max(12, gl - 2.5);
+    const inside = (x, z) => Math.hypot(x - camp.x, z - camp.z) < RP;
+    // pontos do corredor do portão: 5 m fora e 5 m dentro do muro, no eixo da abertura
+    const GOUT = { x: camp.x + out.x * (RP + 5), z: camp.z + out.z * (RP + 5) };
+    const GIN = { x: camp.x + out.x * (RP - 5), z: camp.z + out.z * (RP - 5) };
+    /** Próximo ponto de rota: direto se do mesmo lado; senão, entra/sai pelo eixo do portão. */
+    const route = (me, tg) => {
+      if (inside(me.x, me.z) === inside(tg.x, tg.z)) return null;
+      const rx = me.x - camp.x;
+      const rz = me.z - camp.z;
+      const along = rx * out.x + rz * out.z;
+      const lat = Math.abs(rx * out.z - rz * out.x);
+      const inCorridor = lat < 1.8 && along > RP - 6 && along < RP + 6;
+      const toIn = inside(tg.x, tg.z);
+      if (inCorridor) return toIn ? GIN : GOUT; // já alinhado: atravessa
+      return toIn ? GOUT : GIN; // alinha-se primeiro no lado em que está
+    };
     await shot('acampamento');
     // luta com entrada real
     const r0 = await ev(() => ({ ...window.__e2e.count }));
@@ -429,6 +446,7 @@ const steps = {
     let outcome = 'tempo';
     const t0 = await ev(() => window.__game.elapsed);
     let shotMid = false;
+    let campNavSamples = 0;
     for (;;) {
       const s = await ev(([cx, cz]) => {
         const g = window.__game;
@@ -454,9 +472,11 @@ const steps = {
           lock: pl.lockTarget ? pl.lockTarget.id : null,
           charge: g.sys.abilities.ultimateCharge,
           asc: g.sys.abilities.ascended,
+          campNav: g.sys.ai.enemies.some((e) => e.alive && e.zoneId === 'acampamento_corvos' && e.navPath),
           t: g.elapsed,
         };
       }, [camp.x, camp.z]);
+      if (s.campNav) campNavSamples++;
       if (!s.alive || s.st === 'dead') {
         outcome = 'jogador morreu';
         break;
@@ -466,14 +486,18 @@ const steps = {
         break;
       }
       if (s.t - t0 > 70) break;
-      // dentro × fora da paliçada: passa pela entrada primeiro
+      // dentro × fora da paliçada: passa pelo corredor do portão primeiro
       const me = await pinfo();
-      const viaGate = inside(me.x, me.z) !== inside(s.target.x, s.target.z) && Math.hypot(me.x - G.x, me.z - G.z) > 3;
-      if (viaGate) await aimAt(G.x, G.z);
+      const wp = route(me, s.target);
+      const viaGate = !!wp;
+      if (viaGate) await aimAt(wp.x, wp.z);
       else await aimAt(s.target.x, s.target.z);
       if (s.lock === null && s.target.d < 25 && !viaGate) await tap('Tab');
       if (viaGate) {
-        await hold('KeyW', 0.5);
+        // travar o alvo gira a câmera para ele: solta para seguir a rota
+        if (s.lock !== null) await tap('Tab');
+        await aimAt(wp.x, wp.z);
+        await hold('KeyW', Math.min(0.6, 0.15 * Math.hypot(wp.x - me.x, wp.z - me.z) + 0.1));
         continue;
       }
       if (s.target.d > 3.4) {
@@ -504,8 +528,16 @@ const steps = {
     check('marcador de mira no chão (Tempestade/Fenda)', !castIds.some((c) => c === 'lightningStorm' || c === 'dimensionalRift') || R.markers >= 1, { markers: R.markers });
     check('R ativa a Forma Ascendente', castIds.includes('ascendantForm'), { asc: R.asc });
     check('travar alvo (Tab)', d('player:lockOn') >= 1);
-    // voo gratuito na Forma Ascendente
-    if (R.asc) {
+    // voo gratuito na Forma Ascendente (se ela já acabou na luta, recarrega a Carga Arcana e ativa de novo)
+    let ascNow = R.asc;
+    if (!ascNow && castIds.includes('ascendantForm') && (await ev(() => window.__game.sys.player.entity.alive))) {
+      shortcut('Carga Arcana recarregada para testar o voo gratuito na Forma Ascendente');
+      await ev(() => window.__game.sys.abilities.addUltimateCharge(1000));
+      await waitUntil(() => window.__game.sys.abilities.cooldownRemaining('ascendantForm') <= 0, 30);
+      await tap('KeyR');
+      ascNow = await waitUntil(() => window.__game.sys.abilities.ascended, 3);
+    }
+    if (ascNow) {
       const before = await pinfo();
       await tap('KeyF');
       await page.keyboard.down('Space');
@@ -526,7 +558,7 @@ const steps = {
       });
       await waitSim(0.5);
     }
-    check(`luta terminou (${outcome})`, outcome !== 'tempo' || (await evCount('enemy:killed')) >= 1, { kills: (await evCount('enemy:killed')) - (r0['enemy:killed'] ?? 0), taken: Math.round(R.dmg.taken) });
+    check(`luta terminou (${outcome})`, outcome !== 'tempo' || (await evCount('enemy:killed')) >= 1, { kills: (await evCount('enemy:killed')) - (r0['enemy:killed'] ?? 0), taken: Math.round(R.dmg.taken), inimigosPeloPortao: campNavSamples });
     await shot('combate-fim');
   },
 
@@ -603,19 +635,26 @@ const steps = {
     // alguns segundos de luta real (ataques + habilidade), com o jogador imortal para não resetar a luta
     shortcut('jogador imortal durante a luta do chefe');
     await ev(() => (window.__game.sys.player.health.immortal = true));
-    for (let i = 0; i < 8; i++) {
+    // aproxima-se e golpeia até ferir o chefe (a introdução dele dura ~3 s de invulnerabilidade)
+    const tb0 = await ev(() => window.__game.elapsed);
+    let orbT = -9;
+    for (let i = 0; i < 80; i++) {
       const b = await ev(() => {
         const g = window.__game;
         const b = g.sys.ai.boss;
-        return b ? { x: b.position.x, z: b.position.z } : null;
+        const p = g.sys.player.entity.position;
+        return b ? { x: b.position.x, z: b.position.z, d: Math.hypot(b.position.x - p.x, b.position.z - p.z) - (b.radius ?? 2), f: b.health.current / b.health.max, t: g.elapsed } : null;
       });
-      if (!b) break;
+      if (!b || (b.f < 0.97 && b.t - tb0 > 4) || b.t - tb0 > 25) break;
       await aimAt(b.x, b.z);
       if (i === 0) await tap('Tab');
-      await hold('KeyW', 0.3);
-      await click('left');
-      if (i === 4) await tap('Digit1');
-      await waitSim(0.3);
+      if (b.d > 3) await hold('KeyW', Math.min(0.6, 0.1 * b.d + 0.1));
+      else await click('left');
+      if (b.d < 22 && b.t - orbT > 3) {
+        orbT = b.t;
+        await tap('Digit1');
+      }
+      await waitSim(0.2);
     }
     const hurt = await ev(() => {
       const b = window.__game.sys.ai.boss;
@@ -700,14 +739,21 @@ const steps = {
         if (Math.abs(y - P.y) > 1.5) continue;
         a.set(x, y + 1.1, z);
         if (g.physics.lineOfSight(a, b, true)) continue;
-        const near = g.physics.near ? g.physics.near(x, z, 1.2) : null;
-        if (near && near.size > 0) continue;
+        // ponto livre: a cápsula de um inimigo não pode nascer dentro de uma parede/móvel
+        const probe = new V(x, y, z);
+        const push = g.physics.resolveCapsule(probe, 0.6, 1.8);
+        if (push.collided || Math.hypot(probe.x - x, probe.z - z) > 0.05) continue;
         const path = g.sys.world.findPath({ x, z }, { x: P.x, z: P.z });
         if (!path || path.length < 4) continue;
         const e = g.sys.ai.spawnEnemy('corvo_saqueador', new V(x, y, z), { aggro: true });
         if (!e) return null;
         window.__navE = e;
         window.__navUsed = 0;
+        // amostra a rota a cada 50 ms (o caminho dura pouco quando o inimigo já contornou a casa)
+        clearInterval(window.__navSampler);
+        window.__navSampler = setInterval(() => {
+          if (window.__navE?.navPath) window.__navUsed++;
+        }, 50);
         return { x: +x.toFixed(1), z: +z.toFixed(1), d: +Math.hypot(x - P.x, z - P.z).toFixed(1), nodes: path.length };
       }
       return null;
@@ -721,16 +767,75 @@ const steps = {
         const g = window.__game;
         const e = window.__navE;
         const P = g.sys.player.entity.position;
-        if (e.navPath) window.__navUsed++;
         return { d: Math.hypot(e.position.x - P.x, e.position.z - P.z), alive: e.alive };
       });
       best = Math.min(best, r.d);
       if (r.d < 3.5 || !r.alive) break;
     }
-    const used = await ev(() => window.__navUsed);
+    const used = await ev(() => {
+      clearInterval(window.__navSampler);
+      return window.__navUsed;
+    });
     check('inimigo contorna as casas e alcança o jogador', best < 3.5, { menorDistancia: +best.toFixed(1), amostrasComCaminho: used });
     check('inimigo usou o grafo da vila (navPath)', used > 0, { used });
     await shot('nav-vila');
+    await ev(() => {
+      const g = window.__game;
+      if (window.__navE && !window.__navE.removed) g.entities.remove(window.__navE);
+    });
+    // acampamento: inimigo dentro da paliçada e jogador fora, do outro lado do muro → sai pelo portão
+    const C = await ev(() => {
+      const g = window.__game;
+      const V = g.sys.player.entity.position.constructor;
+      const gate = g.sys.world.placePosition('portao_corvos', new V());
+      const fire = g.sys.world.placePosition('corvos_fogueira', new V());
+      if (!gate || !fire) return null;
+      const R = Math.hypot(gate.x - fire.x, gate.z - fire.z) - 2.5;
+      const ux = (gate.x - fire.x) / (R + 2.5);
+      const uz = (gate.z - fire.z) / (R + 2.5);
+      // ~57° ao lado do portão: o muro fica entre os dois
+      const ang = Math.atan2(uz, ux) + 1.0;
+      return { cx: fire.x, cz: fire.z, R, px: fire.x + Math.cos(ang) * (R + 7), pz: fire.z + Math.sin(ang) * (R + 7), ex: fire.x + Math.cos(ang) * (R - 6), ez: fire.z + Math.sin(ang) * (R - 6) };
+    });
+    if (C) {
+      await teleport(C.px, C.pz, 0, 'fora da paliçada do acampamento (teste do portão)');
+      shortcut('acampamento esvaziado; inimigo agressivo criado dentro da paliçada, do outro lado do muro');
+      await ev(([c]) => {
+        const g = window.__game;
+        for (const e of g.sys.ai.enemies) if (e.alive && e.zoneId === 'acampamento_corvos') g.entities.remove(e);
+        const V = g.sys.player.entity.position.constructor;
+        const y = g.physics.groundHeight(c.ex, c.ez, g.heightfield.heightAt(c.ex, c.ez) + 1.6);
+        window.__navE = g.sys.ai.spawnEnemy('corvo_saqueador', new V(c.ex, y, c.ez), { aggro: true });
+        window.__navUsed = 0;
+        clearInterval(window.__navSampler);
+        window.__navSampler = setInterval(() => {
+          if (window.__navE?.navPath) window.__navUsed++;
+        }, 50);
+      }, [C]);
+      let bestC = 1e9;
+      let usedC = 0;
+      let maxR = 0;
+      for (let i = 0; i < 90; i++) {
+        await waitSim(0.5);
+        const r = await ev((c) => {
+          const g = window.__game;
+          const e = window.__navE;
+          const P = g.sys.player.entity.position;
+          return e ? { d: Math.hypot(e.position.x - P.x, e.position.z - P.z), alive: e.alive, r: Math.hypot(e.position.x - c.cx, e.position.z - c.cz) } : null;
+        }, C);
+        if (!r) break;
+        maxR = Math.max(maxR, r.r);
+        bestC = Math.min(bestC, r.d);
+        if (r.d < 3.5 || !r.alive) break;
+      }
+      usedC = await ev(() => {
+        clearInterval(window.__navSampler);
+        return window.__navUsed;
+      });
+      // ele sai pela abertura (rota pelo portão); alcançar o jogador depende de ainda vê-lo ao sair
+      check('inimigo do acampamento sai pela abertura da paliçada (rota pelo portão)', maxR > C.R + 1.5 && usedC > 0, { raioMax: +maxR.toFixed(1), paliçada: +C.R.toFixed(1), menorDistancia: +bestC.toFixed(1), alcançou: bestC < 3.5, amostrasComRota: usedC });
+      await shot('nav-acampamento');
+    }
     await ev(() => {
       const g = window.__game;
       if (window.__navE && !window.__navE.removed) g.entities.remove(window.__navE);
@@ -958,6 +1063,60 @@ const steps = {
     await fast(true);
     check('erro no render não para o loop', renderErr && (await ev(() => window.__gameCore.robustness.renderErrors)) >= 1 && (await state()) === 'playing');
     expectErrors = false;
+    // 5b) contexto WebGL perdido de verdade (WEBGL_lose_context) → pausa; restaurado → volta a desenhar
+    await fast(false);
+    const lost = await ev(() => {
+      const ext = window.__game.renderer.getContext().getExtension('WEBGL_lose_context');
+      if (!ext) return null;
+      window.__loseExt = ext;
+      ext.loseContext();
+      return true;
+    });
+    if (lost) {
+      await waitFrames(3);
+      const lp = await ev(() => ({ state: window.__game.state, lost: window.__gameCore.robustness.contextLost }));
+      await ev(() => window.__loseExt.restoreContext());
+      await waitUntil(() => !window.__game.renderer.getContext().isContextLost(), 5);
+      await ev(() => window.__game.setState('playing'));
+      await waitFrames(6);
+      const rp = await ev(() => ({ state: window.__game.state, calls: window.__game.renderer.info.render.calls, lost: window.__game.renderer.getContext().isContextLost() }));
+      check('contexto WebGL perdido pausa; restaurado volta a desenhar', lp.state === 'paused' && lp.lost >= 1 && !rp.lost && rp.calls > 0 && rp.state === 'playing', { perdido: lp, restaurado: rp });
+      await shot('contexto-restaurado');
+    }
+    await fast(true);
+    // 5c) cinemática: o mundo continua (relógio), a entrada de gameplay não move o jogador
+    await ev(() => window.__game.setState('cinematic'));
+    const k0 = await ev(() => ({ h: window.__game.clock.hours, x: window.__game.sys.player.entity.position.x, z: window.__game.sys.player.entity.position.z }));
+    await hold('KeyW', 1);
+    const k1 = await ev(() => ({ h: window.__game.clock.hours, x: window.__game.sys.player.entity.position.x, z: window.__game.sys.player.entity.position.z }));
+    await ev(() => window.__game.setState('playing'));
+    check("estado 'cinematic': simulação segue e o jogador não anda", k1.h !== k0.h && Math.hypot(k1.x - k0.x, k1.z - k0.z) < 0.3, { relogio: [k0.h, k1.h], andou: +Math.hypot(k1.x - k0.x, k1.z - k0.z).toFixed(2) });
+    // 5d) F9 na tela de derrota: carrega o rápido e volta a jogar vivo
+    if (!(await ev(() => window.__game.sys.save.hasSave('quick')))) {
+      await tap('F5');
+      await waitSim(0.3);
+    }
+    shortcut('dano de depuração para testar o F9 na tela de derrota');
+    await ev(() => {
+      const g = window.__game;
+      g.sys.player.health.immortal = false;
+      g.sys.player.health.invulnerable = 0;
+      g.sys.combat.applyDamage(g.sys.player.entity, { amount: 99999, type: 'physical' });
+    });
+    const deadOk = await waitUntil(() => window.__game.state === 'dead', 8);
+    await tap('F9');
+    const back = await waitUntil(() => window.__game.state === 'playing' && window.__game.sys.player.entity.alive, 15);
+    check('F9 na tela de derrota volta ao jogo com o mago vivo', deadOk && back, { morto: deadOk, voltou: back });
+    // 5e) sair para o menu durante a transição de novo jogo é ignorado (não fica menu + jogo rodando)
+    const tr = await ev(async () => {
+      const g = window.__game;
+      const n0 = window.__gameCore.robustness.ignoredTransitions;
+      const p = g.newGame();
+      g.quitToMenu();
+      await p;
+      return { state: g.state, ignored: window.__gameCore.robustness.ignoredTransitions - n0 };
+    });
+    check('sair para o menu durante a transição é ignorado', tr.state === 'playing' && tr.ignored >= 1, tr);
     // 6) voltar ao menu e começar de novo 2× sem duplicar listeners/entidades/malhas
     const cycles = [];
     for (let i = 0; i < 2; i++) {

@@ -1,6 +1,7 @@
 import type { GameContext, GameSystem } from '../core/context';
 import { SampleRing, nextDynamicScale, summarize, type FrameSummary } from './stats';
 import { captureDrawCalls, sceneSummary, type DrawCapture } from './sceneStats';
+import { ShaderWarmup } from './ShaderWarmup';
 
 /** Janela do overlay/relatório (quadros). */
 const WINDOW = 300;
@@ -83,6 +84,12 @@ export class PerfMonitor implements GameSystem {
   private dynFrames = 0;
   private dynTimer = 0;
 
+  // ---- pré-aquecimento de shaders (ver ShaderWarmup.ts; desligar com ?prewarm=0) ----
+  readonly warmup = new ShaderWarmup();
+  /** Motivo do próximo aquecimento ('' = nenhum) e quadros até rodá-lo. */
+  private warmReason = '';
+  private warmDelay = 0;
+
   init(ctx: GameContext) {
     this.ctx = ctx;
     this.visible = ctx.settings.data.showFps || ctx.params.has('debug');
@@ -92,6 +99,20 @@ export class PerfMonitor implements GameSystem {
       const t = Number(p || data.dynamicResolutionTarget || 45);
       this.setDynamicResolution(true, Number.isFinite(t) && t >= 20 ? t : 45);
     }
+    this.warmup.enabled = ctx.params.get('prewarm') !== '0';
+    // momentos de carga: fim do boot (menu), entrada no jogo (novo jogo/continuar) e troca de qualidade
+    ctx.events.on('game:state', ({ from, to }) => {
+      if (to === 'menu') this.requestWarmup('menu', 2);
+      else if (to === 'playing' && (from === 'menu' || from === 'boot' || from === 'loading')) this.requestWarmup('jogo', 3);
+    });
+    ctx.events.on('settings:changed', () => this.requestWarmup('qualidade', 2));
+  }
+
+  /** Agenda um pré-aquecimento de shaders para daqui a `frames` quadros (fora do caminho quente). */
+  requestWarmup(reason: string, frames = 1) {
+    if (!this.warmup.enabled) return;
+    this.warmReason = this.warmReason ? this.warmReason : reason;
+    this.warmDelay = Math.max(this.warmDelay, frames);
   }
 
   beginFrame() {
@@ -277,6 +298,13 @@ export class PerfMonitor implements GameSystem {
   // ======================================================================
   update(dt: number, ctx: GameContext) {
     if (ctx.input.pressed('perf')) this.visible = !this.visible;
+    if (this.warmReason && --this.warmDelay <= 0) {
+      const reason = this.warmReason;
+      this.warmReason = '';
+      const t = performance.now();
+      this.warmup.warm(ctx, reason);
+      this.measure('perf.warmup', performance.now() - t);
+    }
     if (this.dynamicEnabled) this.updateDynamic(dt, ctx);
     this.refresh -= dt;
     if (this.refresh > 0) return;
@@ -299,13 +327,16 @@ export class PerfMonitor implements GameSystem {
       .map(([k, v]) => `  ${k.padEnd(13)} ${v.toFixed(2)}ms`)
       .join('\n');
     const dyn = this.dynamicEnabled ? `  resol. dinâmica ${(this.dynamicScale * 100).toFixed(0)}% (alvo ${this.dynamicTargetFps} FPS)` : '';
+    const wh = this.warmup.history;
+    const lw = wh.length ? wh[wh.length - 1] : null;
+    const warm = !this.warmup.enabled ? '  shaders: pré-aquecimento desligado' : lw ? `  shaders: pré-aquec. (${lw.reason}) ${lw.ms.toFixed(0)}ms +${lw.programsAfter - lw.programsBefore} prog.` : '';
     this.el.textContent =
       `FPS ${r.fps.toFixed(0)}  (1% low ${r.low1Fps.toFixed(0)})\n` +
       `quadro ${r.avgFrameMs.toFixed(1)}ms  p50 ${r.p50FrameMs.toFixed(1)}  p95 ${r.p95FrameMs.toFixed(1)}  p99 ${r.p99FrameMs.toFixed(1)}  pico ${r.maxFrameMs.toFixed(0)}ms\n` +
       `cpu ${r.avgCpuMs.toFixed(1)}ms  (p95 ${r.p95CpuMs.toFixed(1)}ms)\n` +
       `draws ${r.drawCalls}  tris ${(r.triangles / 1000).toFixed(0)}k  geo ${r.geometries} tex ${r.textures} prog ${r.programs}\n` +
       `mem ${r.memoryMB ? r.memoryMB.toFixed(0) + 'MB' : 'n/d'}  entidades ${r.entities.total} (t0 ${r.entities.tier0} t1 ${r.entities.tier1} t2 ${r.entities.tier2} t3 ${r.entities.tier3})\n` +
-      `qualidade ${ctx.settings.data.quality}${dyn}\n` +
+      `qualidade ${ctx.settings.data.quality}${dyn}${warm}\n` +
       `sistemas (ms/quadro, média móvel):\n${sys}`;
   }
 }

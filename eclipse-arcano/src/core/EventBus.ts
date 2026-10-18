@@ -74,6 +74,17 @@ export interface GameEvents {
   'dialogue:end': { npcId: string; dialogueId: string };
   'npc:talked': { npcId: string };
   'npc:alarm': { position: Vector3; radius: number; reason: 'magic' | 'combat' | 'monster' };
+  /** Fala curta de um NPC (balão sobre a cabeça; a UI pode mostrar como legenda). */
+  'npc:bark': { npcId: string; name: string; text: string; position: Vector3; situation: string };
+  /** Missão rastreada no HUD mudou. */
+  'quest:tracked': { questId: string | null };
+  /** Opção escolhida num diálogo (postura: compassivo/pragmatico/arrogante/curioso). */
+  'dialogue:choice': { npcId: string; dialogueId: string; text: string; tone?: string };
+  /** Cinemática leve (introdução, memórias, fim de capítulo). */
+  'cinematic:start': { id: string };
+  'cinematic:end': { id: string; skipped: boolean };
+  /** Cartão de título (nome do chefe, capítulo). A UI desenha; sem UI, vira legenda. */
+  'cinematic:title': { title: string; subtitle?: string; duration: number };
 
   'location:discovered': { locationId: string; name: string };
   'location:entered': { locationId: string; name: string };

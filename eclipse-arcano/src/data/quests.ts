@@ -108,6 +108,8 @@ export const QUEST_POINTS: QuestPointDef[] = [
   {
     id: 'ravena_rendida',
     unique: 'ravena',
+    // sem a entidade (ex.: save antigo), a conversa acontece junto à tenda
+    place: 'corvos_lider',
     prompt: 'Falar com Ravena',
     kind: 'talk',
     name: 'Ravena',
@@ -502,6 +504,12 @@ export const QUESTS: Record<string, QuestDef> = {
       {
         id: 'proteger',
         nextStep: 'Derrube os caçadores antes que as flechas acertem o cervo.',
+        // recria os que faltarem (ex.: carregar um save no meio da luta)
+        spawns: [
+          { typeId: 'cacador_furtivo', at: 'clareira_cervo_luminoso', uniqueId: 'cervo_cacador_1', offset: [9, 6], aggro: true, when: [{ noFlag: 'cacadores_fugiram' }] },
+          { typeId: 'cacador_furtivo', at: 'clareira_cervo_luminoso', uniqueId: 'cervo_cacador_2', offset: [-8, 9], aggro: true, when: [{ noFlag: 'cacadores_fugiram' }] },
+          { typeId: 'cacador_furtivo', at: 'clareira_cervo_luminoso', uniqueId: 'cervo_cacador_3', offset: [3, -10], aggro: true, when: [{ noFlag: 'cacadores_fugiram' }] },
+        ],
         objectives: [
           { id: 'cacadores', kind: 'kill', typeId: 'cacador_furtivo', uniquePrefix: 'cervo_cacador_', count: 3, text: 'Derrotar os caçadores furtivos', when: [{ not: { flag: 'cacadores_fugiram' } }], marker: { place: 'clareira_cervo_luminoso', radius: 18 } },
           { id: 'fugiram', kind: 'flag', flag: 'cacadores_fugiram', text: 'Os caçadores fugiram', when: [{ flag: 'cacadores_fugiram' }] },
@@ -635,6 +643,25 @@ export const QUESTS: Record<string, QuestDef> = {
       },
     ],
   },
+};
+
+// ---------------------------------------------------------------------------
+// Ofertas de missões ("!" sobre quem oferece; condições espelham as opções de diálogo)
+// ---------------------------------------------------------------------------
+export interface QuestOffer {
+  /** NPC (id de npcs.ts) ou ponto de interação (QUEST_POINTS). */
+  npc?: string;
+  point?: string;
+  when?: Cond[];
+}
+
+export const QUEST_OFFERS: Record<string, QuestOffer> = {
+  q_martelo: { npc: 'doran', when: [{ quest: 'q_estranho', status: 'completed' }] },
+  q_cervo: { npc: 'ilsa', when: [{ quest: 'q_prologo', status: 'completed' }, { not: { mem: 'traiu', npc: 'ilsa', is: true } }] },
+  q_elyra: { npc: 'teodoro', when: [{ quest: 'q_prologo', status: 'completed' }] },
+  q_taverna: { npc: 'hilda', when: [{ quest: 'q_prologo', status: 'completed' }] },
+  q_lobos: { point: 'quadro_missoes' },
+  q_automato: { point: 'quadro_missoes' },
 };
 
 // ---------------------------------------------------------------------------

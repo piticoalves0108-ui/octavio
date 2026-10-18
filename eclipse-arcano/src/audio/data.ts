@@ -55,6 +55,7 @@ export const SFX_DEFS: Record<SfxId, SfxDef> = {
   ui_error: D('ui', 8, 0.45, 2, false, 1, 1, 0, 0.2),
   quest_start: D('ui', 10, 0.7, 1, false, 1, 1, 0.3, 0),
   quest_complete: D('ui', 10, 0.8, 1, false, 1, 1, 0.35, 0),
+  quest_update: D('ui', 8, 0.45, 1, false, 1, 1, 0.3, 0),
   level_up: D('ui', 10, 0.85, 1, false, 1, 1, 0.4, 0),
   discovery: D('ui', 9, 0.6, 1, false, 1, 1, 0.4, 0),
   pickup: D('ui', 6, 0.45, 3, false, 1, 1, 0.1, 1.2),
@@ -65,6 +66,8 @@ export const SFX_DEFS: Record<SfxId, SfxDef> = {
   heartbeat: D('ui', 8, 0.55, 1, false, 1, 1, 0, 0.2),
   // jogador
   potion: D('sfx', 6, 0.6, 2, true, 3, 30, 0.1, 1),
+  hurt: D('sfx', 8, 0.55, 2, false, 1, 1, 0.1, 1),
+  page: D('sfx', 4, 0.45, 2, true, 2, 25, 0.15, 1.5),
   footstep: D('sfx', 2, 0.32, 4, true, 3, 35, 0.12, 1.6),
   jump: D('sfx', 4, 0.4, 2, true, 3, 35, 0.1, 1.2),
   land: D('sfx', 5, 0.6, 2, true, 3, 45, 0.15, 1),
@@ -127,7 +130,7 @@ export const DEDUPE = { window: 0.07, radius: 2.5 };
 /** Mixagem geral. */
 export const MIX = {
   /** Ganho de cada barramento antes do volume do jogador. */
-  busTrim: { music: 0.55, sfx: 0.9, ambient: 0.75, ui: 0.8 } as Record<BusId, number>,
+  busTrim: { music: 0.85, sfx: 0.9, ambient: 0.75, ui: 0.8 } as Record<BusId, number>,
   /** Compressor do master. */
   comp: { threshold: -16, knee: 8, ratio: 3.5, attack: 0.006, release: 0.22 },
   /** Limitador final. */
@@ -202,6 +205,12 @@ export const MUSIC = {
   /** Duração (s) da troca 'silence' (fade). */
   silenceFade: 3,
 };
+
+/** Notas musicais simultâneas máximas por preset de qualidade (orçamento de nós da música). */
+export const MUSIC_NOTE_LIMIT: Record<QualityLevel, number> = { low: 40, medium: 56, high: 72, ultra: 88 };
+
+/** Intensidade musical do combate: base + por inimigo engajado (0..1). */
+export const MUSIC_INTENSITY = { combatBase: 0.35, perEnemy: 0.17, lowHealthBonus: 0.2, evalInterval: 0.25 };
 
 /** Vida baixa: batimento cardíaco abaixo desta fração. */
 export const LOW_HEALTH = { threshold: 0.25, interval: 0.85 };

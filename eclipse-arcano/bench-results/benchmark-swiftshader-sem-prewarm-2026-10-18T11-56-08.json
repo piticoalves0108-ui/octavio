@@ -1,0 +1,1310 @@
+{
+  "meta": {
+    "date": "2026-10-18T11:56:08.719Z",
+    "mode": "swiftshader",
+    "label": "sem-prewarm",
+    "viewport": [
+      800,
+      450
+    ],
+    "secs": 10,
+    "warmup": 3,
+    "runs": 2,
+    "seed": 1337,
+    "query": "prewarm=0",
+    "renderer": {
+      "vendor": "Google Inc. (Google)",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+    },
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36"
+  },
+  "results": [
+    {
+      "version": 4,
+      "ok": true,
+      "scenario": "combate",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 10,
+      "durationMs": 11875,
+      "gameSeconds": 0.75,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 0.84,
+      "low1Fps": 0.19,
+      "low01Fps": 0.19,
+      "frameMs": {
+        "mean": 1187.56,
+        "p50": 324.75,
+        "p95": 4308.58,
+        "p99": 5057.24,
+        "min": 4.9,
+        "max": 5244.4,
+        "worst1": 5244.4,
+        "worst01": 5244.4
+      },
+      "cpuMs": {
+        "mean": 673.51,
+        "p50": 9.1,
+        "p95": 3454.31,
+        "p99": 4344.3,
+        "min": 4.1,
+        "max": 4566.8,
+        "worst1": 4566.8,
+        "worst01": 4566.8
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 671.01,
+        "p50": 7.4,
+        "p95": 3448.64,
+        "p99": 4336.29,
+        "min": 2.6,
+        "max": 4558.2,
+        "worst1": 4558.2,
+        "worst01": 4558.2
+      },
+      "systems": {
+        "render": 671.01,
+        "bench": 17.99,
+        "world.render": 1.65,
+        "entities": 1.2,
+        "player": 0.42,
+        "camera": 0.21,
+        "env": 0.12,
+        "combat": 0.1,
+        "ai": 0.1,
+        "abilities": 0.06,
+        "world": 0.04,
+        "vfx": 0.04,
+        "inventory": 0.02,
+        "interaction": 0.01,
+        "save": 0.01,
+        "ui": 0.01,
+        "perf": 0.01,
+        "clock": 0,
+        "progression": 0,
+        "env.render": 0
+      },
+      "systemPeaks": {
+        "env": 0.2,
+        "player": 0.7,
+        "ai": 0.6,
+        "inventory": 0.1,
+        "entities": 7.4,
+        "world.render": 5.2,
+        "render": 4558.2,
+        "interaction": 0.1,
+        "save": 0.1,
+        "perf": 0.1,
+        "bench": 163,
+        "world": 0.1,
+        "camera": 1.9,
+        "combat": 0.5,
+        "vfx": 0.1,
+        "ui": 0.1,
+        "abilities": 0.5
+      },
+      "drawCalls": {
+        "mean": 56.1,
+        "p95": 58,
+        "max": 58
+      },
+      "triangles": {
+        "mean": 268804,
+        "p95": 272287,
+        "max": 272772
+      },
+      "memory": {
+        "before": {
+          "geometries": 86,
+          "textures": 17,
+          "programs": 33,
+          "heapMB": 61.6
+        },
+        "after": {
+          "geometries": 91,
+          "textures": 22,
+          "programs": 35,
+          "heapMB": 79.9
+        },
+        "heapMaxMB": 79.9,
+        "programsCompiled": 2,
+        "newPrograms": [
+          " [eclipse-rig-v1|dissolve]",
+          " [eclipse-rig-v1]"
+        ]
+      },
+      "entities": {
+        "total": 9.6,
+        "tier0": 9.6,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 10,
+        "particlesMax": 40,
+        "projectilesMax": 1,
+        "benchSpawned": 12,
+        "casts": 3,
+        "castFails": 0,
+        "kills": 2,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 29,
+        "terrainLevels": [
+          10,
+          10,
+          5,
+          4
+        ],
+        "scatterChunks": 70,
+        "scatterInstances": 1764,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 4.8,
+        "scatterPeakAssembleMs": 5.2,
+        "vegColliders": 383,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 1883,
+        "grassInstances": 2198,
+        "peakPreMs": 5.2
+      },
+      "scene": {
+        "meshes": 105,
+        "visible": 105,
+        "casters": 45,
+        "instanced": 14,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": null,
+      "env": {
+        "weather": "clear",
+        "rain": 0,
+        "night": 0,
+        "visibility": 432
+      },
+      "warmups": "desligado",
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 22.7,
+      "pageErrors": []
+    },
+    {
+      "version": 4,
+      "ok": true,
+      "scenario": "combate",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 16,
+      "durationMs": 10002,
+      "gameSeconds": 1.33,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 1.6,
+      "low1Fps": 0.35,
+      "low01Fps": 0.35,
+      "frameMs": {
+        "mean": 646.19,
+        "p50": 537.95,
+        "p95": 2108.4,
+        "p99": 2699.52,
+        "min": 4.7,
+        "max": 2847.3,
+        "worst1": 2847.3,
+        "worst01": 2847.3
+      },
+      "cpuMs": {
+        "mean": 237.37,
+        "p50": 8.15,
+        "p95": 1571.37,
+        "p99": 2214.99,
+        "min": 4.2,
+        "max": 2375.9,
+        "worst1": 2375.9,
+        "worst01": 2375.9
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 234.38,
+        "p50": 4.6,
+        "p95": 1568.72,
+        "p99": 2211.26,
+        "min": 3,
+        "max": 2371.9,
+        "worst1": 2371.9,
+        "worst01": 2371.9
+      },
+      "systems": {
+        "render": 234.381,
+        "bench": 1.969,
+        "entities": 1.563,
+        "world.render": 0.544,
+        "player": 0.463,
+        "env": 0.175,
+        "world": 0.1,
+        "abilities": 0.1,
+        "camera": 0.1,
+        "combat": 0.094,
+        "vfx": 0.081,
+        "ai": 0.069,
+        "inventory": 0.044,
+        "interaction": 0.025,
+        "perf": 0.013,
+        "clock": 0.006,
+        "env.render": 0.006,
+        "progression": 0,
+        "save": 0,
+        "ui": 0
+      },
+      "systemPeaks": {
+        "env": 1,
+        "player": 0.7,
+        "ai": 0.3,
+        "vfx": 0.2,
+        "entities": 5.7,
+        "camera": 0.7,
+        "bench": 14.6,
+        "world.render": 2.6,
+        "render": 2371.9,
+        "world": 0.5,
+        "abilities": 1.1,
+        "combat": 0.5,
+        "interaction": 0.1,
+        "inventory": 0.1,
+        "clock": 0.1,
+        "perf": 0.1,
+        "env.render": 0.1
+      },
+      "drawCalls": {
+        "mean": 58.7,
+        "p95": 61,
+        "max": 61
+      },
+      "triangles": {
+        "mean": 274252,
+        "p95": 282060,
+        "max": 283788
+      },
+      "memory": {
+        "before": {
+          "geometries": 86,
+          "textures": 17,
+          "programs": 33,
+          "heapMB": 62.5
+        },
+        "after": {
+          "geometries": 91,
+          "textures": 23,
+          "programs": 35,
+          "heapMB": 81.7
+        },
+        "heapMaxMB": 81.7,
+        "programsCompiled": 2,
+        "newPrograms": [
+          " [eclipse-rig-v1|dissolve]",
+          " [eclipse-rig-v1]"
+        ]
+      },
+      "entities": {
+        "total": 12.2,
+        "tier0": 12.3,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 11,
+        "particlesMax": 60,
+        "projectilesMax": 1,
+        "benchSpawned": 13,
+        "casts": 3,
+        "castFails": 8,
+        "kills": 2,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 28,
+        "terrainLevels": [
+          10,
+          9,
+          5,
+          4
+        ],
+        "scatterChunks": 70,
+        "scatterInstances": 1764,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 5,
+        "scatterPeakAssembleMs": 2.2,
+        "vegColliders": 383,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 1883,
+        "grassInstances": 2198,
+        "peakPreMs": 5.7
+      },
+      "scene": {
+        "meshes": 108,
+        "visible": 108,
+        "casters": 45,
+        "instanced": 14,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": null,
+      "env": {
+        "weather": "clear",
+        "rain": 0,
+        "night": 0,
+        "visibility": 431
+      },
+      "warmups": "desligado",
+      "notes": [],
+      "errors": [],
+      "run": 2,
+      "wallSeconds": 20.3,
+      "pageErrors": []
+    },
+    {
+      "version": 4,
+      "ok": true,
+      "scenario": "stress",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 13,
+      "durationMs": 10000,
+      "gameSeconds": 1.05,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 1.3,
+      "low1Fps": 0.36,
+      "low01Fps": 0.36,
+      "frameMs": {
+        "mean": 748.5,
+        "p50": 585.5,
+        "p95": 2701.22,
+        "p99": 2734.96,
+        "min": 6.7,
+        "max": 2743.4,
+        "worst1": 2743.4,
+        "worst01": 2743.4
+      },
+      "cpuMs": {
+        "mean": 322.55,
+        "p50": 6.9,
+        "p95": 2036.44,
+        "p99": 2059.53,
+        "min": 3.9,
+        "max": 2065.3,
+        "worst1": 2065.3,
+        "worst01": 2065.3
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 320.25,
+        "p50": 5.3,
+        "p95": 2034,
+        "p99": 2058,
+        "min": 2.5,
+        "max": 2064,
+        "worst1": 2064,
+        "worst01": 2064
+      },
+      "systems": {
+        "render": 320.254,
+        "bench": 4.731,
+        "entities": 1.085,
+        "world.render": 0.931,
+        "player": 0.577,
+        "env": 0.154,
+        "abilities": 0.085,
+        "camera": 0.077,
+        "vfx": 0.069,
+        "world": 0.054,
+        "inventory": 0.054,
+        "ai": 0.046,
+        "env.render": 0.008,
+        "clock": 0,
+        "combat": 0,
+        "interaction": 0,
+        "progression": 0,
+        "save": 0,
+        "ui": 0,
+        "perf": 0
+      },
+      "systemPeaks": {
+        "world": 0.1,
+        "player": 2.3,
+        "vfx": 0.2,
+        "inventory": 0.2,
+        "entities": 5.2,
+        "camera": 0.2,
+        "bench": 31.5,
+        "world.render": 2.5,
+        "render": 2064,
+        "env": 0.4,
+        "ai": 0.1,
+        "abilities": 0.9,
+        "env.render": 0.1
+      },
+      "drawCalls": {
+        "mean": 59.8,
+        "p95": 63,
+        "max": 63
+      },
+      "triangles": {
+        "mean": 271579,
+        "p95": 279835,
+        "max": 279836
+      },
+      "memory": {
+        "before": {
+          "geometries": 88,
+          "textures": 17,
+          "programs": 35,
+          "heapMB": 61
+        },
+        "after": {
+          "geometries": 95,
+          "textures": 23,
+          "programs": 38,
+          "heapMB": 64
+        },
+        "heapMaxMB": 63.9,
+        "programsCompiled": 3,
+        "newPrograms": [
+          " [eclipse-rig-v1|dissolve]",
+          "raio [onBeforeCompile(){}]",
+          " [eclipse-rig-v1]"
+        ]
+      },
+      "entities": {
+        "total": 9.8,
+        "tier0": 9.8,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 9,
+        "particlesMax": 61,
+        "projectilesMax": 0,
+        "benchSpawned": 12,
+        "casts": 3,
+        "castFails": 8,
+        "kills": 2,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 26,
+        "terrainLevels": [
+          10,
+          6,
+          6,
+          4
+        ],
+        "scatterChunks": 71,
+        "scatterInstances": 1783,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 7.4,
+        "scatterPeakAssembleMs": 4.8,
+        "vegColliders": 366,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 1866,
+        "grassInstances": 2198,
+        "peakPreMs": 9.4
+      },
+      "scene": {
+        "meshes": 108,
+        "visible": 108,
+        "casters": 45,
+        "instanced": 14,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": null,
+      "env": {
+        "weather": "storm",
+        "rain": 0.81,
+        "night": 1,
+        "visibility": 212
+      },
+      "warmups": "desligado",
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 22.4,
+      "pageErrors": []
+    },
+    {
+      "version": 4,
+      "ok": true,
+      "scenario": "stress",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 18,
+      "durationMs": 10001,
+      "gameSeconds": 1.55,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 1.8,
+      "low1Fps": 0.55,
+      "low01Fps": 0.55,
+      "frameMs": {
+        "mean": 526.77,
+        "p50": 374.55,
+        "p95": 1576.16,
+        "p99": 1767.71,
+        "min": 7.3,
+        "max": 1815.6,
+        "worst1": 1815.6,
+        "worst01": 1815.6
+      },
+      "cpuMs": {
+        "mean": 204.89,
+        "p50": 6.65,
+        "p95": 1191.57,
+        "p99": 1209.59,
+        "min": 4.6,
+        "max": 1214.1,
+        "worst1": 1214.1,
+        "worst01": 1214.1
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 202.12,
+        "p50": 4.75,
+        "p95": 1184.86,
+        "p99": 1205.05,
+        "min": 2.7,
+        "max": 1210.1,
+        "worst1": 1210.1,
+        "worst01": 1210.1
+      },
+      "systems": {
+        "render": 202.117,
+        "bench": 2.194,
+        "entities": 1.311,
+        "world.render": 0.522,
+        "camera": 0.389,
+        "player": 0.389,
+        "env": 0.2,
+        "abilities": 0.089,
+        "inventory": 0.089,
+        "vfx": 0.067,
+        "world": 0.05,
+        "combat": 0.044,
+        "ai": 0.028,
+        "perf": 0.017,
+        "env.render": 0.017,
+        "save": 0.006,
+        "clock": 0.006,
+        "interaction": 0,
+        "progression": 0,
+        "ui": 0
+      },
+      "systemPeaks": {
+        "env": 0.8,
+        "world": 0.1,
+        "player": 0.6,
+        "abilities": 0.7,
+        "vfx": 0.2,
+        "entities": 5,
+        "camera": 5.8,
+        "bench": 19.1,
+        "world.render": 2.1,
+        "render": 1210.1,
+        "ai": 0.1,
+        "combat": 0.1,
+        "inventory": 0.4,
+        "env.render": 0.1,
+        "clock": 0.1,
+        "perf": 0.2,
+        "save": 0.1
+      },
+      "drawCalls": {
+        "mean": 62.1,
+        "p95": 66,
+        "max": 66
+      },
+      "triangles": {
+        "mean": 273898,
+        "p95": 279965,
+        "max": 280742
+      },
+      "memory": {
+        "before": {
+          "geometries": 88,
+          "textures": 17,
+          "programs": 35,
+          "heapMB": 63.9
+        },
+        "after": {
+          "geometries": 96,
+          "textures": 24,
+          "programs": 39,
+          "heapMB": 84.1
+        },
+        "heapMaxMB": 84,
+        "programsCompiled": 4,
+        "newPrograms": [
+          " [eclipse-rig-v1|dissolve]",
+          "raio [onBeforeCompile(){}]",
+          " [eclipse-rig-v1]",
+          " [onBeforeCompile(){}]"
+        ]
+      },
+      "entities": {
+        "total": 12.1,
+        "tier0": 12.1,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 10,
+        "particlesMax": 46,
+        "projectilesMax": 1,
+        "benchSpawned": 13,
+        "casts": 4,
+        "castFails": 8,
+        "kills": 2,
+        "bossPhase": null,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 27,
+        "terrainLevels": [
+          10,
+          6,
+          7,
+          4
+        ],
+        "scatterChunks": 71,
+        "scatterInstances": 1783,
+        "scatterDraws": 9,
+        "scatterPeakBuildMs": 5.5,
+        "scatterPeakAssembleMs": 6.8,
+        "vegColliders": 453,
+        "structureMeshes": 23,
+        "visibleStructures": 23,
+        "gates": 8,
+        "colliders": 1953,
+        "grassInstances": 2198,
+        "peakPreMs": 7.6
+      },
+      "scene": {
+        "meshes": 111,
+        "visible": 111,
+        "casters": 45,
+        "instanced": 14,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": null,
+      "env": {
+        "weather": "storm",
+        "rain": 0.82,
+        "night": 1,
+        "visibility": 208
+      },
+      "warmups": "desligado",
+      "notes": [],
+      "errors": [],
+      "run": 2,
+      "wallSeconds": 20.4,
+      "pageErrors": []
+    },
+    {
+      "version": 4,
+      "ok": true,
+      "scenario": "chefe",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 12,
+      "durationMs": 10000,
+      "gameSeconds": 1.05,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 1.2,
+      "low1Fps": 0.27,
+      "low01Fps": 0.27,
+      "frameMs": {
+        "mean": 779.66,
+        "p50": 522.2,
+        "p95": 2490.73,
+        "p99": 3495.43,
+        "min": 10.2,
+        "max": 3746.6,
+        "worst1": 3746.6,
+        "worst01": 3746.6
+      },
+      "cpuMs": {
+        "mean": 167.77,
+        "p50": 7.2,
+        "p95": 876.1,
+        "p99": 1716.5,
+        "min": 2.7,
+        "max": 1926.6,
+        "worst1": 1926.6,
+        "worst01": 1926.6
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 165.61,
+        "p50": 5.5,
+        "p95": 872.64,
+        "p99": 1713.17,
+        "min": 1.5,
+        "max": 1923.3,
+        "worst1": 1923.3,
+        "worst01": 1923.3
+      },
+      "systems": {
+        "render": 165.608,
+        "world.render": 1.225,
+        "player": 0.767,
+        "bench": 0.642,
+        "interaction": 0.508,
+        "env": 0.167,
+        "abilities": 0.167,
+        "entities": 0.167,
+        "inventory": 0.083,
+        "world": 0.075,
+        "camera": 0.067,
+        "vfx": 0.033,
+        "ai": 0.017,
+        "combat": 0.008,
+        "perf": 0.008,
+        "env.render": 0.008,
+        "clock": 0,
+        "progression": 0,
+        "save": 0,
+        "ui": 0
+      },
+      "systemPeaks": {
+        "env": 0.6,
+        "world": 0.2,
+        "player": 4.5,
+        "vfx": 0.2,
+        "entities": 0.6,
+        "camera": 0.2,
+        "env.render": 0.1,
+        "world.render": 7.8,
+        "render": 1923.3,
+        "abilities": 1.2,
+        "combat": 0.1,
+        "interaction": 5.7,
+        "bench": 6.4,
+        "inventory": 0.8,
+        "ai": 0.1,
+        "perf": 0.1
+      },
+      "drawCalls": {
+        "mean": 37.2,
+        "p95": 38,
+        "max": 39
+      },
+      "triangles": {
+        "mean": 200583,
+        "p95": 204294,
+        "max": 205402
+      },
+      "memory": {
+        "before": {
+          "geometries": 81,
+          "textures": 12,
+          "programs": 32,
+          "heapMB": 59.6
+        },
+        "after": {
+          "geometries": 82,
+          "textures": 12,
+          "programs": 33,
+          "heapMB": 64.4
+        },
+        "heapMaxMB": 64.4,
+        "programsCompiled": 1,
+        "newPrograms": [
+          " [onBeforeCompile(){}]"
+        ]
+      },
+      "entities": {
+        "total": 2,
+        "tier0": 2,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 0,
+        "particlesMax": 56,
+        "projectilesMax": 0,
+        "benchSpawned": 0,
+        "casts": 3,
+        "castFails": 0,
+        "kills": 0,
+        "bossPhase": 1,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 18,
+        "terrainLevels": [
+          9,
+          2,
+          7,
+          0
+        ],
+        "scatterChunks": 70,
+        "scatterInstances": 1176,
+        "scatterDraws": 8,
+        "scatterPeakBuildMs": 3,
+        "scatterPeakAssembleMs": 3.7,
+        "vegColliders": 146,
+        "structureMeshes": 23,
+        "visibleStructures": 20,
+        "gates": 8,
+        "colliders": 1646,
+        "grassInstances": 2198,
+        "peakPreMs": 7.8
+      },
+      "scene": {
+        "meshes": 109,
+        "visible": 109,
+        "casters": 53,
+        "instanced": 9,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": null,
+      "env": {
+        "weather": "storm",
+        "rain": 0.81,
+        "night": 1,
+        "visibility": 241
+      },
+      "warmups": "desligado",
+      "notes": [],
+      "errors": [],
+      "run": 1,
+      "wallSeconds": 19,
+      "pageErrors": []
+    },
+    {
+      "version": 4,
+      "ok": true,
+      "scenario": "chefe",
+      "quality": "low",
+      "preset": {
+        "renderScale": 0.75,
+        "maxPixelRatio": 1,
+        "antialias": false,
+        "shadowMapSize": 0,
+        "shadowDistance": 0,
+        "viewDistance": 600,
+        "grassDensity": 0.3,
+        "grassRadius": 35,
+        "propDensity": 0.5,
+        "maxParticles": 600,
+        "maxDynamicLights": 2,
+        "bloom": false,
+        "lodBias": 0.6,
+        "rainDrops": 1500,
+        "maxActiveEnemies": 10,
+        "maxActiveNpcs": 12
+      },
+      "secs": 10,
+      "warmup": 3,
+      "seed": 1337,
+      "frames": 18,
+      "durationMs": 10713,
+      "gameSeconds": 1.72,
+      "resolution": {
+        "css": [
+          800,
+          450
+        ],
+        "drawingBuffer": [
+          600,
+          337
+        ],
+        "pixelRatio": 0.75
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "renderer": {
+        "vendor": "Google Inc. (Google)",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      },
+      "postFX": false,
+      "shadows": false,
+      "fps": 1.68,
+      "low1Fps": 0.46,
+      "low01Fps": 0.46,
+      "frameMs": {
+        "mean": 607.49,
+        "p50": 536.8,
+        "p95": 1334.34,
+        "p99": 1996.39,
+        "min": 2.9,
+        "max": 2161.9,
+        "worst1": 2161.9,
+        "worst01": 2161.9
+      },
+      "cpuMs": {
+        "mean": 136.83,
+        "p50": 5.8,
+        "p95": 906.29,
+        "p99": 1444.38,
+        "min": 2.3,
+        "max": 1578.9,
+        "worst1": 1578.9,
+        "worst01": 1578.9
+      },
+      "gpuMs": null,
+      "gpuTimer": "desligado",
+      "renderSubmitMs": {
+        "mean": 134.68,
+        "p50": 4.2,
+        "p95": 904.9,
+        "p99": 1441.62,
+        "min": 1.4,
+        "max": 1575.8,
+        "worst1": 1575.8,
+        "worst01": 1575.8
+      },
+      "systems": {
+        "render": 134.683,
+        "player": 0.806,
+        "env": 0.489,
+        "world.render": 0.467,
+        "abilities": 0.411,
+        "bench": 0.122,
+        "entities": 0.094,
+        "camera": 0.089,
+        "world": 0.05,
+        "vfx": 0.044,
+        "ai": 0.017,
+        "combat": 0.017,
+        "interaction": 0.017,
+        "inventory": 0.011,
+        "perf": 0.011,
+        "save": 0.006,
+        "env.render": 0.006,
+        "clock": 0,
+        "progression": 0,
+        "ui": 0
+      },
+      "systemPeaks": {
+        "env": 6.1,
+        "world": 0.2,
+        "player": 4.1,
+        "abilities": 5.3,
+        "ai": 0.1,
+        "camera": 0.2,
+        "perf": 0.1,
+        "world.render": 2.7,
+        "render": 1575.8,
+        "entities": 0.2,
+        "interaction": 0.1,
+        "combat": 0.1,
+        "inventory": 0.1,
+        "vfx": 0.1,
+        "bench": 1.1,
+        "save": 0.1,
+        "env.render": 0.1
+      },
+      "drawCalls": {
+        "mean": 36.8,
+        "p95": 40,
+        "max": 40
+      },
+      "triangles": {
+        "mean": 200942,
+        "p95": 207858,
+        "max": 207868
+      },
+      "memory": {
+        "before": {
+          "geometries": 80,
+          "textures": 12,
+          "programs": 32,
+          "heapMB": 61.2
+        },
+        "after": {
+          "geometries": 82,
+          "textures": 12,
+          "programs": 34,
+          "heapMB": 66.5
+        },
+        "heapMaxMB": 66.4,
+        "programsCompiled": 2,
+        "newPrograms": [
+          " [onBeforeCompile(){}]",
+          " [onBeforeCompile(){}]"
+        ]
+      },
+      "entities": {
+        "total": 2,
+        "tier0": 2,
+        "tier1": 0,
+        "tier2": 0,
+        "tier3": 0
+      },
+      "counts": {
+        "enemiesMax": 0,
+        "particlesMax": 40,
+        "projectilesMax": 0,
+        "benchSpawned": 0,
+        "casts": 4,
+        "castFails": 0,
+        "kills": 0,
+        "bossPhase": 1,
+        "npcs": 0
+      },
+      "world": {
+        "terrainNodes": 18,
+        "terrainLevels": [
+          9,
+          2,
+          7,
+          0
+        ],
+        "scatterChunks": 70,
+        "scatterInstances": 1176,
+        "scatterDraws": 8,
+        "scatterPeakBuildMs": 2.2,
+        "scatterPeakAssembleMs": 4.7,
+        "vegColliders": 146,
+        "structureMeshes": 23,
+        "visibleStructures": 20,
+        "gates": 8,
+        "colliders": 1646,
+        "grassInstances": 2198,
+        "peakPreMs": 5.4
+      },
+      "scene": {
+        "meshes": 114,
+        "visible": 114,
+        "casters": 53,
+        "instanced": 9,
+        "lights": 5,
+        "shadowLights": 0
+      },
+      "drawBreakdown": null,
+      "env": {
+        "weather": "storm",
+        "rain": 0.82,
+        "night": 1,
+        "visibility": 246
+      },
+      "warmups": "desligado",
+      "notes": [],
+      "errors": [],
+      "run": 2,
+      "wallSeconds": 18.9,
+      "pageErrors": []
+    }
+  ]
+}

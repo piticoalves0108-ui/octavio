@@ -793,6 +793,8 @@ export class Guardian extends Entity {
     this.light?.cancel();
     super.dispose();
     this.mat.dispose();
+    // textura de ossos da malha fundida (por instância)
+    this.rig.dispose?.();
   }
 
   debug() {

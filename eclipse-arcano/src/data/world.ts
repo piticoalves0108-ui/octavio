@@ -30,7 +30,8 @@ export const BIOME_INFO: Record<BiomeId, { name: string; grass: number; trees: n
   shore: { name: 'Margem', grass: 0.3, trees: 0.02, color: [0.62, 0.58, 0.42], surface: 'sand' },
   village: { name: 'Vila', grass: 0.55, trees: 0.03, color: [0.38, 0.45, 0.24], surface: 'dirt' },
   rocky: { name: 'Desfiladeiro', grass: 0.15, trees: 0.02, color: [0.5, 0.41, 0.33], surface: 'stone' },
-  corrupted: { name: 'Terra Corrompida', grass: 0.25, trees: 0.15, color: [0.27, 0.23, 0.27], surface: 'dirt' },
+  // cinza-cinzento com leve fundo violeta (o roxo forte fica para cristais/veios e a névoa)
+  corrupted: { name: 'Terra Corrompida', grass: 0.25, trees: 0.15, color: [0.25, 0.225, 0.215], surface: 'dirt' },
 };
 
 export type LocationKind = 'settlement' | 'dungeon' | 'ruins' | 'landmark' | 'camp' | 'tower' | 'region' | 'secret' | 'arena';
