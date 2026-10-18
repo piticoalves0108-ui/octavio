@@ -1,0 +1,247 @@
+@import "tailwindcss";
+
+/* ————————————————————————————————————————————————
+   Tokens de design
+   Madeira nobre, off-white quente, grafite, concreto e acentos terrosos.
+   ———————————————————————————————————————————————— */
+@theme {
+  --color-linen: #f4efe9;
+  --color-paper: #faf7f2;
+  --color-sand: #e8e0d5;
+  --color-concrete: #b8b0a5;
+  --color-stone: #6f685f;
+  --color-wood: #8b6f47;
+  --color-wood-deep: #6b5434;
+  --color-wood-light: #c4a77d;
+  --color-graphite: #2b2b2b;
+  --color-ink: #1b1a18;
+  --color-olive: #5a6b4f;
+  --color-terracotta: #c96e4b;
+  --color-terracotta-deep: #a4553a;
+
+  --font-display: var(--font-fraunces), "Iowan Old Style", "Times New Roman", serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.4s var(--ease-out-expo) infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.6);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(2.2);
+      opacity: 0;
+    }
+  }
+}
+
+/* ————————————————————————————————————————————————
+   Base
+   ———————————————————————————————————————————————— */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-linen);
+    color: var(--color-graphite);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-wood);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-wood);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  img {
+    user-select: none;
+  }
+
+  input[type="range"] {
+    accent-color: var(--color-wood);
+  }
+}
+
+/* ————————————————————————————————————————————————
+   Utilitários de composição
+   ———————————————————————————————————————————————— */
+@utility container-x {
+  width: 100%;
+  max-width: 1480px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8.5vw, 9.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  font-weight: 300;
+}
+
+@utility display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5.6vw, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  font-weight: 300;
+}
+
+@utility display-md {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  font-weight: 300;
+}
+
+/* Itálico editorial dentro dos títulos */
+@utility serif-accent {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+}
+
+/* Grade arquitetônica de fundo (linhas finas, como prancha técnica) */
+@utility blueprint {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-concrete) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-concrete) 35%, transparent) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* ————————————————————————————————————————————————
+   Camadas globais
+   ———————————————————————————————————————————————— */
+
+/* Granulação de papel sobre o site inteiro */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Cursor customizado ativo: esconde o nativo (menos em campos de texto) */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+html.has-cursor input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+html.has-cursor textarea,
+html.has-cursor select {
+  cursor: text !important;
+}
+
+/* Tela de carregamento: some imediatamente se o visitante já a viu nesta sessão */
+html.is-loaded .site-loader {
+  display: none;
+}
+
+/* Linha de cota (dimensão técnica) */
+.dim-line {
+  position: relative;
+  height: 1px;
+  background: currentColor;
+}
+.dim-line::before,
+.dim-line::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  width: 1px;
+  height: 11px;
+  background: currentColor;
+}
+.dim-line::before {
+  left: 0;
+}
+.dim-line::after {
+  right: 0;
+}
+
+/* Barra de rolagem discreta */
+@media (hover: hover) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-linen);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-concrete);
+    border: 3px solid var(--color-linen);
+    border-radius: 999px;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
