@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
-import { brand } from "@/data/brand";
+import { brand, isLiveSite } from "@/data/brand";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/api/"] }],
+    // Enquanto o domínio real não estiver configurado, a prévia fica fora dos buscadores
+    rules: isLiveSite ? [{ userAgent: "*", allow: "/", disallow: ["/api/"] }] : [{ userAgent: "*", disallow: "/" }],
     sitemap: `${brand.siteUrl.replace(/\/$/, "")}/sitemap.xml`,
   };
 }

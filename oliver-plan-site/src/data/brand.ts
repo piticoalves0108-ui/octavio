@@ -40,6 +40,14 @@ export interface Brand {
   stats: { value: number; suffix?: string; prefix?: string; label: string }[];
 }
 
+/**
+ * URL pública. Sem NEXT_PUBLIC_SITE_URL, usa o endereço da Vercel (prévia) e, por último, o domínio previsto.
+ * O site só pede indexação ao Google quando NEXT_PUBLIC_SITE_URL está definida (domínio real configurado).
+ */
+const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const siteUrlFor = (fallback: string) => process.env.NEXT_PUBLIC_SITE_URL ?? (vercelUrl ? `https://${vercelUrl}` : fallback);
+export const isLiveSite = Boolean(process.env.NEXT_PUBLIC_SITE_URL);
+
 const shared = {
   stats: [
     { value: 1200, suffix: "+", label: "ambientes entregues" },
@@ -61,7 +69,7 @@ export const brands: Record<BrandKey, Brand> = {
       "Móveis planejados de alto padrão com projeto 3D, marcenaria própria e montagem com acabamento de ateliê. Cozinhas, closets, home office, salas, quartos e banheiros sob medida.",
     // CONFIRMAR: o ano de 2016 vem do cadastro "Oliver Planejados" (Barueri) no Solutudo.
     founded: 2016,
-    siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.oliverplan.com.br",
+    siteUrl: siteUrlFor("https://www.oliverplan.com.br"),
     contact: {
       // CONFIRMAR: número provisório; troque pelo WhatsApp comercial da Oliver Plan.
       whatsapp: "5511900000000",
@@ -95,7 +103,7 @@ export const brands: Record<BrandKey, Brand> = {
     description:
       "Ateliê de móveis planejados de alto padrão: projeto autoral em 3D, marcenaria própria e montagem com precisão milimétrica. Cozinhas, closets, home office, salas, quartos e banheiros.",
     founded: 2012,
-    siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ateliefoma.com.br",
+    siteUrl: siteUrlFor("https://www.ateliefoma.com.br"),
     contact: {
       whatsapp: "5511900000000",
       whatsappDisplay: "(11) 90000-0000",

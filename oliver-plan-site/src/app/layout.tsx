@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import "lenis/dist/lenis.css";
 import "./globals.css";
-import { brand, fullAddress } from "@/data/brand";
+import { brand, fullAddress, isLiveSite } from "@/data/brand";
 import { Providers } from "@/components/Providers";
 import { Loader } from "@/components/motion/Loader";
 import { Cursor } from "@/components/motion/Cursor";
@@ -53,7 +53,8 @@ export const metadata: Metadata = {
     url: "/",
   },
   twitter: { card: "summary_large_image", title, description: brand.description },
-  robots: { index: true, follow: true },
+  // Prévias (sem domínio configurado) não são indexadas
+  robots: isLiveSite ? { index: true, follow: true } : { index: false, follow: false },
   formatDetection: { telephone: false },
 };
 

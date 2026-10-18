@@ -145,4 +145,4 @@ O Instagram da Oliver Plan não pôde ser acessado durante a criação, então a
 - [ ] **Horários do showroom**.
 - [ ] **Projetos, depoimentos, time e números** (1.200+ ambientes, 98% etc.) são **ilustrativos**. Troque pelos reais, com fotos autorizadas pelos clientes.
 - [ ] **Fotos**: as do Unsplash são de uso livre, mas não são da empresa. Substitua pelas fotos dos projetos reais.
-- [ ] Configure `NEXT_PUBLIC_SITE_URL` e, se quiser receber os leads num CRM, `LEADS_WEBHOOK_URL` e `NEWSLETTER_WEBHOOK_URL`.
+- [ ] Configure `NEXT_PUBLIC_SITE_URL` e, se quiser receber os leads num CRM, `LEADS_WEBHOOK_URL` e `NEWSLETTER_WEBHOOK_URL`. **Sem `NEXT_PUBLIC_SITE_URL` o site se comporta como prévia**: usa o endereço da Vercel nos links de compartilhamento e pede aos buscadores para não indexar (`noindex` e `robots.txt` bloqueando tudo).
