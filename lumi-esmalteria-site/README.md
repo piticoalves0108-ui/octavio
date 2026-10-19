@@ -57,15 +57,27 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · motion ·
 
 ## ⚠️ Confirmar com a Lumi antes de publicar
 
-Só **nome, WhatsApp e Instagram** foram confirmados. O resto é conteúdo-modelo, marcado para revisão:
+Só **nome, WhatsApp, Instagram e a cidade (Brasília-DF)** foram confirmados. O resto é conteúdo-modelo, escrito de forma genérica e marcado para revisão:
 
 - [ ] **Endereço** (o site mostra só "Brasília - DF"; o mapa usa a cidade). Preencher `brand.location.address`.
 - [ ] **Horários de funcionamento** (`brand.hours` e `brand.schedule`, usados no rodapé, contato e agendamento).
-- [ ] **Equipe**: nomes, especialidades e fotos são ilustrativos.
+- [ ] **Equipe**: nomes, especialidades e fotos são ilustrativos (`team` em `content.ts`, também usado no agendamento).
 - [ ] **Depoimentos**: ilustrativos; trocar por avaliações reais (com autorização).
-- [ ] **Fotos**: a galeria usa nail art desenhada em SVG e fotos de banco de imagens (Unsplash) para o spa. Substituir por fotos reais do Instagram quando possível.
-- [ ] **Serviços e durações**, **clube de assinatura** e **números** da seção "Por que a Lumi".
-- [ ] **Política de atendimento** (tolerância de atraso, remarcação, atendimento adaptado) na página de contato e no FAQ.
-- [ ] Domínio final em `NEXT_PUBLIC_SITE_URL` (libera a indexação no Google).
+- [ ] **Fotos**: a galeria usa nail art desenhada em SVG e fotos de banco de imagens (Unsplash) para o spa. Substituir por fotos reais do Instagram quando possível. A galeria é apresentada como inspiração, não como portfólio.
+- [ ] **Serviços e durações** (`services.ts`): nomes, o que inclui e tempo de cada atendimento.
+- [ ] **O espaço e biossegurança**: os textos de `/sobre` (valores, "O espaço") e da seção "Por que a Lumi" na home descrevem ambiente, mimos e higiene de forma genérica. Confirmar o que a Lumi oferece de fato (protocolo de esterilização, materiais descartáveis, bebidas, música, iluminação) antes de detalhar.
+- [ ] **Clube de assinatura** (`/clube`, `plans.ts`): planos, benefícios, condições e as respostas do FAQ são uma **proposta**. Nada disso foi definido pela Lumi; ajustar ou remover a página se o clube não existir.
+- [ ] **Cartela de cores** (`colors.ts`): nomes, coleções e acabamentos são ilustrativos, uma seleção para inspirar. Não representam uma linha própria nem o estoque da Lumi.
+- [ ] **Política de atendimento** (tolerância de atraso, remarcação e cancelamento, atendimento a gestantes e diabéticas) na página de contato, no agendamento e no FAQ. Hoje o texto só pede para avisar pelo WhatsApp com antecedência, sem prazos.
+- [ ] **Domínio**: ainda não definido; `lumiesmalteria.com.br`, citado acima, é só um exemplo e **não está confirmado**. Sem `NEXT_PUBLIC_SITE_URL`, `brand.siteUrl` usa o domínio de produção do projeto na Vercel (ou `http://localhost:3000` fora dela) e o site fica fora do Google. Definir o domínio final em `NEXT_PUBLIC_SITE_URL` (libera a indexação).
 
 Nenhum preço foi publicado: os valores são combinados pelo WhatsApp.
+
+## Qualidade
+
+O projeto não tem ESLint configurado. A verificação é feita com:
+
+```bash
+npx tsc --noEmit   # ou npm run typecheck
+npm run build
+```

@@ -66,7 +66,7 @@ export function ArticleBody({ post }: { post: Post }) {
           <ol className="mt-5 space-y-3 text-sm">
             {headings.map((h, i) => (
               <li key={h} className="flex gap-3">
-                <span className="w-5 shrink-0 font-display text-base italic leading-5 text-mauve lining-nums">{String(i + 1).padStart(2, "0")}</span>
+                <span className="w-5 shrink-0 font-display text-base italic leading-5 text-wine/80 lining-nums">{String(i + 1).padStart(2, "0")}</span>
                 <a href={`#${headingId(h)}`} className="text-ink-soft transition-colors hover:text-wine">
                   {/* O índice já numera: tira o "1." de subtítulos que vêm numerados */}
                   {h.replace(/^\d+\.\s*/, "")}

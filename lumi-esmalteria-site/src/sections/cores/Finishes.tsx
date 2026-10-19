@@ -50,7 +50,7 @@ export function Finishes() {
             <RevealText as="h2" text={"Quatro jeitos\nde *brilhar*"} className="display-lg mt-6 text-ink" />
           </div>
           <Reveal delay={0.15} className="lg:col-span-4 lg:col-start-9">
-            <p className="leading-relaxed text-muted">A mesma cor muda de personalidade com o acabamento. Na dúvida, a gente mostra as amostras na hora, com a luz do espaço.</p>
+            <p className="leading-relaxed text-muted">A mesma cor muda de personalidade com o acabamento. Na dúvida, a gente mostra as amostras no atendimento.</p>
           </Reveal>
         </div>
 

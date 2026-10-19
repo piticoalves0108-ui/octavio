@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import { WhatsAppIcon } from "@/components/ui/Icons";
 import { whatsappLink } from "@/lib/whatsapp";
+
+// Sem canonical: a 404 não deve apontar para nenhuma página (o layout não declara um)
+export const metadata: Metadata = {
+  title: "Página não encontrada",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

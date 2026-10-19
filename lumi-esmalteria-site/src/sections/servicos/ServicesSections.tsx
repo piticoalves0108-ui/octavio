@@ -1,4 +1,4 @@
-import { CalendarHeart, Coffee, HeartHandshake, Leaf, Move3d } from "lucide-react";
+import { Armchair, CalendarHeart, HeartHandshake, Leaf, Move3d } from "lucide-react";
 import { services } from "@/data/services";
 import { faq } from "@/data/content";
 import { brand } from "@/data/brand";
@@ -70,7 +70,7 @@ export function BottleSection() {
 
 const steps = [
   { icon: CalendarHeart, title: "Agendamento pelo WhatsApp", text: "Você conta o que deseja, escolhemos juntas o melhor dia e horário e combinamos tudo por mensagem." },
-  { icon: Coffee, title: "Acolhimento com café", text: "Chegou, sentou: um café passado na hora (ou um chá), ambiente perfumado e a cartela de cores em mãos." },
+  { icon: Armchair, title: "Acolhimento", text: "Chegou, sentou: um momento de pausa e a cartela de cores em mãos." },
   { icon: HeartHandshake, title: "Atendimento sem pressa", text: "Material esterilizado, técnica cuidadosa e tempo reservado só para você, do preparo ao top coat." },
   { icon: Leaf, title: "Dicas de cuidado para casa", text: "Você sai com orientações para fazer o resultado durar mais e lembrete para a próxima manutenção." },
 ];

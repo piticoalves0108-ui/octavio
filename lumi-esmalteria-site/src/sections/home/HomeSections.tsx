@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Clock, Droplets, Footprints, Gem, Hand, MapPin, Palette, Sparkles, Crown, CalendarHeart } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Clock, Droplets, Footprints, Gem, Hand, MapPin, Palette, Pause, Play, Sparkles, Crown, CalendarHeart } from "lucide-react";
+import { useReducedMotion } from "@/hooks/useMedia";
 import { brand, fullAddress } from "@/data/brand";
 import { featuredServices, type ServiceIcon } from "@/data/services";
 import { getPolish } from "@/data/colors";
@@ -102,9 +103,9 @@ export function WhyLumi() {
           {whyLumi.map((w, i) => (
             <Reveal key={w.title} delay={i * 0.08} className="bg-wine p-8">
               <p className="font-display text-6xl italic text-coral">{w.stat}</p>
-              <p className="eyebrow mt-2 text-blush/70">{w.statLabel}</p>
+              <p className="eyebrow mt-2 text-blush/85">{w.statLabel}</p>
               <h3 className="mt-8 font-display text-3xl">{w.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-blush/80">{w.text}</p>
+              <p className="mt-3 text-sm leading-relaxed text-blush/90">{w.text}</p>
             </Reveal>
           ))}
         </div>
@@ -161,7 +162,7 @@ export function GalleryTeaser() {
                   <div className="absolute inset-0 p-4 transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.05]">
                     <NailArt {...g.art!} label={g.title} />
                   </div>
-                  <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-full bg-cream/85 px-4 py-2 text-sm opacity-0 backdrop-blur transition-opacity duration-500 group-hover:opacity-100">
+                  <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-full bg-cream/85 px-4 py-2 text-sm opacity-0 backdrop-blur transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
                     <span className="font-display text-lg italic">{g.title}</span>
                     <ArrowUpRight className="h-4 w-4 text-wine" />
                   </div>
@@ -175,26 +176,55 @@ export function GalleryTeaser() {
   );
 }
 
-/** Depoimentos com troca automática (pausa no hover/foco) */
+/**
+ * Depoimentos com troca automática. Pausa no hover, no foco e pelo botão; com movimento
+ * reduzido não troca sozinho. Leitores de tela só anunciam a troca feita pela pessoa.
+ */
 export function Testimonials() {
+  const reduced = useReducedMotion();
   const [i, setI] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [playing, setPlaying] = useState(true);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  /** O foco no botão de pausa não conta: senão "Retomar" só valeria ao sair dele */
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const rotating = playing && !reduced && !hovered && !focused;
   const go = (d: number) => setI((v) => (v + d + testimonials.length) % testimonials.length);
   useEffect(() => {
-    if (paused) return;
+    if (!rotating) return;
     const t = setTimeout(() => go(1), 6500);
     return () => clearTimeout(t);
-  }, [i, paused]);
+  }, [i, rotating]);
   const t = testimonials[i];
+  const ctrl = "flex h-11 w-11 items-center justify-center rounded-full border border-wine/20 transition-colors hover:bg-wine hover:text-cream";
 
   return (
-    <section className="container-x py-24 text-center md:py-32" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)} aria-roledescription="carrossel" aria-label="Depoimentos">
+    <section
+      className="container-x py-24 text-center md:py-32"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={(e) => setFocused(e.target !== toggleRef.current)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
+      }}
+      aria-roledescription="carrossel"
+      aria-label="Depoimentos"
+    >
       <SectionLabel index="05" className="justify-center">
         Quem já viveu a Lumi
       </SectionLabel>
-      <div className="mx-auto mt-10 min-h-[15rem] max-w-4xl" aria-live="polite">
+      <div className="mx-auto mt-10 min-h-[15rem] max-w-4xl" aria-live={rotating ? "off" : "polite"}>
         <AnimatePresence mode="wait">
-          <motion.figure key={i} initial={{ opacity: 0, y: 20, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} exit={{ opacity: 0, y: -14, filter: "blur(6px)" }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}>
+          <motion.figure
+            key={i}
+            role="group"
+            aria-roledescription="depoimento"
+            aria-label={`${i + 1} de ${testimonials.length}`}
+            initial={{ opacity: 0, y: 20, filter: reduced ? "none" : "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: reduced ? "none" : "blur(0px)" }}
+            exit={{ opacity: 0, y: -14, filter: reduced ? "none" : "blur(6px)" }}
+            transition={{ duration: reduced ? 0.3 : 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
             <blockquote className="font-display text-[clamp(1.8rem,3.6vw,3rem)] italic leading-[1.15] text-balance">&ldquo;{t.quote}&rdquo;</blockquote>
             <figcaption className="mt-8 text-sm">
               <span className="font-medium">{t.name}</span> <span className="text-muted">· {t.service}</span>
@@ -203,17 +233,23 @@ export function Testimonials() {
         </AnimatePresence>
       </div>
       <div className="mt-8 flex items-center justify-center gap-5">
-        <button type="button" onClick={() => go(-1)} aria-label="Depoimento anterior" className="flex h-11 w-11 items-center justify-center rounded-full border border-wine/20 transition-colors hover:bg-wine hover:text-cream">
-          <ArrowLeft className="h-4 w-4" />
+        <button type="button" onClick={() => go(-1)} aria-label="Depoimento anterior" className={ctrl}>
+          <ArrowLeft className="h-4 w-4" aria-hidden />
         </button>
         <div className="flex gap-2">
           {testimonials.map((_, k) => (
             <button key={k} type="button" onClick={() => setI(k)} aria-label={`Depoimento ${k + 1}`} aria-current={k === i} className={cn("h-2 rounded-full transition-all duration-500", k === i ? "w-8 bg-wine" : "w-2 bg-wine/20")} />
           ))}
         </div>
-        <button type="button" onClick={() => go(1)} aria-label="Próximo depoimento" className="flex h-11 w-11 items-center justify-center rounded-full border border-wine/20 transition-colors hover:bg-wine hover:text-cream">
-          <ArrowRight className="h-4 w-4" />
+        <button type="button" onClick={() => go(1)} aria-label="Próximo depoimento" className={ctrl}>
+          <ArrowRight className="h-4 w-4" aria-hidden />
         </button>
+        {!reduced && (
+          <button ref={toggleRef} type="button" onClick={() => setPlaying((p) => !p)} aria-label={playing ? "Pausar depoimentos" : "Retomar depoimentos"} className={ctrl}>
+            {/* Ícones sem eventos de ponteiro: trocar o nó sob o mouse impediria o mouseleave de retomar */}
+            {playing ? <Pause className="pointer-events-none h-4 w-4" aria-hidden /> : <Play className="pointer-events-none h-4 w-4 translate-x-px" aria-hidden />}
+          </button>
+        )}
       </div>
     </section>
   );

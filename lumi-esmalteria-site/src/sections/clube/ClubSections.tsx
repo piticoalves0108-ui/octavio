@@ -16,7 +16,7 @@ const planMessage = (name: string) => `Olá, Lumi! Tenho interesse no Clube Lumi
 const reasons = [
   { icon: CalendarCheck, title: "Agenda com prioridade", text: "Seus horários reservados antes, sem correr atrás de vaga na semana corrida." },
   { icon: Sparkles, title: "Unhas sempre prontas", text: "Manutenção no ritmo certo: o esmalte nunca passa do ponto e a unha natural agradece." },
-  { icon: Gift, title: "Mimos de quem é da casa", text: "Benefícios exclusivos, café passado na hora e aquele cuidado de quem já conhece você." },
+  { icon: Gift, title: "Mimos de quem é da casa", text: "Benefícios pensados para membros e aquele cuidado de quem já conhece você." },
 ];
 
 /** A ideia do clube: cartões de membro e os motivos para assinar. */
@@ -93,7 +93,7 @@ export function ClubPlans() {
                   </div>
                   <span className="absolute right-6 top-6 inline-flex items-center gap-1.5 rounded-full bg-cream px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-wine md:right-8 md:top-8">
                     <Sparkles className="h-3 w-3" strokeWidth={2} aria-hidden />
-                    Mais escolhido
+                    Favorito da casa
                   </span>
                 </>
               )}
@@ -141,8 +141,8 @@ export function ClubPlans() {
 
 const steps = [
   { icon: MessageCircleHeart, title: "Escolha o seu plano", text: "Chame a gente no WhatsApp: apresentamos os valores, tiramos as dúvidas e indicamos o plano que combina com a sua rotina." },
-  { icon: CalendarHeart, title: "Reserve os seus horários", text: "Combinamos juntas os dias do mês. Como membro, você tem prioridade na agenda e pode deixar horários fixos." },
-  { icon: Coffee, title: "Aproveite o mês inteiro", text: "É só chegar, sentar e relaxar. Os benefícios se renovam a cada mês e a gente avisa antes de cada ciclo." },
+  { icon: CalendarHeart, title: "Reserve os seus horários", text: "Combinamos juntas os dias do mês. Como membro, você tem prioridade na hora de reservar." },
+  { icon: Coffee, title: "Aproveite o mês inteiro", text: "É só chegar, sentar e relaxar. Os benefícios acompanham o ciclo do seu plano, nas condições combinadas na adesão." },
 ];
 
 /** "Como funciona": três passos do clube. */
@@ -175,22 +175,23 @@ export function ClubSteps() {
   );
 }
 
+/** Respostas genéricas: as regras do clube são uma proposta a confirmar com a Lumi */
 const clubFaq = [
   {
-    q: "Como funciona a renovação mensal?",
-    a: "O Clube é uma assinatura mensal: os benefícios do seu plano se renovam a cada ciclo. Antes de cada renovação a gente manda uma mensagem pelo WhatsApp para confirmar os horários do mês seguinte. As condições de pagamento são combinadas na adesão.",
+    q: "Como funciona a renovação?",
+    a: "O Clube é pensado como uma assinatura mensal, com os benefícios do plano renovados a cada ciclo. Valores, forma de pagamento e regras de renovação são apresentados na adesão, pelo WhatsApp.",
   },
   {
     q: "O que são os horários prioritários?",
-    a: "Membros reservam antes da abertura da agenda geral e podem deixar dias e horários fixos combinados para o mês. Assim, aquele sábado de manhã ou o fim de tarde depois do trabalho ficam guardados para você.",
+    a: "Membros têm prioridade na hora de reservar, e os horários do mês podem ser combinados com antecedência. Assim, o horário que mais combina com a sua rotina fica mais fácil de garantir.",
   },
   {
     q: "Posso pausar ou cancelar a assinatura?",
-    a: "Pode, sem burocracia. Se for viajar ou precisar de uma pausa, é só avisar pelo WhatsApp antes da próxima renovação. O cancelamento também é feito por mensagem, com a mesma tranquilidade.",
+    a: "As condições de renovação, pausa e cancelamento são combinadas na adesão, pelo WhatsApp. Se a sua rotina mudar, é só conversar com a gente.",
   },
   {
     q: "Como uso os benefícios do plano?",
-    a: "Os serviços do plano são usados ao longo do mês, nos horários que você reservar, e os descontos valem nos atendimentos feitos aqui no espaço. Se algum imprevisto acontecer, fale com a gente: encontramos uma solução juntas.",
+    a: "Os serviços do plano são usados ao longo do mês, nos horários que você reservar. Os detalhes de cada benefício são explicados na adesão, e se algum imprevisto acontecer é só falar com a gente.",
   },
 ];
 

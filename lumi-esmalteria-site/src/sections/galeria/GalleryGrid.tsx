@@ -60,7 +60,7 @@ export function GalleryGrid() {
                   >
                     {active && <motion.span layoutId="gallery-pill" className="absolute inset-0 rounded-full bg-wine" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
                     <span className="relative">{f.label}</span>
-                    <span className={cn("relative font-display text-base italic leading-none", active ? "text-blush" : "text-mauve")}>{String(f.count).padStart(2, "0")}</span>
+                    <span className={cn("relative font-display text-base italic leading-none", active ? "text-blush" : "text-wine/80")}>{String(f.count).padStart(2, "0")}</span>
                   </button>
                 );
               })}

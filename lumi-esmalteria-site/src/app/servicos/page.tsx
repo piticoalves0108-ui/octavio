@@ -1,16 +1,19 @@
-import type { Metadata } from "next";
+import type { ResolvingMetadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { services } from "@/data/services";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ServiceCard } from "@/sections/servicos/ServiceCard";
 import { BottleSection, ProcessSteps, ServiceIndex, ServicesCTA, ServicesFAQ } from "@/sections/servicos/ServicesSections";
 
-export const metadata: Metadata = {
-  title: "Serviços",
-  description:
-    "Unhas tradicionais, esmaltação em gel, nail design, alongamento, SPA dos pés, blindagem e Dia de Noiva na Lumi Esmalteria, em Brasília. Agende pelo WhatsApp.",
-  alternates: { canonical: "/servicos" },
-};
+export function generateMetadata(_: unknown, parent: ResolvingMetadata) {
+  return pageMetadata(parent, {
+    title: "Serviços",
+    description:
+      "Unhas tradicionais, esmaltação em gel, nail design, alongamento, spa dos pés, blindagem e Dia de Noiva na Lumi Esmalteria, em Brasília. Agende pelo WhatsApp.",
+    path: "/servicos",
+  });
+}
 
 /** Página de serviços: cada serviço em detalhe, frasco 3D, jornada do atendimento, dúvidas e CTA. */
 export default function ServicosPage() {

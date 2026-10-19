@@ -49,7 +49,7 @@ export function ColorsCTA() {
             Traga as duas, <span className="serif-accent text-blush">a gente decide junto.</span>
           </h2>
           <p className="mt-6 max-w-lg leading-relaxed text-blush/85">
-            No atendimento você testa as amostras na luz do espaço, com calma. Conte pelo WhatsApp quais cores te chamaram atenção e reservamos o seu horário.
+            No atendimento você vê as amostras de perto, com calma. Conte pelo WhatsApp quais cores te chamaram atenção e reservamos o seu horário.
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
             <Button

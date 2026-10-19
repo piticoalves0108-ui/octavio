@@ -11,7 +11,8 @@
   --color-cream: #faf7f2;
   --color-ink: #1a1a1a;
   --color-ink-soft: #3a3433;
-  --color-muted: #6e5d59;
+  /* Escuro o suficiente para texto pequeno sobre blush (AA 4.5:1) */
+  --color-muted: #66524e;
   --color-mauve: #b9918a;
   --color-coral: #ff6b7a;
   --color-coral-deep: #d94557;

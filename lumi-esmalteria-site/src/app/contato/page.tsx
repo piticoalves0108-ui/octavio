@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
+import type { ResolvingMetadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { brand, fullAddress } from "@/data/brand";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ContactCTA, HoursAndSocial, LocationSection, PolicySection, WhatsAppHighlight } from "@/sections/contato/ContactSections";
 
-export const metadata: Metadata = {
-  title: "Contato",
-  description: `Fale com a ${brand.name} pelo WhatsApp ${brand.contact.whatsappDisplay}, veja os horários de atendimento, siga @${brand.contact.instagram} no Instagram e agende o seu horário em ${fullAddress}.`,
-  alternates: { canonical: "/contato" },
-};
+export function generateMetadata(_: unknown, parent: ResolvingMetadata) {
+  return pageMetadata(parent, {
+    title: "Contato",
+    description: `Fale com a ${brand.name} pelo WhatsApp ${brand.contact.whatsappDisplay}, veja os horários de atendimento, siga @${brand.contact.instagram} no Instagram e agende o seu horário em ${fullAddress}.`,
+    path: "/contato",
+  });
+}
 
 /** Página de contato: WhatsApp em destaque, horários, Instagram, localização e combinados. */
 export default function ContatoPage() {

@@ -14,11 +14,11 @@ interface Tile {
   visual: React.ReactNode;
 }
 
-/** Composições decorativas (sem fotos) para cada sensação do espaço */
+/** Composições decorativas (sem fotos) para cada sensação do espaço. Textos genéricos: detalhes do espaço a confirmar com a Lumi. */
 const tiles: Tile[] = [
   {
-    title: "Luz natural",
-    text: "Um ambiente claro e sereno, com luz suave que valoriza a cor real do esmalte e acalma o olhar.",
+    title: "Um espaço claro",
+    text: "Um ambiente claro e sereno, pensado para valorizar a cor do esmalte e acalmar o olhar.",
     icon: Sun,
     className: "sm:col-span-2 lg:col-span-4 lg:row-span-2",
     visual: (
@@ -34,8 +34,8 @@ const tiles: Tile[] = [
     ),
   },
   {
-    title: "Aromas",
-    text: "Notas florais e amadeiradas que recebem você na porta e ficam na lembrança.",
+    title: "Acolhimento",
+    text: "Um lugar acolhedor, que recebe você com calma e fica na lembrança.",
     icon: Flower2,
     className: "lg:col-span-2",
     visual: (
@@ -52,8 +52,8 @@ const tiles: Tile[] = [
     ),
   },
   {
-    title: "Café e chá",
-    text: "Um cafezinho passado ou um chá quente enquanto o gel cura. Detalhe faz diferença.",
+    title: "Mimos para a pausa",
+    text: "Pequenos mimos para a sua pausa enquanto o esmalte seca. Detalhe faz diferença.",
     icon: Coffee,
     className: "lg:col-span-2",
     visual: (
@@ -68,8 +68,8 @@ const tiles: Tile[] = [
     ),
   },
   {
-    title: "Playlist pensada",
-    text: "Som baixinho e escolhido a dedo: bossa, jazz e vozes suaves para desacelerar.",
+    title: "No seu ritmo",
+    text: "Um clima calmo e sem correria, para você desacelerar de verdade.",
     icon: Music2,
     className: "lg:col-span-3",
     visual: (
@@ -86,7 +86,7 @@ const tiles: Tile[] = [
   },
   {
     title: "Biossegurança",
-    text: "Materiais esterilizados em autoclave, embalagens seladas, lixas de uso único e kits individuais em todo atendimento.",
+    text: "Materiais higienizados e esterilizados, com um cuidado rigoroso em cada etapa do atendimento.",
     icon: ShieldCheck,
     className: "lg:col-span-3",
     dark: true,
@@ -120,11 +120,11 @@ export function AboutSpace() {
       <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
           <SectionLabel index="03">O espaço</SectionLabel>
-          <RevealText as="h2" text={"Um refúgio para os *cinco sentidos*."} className="display-lg mt-8 text-ink" />
+          <RevealText as="h2" text={"Um refúgio para os *sentidos*."} className="display-lg mt-8 text-ink" />
         </div>
         <Reveal delay={0.2} className="lg:col-span-5">
           <p className="text-lg leading-relaxed text-muted">
-            Pensamos em cada detalhe para que a sua hora aqui seja leve: o que você vê, sente, ouve e saboreia. E, por trás de tudo, um cuidado rigoroso com a sua segurança.
+            Pensamos em cada detalhe para que a sua hora aqui seja leve e acolhedora. E, por trás de tudo, um cuidado rigoroso com a sua segurança.
           </p>
         </Reveal>
       </div>

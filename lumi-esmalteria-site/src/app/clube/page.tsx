@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
+import type { ResolvingMetadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ClubCTA, ClubFAQ, ClubIntro, ClubPlans, ClubSteps } from "@/sections/clube/ClubSections";
 
-export const metadata: Metadata = {
-  title: "Clube Lumi",
-  description:
-    "Assinatura mensal de cuidados com as unhas na Lumi Esmalteria, em Brasília: agenda com prioridade, unhas sempre prontas e mimos de membro. Conheça os planos pelo WhatsApp.",
-  alternates: { canonical: "/clube" },
-};
+export function generateMetadata(_: unknown, parent: ResolvingMetadata) {
+  return pageMetadata(parent, {
+    title: "Clube Lumi",
+    description:
+      "Clube Lumi: assinatura mensal de cuidados com as unhas na Lumi Esmalteria, em Brasília. Conheça os planos e tire suas dúvidas pelo WhatsApp.",
+    path: "/clube",
+  });
+}
 
 /** Clube Lumi: a ideia da assinatura, os três planos, como funciona, dúvidas e convite. */
 export default function ClubePage() {

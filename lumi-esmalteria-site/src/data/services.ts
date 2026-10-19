@@ -78,7 +78,7 @@ export const services: Service[] = [
   },
   {
     id: "spa-dos-pes",
-    name: "SPA dos Pés",
+    name: "Spa dos Pés",
     short: "Escalda-pés aromático, esfoliação, máscara hidratante e massagem relaxante.",
     description:
       "Um ritual de pausa: imersão em água morna com sais e óleos, esfoliação, remoção de calosidades, máscara nutritiva e massagem, finalizando com a esmaltação.",
@@ -108,7 +108,7 @@ export const services: Service[] = [
     name: "Dia de Noiva",
     short: "Mãos e pés impecáveis para o grande dia, com prova de cor antes.",
     description:
-      "Pacote com teste de cor e formato, spa das mãos e dos pés e nail design sob medida para combinar com o vestido e o buquê. Atendimento para madrinhas sob consulta.",
+      "Pacote com prova de cor e formato, spa das mãos e dos pés e nail design sob medida para combinar com o vestido e o buquê. Atendimento para madrinhas sob consulta.",
     duration: 180,
     durationLabel: "≈ 3h",
     includes: ["Prova de cor e formato", "Spa das mãos e dos pés", "Nail design sob medida", "Kit de retoque"],

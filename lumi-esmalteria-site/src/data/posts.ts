@@ -57,7 +57,7 @@ export const posts: Post[] = [
   },
   {
     slug: "francesinha-moderna",
-    title: "Francesinha moderna: cinco jeitos de usar",
+    title: "Francesinha moderna: quatro jeitos de usar",
     excerpt: "Micro, colorida, invertida ou com glitter: o clássico ganhou versões para todos os estilos.",
     category: "Nail art",
     readingTime: "3 min",

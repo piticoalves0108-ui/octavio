@@ -458,7 +458,7 @@ function EmptyState({
         </button>
       </div>
       <a
-        href={whatsappLink(`Olá, Lumi! Estou procurando uma cor ${one} na linha ${collection} da cartela. Pode me ajudar a escolher?`)}
+        href={whatsappLink(`Olá, Lumi! Estou procurando uma cor ${one} nos tons ${collection}. Pode me ajudar a escolher?`)}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-5 inline-flex items-center gap-2 text-sm text-ink-soft underline decoration-wine/30 underline-offset-4 transition-colors duration-300 hover:text-wine hover:decoration-wine"

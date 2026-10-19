@@ -13,7 +13,9 @@ export const brand = {
   tagline: "Nail design & autocuidado",
   description:
     "Esmalteria em Brasília para quem trata as unhas como um ritual: nail design, esmaltação em gel, alongamento e spa dos pés num espaço leve e acolhedor. Agende pelo WhatsApp.",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? (vercelUrl ? `https://${vercelUrl}` : "https://www.lumiesmalteria.com.br"),
+  // Domínio final em NEXT_PUBLIC_SITE_URL (CONFIRMAR); na Vercel, o domínio de produção do projeto; fora disso, localhost.
+  // `||` e não `??`: o .env.example deixa a variável vazia. Sem barra final, para concatenar caminhos.
+  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL || (vercelUrl && `https://${vercelUrl}`) || "http://localhost:3000").replace(/\/+$/, ""),
   contact: {
     whatsapp: "5561996680622",
     whatsappDisplay: "(61) 99668-0622",

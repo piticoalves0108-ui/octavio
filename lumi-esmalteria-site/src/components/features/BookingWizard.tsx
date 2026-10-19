@@ -55,6 +55,15 @@ const WEEKDAYS = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "q
 const WEEKDAYS_SHORT = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
 const MONTHS = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 
+/** "Fechamos aos domingos. " a partir dos dias sem expediente em brand.schedule */
+const CLOSED_ON = ["aos domingos", "às segundas", "às terças", "às quartas", "às quintas", "às sextas", "aos sábados"];
+const CLOSED_NOTE = (() => {
+  const days = CLOSED_ON.filter((_, d) => !brand.schedule[d]);
+  if (!days.length) return "";
+  const list = days.length > 1 ? `${days.slice(0, -1).join(", ")} e ${days[days.length - 1]}` : days[0];
+  return `Fechamos ${list}. `;
+})();
+
 /** Observações rápidas (viram parte da mensagem) */
 const CARE_FLAGS = ["Primeira visita", "Gestante", "Diabética", "Alergia a algum produto", "Unhas sensíveis"];
 
@@ -508,7 +517,7 @@ export function BookingWizard() {
               <span className={cn("mt-1 text-xs", on ? "text-blush" : "text-muted", disabled && "text-muted/60")} aria-hidden>
                 {MONTHS[d.date.getMonth()].slice(0, 3)}
               </span>
-              <span className={cn("mt-2 whitespace-nowrap text-[0.6rem] uppercase tracking-[0.06em]", on ? "text-cream/80" : disabled ? "text-muted/70" : "text-wine/70")} aria-hidden>
+              <span className={cn("mt-2 whitespace-nowrap text-[0.6rem] uppercase tracking-[0.06em]", on ? "text-cream/80" : disabled ? "text-muted/70" : "text-wine/85")} aria-hidden>
                 {status}
               </span>
             </label>
@@ -532,7 +541,9 @@ export function BookingWizard() {
             para dividir em mais de um horário.
           </p>
         ) : (
-          <p>Domingos ficam fechados. Os dias riscados não têm horário para a duração dos seus serviços.</p>
+          <p>
+            {CLOSED_NOTE}Os dias riscados não têm horário para a duração dos seus serviços.
+          </p>
         )}
       </div>
     </fieldset>
@@ -676,7 +687,7 @@ export function BookingWizard() {
           className={cn(inputBase, nameError && "ring-2 ring-coral-deep")}
         />
         {nameError && (
-          <p id="bk-nome-erro" className="mt-2 text-sm text-coral-deep">
+          <p id="bk-nome-erro" className="mt-2 text-sm text-wine">
             {nameError}
           </p>
         )}
@@ -911,8 +922,8 @@ export function BookingWizard() {
                 {/* Mensagens de validação */}
                 <div aria-live="assertive" role="alert" className="min-h-0">
                   {error && (
-                    <p className="mt-6 flex items-center gap-2 rounded-2xl bg-coral/10 px-4 py-3 text-sm text-coral-deep ring-1 ring-coral-deep/30">
-                      <Info className="h-4 w-4 shrink-0" aria-hidden /> {error}
+                    <p className="mt-6 flex items-center gap-2 rounded-2xl bg-coral/10 px-4 py-3 text-sm text-wine ring-1 ring-coral-deep/30">
+                      <Info className="h-4 w-4 shrink-0 text-coral-deep" aria-hidden /> {error}
                     </p>
                   )}
                 </div>

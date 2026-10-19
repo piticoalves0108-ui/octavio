@@ -17,7 +17,7 @@ export function AboutValues() {
             <RevealText as="h2" text={"O que guia *cada* atendimento."} className="display-lg mt-8 text-ink" />
           </div>
           <Reveal delay={0.2} className="lg:col-span-5">
-            <p className="text-lg leading-relaxed text-muted">Quatro compromissos que você sente do primeiro café ao último brilho do top coat.</p>
+            <p className="text-lg leading-relaxed text-muted">Quatro compromissos que você sente do primeiro olá ao último brilho do top coat.</p>
           </Reveal>
         </div>
 
@@ -32,7 +32,7 @@ export function AboutValues() {
                     <span className="flex h-14 w-14 items-center justify-center rounded-full bg-blush/70 text-wine transition-colors duration-500 group-hover:bg-wine group-hover:text-cream">
                       <Icon className="h-6 w-6" strokeWidth={1.4} aria-hidden />
                     </span>
-                    <span className="font-display text-xl italic text-mauve">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-display text-xl italic text-wine/80">{String(i + 1).padStart(2, "0")}</span>
                   </div>
                   <h3 className="relative mt-10 font-display text-[1.9rem] leading-tight text-ink">{v.title}</h3>
                   <p className="relative mt-4 leading-relaxed text-muted">{v.text}</p>

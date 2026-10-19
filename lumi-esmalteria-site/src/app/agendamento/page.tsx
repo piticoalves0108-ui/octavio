@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { ResolvingMetadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Suspense } from "react";
 import { faq } from "@/data/content";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -7,12 +8,14 @@ import { RevealText } from "@/components/ui/RevealText";
 import { FAQ } from "@/components/features/FAQ";
 import { BookingWizard } from "@/components/features/BookingWizard";
 
-export const metadata: Metadata = {
-  title: "Agendamento",
-  description:
-    "Escolha serviço, profissional, dia e horário na Lumi Esmalteria, em Brasília, e envie o pedido pronto pelo WhatsApp. Confirmamos a disponibilidade pela conversa.",
-  alternates: { canonical: "/agendamento" },
-};
+export function generateMetadata(_: unknown, parent: ResolvingMetadata) {
+  return pageMetadata(parent, {
+    title: "Agendamento",
+    description:
+      "Escolha serviço, profissional, dia e horário na Lumi Esmalteria, em Brasília, e envie o pedido pronto pelo WhatsApp. Confirmamos a disponibilidade pela conversa.",
+    path: "/agendamento",
+  });
+}
 
 /** Perguntas que mais aparecem na hora de agendar (a política de atraso fica de fora até ser confirmada) */
 const bookingFaq = faq.filter((f) => /agendamento|gestantes|referência/i.test(f.q));

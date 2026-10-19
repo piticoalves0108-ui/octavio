@@ -12,7 +12,7 @@ export function AboutManifesto() {
           <Reveal className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-[radial-gradient(120%_90%_at_25%_10%,rgba(255,255,255,0.9),transparent_55%),linear-gradient(165deg,#F5EDE6_0%,#E8D5CE_60%,#D9BDB3_100%)] shadow-[0_30px_60px_-35px_rgba(139,41,66,0.35)]">
               <div className="absolute inset-x-[6%] top-[14%] h-[52%]">
-                <NailArt design="solid" shape="amendoada" colors={["#E3BFAF"]} length="media" label="Unhas amendoadas em nude rosé, a cor da casa" />
+                <NailArt design="solid" shape="amendoada" colors={["#E3BFAF"]} length="media" label="Unhas amendoadas em nude rosé" />
               </div>
               <div className="absolute inset-x-8 bottom-8">
                 <p className="font-display text-3xl italic leading-tight text-wine md:text-4xl">“Uma pausa que cabe na sua semana.”</p>

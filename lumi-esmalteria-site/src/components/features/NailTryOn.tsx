@@ -236,7 +236,7 @@ export function NailTryOn({ initialPolish = "nude-lumi", compact = false }: { in
         )}
 
         <div className="mt-auto flex flex-col gap-2 sm:flex-row">
-          <Button href={`/agendamento?cor=${polish.id}`} variant="wine" magnetic={false} className="flex-1">
+          <Button href={`/agendamento?cor=${polish.id}`} variant="wine" magnetic={false} className="sm:flex-1">
             Agendar com esta cor
           </Button>
           <Button
@@ -246,7 +246,7 @@ export function NailTryOn({ initialPolish = "nude-lumi", compact = false }: { in
             arrow={false}
             magnetic={false}
             icon={<WhatsAppIcon className="h-4 w-4" />}
-            className="flex-1"
+            className="sm:flex-1"
           >
             Enviar no WhatsApp
           </Button>

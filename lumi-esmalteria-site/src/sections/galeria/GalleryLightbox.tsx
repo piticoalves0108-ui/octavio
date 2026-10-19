@@ -98,7 +98,7 @@ export function GalleryLightbox({ items, index, baseIndex, onClose, onNavigate }
           <div className="relative mx-auto flex min-h-full max-w-[1320px] flex-col px-4 pb-10 pt-4 sm:px-8 lg:justify-center lg:py-10">
             <div className="relative z-10 mb-4 flex items-center justify-between lg:mb-6">
               <p className="font-display text-lg italic text-muted" aria-live="polite">
-                {pad(index + 1)} <span className="text-mauve">/ {pad(total)}</span>
+                {pad(index + 1)} <span className="text-wine/80">/ {pad(total)}</span>
               </p>
               <button
                 ref={closeRef}

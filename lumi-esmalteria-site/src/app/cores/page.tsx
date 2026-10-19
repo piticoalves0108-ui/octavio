@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { ResolvingMetadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { polishes } from "@/data/colors";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -7,12 +8,14 @@ import { ColorLibrary } from "@/sections/cores/ColorLibrary";
 import { Finishes } from "@/sections/cores/Finishes";
 import { ColorsCTA } from "@/sections/cores/ColorsCTA";
 
-export const metadata: Metadata = {
-  title: "Cartela de cores",
-  description:
-    "Experimente as cores da Lumi Esmalteria nas unhas antes de agendar: nudes, rosés, vermelhos, tendências e brilhos em acabamento cremoso, perolado, metálico ou glitter. Brasília.",
-  alternates: { canonical: "/cores" },
-};
+export function generateMetadata(_: unknown, parent: ResolvingMetadata) {
+  return pageMetadata(parent, {
+    title: "Cartela de cores",
+    description:
+      "Prove cores nas unhas antes de agendar na Lumi Esmalteria, em Brasília: nudes, rosés, vermelhos, tendências e brilhos em acabamento cremoso, perolado, metálico ou glitter.",
+    path: "/cores",
+  });
+}
 
 /** Cartela de cores: provador interativo, cartela completa filtrável e guia de acabamentos. */
 export default function CoresPage() {
@@ -21,7 +24,7 @@ export default function CoresPage() {
       <PageHeader
         eyebrow="Cartela de cores"
         title={"Escolha a cor,\n*a gente* pinta."}
-        intro={`${polishes.length} cores selecionadas a dedo, de nudes luminosos a vermelhos de cinema. Prove nas unhas aqui mesmo e chegue ao atendimento com a escolha feita.`}
+        intro={`Uma seleção de ${polishes.length} cores para inspirar, de nudes luminosos a vermelhos de cinema. Prove nas unhas aqui mesmo e leve a sua ideia para o atendimento.`}
       />
 
       <section aria-label="Provador de cores" className="container-x pb-4">

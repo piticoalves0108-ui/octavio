@@ -20,7 +20,7 @@ export function AboutTeam() {
           </div>
           <Reveal delay={0.2} className="lg:col-span-5">
             <p className="text-lg leading-relaxed text-muted">
-              Nail designers em formação contínua, cada uma com a sua especialidade, todas com o mesmo cuidado: escutar você antes de pegar no pincel.
+              Nail designers, cada uma com a sua especialidade, todas com o mesmo cuidado: escutar você antes de pegar no pincel.
             </p>
           </Reveal>
         </div>

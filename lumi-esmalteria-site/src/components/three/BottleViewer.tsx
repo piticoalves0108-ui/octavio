@@ -7,6 +7,7 @@ import { finishLabel, getPolish, polishes, type Finish } from "@/data/colors";
 import { PaintSwatch } from "@/components/features/PaintSwatch";
 import { Button } from "@/components/ui/Button";
 import { useNearViewport } from "@/hooks/useInView";
+import { useReducedMotion } from "@/hooks/useMedia";
 import { useWebGL } from "@/hooks/useWebGL";
 import { whatsappLink } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,8 @@ export function BottleViewer({ initialPolish = "nude-lumi", className }: { initi
   const [finish, setFinish] = useState<Finish>(polish.finish);
   const [goldCap, setGoldCap] = useState(false);
   const [auto, setAuto] = useState(true);
+  // Movimento reduzido: o frasco só gira quando a pessoa arrasta
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (near) setMounted(true);
@@ -40,7 +43,7 @@ export function BottleViewer({ initialPolish = "nude-lumi", className }: { initi
   return (
     <div ref={wrapper} className={cn("relative grid gap-6 lg:grid-cols-[1fr_340px]", className)}>
       <div className="relative min-h-[420px] overflow-hidden rounded-[32px] bg-[radial-gradient(70%_60%_at_50%_45%,#fff_0%,#f5ede6_55%,#e8d5ce_100%)]" data-cursor-label="Girar">
-        {webgl !== false && mounted && <ViewerCanvas color={polish.hex} finish={finish} goldCap={goldCap} visible={near} autoRotate={auto} onInteract={() => setAuto(false)} />}
+        {webgl !== false && mounted && <ViewerCanvas color={polish.hex} finish={finish} goldCap={goldCap} visible={near} autoRotate={auto && !reduced} onInteract={() => setAuto(false)} />}
         <p className="pointer-events-none absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-cream/85 px-4 py-2 text-xs text-muted backdrop-blur">
           <Move3d className="h-4 w-4" strokeWidth={1.5} /> Arraste para girar o frasco
         </p>

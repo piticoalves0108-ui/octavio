@@ -73,7 +73,7 @@ export function ServiceCard({ service, index, total }: { service: Service; index
                 <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden />
               </span>
               <span className="eyebrow text-muted">
-                Serviço {num} <span className="text-mauve">/ {String(total).padStart(2, "0")}</span>
+                Serviço {num} <span className="text-wine/80">/ {String(total).padStart(2, "0")}</span>
               </span>
             </div>
             <h2 id={`${service.id}-titulo`} className="display-md mt-6 text-balance text-ink">

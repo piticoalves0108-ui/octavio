@@ -1,7 +1,7 @@
 "use client";
 
-import { useId, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useId, useState, type ReactNode } from "react";
+import { motion } from "motion/react";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,20 +26,36 @@ export function FAQ({ items }: { items: { q: string; a: string }[] }) {
               >
                 {it.q}
                 <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-wine/20 transition-transform duration-500", isOpen && "rotate-45 bg-wine text-cream")}>
-                  <Plus className="h-4 w-4" />
+                  <Plus className="h-4 w-4" aria-hidden />
                 </span>
               </button>
             </h3>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div id={`${base}-a${i}`} role="region" aria-labelledby={`${base}-q${i}`} initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden">
-                  <p className="max-w-2xl pb-8 leading-relaxed text-muted">{it.a}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <Panel id={`${base}-a${i}`} labelledBy={`${base}-q${i}`} open={isOpen}>
+              <p className="max-w-2xl pb-8 leading-relaxed text-muted">{it.a}</p>
+            </Panel>
           </div>
         );
       })}
     </div>
+  );
+}
+
+/** Painel sempre no DOM (o aria-controls aponta para ele); fica `hidden` depois de recolher. */
+function Panel({ id, labelledBy, open, children }: { id: string; labelledBy: string; open: boolean; children: ReactNode }) {
+  const [collapsed, setCollapsed] = useState(!open);
+  return (
+    <motion.div
+      id={id}
+      role="region"
+      aria-labelledby={labelledBy}
+      hidden={!open && collapsed}
+      initial={false}
+      animate={open ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      onAnimationComplete={() => setCollapsed(!open)}
+      className="overflow-hidden"
+    >
+      {children}
+    </motion.div>
   );
 }

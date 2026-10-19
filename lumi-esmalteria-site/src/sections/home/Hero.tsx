@@ -65,7 +65,7 @@ export function Hero() {
           <RevealText as="h1" text={"Seu momento\nde *brilho*."} trigger="loaded" delay={0.1} className="display-xl text-ink [&_.serif-accent]:text-wine" />
           <motion.div initial={{ opacity: 0, y: 16 }} animate={loaded ? { opacity: 1, y: 0 } : {}} transition={{ duration: 1, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}>
             <p className="mt-6 max-w-md text-[1.02rem] leading-relaxed text-muted md:text-lg">
-              Nail design, esmaltação em gel, alongamento e spa dos pés num espaço leve, perfumado e sem pressa. O cuidado que suas mãos merecem.
+              Nail design, esmaltação em gel, alongamento e spa dos pés num espaço leve e sem pressa. O cuidado que suas mãos merecem.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button href={whatsappLink("Olá, Lumi! Gostaria de agendar um horário.")} external variant="wine" size="lg" arrow={false} icon={<WhatsAppIcon className="h-5 w-5" />}>

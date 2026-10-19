@@ -1,6 +1,6 @@
 /**
- * Cartela de esmaltes (dados de demonstração). Cada cor alimenta os swatches, o provador
- * de cores e o frasco 3D. `finish` muda o material: cremoso, perolado, metálico ou glitter.
+ * Cartela de esmaltes: seleção ilustrativa para inspirar (nomes e coleções a confirmar com a Lumi).
+ * Cada cor alimenta os swatches, o provador de cores e o frasco 3D. `finish` muda o material: cremoso, perolado, metálico ou glitter.
  */
 
 export type Finish = "cremoso" | "perolado" | "metalico" | "glitter";
@@ -15,7 +15,7 @@ export interface Polish {
 }
 
 export const polishes: Polish[] = [
-  { id: "nude-lumi", name: "Nude Lumi", hex: "#E3BFAF", finish: "cremoso", collection: "Nudes", mood: "A cor da casa: limpa, luminosa, combina com tudo." },
+  { id: "nude-lumi", name: "Nude Lumi", hex: "#E3BFAF", finish: "cremoso", collection: "Nudes", mood: "Nude limpo e luminoso, combina com tudo." },
   { id: "areia", name: "Areia", hex: "#D8C1A5", finish: "cremoso", collection: "Nudes", mood: "Bege quente para mãos que pedem discrição." },
   { id: "porcelana", name: "Porcelana", hex: "#F3EEE8", finish: "cremoso", collection: "Clássicos", mood: "Branco leitoso, delicado e atemporal." },
   { id: "rose-seda", name: "Rosé Seda", hex: "#D9A3A0", finish: "perolado", collection: "Rosas", mood: "Rosé com reflexo perolado de seda." },

@@ -1,5 +1,5 @@
 /**
- * Galeria. As peças de nail art são desenhadas em SVG pelo componente <NailArt />
+ * Galeria de inspirações. As peças de nail art são desenhadas em SVG pelo componente <NailArt />
  * (sempre carregam e trocam de cor). Fotos do Unsplash entram em spa e ambiente.
  * Troque pelas fotos reais da Lumi antes de publicar.
  */
@@ -30,7 +30,7 @@ export const galleryCategories: { id: GalleryCategory; label: string }[] = [
 const u = (id: string) => `https://images.unsplash.com/${id}`;
 
 export const gallery: GalleryItem[] = [
-  { id: "g1", title: "Nude Lumi", category: "unhas", art: { design: "solid", shape: "amendoada", colors: ["#E3BFAF"], length: "media" }, caption: "Esmaltação em gel no nude da casa." },
+  { id: "g1", title: "Nude Lumi", category: "unhas", art: { design: "solid", shape: "amendoada", colors: ["#E3BFAF"], length: "media" }, caption: "Esmaltação em gel em nude luminoso." },
   { id: "g2", title: "Francesinha fina", category: "nail-art", art: { design: "micro-french", shape: "amendoada", colors: ["#F3E6E0", "#1A1A1A"], length: "media" }, caption: "Micro francesinha preta sobre base leitosa." },
   { id: "g3", title: "Cromado rosé", category: "nail-art", art: { design: "chrome", shape: "stiletto", colors: ["#E7B8B5", "#FFFFFF"], length: "longa" }, caption: "Efeito espelho em alongamento stiletto." },
   { id: "g4", title: "Vermelho clássico", category: "unhas", art: { design: "solid", shape: "redonda", colors: ["#B3122E"], length: "curta" }, caption: "Curtinhas, redondas e impecáveis." },
