@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import type { Post } from "@/data/posts";
 import { finishLabel } from "@/data/colors";
+import { cn } from "@/lib/utils";
 import { whatsappLink } from "@/lib/whatsapp";
 import { RevealText } from "@/components/ui/RevealText";
 import { Reveal } from "@/components/ui/Reveal";
@@ -65,9 +66,10 @@ export function ArticleBody({ post }: { post: Post }) {
           <ol className="mt-5 space-y-3 text-sm">
             {headings.map((h, i) => (
               <li key={h} className="flex gap-3">
-                <span className="font-display italic text-mauve">{String(i + 1).padStart(2, "0")}</span>
+                <span className="w-5 shrink-0 font-display text-base italic leading-5 text-mauve lining-nums">{String(i + 1).padStart(2, "0")}</span>
                 <a href={`#${headingId(h)}`} className="text-ink-soft transition-colors hover:text-wine">
-                  {h}
+                  {/* O índice já numera: tira o "1." de subtítulos que vêm numerados */}
+                  {h.replace(/^\d+\.\s*/, "")}
                 </a>
               </li>
             ))}
@@ -80,7 +82,7 @@ export function ArticleBody({ post }: { post: Post }) {
           {post.body.map((block, i) => (
             <div key={i}>
               {block.heading && (
-                <h2 id={headingId(block.heading)} className="mt-14 scroll-mt-28 font-display text-[2rem] leading-tight text-ink md:text-[2.4rem]">
+                <h2 id={headingId(block.heading)} className="mt-14 scroll-mt-28 font-display text-[2rem] leading-tight text-ink lining-nums md:text-[2.4rem]">
                   {block.heading}
                 </h2>
               )}
@@ -137,12 +139,12 @@ export function PaletteStrip({ post }: { post: Post }) {
             Ver a cartela completa <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} aria-hidden />
           </TransitionLink>
         </div>
-        <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <ul className={cn("mt-10 grid grid-cols-2 gap-4", post.palette.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-4")}>
           {post.palette.map((hex) => {
             const polish = polishForHex(hex);
             const href = polish ? `/cores?cor=${polish.id}` : "/cores";
             return (
-              <li key={hex}>
+              <li key={hex} className="last:odd:col-span-2 sm:last:odd:col-span-1">
                 <TransitionLink href={href} className="group block h-full rounded-[24px] bg-cream p-3 transition-shadow duration-500 hover:shadow-[0_30px_60px_-35px_rgba(139,41,66,0.35)]">
                   <span
                     aria-hidden

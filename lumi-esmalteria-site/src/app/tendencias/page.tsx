@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { brand } from "@/data/brand";
 import { posts } from "@/data/posts";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Reveal } from "@/components/ui/Reveal";
@@ -6,12 +7,21 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { FeaturedPost, PostCard } from "@/sections/tendencias/PostCard";
 import { TrendsCTA } from "@/sections/tendencias/TrendsCTA";
 
-export const metadata: Metadata = {
-  title: "Tendências",
-  description:
-    "Cores da estação, nail art, cuidados para o esmalte durar e pequenos rituais de bem-estar: o diário da Lumi Esmalteria, em Brasília.",
-  alternates: { canonical: "/tendencias" },
-};
+const description =
+  "Cores da estação, nail art, cuidados para o esmalte durar e pequenos rituais de bem-estar: o diário da Lumi Esmalteria, em Brasília.";
+
+export async function generateMetadata(_: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  // openGraph/twitter substituem os do layout por inteiro: herdamos a imagem de compartilhamento
+  const { openGraph, twitter } = await parent;
+  const title = `Tendências · ${brand.name}`;
+  return {
+    title: "Tendências",
+    description,
+    alternates: { canonical: "/tendencias" },
+    openGraph: { type: "website", locale: "pt_BR", siteName: brand.name, title, description, url: "/tendencias", images: openGraph?.images },
+    twitter: { card: "summary_large_image", title, description, images: twitter?.images },
+  };
+}
 
 /** Tendências: o post mais recente em destaque e os demais numa grade editorial. */
 export default function TendenciasPage() {

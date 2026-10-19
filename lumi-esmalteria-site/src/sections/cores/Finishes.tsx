@@ -3,6 +3,10 @@ import { Reveal } from "@/components/ui/Reveal";
 import { RevealText } from "@/components/ui/RevealText";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { finishBackground } from "./finishStyles";
+import { FinishFilterButton } from "./FinishFilterButton";
+
+/** Bolinhas de cor por cartão (o resto vira "+N") */
+const MAX_DOTS = 5;
 
 const finishes: { id: Finish; text: string; ideal: string }[] = [
   { id: "cremoso", text: "Cor plena e uniforme, sem partículas. O clássico que vai do escritório ao jantar sem pedir licença.", ideal: "Dia a dia, nudes e vermelhos" },
@@ -75,13 +79,18 @@ export function Finishes() {
                   </p>
                   <div className="mt-auto pt-6">
                     <div className="flex items-center justify-between gap-3 border-t border-wine/10 pt-5">
-                      <span className="text-xs text-muted">
-                        {tones.length} {tones.length === 1 ? "cor" : "cores"} na cartela
-                      </span>
-                      <span className="flex flex-wrap justify-end -space-x-1.5" title={tones.map((t) => t.name).join(", ")}>
-                        {tones.map((t) => (
+                      <FinishFilterButton finish={f.id}>
+                        {tones.length === 1 ? "Ver a cor" : `Ver as ${tones.length} cores`}
+                      </FinishFilterButton>
+                      <span className="flex shrink-0 items-center -space-x-1.5" title={tones.map((t) => t.name).join(", ")}>
+                        {tones.slice(0, MAX_DOTS).map((t) => (
                           <span key={t.id} aria-hidden className="h-5 w-5 rounded-full ring-2 ring-cream" style={{ background: finishBackground(t.finish, t.hex) }} />
                         ))}
+                        {tones.length > MAX_DOTS && (
+                          <span aria-hidden className="relative grid h-5 min-w-5 place-items-center rounded-full bg-sand px-1 text-[0.6rem] tabular-nums text-muted ring-2 ring-cream">
+                            +{tones.length - MAX_DOTS}
+                          </span>
+                        )}
                       </span>
                     </div>
                   </div>

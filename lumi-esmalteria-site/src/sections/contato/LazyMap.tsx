@@ -58,7 +58,9 @@ export function LazyMap({ className }: { className?: string }) {
             </span>
             <div>
               <p className="font-display text-3xl text-ink">{fullAddress}</p>
-              <p className="mt-1 text-sm text-muted">{show ? "Carregando o mapa…" : "O mapa do Google só carrega quando você pedir."}</p>
+              <p className="mt-1 text-sm text-muted" aria-live="polite">
+                {show ? "Carregando o mapa…" : "O mapa do Google só carrega quando você pedir."}
+              </p>
             </div>
             {!show && (
               <button

@@ -38,7 +38,7 @@ export function PostCard({ post, headingLevel = "h3", className }: { post: Post;
       <TransitionLink href={`/tendencias/${post.slug}`} className="block rounded-[28px]">
         <div className="relative aspect-[5/4] overflow-hidden rounded-[28px] shadow-[0_30px_60px_-40px_rgba(139,41,66,0.35)]">
           <div className="absolute inset-0 transition-transform duration-[1400ms] ease-out-expo group-hover:scale-[1.05]">
-            <PostCover palette={post.palette} seed={postIndex(post.slug)} number={postNumber(post.slug)} label={`Capa ilustrada do post ${post.title}`} />
+            <PostCover palette={post.palette} seed={postIndex(post.slug)} number={postNumber(post.slug)} decorative />
           </div>
           <span className="absolute left-4 top-4 rounded-full bg-cream/85 px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-ink-soft backdrop-blur">
             {post.category}
@@ -65,7 +65,7 @@ export function FeaturedPost({ post }: { post: Post }) {
       <TransitionLink href={`/tendencias/${post.slug}`} className="grid overflow-hidden rounded-[36px] bg-sand lg:grid-cols-12">
         <div className="relative aspect-[4/3] overflow-hidden lg:col-span-7 lg:aspect-auto lg:min-h-[560px]">
           <div className="absolute inset-0 transition-transform duration-[1400ms] ease-out-expo group-hover:scale-[1.04]">
-            <PostCover palette={post.palette} seed={postIndex(post.slug)} number={postNumber(post.slug)} label={`Capa ilustrada do post ${post.title}`} />
+            <PostCover palette={post.palette} seed={postIndex(post.slug)} number={postNumber(post.slug)} decorative />
           </div>
         </div>
         <div className="flex flex-col justify-between gap-10 p-7 md:p-12 lg:col-span-5">

@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { nailPath, NAIL_LENGTH } from "@/components/features/NailArt";
 import { nailShapes } from "@/data/colors";
 import { cn } from "@/lib/utils";
+import { r2 } from "@/lib/random";
 
 /** Cor com transparência; tons muito escuros ficam mais leves para não "sujar" o fundo */
 function soft(hex: string, alpha: number) {
@@ -18,7 +19,22 @@ function soft(hex: string, alpha: number) {
  * Capa gerada a partir da paleta do post: cinco unhas em leque, cada uma numa cor da paleta,
  * sobre um fundo de manchas suaves das mesmas cores. `seed` varia o formato e a composição.
  */
-export function PostCover({ palette, seed = 0, className, label, number }: { palette: string[]; seed?: number; className?: string; label?: string; number?: string }) {
+export function PostCover({
+  palette,
+  seed = 0,
+  className,
+  label,
+  number,
+  decorative = false,
+}: {
+  palette: string[];
+  seed?: number;
+  className?: string;
+  label?: string;
+  number?: string;
+  /** Dentro de um link que já tem o título: a capa fica fora da leitura de tela */
+  decorative?: boolean;
+}) {
   const uid = useId().replace(/[:«»]/g, "");
   const shape = nailShapes[seed % nailShapes.length].id;
   const L = seed % 2 === 0 ? NAIL_LENGTH.media : NAIL_LENGTH.longa * 0.9;
@@ -47,8 +63,7 @@ export function PostCover({ palette, seed = 0, className, label, number }: { pal
         viewBox="-210 -250 420 300"
         preserveAspectRatio="xMidYMid meet"
         className="absolute inset-[6%] h-[88%] w-[88%] overflow-visible"
-        role="img"
-        aria-label={label ?? "Composição de unhas com as cores da paleta"}
+        {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": label ?? "Composição de unhas com as cores da paleta" })}
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.3 }}
@@ -74,8 +89,8 @@ export function PostCover({ palette, seed = 0, className, label, number }: { pal
 
         {angles.map((a, i) => {
           const s = sizes[i];
-          const x = Math.round(Math.sin((a * Math.PI) / 180) * 250 * 100) / 100;
-          const y = Math.round((40 - Math.cos((a * Math.PI) / 180) * 30 + Math.abs(a) * 0.4) * 100) / 100;
+          const x = r2(Math.sin((a * Math.PI) / 180) * 250);
+          const y = r2(40 - Math.cos((a * Math.PI) / 180) * 30 + Math.abs(a) * 0.4);
           const d = nailPath(shape, w, L);
           return (
             <g key={i} transform={`translate(${x} ${y}) rotate(${a}) scale(${s})`} filter={`url(#${uid}-shadow)`}>

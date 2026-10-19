@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import { brand } from "@/data/brand";
 import { getPost, posts } from "@/data/posts";
@@ -11,15 +11,28 @@ export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return { title: "Artigo não encontrado" };
+  // openGraph/twitter substituem os do layout por inteiro: herdamos a imagem de compartilhamento
+  const { openGraph, twitter } = await parent;
+  const title = `${post.title} · ${brand.name}`;
   return {
     title: post.title,
     description: post.excerpt,
     alternates: { canonical: `/tendencias/${post.slug}` },
-    openGraph: { type: "article", title: post.title, description: post.excerpt, url: `/tendencias/${post.slug}`, section: post.category },
+    openGraph: {
+      type: "article",
+      locale: "pt_BR",
+      siteName: brand.name,
+      title,
+      description: post.excerpt,
+      url: `/tendencias/${post.slug}`,
+      section: post.category,
+      images: openGraph?.images,
+    },
+    twitter: { card: "summary_large_image", title, description: post.excerpt, images: twitter?.images },
   };
 }
 

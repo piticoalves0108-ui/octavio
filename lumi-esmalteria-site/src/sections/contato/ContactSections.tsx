@@ -156,7 +156,7 @@ export function HoursAndSocial() {
 
 /** Localização em Brasília com mapa sob demanda. */
 export function LocationSection() {
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(brand.location.mapQuery)}`;
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(brand.location.address ? fullAddress : brand.location.mapQuery)}`;
   return (
     <section aria-labelledby="contato-local" className="container-x pt-24 md:pt-32">
       <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-14">
@@ -166,17 +166,20 @@ export function LocationSection() {
             {brand.location.city} <span className="serif-accent text-wine">- {brand.location.state}</span>
           </h2>
           <p className="mt-6 max-w-sm leading-relaxed text-muted">
-            Um espaço claro e acolhedor no coração do quadradinho. Para receber o endereço e a melhor forma de chegar, é só chamar a gente no WhatsApp.
+            Um espaço claro e acolhedor em {brand.location.city}. Para receber o endereço e a melhor forma de chegar, é só chamar a gente no WhatsApp.
           </p>
           <div className="mt-8 flex flex-col items-start gap-4">
             <Button href={whatsappLink("Olá, Lumi! Pode me enviar a localização do espaço?")} external variant="outline" icon={<MapPin className="h-4 w-4" strokeWidth={1.6} />}>
               Pedir a localização
             </Button>
-            <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-ink underline decoration-wine/40 underline-offset-4 transition-colors hover:text-wine">
-              Abrir no Google Maps <span className="sr-only">(abre em nova aba)</span>
-            </a>
+            {/* Só faz sentido abrir o Maps quando houver endereço confirmado */}
+            {brand.location.address && (
+              <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-ink underline decoration-wine/40 underline-offset-4 transition-colors hover:text-wine">
+                Abrir no Google Maps <span className="sr-only">(abre em nova aba)</span>
+              </a>
+            )}
           </div>
-          <p className="mt-6 text-xs text-muted">{fullAddress}</p>
+          {brand.location.address && <p className="mt-6 text-xs text-muted">{fullAddress}</p>}
         </div>
         <Reveal className="lg:col-span-8">
           <LazyMap className="aspect-[4/5] sm:aspect-[16/10]" />
@@ -186,9 +189,10 @@ export function LocationSection() {
   );
 }
 
+/** Combinados genéricos: os detalhes (tolerância, prazos) são confirmados com a Lumi antes de publicar */
 const policy = [
-  { icon: Clock, title: "Tolerância de 15 minutos", text: "Assim conseguimos manter a agenda pontual e o seu atendimento sem pressa." },
-  { icon: CalendarClock, title: "Remarque com 24h", text: "Para remarcar ou cancelar, avise com pelo menos 24 horas de antecedência pelo WhatsApp." },
+  { icon: Clock, title: "Pontualidade com carinho", text: "Chegar no horário marcado garante o seu atendimento completo e sem pressa. Se surgir um imprevisto, avise a gente pelo WhatsApp." },
+  { icon: CalendarClock, title: "Remarque pelo WhatsApp", text: "Precisa remarcar ou cancelar? Avise com a maior antecedência possível: assim o horário pode ficar com outra cliente." },
   { icon: MessageCircleHeart, title: "Confirmação na conversa", text: "Os pedidos feitos pelo site são confirmados no WhatsApp, de acordo com a agenda do dia." },
   { icon: HeartHandshake, title: "Cuidados especiais", text: "Gestantes, diabéticas e pessoas com alergias têm atendimento adaptado: é só contar para a gente." },
 ];
@@ -241,7 +245,7 @@ export function ContactCTA() {
           <h2 id="contato-cta" className="display-lg mt-6 text-balance text-ink">
             Pronta para a <span className="serif-accent text-wine">sua pausa?</span>
           </h2>
-          <p className="mt-6 max-w-md leading-relaxed text-muted">Escolha serviço, profissional, dia e horário em um minuto. O pedido chega pronto no nosso WhatsApp.</p>
+          <p className="mt-6 max-w-md leading-relaxed text-muted">Escolha o serviço, o dia, o horário e a profissional em poucos passos. O pedido chega pronto no nosso WhatsApp.</p>
           <div className="mt-9">
             <Button href="/agendamento" variant="wine" size="lg">
               Agendar meu horário

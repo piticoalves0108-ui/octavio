@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/agendamento" },
 };
 
-/** Perguntas que mais aparecem na hora de agendar */
-const bookingFaq = faq.filter((f) => /agendamento|atraso|gestantes/i.test(f.q));
+/** Perguntas que mais aparecem na hora de agendar (a política de atraso fica de fora até ser confirmada) */
+const bookingFaq = faq.filter((f) => /agendamento|gestantes|referência/i.test(f.q));
 
 /** Página de agendamento: assistente em seis passos que termina numa mensagem pronta no WhatsApp. */
 export default function AgendamentoPage() {
@@ -24,7 +24,7 @@ export default function AgendamentoPage() {
       <PageHeader
         eyebrow="Agendamento"
         title={"Reserve o *seu*\nmomento."}
-        intro="Escolha o cuidado, o dia e o horário que combinam com você. O pedido segue pronto pelo WhatsApp e a gente confirma a disponibilidade por lá, rapidinho."
+        intro="Escolha o cuidado, o dia e o horário que combinam com você. O pedido segue pronto pelo WhatsApp e a gente confirma a disponibilidade por lá."
         aside={
           <ol className="mt-8 grid grid-cols-3 gap-3 border-t border-wine/15 pt-6 text-sm">
             {["Escolha", "Envie", "Confirmamos"].map((s, i) => (
