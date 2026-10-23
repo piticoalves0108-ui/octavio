@@ -4,7 +4,7 @@ Site premium de hamburgueria artesanal, em dark mode com âmbar, cobre e brasa. 
 
 - **Stack:** React 19, Vite 8, Three.js r186, GSAP 3 (ScrollTrigger), Lenis e Tailwind CSS v4.
 - **SEO:** HTML pré-renderizado no build, meta tags, Open Graph, schema.org `Restaurant` com cardápio e horários, sitemap e robots.
-- **Perfil do cliente:** os links de pedido e de redes apontam para o Instagram [@delicias_nachapada](https://www.instagram.com/delicias_nachapada/). Veja [Antes de publicar](#antes-de-publicar).
+- **Perfil do cliente:** os links de pedido e de redes apontam para o Instagram [@delicias_nachapada](https://www.instagram.com/delicias_nachapada/). O cardápio (10 lanches, preços artesanal e industrial, e adicionais) e a anatomia do X-Tudo vêm da foto do cardápio enviada pelo cliente. Veja [Antes de publicar](#antes-de-publicar).
 
 ---
 
@@ -37,7 +37,7 @@ Para testar a qualidade do 3D, acrescente `?qualidade=low`, `?qualidade=medium` 
 
 ## Onde editar o conteúdo
 
-**Tudo fica em `src/data/site.ts`:** nome, contatos, endereço, horários, textos das seções, cardápio (com a receita do hambúrguer 3D de cada item), ingredientes, galeria e depoimentos. O SEO (title, description, Open Graph, JSON-LD, sitemap) é gerado a partir desse arquivo, então não precisa mexer no HTML.
+**Tudo fica em `src/data/site.ts`:** nome, contatos, endereço, horários, textos das seções, cardápio (com a receita do hambúrguer 3D de cada item, de baixo para cima), adicionais, a anatomia do X-Tudo, ingredientes, galeria e depoimentos. Para mudar um preço, edite `preco` (artesanal) e `precoIndustrial`. Para mudar um lanche no 3D, edite a lista `camadas`; os ingredientes disponíveis estão no tipo `Camada` no topo do arquivo. O SEO (title, description, Open Graph, JSON-LD, sitemap) é gerado a partir desse arquivo, então não precisa mexer no HTML.
 
 Os valores de exemplo estão marcados com `confirmar('campo', valor)`. O `npm run build` lista no terminal todos os que ainda faltam.
 
@@ -55,8 +55,7 @@ Os valores de exemplo estão marcados com `confirmar('campo', valor)`. O `npm ru
 | Links do iFood e do TikTok | vazios (ícones ocultos) |
 | Endpoint da newsletter | vazio: o formulário só simula o envio |
 | História, números da casa (anos, hambúrgueres servidos…) | exemplos |
-| Cardápio e preços (8 itens) | exemplos |
-| Ingredientes e fornecedores | exemplos |
+| Seção "Ingredientes" (blend, pão, cheddar inglês, bacon defumado…) | exemplos: ainda não batem com o cardápio real |
 | Depoimentos | **exemplos fictícios**: troque por avaliações reais (Google, iFood) com autorização antes de publicar |
 
 > **Pedido pelo WhatsApp:** preencha `contato.whatsapp` só com dígitos, com DDI e DDD (ex.: `5561999999999`). Todos os botões passam a abrir o WhatsApp com a mensagem pronta (e com o nome do lanche, nos cards do cardápio).

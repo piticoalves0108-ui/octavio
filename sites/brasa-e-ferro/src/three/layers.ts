@@ -67,7 +67,7 @@ const BUN_LOOK: Record<BunStyle, { colors: string[]; height: number; m: number; 
     colors: ['#5e2606', '#a85e1c', '#ecc88a', '#9a5a22'],
     height: 0.74,
     m: 2.2,
-    physical: { roughness: 0.34, clearcoat: 0.65, clearcoatRoughness: 0.32 },
+    physical: { roughness: 0.42, clearcoat: 0.3, clearcoatRoughness: 0.4 },
     dust: 0,
     heel: 0.27,
   },
@@ -243,12 +243,13 @@ export function bunBottom(style: BunStyle, ctx: BuildCtx): BuiltLayer {
 // Carnes
 // ---------------------------------------------------------------------------
 
-type PattyStyle = 'carne' | 'smash' | 'veggie'
+type PattyStyle = 'carne' | 'smash' | 'veggie' | 'costela'
 
 const PATTY_LOOK: Record<PattyStyle, { R: number; T: number; colors: string[]; params: [number, number, number, number]; lace: number }> = {
   carne: { R: 1.07, T: 0.27, colors: ['#5e3a24', '#3b2213', '#140a05', '#7c4727'], params: [1, 9.5, 0, 0], lace: 0 },
   smash: { R: 1.16, T: 0.11, colors: ['#563320', '#311a0c', '#120803', '#8a4f26'], params: [0, 0, 0, 1], lace: 1 },
   veggie: { R: 1.0, T: 0.24, colors: ['#9a6a2c', '#6a4318', '#24160a', '#b8853a'], params: [1, 9.5, 1, 0], lace: 0 },
+  costela: { R: 1.08, T: 0.29, colors: ['#5c2d1b', '#381a0e', '#120704', '#7a3d22'], params: [0, 0, 0, 0], lace: 0 },
 }
 
 export function patty(style: PattyStyle, ctx: BuildCtx): BuiltLayer {
@@ -291,19 +292,20 @@ export function patty(style: PattyStyle, ctx: BuildCtx): BuiltLayer {
 // Queijos
 // ---------------------------------------------------------------------------
 
-export function cheese(style: 'queijo' | 'queijo-branco', ctx: BuildCtx): BuiltLayer {
+export function cheese(style: 'queijo' | 'queijo-branco' | 'mussarela', ctx: BuildCtx): BuiltLayer {
   const white = style === 'queijo-branco'
+  const mozza = style === 'mussarela'
   const size = white ? 1.82 : 2.0
-  const thick = white ? 0.055 : 0.034
+  const thick = white ? 0.055 : mozza ? 0.03 : 0.034
   const g = ctx.s.grid
   const geo = new BoxGeometry(size, thick, size, g, 1, g)
   geo.translate(0, thick / 2, 0)
-  const Rp = ctx.below * (white ? 0.98 : 0.8)
+  const Rp = ctx.below * (white ? 0.98 : mozza ? 0.84 : 0.8)
   const rot = (ctx.rand() - 0.5) * 0.9 + Math.PI / 4
   const cr = Math.cos(rot)
   const sr = Math.sin(rot)
   const seed = ctx.seed + 21
-  const droop = white ? 0.35 : 1
+  const droop = white ? 0.35 : mozza ? 0.55 : 1
 
   const corner = size * 0.6
   const shape = (v: Vector3) => {
@@ -332,12 +334,14 @@ export function cheese(style: 'queijo' | 'queijo-branco', ctx: BuildCtx): BuiltL
 
   const mat = foodMaterial('cheese', ctx.q, white
     ? { colors: ['#f2e3bd', '#a8773a'], params: [0.55, 1, 0, 0], seed: ctx.seed, physical: { roughness: 0.55, clearcoat: 0.15 } }
-    : { colors: ['#f0a020', '#c97a10'], params: [0.12, 0, 0, 0], seed: ctx.seed })
+    : mozza
+      ? { colors: ['#e8c97a', '#c8954a'], params: [0.3, 0, 0, 0], seed: ctx.seed, physical: { roughness: 0.38, clearcoat: 0.35, clearcoatRoughness: 0.3 } }
+      : { colors: ['#f0a020', '#c97a10'], params: [0.12, 0, 0, 0], seed: ctx.seed })
   const group = new Group()
   group.add(new Mesh(geo, mat))
 
   // Gotas de queijo escorrendo nos cantos (só o cheddar).
-  if (!white) {
+  if (!white && !mozza) {
     const corners = [[1, 1], [-1, 1], [1, -1], [-1, -1]].filter(() => ctx.rand() > 0.35)
     for (const [cx, cz] of corners) {
       const tip = new Vector3(cx * size * 0.46, 0, cz * size * 0.46)
@@ -526,6 +530,7 @@ const SAUCE_COLORS: Record<string, string> = {
   paprica: '#d9662c',
   verde: '#9db55a',
   ervas: '#cfd4a0',
+  'creme-queijo': '#f2e7c9',
 }
 
 export function sauce(color: string, ctx: BuildCtx): BuiltLayer {
@@ -536,10 +541,235 @@ export function sauce(color: string, ctx: BuildCtx): BuiltLayer {
   const geo = polarDisc(
     ctx.q === 'low' ? 6 : 10,
     ctx.s.grid * 2,
-    (th) => R0 + 0.06 * fbm3(Math.cos(th) * 2 + seed, 0, Math.sin(th) * 2, 2) + 0.24 * Math.pow(Math.max(0, Math.sin(th * lobes + phase)), 8),
-    (_th, _t, r) => 0.012 - Math.max(0, r - ctx.below * 0.92) * 1.6,
+    (th) => R0 + 0.05 * fbm3(Math.cos(th) * 2 + seed, 0, Math.sin(th) * 2, 2) + 0.13 * Math.pow(Math.max(0, Math.sin(th * lobes + phase)), 3),
+    (_th, _t, r) => 0.012 - Math.min(0.06, Math.max(0, r - ctx.below * 0.95) * 0.9),
   )
   smoothNormals(geo)
   const mat = foodMaterial('sauce', ctx.q, { colors: [SAUCE_COLORS[color] ?? color], seed, side: 2 })
   return { object: new Mesh(geo, mat), height: 0.014, radius: R0 }
+}
+
+// ---------------------------------------------------------------------------
+// Ingredientes do cardápio real (X-Tudo e companhia)
+// ---------------------------------------------------------------------------
+
+/** Fatia de presunto: disco fino e ondulado que cai um pouco pela borda. */
+export function ham(ctx: BuildCtx): BuiltLayer {
+  const group = new Group()
+  const mat = foodMaterial('ham', ctx.q, { seed: ctx.seed * 0.4 })
+  const R0 = Math.max(0.95, ctx.below * 0.96)
+  for (let k = 0; k < 2; k++) {
+    const seed = ctx.seed + k * 9.1
+    const geo = polarDisc(
+      ctx.q === 'low' ? 7 : 11,
+      ctx.s.grid * 2,
+      (th) => R0 * (0.97 + 0.05 * fbm3(Math.cos(th) * 1.4 + seed, 0, Math.sin(th) * 1.4, 2)),
+      (th, t) => 0.025 * Math.pow(t, 2) * Math.sin(th * 3 + seed) - 0.12 * Math.pow(smoothstep(0.78, 1, t), 1.5) + 0.006 * simplex3(Math.cos(th) * t * 3, seed, Math.sin(th) * t * 3),
+    )
+    smoothNormals(geo)
+    const mesh = new Mesh(geo, mat)
+    mesh.position.set((k - 0.5) * 0.14, 0.014 + k * 0.012, (k - 0.5) * -0.1)
+    mesh.rotation.y = ctx.rand() * TAU
+    group.add(mesh)
+  }
+  return { object: group, height: 0.04, radius: R0 }
+}
+
+/** Rodelas de salsicha ou de calabresa espalhadas sobre a camada de baixo. */
+export function sausageSlices(kind: 'salsicha' | 'calabresa', ctx: BuildCtx): BuiltLayer {
+  const calab = kind === 'calabresa'
+  const r = calab ? 0.17 : 0.125
+  const h = calab ? 0.05 : 0.065
+  const count = calab ? 8 : 9
+  const geo = new CylinderGeometry(r, r, h, 24, 1)
+  geo.translate(0, h / 2, 0)
+  const mat = calab
+    ? foodMaterial('sausage', ctx.q, { colors: ['#3e140b', '#82301e', '#f0d0b0'], params: [0.85, r, 0.6, 0], seed: ctx.seed })
+    : foodMaterial('sausage', ctx.q, { colors: ['#c4633c', '#efbc9c', '#f3d6c2'], params: [0, r, 0.15, 0], seed: ctx.seed })
+  const mesh = new InstancedMesh(geo, mat, count)
+  const o = new Object3D()
+  const rnd = rng(ctx.seed * 13 + (calab ? 3 : 7))
+  const spread = calab ? 0.84 : 0.8
+  for (let i = 0; i < count; i++) {
+    const a = (i / (count - 1)) * TAU + rnd() * 0.4 + (calab ? 0.3 : 0)
+    const d = i === count - 1 ? 0 : spread * (0.75 + rnd() * 0.3)
+    o.position.set(Math.cos(a) * d, rnd() * 0.01, Math.sin(a) * d)
+    o.rotation.set((rnd() - 0.5) * 0.14, rnd() * TAU, (rnd() - 0.5) * 0.14)
+    o.updateMatrix()
+    mesh.setMatrixAt(i, o.matrix)
+  }
+  mesh.instanceMatrix.needsUpdate = true
+  return { object: mesh, height: h + 0.012, radius: spread + r }
+}
+
+/** Fatia de abacaxi (anel), opcionalmente grelhada e com mel. */
+export function pineapple(ctx: BuildCtx, mel = false): BuiltLayer {
+  const ro = 0.8
+  const ri = 0.14
+  const h = 0.07
+  const e = 0.015
+  const pts = [
+    new Vector2(ri, e),
+    new Vector2(ri + e, 0),
+    new Vector2(ro - e, 0),
+    new Vector2(ro, e),
+    new Vector2(ro, h - e),
+    new Vector2(ro - e, h),
+    new Vector2(ri + e, h),
+    new Vector2(ri, h - e),
+    new Vector2(ri, e),
+  ]
+  const geo = lathe(pts, Math.max(48, ctx.s.radial))
+  deform(geo, (v) => {
+    const k = 1 + fbm3(v.x * 2 + ctx.seed, v.y, v.z * 2, 2) * 0.03
+    v.x *= k
+    v.z *= k
+  })
+  geo.computeVertexNormals()
+  const mat = foodMaterial('pineapple', ctx.q, {
+    colors: mel ? ['#eeb22e', '#f8d77c', '#9a5a12'] : undefined,
+    params: [ro, mel ? 1 : 0, mel ? 1 : 0, 0],
+    seed: ctx.seed,
+    physical: mel ? { roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.08 } : undefined,
+  })
+  const mesh = new Mesh(geo, mat)
+  mesh.rotation.y = ctx.rand() * TAU
+  // Deslocada para um lado: a fatia aparece pela borda do pão.
+  const off = ctx.rand() * TAU
+  mesh.position.set(Math.cos(off) * 0.22, 0, Math.sin(off) * 0.22)
+  return { object: mesh, height: h, radius: ro }
+}
+
+/** Grãos de milho espalhados. */
+export function corn(ctx: BuildCtx): BuiltLayer {
+  const count = ctx.q === 'low' ? 60 : ctx.q === 'medium' ? 90 : 120
+  const geo = ctx.q === 'low' ? new SphereGeometry(1, 7, 5) : new SphereGeometry(1, 10, 7)
+  const mesh = new InstancedMesh(geo, foodMaterial('corn', ctx.q), count)
+  const o = new Object3D()
+  const rnd = rng(ctx.seed * 17 + 5)
+  for (let i = 0; i < count; i++) {
+    const a = rnd() * TAU
+    const d = Math.sqrt(rnd()) * 1.0
+    o.position.set(Math.cos(a) * d, 0.028 + rnd() * 0.03 * (1 - d), Math.sin(a) * d)
+    o.rotation.set(rnd() * TAU, rnd() * TAU, rnd() * TAU)
+    const sc = 0.85 + rnd() * 0.3
+    o.scale.set(0.046 * sc, 0.034 * sc, 0.04 * sc)
+    o.updateMatrix()
+    mesh.setMatrixAt(i, o.matrix)
+  }
+  mesh.instanceMatrix.needsUpdate = true
+  return { object: mesh, height: 0.06, radius: 1.0 }
+}
+
+/** Batata palha (ou cebola crispy): montinho de palitos finos e dourados. */
+export function sticks(kind: 'batata-palha' | 'cebola-crispy', ctx: BuildCtx): BuiltLayer {
+  const crispy = kind === 'cebola-crispy'
+  const base = ctx.q === 'low' ? 110 : ctx.q === 'medium' ? 180 : 260
+  const count = crispy ? Math.round(base * 0.7) : base
+  const len = crispy ? 0.15 : 0.22
+  const w = crispy ? 0.012 : 0.017
+  const geo = new BoxGeometry(w, len, w, 1, 3, 1)
+  deform(geo, (v) => {
+    // leve curvatura (a cebola crispy enrola mais)
+    v.x += Math.sin((v.y / len) * Math.PI) * (crispy ? 0.02 : 0.006)
+  })
+  geo.computeVertexNormals()
+  const mat = foodMaterial('fries', ctx.q, {
+    colors: crispy ? ['#dc9a42', '#8a4a16'] : ['#ecbf55', '#b8782a'],
+    params: [len / 2, 0, 0, 0],
+  })
+  const mesh = new InstancedMesh(geo, mat, count)
+  const o = new Object3D()
+  const rnd = rng(ctx.seed * 19 + (crispy ? 1 : 2))
+  for (let i = 0; i < count; i++) {
+    const a = rnd() * TAU
+    const d = Math.sqrt(rnd()) * (crispy ? 1.14 : 1.08)
+    const edge = smoothstep(0.85, 1.1, d)
+    o.position.set(Math.cos(a) * d, 0.012 + rnd() * 0.05 + (1 - Math.min(d, 1)) * 0.05 - edge * 0.05, Math.sin(a) * d)
+    o.rotation.set(Math.PI / 2 + (rnd() - 0.5) * 0.7 + edge * 0.4, rnd() * TAU, (rnd() - 0.5) * 0.5, 'YXZ')
+    o.updateMatrix()
+    mesh.setMatrixAt(i, o.matrix)
+  }
+  mesh.instanceMatrix.needsUpdate = true
+  return { object: mesh, height: 0.1, radius: 1.05 }
+}
+
+/** Anéis de cebola empanados. */
+export function onionRingsLayer(ctx: BuildCtx): BuiltLayer {
+  const group = new Group()
+  const mat = foodMaterial('batter', ctx.q, { seed: ctx.seed })
+  const segs = ctx.q === 'low' ? 32 : 56
+  for (let i = 0; i < 3; i++) {
+    const geo = new TorusGeometry(0.34, 0.085, 14, segs)
+    geo.rotateX(Math.PI / 2)
+    const seed = ctx.seed + i * 3.3
+    deform(geo, (v) => {
+      v.multiplyScalar(1 + fbm3(v.x * 4 + seed, v.y * 4, v.z * 4, 2) * 0.04)
+      v.y *= 0.8
+    })
+    smoothNormals(geo)
+    const ring = new Mesh(geo, mat)
+    const a = (i / 3) * TAU + ctx.rand() * 0.4
+    ring.position.set(Math.cos(a) * 0.6, 0.075 + i * 0.012, Math.sin(a) * 0.6)
+    ring.rotation.set((ctx.rand() - 0.5) * 0.2, ctx.rand() * TAU, (ctx.rand() - 0.5) * 0.2)
+    group.add(ring)
+  }
+  return { object: group, height: 0.16, radius: 1.0 }
+}
+
+/** Banana-da-terra frita em fatias ovais. */
+export function plantain(ctx: BuildCtx): BuiltLayer {
+  const geo = new CylinderGeometry(1, 1, 1, 28, 1)
+  geo.translate(0, 0.5, 0)
+  const mat = foodMaterial('generic', ctx.q, {
+    colors: ['#eab33c', '#a85a14', '#5e2c08'],
+    params: [6, 0.5, 0, 0.55],
+    seed: ctx.seed,
+    physical: { roughness: 0.4, clearcoat: 0.5, clearcoatRoughness: 0.25 },
+  })
+  const count = 5
+  const mesh = new InstancedMesh(geo, mat, count)
+  const o = new Object3D()
+  const rnd = rng(ctx.seed * 23)
+  for (let i = 0; i < count; i++) {
+    const a = (i / count) * TAU + rnd() * 0.3
+    const d = i === 0 ? 0.05 : 0.74
+    o.position.set(Math.cos(a) * d, i * 0.004, Math.sin(a) * d)
+    o.rotation.set((rnd() - 0.5) * 0.1, a + Math.PI / 2 + (rnd() - 0.5) * 0.4, (rnd() - 0.5) * 0.1)
+    o.scale.set(0.36, 0.045, 0.17)
+    o.updateMatrix()
+    mesh.setMatrixAt(i, o.matrix)
+  }
+  mesh.instanceMatrix.needsUpdate = true
+  return { object: mesh, height: 0.06, radius: 0.85 }
+}
+
+/** Carne seca desfiada: fios avermelhados empilhados. */
+export function shreddedBeef(ctx: BuildCtx): BuiltLayer {
+  const count = ctx.q === 'low' ? 45 : 80
+  const len = 0.28
+  const geo = new BoxGeometry(0.036, 0.03, len, 1, 1, 4)
+  deform(geo, (v) => {
+    v.y += Math.sin((v.z / len) * Math.PI) * 0.012
+    v.x += Math.sin((v.z / len) * 5) * 0.008
+  })
+  geo.computeVertexNormals()
+  const mat = foodMaterial('generic', ctx.q, {
+    colors: ['#8e4026', '#471b0d', '#c4704a'],
+    params: [9, 0.6, 0.8, 0.3],
+    seed: ctx.seed,
+  })
+  const mesh = new InstancedMesh(geo, mat, count)
+  const o = new Object3D()
+  const rnd = rng(ctx.seed * 29)
+  for (let i = 0; i < count; i++) {
+    const a = rnd() * TAU
+    const d = Math.sqrt(rnd()) * 0.95
+    o.position.set(Math.cos(a) * d, 0.018 + rnd() * 0.05 + (1 - d) * 0.03, Math.sin(a) * d)
+    o.rotation.set((rnd() - 0.5) * 0.4, rnd() * TAU, (rnd() - 0.5) * 0.4)
+    o.updateMatrix()
+    mesh.setMatrixAt(i, o.matrix)
+  }
+  mesh.instanceMatrix.needsUpdate = true
+  return { object: mesh, height: 0.09, radius: 0.85 }
 }

@@ -4,8 +4,8 @@
  */
 import { Group, Mesh, PlaneGeometry, ShaderMaterial, type PerspectiveCamera, type Scene } from 'three'
 import { burgerHero, cardapio } from '../data/site'
-import { createBurger, type Recipe } from '../three/burger'
-import { friesCone, onionRings } from '../three/extras'
+import { createBurger, explodedHeight, type Recipe } from '../three/burger'
+import { onionRings } from '../three/extras'
 import { bacon, bunBottom, bunTop, cheese, lettuce, patty, sauce, tomato, type BuildCtx } from '../three/layers'
 import { rng } from '../three/noise'
 import { createEmbers, createSmoke } from '../three/particles'
@@ -111,8 +111,8 @@ const menuShots: Shot[] = cardapio.itens.map((item, i) => ({
     const b = createBurger(recipeOf(item.id), Q, 10 + i)
     b.group.rotation.set(0.12, -0.5 + i * 0.7, 0)
     scene.add(b.group)
-    const d = 5.2 + b.height * 0.85
-    look(camera, [0, 1.45, d], [0, -0.04, 0], 30)
+    const d = 4.4 + b.height * 0.95
+    look(camera, [0, 1.3, d], [0, -0.04, 0], 30)
   },
 }))
 
@@ -192,9 +192,9 @@ const galleryShots: Shot[] = [
     build: (ctx) => {
       backdrop(ctx.scene)
       ctx.scene.add(createChapa(Q, QUALITY[Q], 2.6, 1))
-      const b = burgerOnPlate(ctx.scene, { pao: burgerHero.pao, camadas: burgerHero.camadas }, 3, 0, 0, -0.4)
+      const b = burgerOnPlate(ctx.scene, burgerHero, 3, 0, 0, -0.4)
       smokeAndEmbers(ctx, b.height + 0.1)
-      look(ctx.camera, [0, 0.9, 6.2], [0, 0.85, 0], 32)
+      look(ctx.camera, [0, 0.55 + b.height * 0.3, 4.4 + b.height * 1.0], [0, b.height * 0.5 + 0.05, 0], 32)
     },
   },
   {
@@ -224,20 +224,18 @@ const galleryShots: Shot[] = [
     },
   },
   {
-    id: 'g-batata',
+    id: 'g-abacaxi',
     pasta: 'galeria',
     w: 1000,
     h: 1000,
     transparent: false,
     sizes: [1200, 720],
     build: (ctx) => {
-      backdrop(ctx.scene, -7, '#40200c')
-      ctx.scene.add(createChapa(Q, QUALITY[Q], 2.4, 0.6))
-      const f = friesCone(Q)
-      f.position.y = 0.08
-      f.rotation.y = 0.6
-      ctx.scene.add(f)
-      look(ctx.camera, [0, 1.8, 6.4], [0, 1.15, 0], 32)
+      backdrop(ctx.scene, -7, '#4a220c')
+      ctx.scene.add(createChapa(Q, QUALITY[Q], 2.6, 1))
+      const b = burgerOnPlate(ctx.scene, recipeOf('x-burguer-de-abacaxi'), 41, 0, 0, 0.5)
+      smokeAndEmbers(ctx, b.height + 0.1, { smoke: 70 })
+      look(ctx.camera, [0, 1.3 + b.height * 0.4, 4.6 + b.height], [0, b.height * 0.48, 0], 32)
     },
   },
   {
@@ -250,9 +248,9 @@ const galleryShots: Shot[] = [
     build: (ctx) => {
       backdrop(ctx.scene, -7, '#4a1e0c')
       ctx.scene.add(createChapa(Q, QUALITY[Q], 2.6, 1))
-      const b = burgerOnPlate(ctx.scene, recipeOf('duplo-ferro'), 15, 0, 0, 0.8)
+      const b = burgerOnPlate(ctx.scene, recipeOf('x-tudo-duplo'), 15, 0, 0, 0.8)
       smokeAndEmbers(ctx, b.height + 0.1, { smoke: 70 })
-      look(ctx.camera, [0.4, 1.3, 6.6], [0, 1.05, 0], 32)
+      look(ctx.camera, [0.4, 0.7 + b.height * 0.3, 4.4 + b.height * 1.0], [0, b.height * 0.5 + 0.05, 0], 32)
     },
   },
   {
@@ -264,7 +262,7 @@ const galleryShots: Shot[] = [
     sizes: [1200, 720],
     build: (ctx) => {
       backdrop(ctx.scene, -7, '#3c1c0c')
-      const b = createBurger({ pao: 'brioche', camadas: ['alface', 'tomate', 'carne', 'queijo', 'bacon'] }, Q, 8)
+      const b = createBurger(burgerHero, Q, 8)
       b.explode(1)
       b.group.rotation.set(0.25, 0.5, 0)
       ctx.scene.add(b.group)
@@ -273,7 +271,8 @@ const galleryShots: Shot[] = [
       e.material.uniforms.uTime.value = 18
       e.setScale(ctx.pxPerUnit)
       ctx.scene.add(e.points)
-      look(ctx.camera, [0, 1.2, 11], [0, 0, 0], 30)
+      const H = explodedHeight(b)
+      look(ctx.camera, [0, 1.2, (H / 2 + 0.7) / Math.tan((15 * Math.PI) / 180)], [0, 0, 0], 30)
     },
   },
   {
@@ -303,10 +302,10 @@ const galleryShots: Shot[] = [
     build: (ctx) => {
       backdrop(ctx.scene, -9, '#43200c')
       ctx.scene.add(createChapa(Q, QUALITY[Q], 3.8, 1))
-      const a = burgerOnPlate(ctx.scene, recipeOf('ferro-smash'), 21, -1.35, 0.1, 0.3)
-      burgerOnPlate(ctx.scene, recipeOf('bacon-fumaca'), 22, 1.35, -0.2, -0.6)
+      const a = burgerOnPlate(ctx.scene, recipeOf('x-caseirao'), 21, -1.35, 0.1, 0.3)
+      burgerOnPlate(ctx.scene, recipeOf('x-picanha'), 22, 1.35, -0.2, -0.6)
       smokeAndEmbers(ctx, a.height + 0.1, { smoke: 60 })
-      look(ctx.camera, [0, 2.0, 8.6], [0, 0.8, 0], 32)
+      look(ctx.camera, [0, 2.0, 8.8], [0, 0.95, 0], 32)
     },
   },
   {
@@ -319,9 +318,9 @@ const galleryShots: Shot[] = [
     build: (ctx) => {
       backdrop(ctx.scene, -7, '#4a200e')
       ctx.scene.add(createChapa(Q, QUALITY[Q], 2.6, 1))
-      const b = burgerOnPlate(ctx.scene, recipeOf('bacon-fumaca'), 31, 0, 0, 1.9)
+      const b = burgerOnPlate(ctx.scene, recipeOf('x-bacon'), 31, 0, 0, 1.9)
       smokeAndEmbers(ctx, b.height + 0.1, { smoke: 70 })
-      look(ctx.camera, [0, 2.1, 6.4], [0, 0.8, 0], 32)
+      look(ctx.camera, [0, 1.3 + b.height * 0.4, 4.6 + b.height], [0, b.height * 0.48, 0], 32)
     },
   },
 ]
@@ -335,10 +334,10 @@ const heroShots: Shot[] = [
     transparent: true,
     sizes: [1000, 600],
     build: ({ scene, camera }) => {
-      const b = createBurger({ pao: burgerHero.pao, camadas: burgerHero.camadas }, Q, 3)
+      const b = createBurger(burgerHero, Q, 3)
       b.group.rotation.set(0.16, 0.35, 0)
       scene.add(b.group)
-      look(camera, [0, 0.95, 8.4], [0, 0, 0], 30)
+      look(camera, [0, 0.95, 4.6 + b.height * 1.9], [0, 0, 0], 30)
     },
   },
 ]

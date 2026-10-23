@@ -7,6 +7,14 @@ import type { Camada, Pao } from '../data/site'
 import {
   bacon,
   bunBottom,
+  corn,
+  ham,
+  onionRingsLayer,
+  pineapple,
+  plantain,
+  sausageSlices,
+  shreddedBeef,
+  sticks,
   bunTop,
   cheese,
   egg,
@@ -45,13 +53,15 @@ export interface Burger {
   group: Group
   layers: StackLayer[]
   height: number
+  /** Espaço entre camadas na vista explodida. */
+  gap: number
   /** 0 = montado, 1 = totalmente explodido. */
   explode: (t: number) => void
   dispose: () => void
 }
 
-/** Espaço entre camadas na vista explodida. */
-const GAP = 0.36
+/** Espaço entre camadas na vista explodida (diminui quando há muitas camadas). */
+const gapFor = (layers: number) => Math.max(0.24, Math.min(0.36, 4.2 / Math.max(1, layers - 1)))
 
 export function createBurger(recipe: Recipe, quality: Quality, seed = 1): Burger {
   const s = QUALITY[quality]
@@ -69,13 +79,45 @@ export function createBurger(recipe: Recipe, quality: Quality, seed = 1): Burger
   for (const c of recipe.camadas) {
     switch (c) {
       case 'carne':
+      case 'costela':
       case 'smash':
       case 'veggie':
         add(c, patty(c, ctx))
         break
       case 'queijo':
+      case 'mussarela':
       case 'queijo-branco':
         add(c, cheese(c, ctx))
+        break
+      case 'creme-queijo':
+        add(c, sauce('creme-queijo', ctx))
+        break
+      case 'presunto':
+        add(c, ham(ctx))
+        break
+      case 'salsicha':
+      case 'calabresa':
+        add(c, sausageSlices(c, ctx))
+        break
+      case 'carne-seca':
+        add(c, shreddedBeef(ctx))
+        break
+      case 'batata-palha':
+      case 'cebola-crispy':
+        add(c, sticks(c, ctx))
+        break
+      case 'aneis-cebola':
+        add(c, onionRingsLayer(ctx))
+        break
+      case 'abacaxi':
+      case 'abacaxi-mel':
+        add(c, pineapple(ctx, c === 'abacaxi-mel'))
+        break
+      case 'milho':
+        add(c, corn(ctx))
+        break
+      case 'banana-terra':
+        add(c, plantain(ctx))
         break
       case 'bacon':
         add(c, bacon(ctx))
@@ -132,6 +174,7 @@ export function createBurger(recipe: Recipe, quality: Quality, seed = 1): Burger
     }
   })
 
+  const GAP = gapFor(layers.length)
   const explode = (t: number) => {
     const n = layers.length
     const e = t * t * (3 - 2 * t)
@@ -153,10 +196,10 @@ export function createBurger(recipe: Recipe, quality: Quality, seed = 1): Burger
     })
   }
 
-  return { group, layers, height, explode, dispose }
+  return { group, layers, height, gap: GAP, explode, dispose }
 }
 
 /** Altura total do hambúrguer explodido (para enquadrar a câmera). */
 export function explodedHeight(b: Burger) {
-  return b.height + (b.layers.length - 1) * GAP
+  return b.height + (b.layers.length - 1) * b.gap
 }

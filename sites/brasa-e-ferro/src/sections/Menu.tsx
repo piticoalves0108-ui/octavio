@@ -88,11 +88,25 @@ function MenuCard({ item, index }: { item: ItemCardapio; index: number }) {
         <div className="relative z-20 flex flex-1 flex-col p-6 pt-2 [transform:translateZ(30px)]">
           <h3 className="font-display text-[2.1rem] leading-none text-creme">{item.nome}</h3>
           <p className="mt-2 flex-1 text-sm leading-relaxed text-cinza">{item.descricao}</p>
-          <div className="mt-5 flex items-center justify-between gap-3">
-            <p className="font-display text-3xl text-ambar">
-              <span className="sr-only">Preço: </span>
-              {formatarPreco(item.preco)}
-            </p>
+          <div className="mt-5 flex flex-wrap items-end justify-between gap-3">
+            {item.precoIndustrial ? (
+              // Tradicionais: preço com hambúrguer artesanal e com industrial.
+              <dl className="flex items-end gap-4">
+                <div>
+                  <dt className="text-[0.65rem] font-semibold tracking-[0.16em] text-cinza uppercase">Artesanal</dt>
+                  <dd className="font-display text-3xl leading-none text-ambar">{formatarPreco(item.preco)}</dd>
+                </div>
+                <div>
+                  <dt className="text-[0.65rem] font-semibold tracking-[0.16em] text-cinza uppercase">Industrial</dt>
+                  <dd className="font-display text-2xl leading-none text-creme/85">{formatarPreco(item.precoIndustrial)}</dd>
+                </div>
+              </dl>
+            ) : (
+              <p className="font-display text-3xl leading-none text-ambar">
+                <span className="sr-only">Preço: </span>
+                {formatarPreco(item.preco)}
+              </p>
+            )}
             <a
               href={pedido}
               target="_blank"
@@ -109,6 +123,50 @@ function MenuCard({ item, index }: { item: ItemCardapio; index: number }) {
         </div>
       </div>
     </article>
+  )
+}
+
+/** Adicionais: ocupa duas colunas no fim da grade, com pontilhado de cardápio. */
+function Adicionais() {
+  return (
+    <aside
+      aria-labelledby="adicionais-titulo"
+      className="metal metal-border relative flex flex-col justify-between gap-8 overflow-hidden rounded-[1.75rem] p-6 sm:col-span-2 md:p-8"
+      data-reveal
+    >
+      <span aria-hidden className="pointer-events-none absolute -top-20 -right-16 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(232,120,40,0.22),transparent_65%)]" />
+      <div className="relative">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h3 id="adicionais-titulo" className="font-display text-[2.6rem] leading-none text-creme">
+            {cardapio.adicionaisTitulo}
+          </h3>
+          <p className="text-sm text-cinza">{cardapio.adicionaisTexto}</p>
+        </div>
+        <ul className="mt-6 grid gap-x-10 gap-y-3 sm:grid-cols-2">
+          {cardapio.adicionais.map((a) => (
+            <li key={a.nome} className="flex items-baseline gap-3">
+              <span className="font-display text-2xl leading-none text-creme">{a.nome}</span>
+              <span aria-hidden className="mb-1 flex-1 border-b border-dotted border-white/20" />
+              <span className="font-display text-2xl leading-none text-ambar">{formatarPreco(a.preco)}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="relative flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.07] pt-6">
+        <p className="max-w-xs text-sm text-cinza">Escolha o lanche e diga os adicionais na hora do pedido.</p>
+        <a
+          href={linkPedido('Olá! Vim pelo site e quero fazer um pedido com adicionais.')}
+          target="_blank"
+          rel="noopener"
+          className="btn btn-primary !min-h-11 !px-5 text-sm"
+          aria-label={`Pedir com adicionais pelo ${canalPedido()} (abre em nova aba)`}
+        >
+          <span className="btn-label">
+            <IconBag width={17} height={17} /> Montar meu pedido
+          </span>
+        </a>
+      </div>
+    </aside>
   )
 }
 
@@ -159,6 +217,7 @@ export function Menu() {
           {itens.map((item, i) => (
             <MenuCard key={item.id} item={item} index={i} />
           ))}
+          <Adicionais />
         </div>
       </div>
     </section>

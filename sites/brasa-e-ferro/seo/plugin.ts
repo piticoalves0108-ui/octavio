@@ -77,7 +77,8 @@ function jsonLd() {
       name: 'Cardápio',
       url: `${base}/#cardapio`,
       inLanguage: 'pt-BR',
-      hasMenuSection: categorias.map((cat) => ({
+      hasMenuSection: [
+      ...categorias.map((cat) => ({
         '@type': 'MenuSection',
         name: cat.rotulo,
         hasMenuItem: cardapio.itens
@@ -88,9 +89,24 @@ function jsonLd() {
             description: i.descricao,
             image: `${base}/images/cardapio/${i.id}-800.webp`,
             ...(i.selo === 'Vegetariano' ? { suitableForDiet: 'https://schema.org/VegetarianDiet' } : {}),
-            offers: { '@type': 'Offer', price: i.preco.toFixed(2), priceCurrency: 'BRL' },
+            offers: i.precoIndustrial
+              ? [
+                  { '@type': 'Offer', name: 'Com hambúrguer artesanal', price: i.preco.toFixed(2), priceCurrency: 'BRL' },
+                  { '@type': 'Offer', name: 'Com hambúrguer industrial', price: i.precoIndustrial.toFixed(2), priceCurrency: 'BRL' },
+                ]
+              : { '@type': 'Offer', price: i.preco.toFixed(2), priceCurrency: 'BRL' },
           })),
       })),
+      {
+        '@type': 'MenuSection',
+        name: cardapio.adicionaisTitulo,
+        hasMenuItem: cardapio.adicionais.map((a) => ({
+          '@type': 'MenuItem',
+          name: a.nome,
+          offers: { '@type': 'Offer', price: a.preco.toFixed(2), priceCurrency: 'BRL' },
+        })),
+      },
+      ],
     },
   }
 
@@ -128,7 +144,7 @@ export function headSeo(favicon?: string) {
     `<meta property="og:image:type" content="image/jpeg" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
-    `<meta property="og:image:alt" content="${esc(`${site.nome}: hambúrguer artesanal com cheddar derretido e bacon sobre a chapa de ferro`)}" />`,
+    `<meta property="og:image:alt" content="${esc(`${site.nome}: X-Tudo com batata palha, ovo, bacon e mussarela`)}" />`,
     `<meta property="restaurant:contact_info:street_address" content="${esc(site.endereco.rua)}" />`,
     `<meta property="restaurant:contact_info:locality" content="${esc(site.endereco.cidade)}" />`,
     `<meta property="restaurant:contact_info:region" content="${esc(site.endereco.uf)}" />`,

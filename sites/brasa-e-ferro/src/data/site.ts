@@ -44,20 +44,38 @@ export interface Horario {
 export type Camada =
   | 'pao-base'
   | 'pao-topo'
+  // carnes
   | 'carne'
+  | 'costela'
   | 'smash'
   | 'veggie'
-  | 'queijo'
+  // queijos e cremes
+  | 'queijo' // cheddar
+  | 'mussarela'
   | 'queijo-branco'
+  | 'creme-queijo'
+  // frios e embutidos
   | 'bacon'
+  | 'presunto'
+  | 'salsicha'
+  | 'calabresa'
+  | 'carne-seca'
+  | 'ovo'
+  // vegetais, frutas e crocantes
   | 'alface'
   | 'tomate'
   | 'cebola'
   | 'cebola-roxa'
+  | 'cebola-crispy'
+  | 'aneis-cebola'
   | 'picles'
-  | 'ovo'
-  | 'molho'
   | 'jalapeno'
+  | 'abacaxi'
+  | 'abacaxi-mel'
+  | 'milho'
+  | 'banana-terra'
+  | 'batata-palha'
+  | 'molho'
 
 export type Pao = 'gergelim' | 'brioche' | 'australiano'
 
@@ -65,14 +83,22 @@ export interface ItemCardapio {
   id: string
   nome: string
   descricao: string
+  /** Preço com hambúrguer artesanal (ou preço único). */
   preco: number
-  categoria: 'classicos' | 'smash' | 'especiais'
+  /** Preço com hambúrguer industrial (só nos tradicionais). */
+  precoIndustrial?: number
+  categoria: 'tradicionais' | 'artesanais'
   selo?: string
   pao: Pao
   /** Camadas de baixo para cima, sem os pães (o pão vem de `pao`). */
   camadas: Camada[]
-  /** Cor do molho no 3D: casa, barbecue, paprica, verde, ervas. */
-  molho?: 'casa' | 'barbecue' | 'paprica' | 'verde' | 'ervas'
+  /** Cor do molho no 3D: casa, barbecue, paprica, verde, ervas, creme-queijo. */
+  molho?: 'casa' | 'barbecue' | 'paprica' | 'verde' | 'ervas' | 'creme-queijo'
+}
+
+export interface Adicional {
+  nome: string
+  preco: number
 }
 
 // ---------------------------------------------------------------------------
@@ -89,7 +115,7 @@ export const site = {
   sloganLongo: 'Carne de verdade. Fogo de verdade. Sabor que não se explica — se prova.',
   descricaoSeo: confirmar(
     'descrição para o Google',
-    'Hambúrguer artesanal feito na brasa e na chapa de ferro. Blend moído todo dia, pão selado na manteiga e bacon defumado na casa. Peça agora.',
+    'X-Tudo, X-Bacon, X-Picanha, X-Costela e mais: hambúrguer artesanal ou industrial feito na chapa. Peça pelo Instagram @delicias_nachapada.',
   ),
 
   /** Domínio final, sem barra no fim. Usado no canonical, OG e sitemap. */
@@ -165,25 +191,27 @@ export const hero = {
   dica: 'Role para desmontar',
 }
 
-/** Rótulos da vista explodida (a ordem segue as camadas do hambúrguer do hero). */
+/** Rótulos da vista explodida, de cima para baixo (a mesma receita do X-Tudo do cardápio). */
 export const anatomia = {
-  titulo: 'Anatomia de um clássico',
-  subtitulo: 'Sete camadas. Nenhum atalho.',
+  titulo: 'Anatomia do X-Tudo',
+  subtitulo: '14 ingredientes. Tudo no mesmo pão.',
   camadas: [
-    { camada: 'pao-topo', nome: 'Pão com gergelim', detalhe: 'Fermentação lenta, selado na manteiga' },
-    { camada: 'bacon', nome: 'Bacon defumado', detalhe: 'Defumado na casa por 8 horas' },
-    { camada: 'queijo', nome: 'Cheddar inglês', detalhe: 'Derretido sob a cúpula' },
-    { camada: 'carne', nome: 'Blend 180 g', detalhe: 'Costela e acém, selado na brasa' },
-    { camada: 'tomate', nome: 'Tomate', detalhe: 'Fatia grossa, sal grosso' },
-    { camada: 'alface', nome: 'Alface americana', detalhe: 'Crocante, lavada no dia' },
-    { camada: 'pao-base', nome: 'Base', detalhe: 'Tostada para segurar o suco' },
+    { camada: 'pao-topo', nome: 'Pão', detalhe: 'Tostado na chapa' },
+    { camada: 'batata-palha', nome: 'Batata palha', detalhe: 'Crocante' },
+    { camada: 'milho', nome: 'Milho', detalhe: 'Milho verde' },
+    { camada: 'abacaxi', nome: 'Abacaxi', detalhe: 'Fatia inteira' },
+    { camada: 'ovo', nome: 'Ovo', detalhe: 'Frito na chapa' },
+    { camada: 'salsicha', nome: 'Salsicha', detalhe: 'Em rodelas' },
+    { camada: 'calabresa', nome: 'Calabresa', detalhe: 'Fatiada e grelhada' },
+    { camada: 'bacon', nome: 'Bacon', detalhe: 'Em tiras' },
+    { camada: 'presunto', nome: 'Presunto', detalhe: 'Fatia dobrada' },
+    { camada: 'mussarela', nome: 'Mussarela', detalhe: 'Derretida' },
+    { camada: 'carne', nome: 'Hambúrguer', detalhe: 'Artesanal ou industrial' },
+    { camada: 'tomate', nome: 'Tomate', detalhe: 'Em rodelas' },
+    { camada: 'alface', nome: 'Alface', detalhe: 'Fresca' },
+    { camada: 'molho', nome: 'Molho', detalhe: 'Na base' },
+    { camada: 'pao-base', nome: 'Pão (base)', detalhe: 'Segura tudo' },
   ] satisfies { camada: Camada; nome: string; detalhe: string }[],
-}
-
-/** Camadas do hambúrguer do hero, de baixo para cima (sem os pães). */
-export const burgerHero: { pao: Pao; camadas: Camada[] } = {
-  pao: 'gergelim',
-  camadas: ['alface', 'tomate', 'carne', 'queijo', 'bacon'],
 }
 
 export const sobre = {
@@ -203,100 +231,143 @@ export const sobre = {
   assinatura: 'Feito com fogo. Servido com orgulho.',
 }
 
+/** Cardápio do perfil @delicias_nachapada (foto do cardápio enviada pelo cliente). */
 export const cardapio = {
   eyebrow: 'Cardápio',
   titulo: 'Escolha sua brasa.',
-  subtitulo: 'Todos acompanham batata rústica. Peça pelo direct ou pelo WhatsApp.',
+  subtitulo: 'Os tradicionais saem com hambúrguer artesanal ou industrial. Peça pelo direct ou pelo WhatsApp.',
   categorias: [
     { id: 'todos', rotulo: 'Todos' },
-    { id: 'classicos', rotulo: 'Clássicos' },
-    { id: 'smash', rotulo: 'Smash' },
-    { id: 'especiais', rotulo: 'Especiais' },
+    { id: 'tradicionais', rotulo: 'Tradicionais' },
+    { id: 'artesanais', rotulo: 'Artesanais' },
   ],
-  itens: confirmar<ItemCardapio[]>('cardápio e preços', [
+  itens: [
+    // --- Hambúrguer tradicional (artesanal / industrial) ---
     {
-      id: 'brasa-classico',
-      nome: 'Brasa Clássico',
-      descricao: 'Blend 180 g na brasa, cheddar inglês, alface, tomate e molho da casa no pão com gergelim.',
-      preco: 34.9,
-      categoria: 'classicos',
-      selo: 'Mais pedido',
+      id: 'x-tudo',
+      nome: 'X-Tudo',
+      descricao: 'Pão, hambúrguer, mussarela, bacon, ovo, salsicha, calabresa, presunto, abacaxi, milho, tomate, alface, batata palha e molho.',
+      preco: 24,
+      precoIndustrial: 21,
+      categoria: 'tradicionais',
+      selo: '14 ingredientes',
       pao: 'gergelim',
-      camadas: ['molho', 'carne', 'queijo', 'tomate', 'alface'],
+      camadas: ['molho', 'alface', 'tomate', 'carne', 'mussarela', 'presunto', 'bacon', 'calabresa', 'salsicha', 'ovo', 'abacaxi', 'milho', 'batata-palha'],
+      molho: 'casa',
     },
     {
-      id: 'ferro-smash',
-      nome: 'Ferro Smash',
-      descricao: 'Dois smash de 90 g prensados no ferro, cheddar duplo, cebola na chapa e picles.',
-      preco: 36.9,
-      categoria: 'smash',
-      pao: 'brioche',
-      camadas: ['smash', 'queijo', 'smash', 'queijo', 'cebola', 'picles'],
-    },
-    {
-      id: 'bacon-fumaca',
-      nome: 'Bacon Fumaça',
-      descricao: 'Blend 180 g, bacon defumado na casa, cheddar e barbecue de rapadura no pão australiano.',
-      preco: 39.9,
-      categoria: 'classicos',
-      selo: 'Defumado na casa',
-      pao: 'australiano',
-      camadas: ['carne', 'queijo', 'bacon', 'molho'],
-      molho: 'barbecue',
-    },
-    {
-      id: 'chapa-quente',
-      nome: 'Chapa Quente',
-      descricao: 'Blend 180 g, queijo branco tostado, jalapeño e maionese de páprica defumada. Arde na medida.',
-      preco: 37.9,
-      categoria: 'especiais',
-      selo: 'Picante',
-      pao: 'brioche',
-      camadas: ['carne', 'queijo-branco', 'jalapeno', 'molho', 'alface'],
-      molho: 'paprica',
-    },
-    {
-      id: 'ovo-na-brasa',
-      nome: 'Ovo na Brasa',
-      descricao: 'Blend 180 g, queijo prato, bacon, ovo com gema mole, alface e tomate.',
-      preco: 38.9,
-      categoria: 'especiais',
+      id: 'x-tudo-duplo',
+      nome: 'X-Tudo Duplo',
+      descricao: 'Pão, 2 hambúrgueres, mussarela, bacon, ovo, salsicha, calabresa, presunto, abacaxi, milho, tomate, alface, batata palha e molho.',
+      preco: 26,
+      precoIndustrial: 24,
+      categoria: 'tradicionais',
+      selo: '2 hambúrgueres',
       pao: 'gergelim',
-      camadas: ['carne', 'queijo', 'bacon', 'ovo', 'tomate', 'alface'],
+      camadas: ['molho', 'alface', 'tomate', 'carne', 'mussarela', 'carne', 'presunto', 'bacon', 'calabresa', 'salsicha', 'ovo', 'abacaxi', 'milho', 'batata-palha'],
+      molho: 'casa',
     },
     {
-      id: 'duplo-ferro',
-      nome: 'Duplo Ferro',
-      descricao: 'Dois blends de 150 g, cheddar duplo e bacon. Para quem chegou com fome de verdade.',
-      preco: 46.9,
-      categoria: 'classicos',
-      selo: 'Para os fortes',
-      pao: 'brioche',
-      camadas: ['carne', 'queijo', 'carne', 'queijo', 'bacon'],
-    },
-    {
-      id: 'smash-salada',
-      nome: 'Smash Salada',
-      descricao: 'Smash de 90 g, cheddar, alface, tomate, cebola roxa e maionese verde.',
-      preco: 29.9,
-      categoria: 'smash',
+      id: 'x-bacon',
+      nome: 'X-Bacon',
+      descricao: 'Pão, hambúrguer, mussarela, bacon, ovo, cebola, tomate, alface e molho.',
+      preco: 20,
+      precoIndustrial: 18,
+      categoria: 'tradicionais',
       pao: 'gergelim',
-      camadas: ['molho', 'smash', 'queijo', 'cebola-roxa', 'tomate', 'alface'],
-      molho: 'verde',
+      camadas: ['molho', 'alface', 'tomate', 'carne', 'mussarela', 'bacon', 'ovo', 'cebola'],
+      molho: 'casa',
     },
     {
-      id: 'verde-brasa',
-      nome: 'Verde Brasa',
-      descricao: 'Burger de grão-de-bico grelhado, queijo branco, tomate, alface e molho de ervas. Vegetariano.',
+      id: 'x-salada',
+      nome: 'X-Salada',
+      descricao: 'Pão, hambúrguer, mussarela, presunto, ovo, milho, tomate e alface.',
+      preco: 20,
+      precoIndustrial: 18,
+      categoria: 'tradicionais',
+      pao: 'gergelim',
+      camadas: ['alface', 'tomate', 'carne', 'mussarela', 'presunto', 'ovo', 'milho'],
+    },
+    // --- Artesanais ---
+    {
+      id: 'x-caseirao',
+      nome: 'X-Caseirão',
+      descricao: 'Pão, 2 hambúrgueres, mussarela, bacon, cheddar, batata palha, tomate, alface e molho.',
+      preco: 26,
+      categoria: 'artesanais',
+      selo: '2 hambúrgueres',
+      pao: 'brioche',
+      camadas: ['molho', 'alface', 'tomate', 'carne', 'queijo', 'carne', 'mussarela', 'bacon', 'batata-palha'],
+      molho: 'casa',
+    },
+    {
+      id: 'x-costela',
+      nome: 'X-Costela',
+      descricao: 'Pão, hambúrguer de costela, mussarela, tomate e molho.',
       preco: 32.9,
-      categoria: 'especiais',
-      selo: 'Vegetariano',
-      pao: 'australiano',
-      camadas: ['molho', 'veggie', 'queijo-branco', 'tomate', 'alface'],
-      molho: 'ervas',
+      categoria: 'artesanais',
+      pao: 'brioche',
+      camadas: ['molho', 'tomate', 'costela', 'mussarela'],
+      molho: 'casa',
     },
-  ]),
+    {
+      id: 'x-burguer-da-terra',
+      nome: 'X-Burguer da Terra',
+      descricao: 'Pão, hambúrguer, banana-da-terra, carne seca, creme de queijo e molho.',
+      preco: 38,
+      categoria: 'artesanais',
+      pao: 'brioche',
+      camadas: ['molho', 'carne', 'creme-queijo', 'carne-seca', 'banana-terra'],
+      molho: 'casa',
+    },
+    {
+      id: 'x-picanha',
+      nome: 'X-Picanha',
+      descricao: 'Pão, hambúrguer, mussarela, cebola crispy e molho.',
+      preco: 39.9,
+      categoria: 'artesanais',
+      pao: 'brioche',
+      camadas: ['molho', 'carne', 'mussarela', 'cebola-crispy'],
+      molho: 'casa',
+    },
+    {
+      id: 'x-da-casa',
+      nome: 'X-da Casa',
+      descricao: 'Pão, hambúrguer, mussarela, bacon, anéis de cebola e molho.',
+      preco: 22,
+      categoria: 'artesanais',
+      pao: 'brioche',
+      camadas: ['molho', 'carne', 'mussarela', 'bacon', 'aneis-cebola'],
+      molho: 'casa',
+    },
+    {
+      id: 'x-burguer-de-abacaxi',
+      nome: 'X-Burguer de Abacaxi',
+      descricao: 'Pão, hambúrguer, creme de queijo, bacon, abacaxi com mel e molho.',
+      preco: 36,
+      categoria: 'artesanais',
+      pao: 'brioche',
+      camadas: ['molho', 'carne', 'creme-queijo', 'bacon', 'abacaxi-mel'],
+      molho: 'casa',
+    },
+  ] satisfies ItemCardapio[] as ItemCardapio[],
+  adicionaisTitulo: 'Adicionais',
+  adicionaisTexto: 'Turbine qualquer lanche.',
+  adicionais: [
+    { nome: 'Carne', preco: 7 },
+    { nome: 'Mussarela', preco: 5 },
+    { nome: 'Presunto', preco: 5 },
+    { nome: 'Bacon', preco: 5 },
+    { nome: 'Salsicha', preco: 4 },
+    { nome: 'Outros', preco: 3 },
+  ] satisfies Adicional[] as Adicional[],
 }
+
+/** Hambúrguer do hero: o X-Tudo do cardápio (a anatomia lista as mesmas camadas). */
+export const burgerHero = (() => {
+  const x = cardapio.itens.find((i) => i.id === 'x-tudo')!
+  return { pao: x.pao, camadas: x.camadas, molho: x.molho }
+})()
 
 export const ingredientes = {
   eyebrow: 'Ingredientes',
@@ -348,14 +419,14 @@ export const galeria = {
   subtitulo: 'Siga o fogo no Instagram.',
   /** As imagens ficam em /public/images/galeria (geradas por `npm run assets`). */
   itens: [
-    { id: 'g-classico', legenda: 'Brasa Clássico, saindo agora', alt: 'Hambúrguer com gergelim, cheddar derretido, bacon, tomate e alface sobre fundo escuro', formato: 'retrato' },
-    { id: 'g-chapa', legenda: 'Smash na chapa de ferro', alt: 'Três discos de carne selando na chapa de ferro com fumaça subindo', formato: 'paisagem' },
-    { id: 'g-batata', legenda: 'Batata rústica, sal grosso', alt: 'Cone de papel com batatas fritas douradas', formato: 'quadrado' },
-    { id: 'g-duplo', legenda: 'Duplo Ferro', alt: 'Hambúrguer duplo com duas carnes, cheddar e bacon em pão brioche', formato: 'retrato' },
-    { id: 'g-anatomia', legenda: 'Camada por camada', alt: 'Hambúrguer desmontado com as camadas flutuando uma acima da outra', formato: 'retrato' },
-    { id: 'g-onion', legenda: 'Onion rings na brasa', alt: 'Pilha de anéis de cebola empanados e dourados', formato: 'quadrado' },
-    { id: 'g-dupla', legenda: 'Pra dividir (ou não)', alt: 'Dois hambúrgueres lado a lado sobre a chapa', formato: 'paisagem' },
-    { id: 'g-bacon', legenda: 'Bacon Fumaça', alt: 'Hambúrguer em pão australiano escuro com bacon crocante e cheddar', formato: 'quadrado' },
+    { id: 'g-classico', legenda: 'X-Tudo saindo da chapa', alt: 'X-Tudo com batata palha, milho, abacaxi, ovo, salsicha, calabresa, bacon, presunto, mussarela, hambúrguer, tomate e alface sobre a chapa', formato: 'retrato' },
+    { id: 'g-chapa', legenda: 'Hambúrguer na chapa', alt: 'Três hambúrgueres selando na chapa de ferro com fumaça subindo', formato: 'paisagem' },
+    { id: 'g-abacaxi', legenda: 'X-Burguer de Abacaxi', alt: 'Hambúrguer com creme de queijo, bacon e abacaxi com mel sobre a chapa', formato: 'quadrado' },
+    { id: 'g-duplo', legenda: 'X-Tudo Duplo', alt: 'X-Tudo Duplo, com dois hambúrgueres e todos os ingredientes, sobre a chapa', formato: 'retrato' },
+    { id: 'g-anatomia', legenda: 'Camada por camada', alt: 'X-Tudo desmontado, com as camadas flutuando uma acima da outra', formato: 'retrato' },
+    { id: 'g-onion', legenda: 'Anéis de cebola do X-da Casa', alt: 'Pilha de anéis de cebola empanados e dourados', formato: 'quadrado' },
+    { id: 'g-dupla', legenda: 'X-Caseirão e X-Picanha', alt: 'Dois hambúrgueres lado a lado sobre a chapa', formato: 'paisagem' },
+    { id: 'g-bacon', legenda: 'X-Bacon', alt: 'X-Bacon com mussarela, bacon, ovo e cebola sobre a chapa', formato: 'quadrado' },
   ] as const,
 }
 

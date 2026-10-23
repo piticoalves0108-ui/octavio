@@ -37,6 +37,11 @@ export type FoodKind =
   | 'fries'
   | 'batter'
   | 'paper'
+  | 'ham'
+  | 'sausage'
+  | 'pineapple'
+  | 'corn'
+  | 'generic'
 
 export interface FoodOptions {
   colors?: string[]
@@ -304,6 +309,86 @@ const KIND_GLSL: Record<FoodKind, string> = {
     h = fiber * 0.3;
     emis = vec3(0.0);
   `,
+  // Presunto: rosa com marmoreio suave e borda de gordura mais clara (vSurf.x: 0 centro, 1 borda).
+  ham: /* glsl */ `
+    vec3 p = vObjPos + uSeed;
+    float r = vSurf.x;
+    float n1 = fbm(p * 3.5);
+    float marb = smoothstep(0.55, 0.9, abs(snoise(p * 6.0 + n1)));
+    vec3 c = mix(uC1, uC2, smoothstep(-0.4, 0.6, n1) * 0.55);
+    c = mix(c, uC3, marb * 0.3);
+    c = mix(c, uC3, smoothstep(0.86, 0.97, r) * 0.65);
+    col = c;
+    rough = 0.85;
+    h = n1 * 0.3 + snoise(p * 30.0) * 0.15;
+    emis = uC1 * 0.025;
+  `,
+  // Salsicha e calabresa em rodelas: tripa na lateral, corte com pontos de gordura em cima.
+  sausage: /* glsl */ `
+    vec3 p = vObjPos + vInst * 3.0 + uSeed;
+    float cut = smoothstep(0.55, 0.85, abs(vObjNormal.y));
+    float n = fbm(p * 8.0);
+    vec3 casing = uC1 * (0.85 + 0.25 * n);
+    vec2 q = vObjPos.xz / uP.y;
+    float rr = length(q);
+    float specks = smoothstep(0.5, 0.8, snoise(vec3(q * 11.0, vInst.x * 7.0 + uSeed))) * uP.x;
+    vec3 flesh = uC2 * (0.88 + 0.22 * n);
+    flesh = mix(flesh, uC3, specks);
+    flesh = mix(flesh, uC1, smoothstep(0.84, 0.97, rr));
+    float chr = smoothstep(0.1, 0.9, fbm(p * 3.0)) * uP.z;
+    flesh = mix(flesh, flesh * 0.45, chr * 0.6);
+    col = mix(casing, flesh, cut);
+    rough = mix(0.6, 0.95, cut);
+    h = n * 0.4 + specks * 0.6;
+    emis = vec3(0.0);
+  `,
+  // Abacaxi: fibras radiais, miolo mais claro, borda perto da casca; uP.y = grelhado, uP.z = mel.
+  pineapple: /* glsl */ `
+    vec2 q = vObjPos.xz / uP.x;
+    float r = length(q);
+    float a = atan(q.y, q.x);
+    float n = fbm(vec3(q * 4.0, uSeed));
+    float fibers = 0.5 + 0.5 * sin(a * 70.0 + n * 3.0);
+    float eyes = smoothstep(0.8, 0.9, r) * (0.5 + 0.5 * sin(a * 28.0));
+    vec3 c = mix(uC1, uC2, fibers * 0.3 + n * 0.15);
+    c = mix(c, uC2, smoothstep(0.34, 0.22, r));
+    c = mix(c, uC3, eyes * 0.45 + smoothstep(0.93, 1.0, r) * 0.55);
+    float side = 1.0 - smoothstep(0.5, 0.8, abs(vObjNormal.y));
+    c = mix(c, uC1 * 0.9, side * 0.4);
+    float g = 0.0;
+    if (uP.y > 0.5) {
+      float s = sin((vObjPos.x * 0.93 + vObjPos.z * 0.37) * 11.0 + n);
+      g = smoothstep(0.72, 0.97, s) * smoothstep(0.5, 0.9, vObjNormal.y);
+      c = mix(c, uC3 * 0.55, g * 0.8);
+    }
+    c = mix(c, vec3(0.8, 0.42, 0.07), uP.z * 0.4);
+    col = c;
+    rough = 0.75 - uP.z * 0.45;
+    h = fibers * 0.3 + n * 0.3 - g * 0.8;
+    emis = uC1 * 0.04;
+  `,
+  // Milho: grãos amarelos brilhantes.
+  corn: /* glsl */ `
+    vec3 p = vObjPos * 20.0 + vInst * 13.0;
+    float n = snoise(p);
+    col = mix(uC1, uC2, 0.5 + 0.5 * n);
+    col = mix(col, vec3(1.0, 0.95, 0.8), smoothstep(0.6, 1.0, vObjNormal.y) * 0.15);
+    rough = 0.6;
+    h = 0.0;
+    emis = uC1 * 0.05;
+  `,
+  // Genérico: duas cores por ruído (uP.x escala, uP.y relevo, uP.z fibras ao longo de z, uP.w manchas uC3).
+  generic: /* glsl */ `
+    vec3 p = vObjPos + vInst * 3.0 + uSeed;
+    float n1 = fbm(p * uP.x);
+    float streak = snoise(vec3(p.x * uP.x * 3.0, p.y * uP.x * 3.0, p.z * uP.x * 0.4));
+    float k = mix(n1, streak, uP.z);
+    col = mix(uC1, uC2, smoothstep(-0.5, 0.6, k));
+    col = mix(col, uC3, smoothstep(0.5, 0.9, fbm(p * uP.x * 0.5 + 5.0)) * uP.w);
+    rough = 0.85 + 0.25 * n1;
+    h = k * uP.y;
+    emis = vec3(0.0);
+  `,
 }
 
 const DEFAULTS: Record<FoodKind, { colors: string[]; params: [number, number, number, number]; bump: number; physical: MeshPhysicalMaterialParameters; side?: Side }> = {
@@ -416,6 +501,37 @@ const DEFAULTS: Record<FoodKind, { colors: string[]; params: [number, number, nu
     bump: 0.0008,
     physical: { roughness: 0.85 },
     side: DoubleSide,
+  },
+  ham: {
+    colors: ['#e3978d', '#c97670', '#f6dbd0', '#000000'],
+    params: [0, 0, 0, 0],
+    bump: 0.0012,
+    physical: { roughness: 0.42, clearcoat: 0.35, clearcoatRoughness: 0.3, sheen: 0.3, sheenColor: new Color('#ffd2c8') },
+    side: DoubleSide,
+  },
+  sausage: {
+    colors: ['#b4442a', '#e59b77', '#f3d6c2', '#000000'],
+    params: [0, 0.12, 0.3, 0],
+    bump: 0.0015,
+    physical: { roughness: 0.45, clearcoat: 0.45, clearcoatRoughness: 0.25 },
+  },
+  pineapple: {
+    colors: ['#f2c23a', '#fbe397', '#b8781e', '#000000'],
+    params: [0.6, 0, 0, 0],
+    bump: 0.0018,
+    physical: { roughness: 0.38, clearcoat: 0.6, clearcoatRoughness: 0.2 },
+  },
+  corn: {
+    colors: ['#f7c724', '#e59a12', '#000000', '#000000'],
+    params: [0, 0, 0, 0],
+    bump: 0,
+    physical: { roughness: 0.3, clearcoat: 0.8, clearcoatRoughness: 0.15 },
+  },
+  generic: {
+    colors: ['#c98a3a', '#7a4a1a', '#3a1d0a', '#000000'],
+    params: [6, 0.4, 0, 0],
+    bump: 0.003,
+    physical: { roughness: 0.6, clearcoat: 0.2, clearcoatRoughness: 0.4 },
   },
 }
 

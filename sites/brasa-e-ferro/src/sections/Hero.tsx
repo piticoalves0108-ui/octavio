@@ -81,6 +81,8 @@ export function Hero({ ready }: { ready: boolean }) {
     const w = st.clientWidth
     const narrow = w < 640
     const items = list.children
+    // Com muitas camadas, os rótulos acendem mais próximos um do outro.
+    const step = Math.min(0.07, 0.42 / items.length)
     for (let i = 0; i < items.length; i++) {
       const li = items[i] as HTMLElement
       const a = anchors.find((x) => x.camada === li.dataset.camada)
@@ -89,7 +91,7 @@ export function Hero({ ready }: { ready: boolean }) {
       const gap = narrow ? 10 : 34
       const x = right ? a.x + a.r + gap : a.x - a.r - gap
       // Cada rótulo acende quando a sua camada já se separou.
-      const local = Math.min(1, Math.max(0, (explode - 0.25 - i * 0.07) / 0.3))
+      const local = Math.min(1, Math.max(0, (explode - 0.25 - i * step) / 0.3))
       li.style.transform = `translate3d(${x.toFixed(1)}px, ${a.y.toFixed(1)}px, 0) translate(${right ? '0' : '-100%'}, -50%)`
       li.style.opacity = local.toFixed(3)
       li.dataset.side = right ? 'r' : 'l'
@@ -203,7 +205,7 @@ export function Hero({ ready }: { ready: boolean }) {
             id="poster"
             larguras={[1000, 600]}
             sizes="(min-width: 768px) 64svh, 88vw"
-            alt="Hambúrguer artesanal com pão de gergelim, bacon, cheddar derretido, carne grelhada, tomate e alface"
+            alt="X-Tudo: pão com gergelim, batata palha, milho, abacaxi, ovo, salsicha, calabresa, bacon, presunto, mussarela, hambúrguer, tomate, alface e molho"
             width={1000}
             height={1000}
             priority
