@@ -4,32 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nature Senses Chapadinha</title>
-<meta name="description" content="Chalé na natureza em Cavalcante, Chapada dos Veadeiros (GO). Hidromassagem, céu estrelado, cachoeiras do Território Kalunga e o silêncio do cerrado.">
+<meta name="description" content="Chalé em A com hidromassagem no deck e vista para a serra, em Cavalcante, Chapada dos Veadeiros (GO). Perto das cachoeiras do Território Kalunga.">
 <meta name="theme-color" content="#0C1916">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Nature Senses Chapadinha · Cavalcante, Chapada dos Veadeiros">
-<meta property="og:description" content="Chalé com hidromassagem no meio do cerrado, perto das cachoeiras de Cavalcante. Nota 9,7 no Booking e 5,0 no Airbnb.">
+<meta property="og:description" content="Chalé em A com hidromassagem no deck e vista para a serra. Nota 9,7 no Booking e 5,0 no Airbnb.">
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
-<link rel="preload" as="image" href="assets/img/fotos/chale-entardecer-1080.jpg" imagesrcset="assets/img/fotos/chale-entardecer-640.jpg 640w, assets/img/fotos/chale-entardecer-1080.jpg 1080w" imagesizes="(max-width: 959px) 100vw, 480px">
+<link rel="preload" as="image" href="assets/img/fotos/hidro-vista-serra-1080.jpg" imagesrcset="assets/img/fotos/hidro-vista-serra-640.jpg 640w, assets/img/fotos/hidro-vista-serra-1080.jpg 1080w" imagesizes="100vw">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>
-  (function () {
-    var d = document.documentElement;
+  /* Ativa o motion só com JS disponível; sem JS, tudo aparece pronto. */
+  (function (d) {
     d.classList.add('js');
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) d.classList.add('has-motion');
-  })();
+    var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!rm && 'IntersectionObserver' in window) d.classList.add('js-motion');
+  })(document.documentElement);
 </script>
 </head>
 <body>
 <div class="page">
 
 <a class="skip" href="#pousada">Pular para o conteúdo</a>
-<div class="progress" aria-hidden="true"><span></span></div>
-<div class="cursor" aria-hidden="true"><span class="cursor__ring"><span class="cursor__label"></span></span><span class="cursor__dot"></span></div>
 
 <!-- ============ TOPO ============ -->
 <header class="topbar">
@@ -46,165 +45,125 @@
     <nav class="nav" aria-label="Seções">
       <a href="#pousada">A pousada</a>
       <a href="#chale">Chalé</a>
-      <a href="#sentidos">Experiências</a>
+      <a href="#experiencias">Experiências</a>
       <a href="#regiao">Região</a>
       <a href="#galeria">Galeria</a>
-      <a href="#chegar">Como chegar</a>
+      <a href="#duvidas">Dúvidas</a>
     </nav>
-    <a class="btn btn--gold btn--sm magnetic topbar__cta" href="#reserva"><span>Reservar</span></a>
+    <a class="btn btn--gold btn--sm topbar__cta" href="#reserva"><span class="btn__label">Reservar</span></a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu"><span></span><span></span></button>
   </div>
 </header>
 
-<div class="menu" id="menu" aria-hidden="true">
+<div class="menu" id="menu" aria-hidden="true" inert>
   <nav class="menu__nav wrap" aria-label="Menu">
-    <a href="#pousada"><small>A</small>Pousada</a>
-    <a href="#chale"><small>O</small>Chalé</a>
-    <a href="#sentidos"><small>As</small>Experiências</a>
-    <a href="#regiao"><small>A</small>Região</a>
-    <a href="#galeria"><small>A</small>Galeria</a>
-    <a href="#chegar"><small>Como</small>Chegar</a>
-    <a href="#reserva" class="menu__cta">Reservar estadia</a>
+    <a href="#pousada" style="--i:0">A pousada</a>
+    <a href="#chale" style="--i:1">Chalé Orquídea</a>
+    <a href="#experiencias" style="--i:2">Experiências</a>
+    <a href="#regiao" style="--i:3">Região</a>
+    <a href="#galeria" style="--i:4">Galeria</a>
+    <a href="#chegar" style="--i:5">Como chegar</a>
+    <a href="#duvidas" style="--i:6">Dúvidas</a>
+    <a href="#reserva" class="btn btn--gold menu__cta" style="--i:7"><span class="btn__label">Reservar estadia</span></a>
   </nav>
-  <p class="menu__foot wrap">13°47′ S · 47°27′ O &nbsp;—&nbsp; Chapada dos Veadeiros</p>
 </div>
 
 <main>
 
-<!-- ============ BANNERS (HERO) ============ -->
-<section class="hero" id="inicio" aria-roledescription="carrossel" aria-label="Destaques da pousada">
-  <div class="hero__slides">
-
-    <article class="slide is-active" data-scene="dawn" style="--pos: 68% 50%; --pos-m: 80% 50%" aria-roledescription="banner" aria-label="1 de 3: O chalé">
-      <canvas class="scene" data-intro aria-hidden="true"></canvas>
-      <figure class="slide__media">
-        <div class="slide__photo"><img src="assets/img/fotos/chale-entardecer-1080.jpg" srcset="assets/img/fotos/chale-entardecer-640.jpg 640w, assets/img/fotos/chale-entardecer-1080.jpg 1080w" sizes="(max-width: 959px) 100vw, 480px" alt="Chalé em A entre as árvores, com o sol baixo iluminando a serra ao fundo" fetchpriority="high"></div>
-      </figure>
-      <div class="slide__shade" aria-hidden="true"></div>
-      <div class="slide__content wrap">
-        <p class="eyebrow eyebrow--light slide__eyebrow">Cavalcante · Chapada dos Veadeiros · GO</p>
-        <h1 class="slide__title" data-split>Sinta a <em>Chapada</em> acordar</h1>
-        <p class="slide__text">Um chalé em A no meio do cerrado, com hidromassagem no deck, vista para a serra e as cachoeiras de Cavalcante ao redor.</p>
-        <div class="slide__actions">
-          <a class="btn btn--gold magnetic" href="#reserva"><span>Reservar estadia</span></a>
-          <a class="btn btn--line" href="#chale"><span>Conhecer o chalé</span></a>
-        </div>
-      </div>
-    </article>
-
-    <article class="slide" data-scene="golden" style="--pos: 50% 60%; --pos-m: 38% 50%" aria-roledescription="banner" aria-label="2 de 3: Hidromassagem" aria-hidden="true">
-      <canvas class="scene" aria-hidden="true"></canvas>
-      <figure class="slide__media">
-        <div class="slide__photo"><img src="assets/img/fotos/hidro-vista-serra-1080.jpg" srcset="assets/img/fotos/hidro-vista-serra-640.jpg 640w, assets/img/fotos/hidro-vista-serra-1080.jpg 1080w" sizes="(max-width: 959px) 100vw, 480px" alt="Hidromassagem no deck de madeira, de frente para a serra ao entardecer" loading="lazy"></div>
-      </figure>
-      <div class="slide__shade" aria-hidden="true"></div>
-      <div class="slide__content wrap">
-        <p class="eyebrow eyebrow--light slide__eyebrow">Deck com vista para a serra</p>
-        <h2 class="slide__title" data-split>Água quente, <em>vista infinita</em></h2>
-        <p class="slide__text">A hidromassagem fica no deck, de frente para as serras de Cavalcante. Cada fim de tarde pinta um céu diferente.</p>
-        <div class="slide__actions">
-          <a class="btn btn--gold magnetic" href="#chale" tabindex="-1"><span>Ver o chalé</span></a>
-        </div>
-      </div>
-    </article>
-
-    <article class="slide" data-scene="night" style="--pos: 45% 62%; --pos-m: 42% 50%" aria-roledescription="banner" aria-label="3 de 3: Céu estrelado" aria-hidden="true">
-      <canvas class="scene" aria-hidden="true"></canvas>
-      <figure class="slide__media">
-        <div class="slide__photo"><img src="assets/img/fotos/chale-noite-1080.jpg" srcset="assets/img/fotos/chale-noite-640.jpg 640w, assets/img/fotos/chale-noite-1080.jpg 1080w" sizes="(max-width: 959px) 100vw, 480px" alt="Chalé em A iluminado com luz dourada ao anoitecer, sob o céu azul" loading="lazy"></div>
-      </figure>
-      <div class="slide__shade" aria-hidden="true"></div>
-      <div class="slide__content wrap">
-        <p class="eyebrow eyebrow--light slide__eyebrow">Depois que o sol se põe</p>
-        <h2 class="slide__title" data-split>Noites de <em>céu de cristal</em></h2>
-        <p class="slide__text">Longe das luzes da cidade, a Via Láctea aparece inteira. Assista de dentro da hidromassagem.</p>
-        <div class="slide__actions">
-          <a class="btn btn--gold magnetic" href="#reserva" tabindex="-1"><span>Quero essa noite</span></a>
-        </div>
-      </div>
-    </article>
-
-  </div>
-
-  <svg class="hero__seal" viewBox="0 0 120 120" aria-hidden="true">
-    <defs><path id="seal-circle" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs>
-    <text><textPath href="#seal-circle" textLength="286" lengthAdjust="spacing">NATURE SENSES · CHAPADINHA · CAVALCANTE GO · </textPath></text>
-    <path d="M60 47l2.6 7.4 7.4 2.6-7.4 2.6L60 67l-2.6-7.4-7.4-2.6 7.4-2.6z" stroke="none"/>
-  </svg>
-
-  <div class="hero__ui wrap">
-    <p class="hero__count" aria-hidden="true"><span class="hero__current">01</span><span class="hero__total">/ 03</span></p>
-    <div class="hero__dots" role="group" aria-label="Escolher banner">
-      <button class="dot is-active" type="button" aria-label="Banner 1: O chalé" aria-current="true"><span class="dot__label">O chalé</span><span class="dot__bar"><i></i></span></button>
-      <button class="dot" type="button" aria-label="Banner 2: Hidromassagem"><span class="dot__label">A hidro</span><span class="dot__bar"><i></i></span></button>
-      <button class="dot" type="button" aria-label="Banner 3: Céu estrelado"><span class="dot__label">A noite</span><span class="dot__bar"><i></i></span></button>
+<!-- ============ HERO ============ -->
+<section class="hero" id="inicio" aria-label="Nature Senses Chapadinha">
+  <div class="hero__bg" data-parallax-bg="0.08">
+    <div class="hero__slide ph-hidro-vista-serra is-active" style="--pos: 50% 58%; --pos-m: 30% 50%">
+      <img src="assets/img/fotos/hidro-vista-serra-1080.jpg" srcset="assets/img/fotos/hidro-vista-serra-640.jpg 640w, assets/img/fotos/hidro-vista-serra-1080.jpg 1080w" sizes="100vw" alt="Hidromassagem no deck de madeira, de frente para a serra ao entardecer" fetchpriority="high">
     </div>
-    <div class="hero__arrows">
-      <button class="arrow magnetic" type="button" data-dir="-1" aria-label="Banner anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <button class="arrow magnetic" type="button" data-dir="1" aria-label="Próximo banner"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="hero__slide ph-chale-noite" style="--pos: 50% 16%; --pos-m: 45% 50%" aria-hidden="true">
+      <img src="assets/img/fotos/chale-noite-1080.jpg" srcset="assets/img/fotos/chale-noite-640.jpg 640w, assets/img/fotos/chale-noite-1080.jpg 1080w" sizes="100vw" alt="Chalé em A iluminado com luz dourada ao anoitecer" loading="lazy">
+    </div>
+    <div class="hero__slide ph-chale-entardecer" style="--pos: 50% 50%; --pos-m: 62% 50%" aria-hidden="true">
+      <img src="assets/img/fotos/chale-entardecer-1080.jpg" srcset="assets/img/fotos/chale-entardecer-640.jpg 640w, assets/img/fotos/chale-entardecer-1080.jpg 1080w" sizes="100vw" alt="Chalé em A entre as árvores, com o sol baixo atrás da serra" loading="lazy">
+    </div>
+  </div>
+  <div class="hero__shade" aria-hidden="true"></div>
+
+  <div class="hero__content wrap">
+    <p class="eyebrow eyebrow--light" data-line style="--i:0">Cavalcante · Chapada dos Veadeiros · GO</p>
+    <h1 class="hero__title">
+      <span class="hero__line" data-line style="--i:1">Sinta a Chapada</span>
+      <span class="hero__line" data-line style="--i:2"><em>no seu tempo</em></span>
+    </h1>
+    <p class="hero__text" data-line style="--i:3">Chalé em A no meio do cerrado, com hidromassagem no deck, vista para a serra e as cachoeiras de Cavalcante ao redor.</p>
+    <div class="hero__actions" data-line style="--i:4">
+      <a class="btn btn--gold" href="#reserva"><span class="btn__label">Reservar estadia</span></a>
+      <a class="btn btn--line" href="#chale"><span class="btn__label">Conhecer o chalé</span></a>
     </div>
   </div>
 
-  <a class="hero__scroll" href="#pousada" aria-label="Rolar para a próxima seção"><span>Role para sentir</span><i aria-hidden="true"></i></a>
+  <div class="hero__controls wrap" data-line style="--i:5">
+    <div class="hero__dots" role="group" aria-label="Fotos do destaque">
+      <button class="hero__dot is-active" type="button" aria-label="Foto 1: hidromassagem com vista" aria-current="true"><span>Hidro</span></button>
+      <button class="hero__dot" type="button" aria-label="Foto 2: chalé ao anoitecer"><span>Noite</span></button>
+      <button class="hero__dot" type="button" aria-label="Foto 3: chalé ao entardecer"><span>Entardecer</span></button>
+    </div>
+    <button class="hero__pause" type="button" aria-pressed="false" aria-label="Pausar troca de fotos">
+      <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
+      <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l10 6-10 6z"/></svg>
+    </button>
+  </div>
+
+  <a class="hero__scroll" href="#pousada" aria-label="Rolar para a próxima seção"><span>Role</span><i aria-hidden="true"></i></a>
 </section>
-
-<!-- ============ FAIXA ============ -->
-<div class="ticker" aria-hidden="true">
-  <div class="ticker__track">
-    <span>Chapada dos Veadeiros</span><b></b><span>Cerrado</span><b></b><span>Cachoeiras</span><b></b><span>Céu estrelado</span><b></b><span>Território Kalunga</span><b></b><span>Hidromassagem</span><b></b><span>Silêncio</span><b></b>
-    <span>Chapada dos Veadeiros</span><b></b><span>Cerrado</span><b></b><span>Cachoeiras</span><b></b><span>Céu estrelado</span><b></b><span>Território Kalunga</span><b></b><span>Hidromassagem</span><b></b><span>Silêncio</span><b></b>
-  </div>
-</div>
 
 <!-- ============ A POUSADA ============ -->
 <section class="about light" id="pousada">
-  <svg class="crystal" data-parallax="-0.12" viewBox="0 0 200 260" fill="none" aria-hidden="true">
-    <path d="M100 6 L148 70 L132 236 L68 236 L52 70 Z"/>
-    <path d="M100 6 L112 70 L100 236 M100 6 L88 70 L100 236 M52 70 H148 M88 70 L68 236 M112 70 L132 236"/>
-  </svg>
   <div class="wrap about__grid">
-    <header class="about__head">
-      <p class="eyebrow" data-reveal>A pousada</p>
-      <h2 class="h2" data-split>Um refúgio para <em>sentir</em> o cerrado</h2>
+    <header class="about__head" data-reveal>
+      <p class="eyebrow">A pousada</p>
+      <h2 class="h2">Um refúgio para <em>sentir</em> o cerrado</h2>
     </header>
-    <div class="about__body">
-      <p class="about__lead" data-scrub>O Nature Senses Chapadinha fica na estrada entre Cavalcante e Colinas do Sul, no lado norte da Chapada dos Veadeiros. Aqui o dia começa com o canto dos pássaros e termina com a Via Láctea sobre o chalé. Um lugar feito para desacelerar e usar os cinco sentidos.</p>
+    <div class="about__body" data-stagger>
+      <p class="about__lead" data-reveal>O Nature Senses Chapadinha fica na estrada entre Cavalcante e Colinas do Sul, no lado norte da Chapada dos Veadeiros. Aqui o dia começa com o canto dos pássaros e termina com a Via Láctea sobre o chalé.</p>
       <p class="about__note" data-reveal>Chalé privativo com hidromassagem e churrasqueira no deck, jardim, Wi‑Fi e estacionamento gratuitos. Perto do Território Kalunga e do Parque Nacional.</p>
     </div>
     <dl class="facts" data-stagger>
       <div class="fact" data-reveal>
         <dt>Nota no Booking.com</dt>
-        <dd><span class="fact__num" data-count="9.7" data-decimals="1">9,7</span><small>/10 · Excepcional</small></dd>
+        <dd><span class="fact__num">9,7</span><small>/10 · Excepcional</small></dd>
       </div>
       <div class="fact" data-reveal>
         <dt>Nota no Airbnb</dt>
-        <dd><span class="fact__num" data-count="5" data-decimals="1">5,0</span><small>/5 estrelas</small></dd>
+        <dd><span class="fact__num">5,0</span><small>/5 estrelas</small></dd>
       </div>
       <div class="fact" data-reveal>
         <dt>Distância de Brasília</dt>
-        <dd><span class="fact__num" data-count="320">320</span><small>km, aprox.</small></dd>
+        <dd><span class="fact__num">320</span><small>km, aprox.</small></dd>
       </div>
       <div class="fact" data-reveal>
         <dt>Idade das rochas da Chapada</dt>
-        <dd><span class="fact__num" data-count="1.8" data-decimals="1">1,8</span><small>bilhão de anos</small></dd>
+        <dd><span class="fact__num">1,8</span><small>bilhão de anos</small></dd>
       </div>
     </dl>
   </div>
 </section>
 
-<!-- ============ CHALÉ ============ -->
+<!-- ============ ACOMODAÇÃO ============ -->
 <section class="chalet" id="chale">
   <div class="wrap chalet__grid">
-    <figure class="chalet__art" data-tilt data-reveal="scale" data-cursor="Chalé">
-      <div class="chalet__frame"><img class="chalet__photo" src="assets/img/fotos/chale-deck-hidro-1080.jpg" srcset="assets/img/fotos/chale-deck-hidro-640.jpg 640w, assets/img/fotos/chale-deck-hidro-1080.jpg 1080w" sizes="(max-width: 899px) 92vw, 480px" alt="Chalé em A com fachada de vidro, deck de madeira, hidromassagem, poltronas e churrasqueira, com a serra ao fundo" loading="lazy"></div>
-      <div class="chalet__inset"><img src="assets/img/fotos/hidro-espumante-1080.jpg" srcset="assets/img/fotos/hidro-espumante-640.jpg 640w, assets/img/fotos/hidro-espumante-1080.jpg 1080w" sizes="220px" alt="Hidromassagem borbulhando no deck, com espumante e chocolates à beira" loading="lazy"></div>
-      <figcaption class="chalet__badge"><span>Avaliação</span><strong>5,0</strong><small>no Airbnb</small></figcaption>
-    </figure>
+    <div class="chalet__photos" data-reveal="lg">
+      <figure class="chalet__main media ph-chale-deck-hidro" style="--pos: 50% 60%">
+        <img src="assets/img/fotos/chale-deck-hidro-1080.jpg" srcset="assets/img/fotos/chale-deck-hidro-640.jpg 640w, assets/img/fotos/chale-deck-hidro-1080.jpg 1080w" sizes="(max-width: 899px) 92vw, 520px" alt="Chalé em A com fachada de vidro, deck de madeira, hidromassagem, poltronas e churrasqueira, com a serra ao fundo" loading="lazy">
+      </figure>
+      <figure class="chalet__second media ph-chale-fachada" style="--pos: 50% 40%">
+        <img src="assets/img/fotos/chale-fachada-640.jpg" alt="Fachada de madeira do chalé na luz dourada do fim de tarde" loading="lazy">
+      </figure>
+      <p class="chalet__badge"><span>Avaliação</span><strong>5,0</strong><small>no Airbnb</small></p>
+    </div>
 
     <div class="chalet__text">
-      <p class="eyebrow eyebrow--light" data-reveal>Hospedagem</p>
-      <h2 class="h2" data-split>Chalé <em>Orquídea</em></h2>
-      <p class="chalet__lead" data-reveal>Chalé em A com fachada de vidro, cercado de árvores do cerrado e de frente para a serra. Por dentro, sala com sofá e escada para o mezanino. Do lado de fora, o deck com hidromassagem.</p>
+      <header data-reveal>
+        <p class="eyebrow eyebrow--light">Acomodação</p>
+        <h2 class="h2">Chalé <em>Orquídea</em></h2>
+        <p class="chalet__lead">Chalé em A com fachada de vidro, cercado de árvores do cerrado e de frente para a serra. Por dentro, sala com sofá e escada para o mezanino. Do lado de fora, o deck com hidromassagem.</p>
+      </header>
       <ul class="amenities" data-stagger>
         <li data-reveal>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h18v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M8 9.5c-1-1 1-2 0-3.5M12 9.5c-1-1 1-2 0-3.5M16 9.5c-1-1 1-2 0-3.5"/></svg>
@@ -220,7 +179,7 @@
         </li>
         <li data-reveal>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20c0-8.5 6-15 15-15 0 9-6 15-14.5 15"/><path d="M5 20l8.5-8.5"/></svg>
-          <div><strong>Jardim</strong><span>Área verde em volta, com flores do cerrado.</span></div>
+          <div><strong>Jardim</strong><span>Área verde em volta, com árvores do cerrado.</span></div>
         </li>
         <li data-reveal>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0"/><path d="M5.5 12.5a10 10 0 0 1 13 0"/><path d="M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r=".8"/></svg>
@@ -230,220 +189,211 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M10 17V7h3a3 3 0 0 1 0 6h-3"/></svg>
           <div><strong>Estacionamento privativo</strong><span>Gratuito, dentro da propriedade.</span></div>
         </li>
-        <li data-reveal>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></svg>
-          <div><strong>Céu escuro</strong><span>Sem poluição luminosa: estrelas a olho nu.</span></div>
-        </li>
-        <li data-reveal>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
-          <div><strong>Silêncio</strong><span>Longe do movimento, perto da natureza.</span></div>
-        </li>
       </ul>
       <div class="chalet__actions" data-reveal>
-        <a class="btn btn--gold magnetic" href="#reserva"><span>Consultar datas</span></a>
-        <a class="btn btn--line js-airbnb" href="https://www.airbnb.com.br/s/Cavalcante--GO/homes?query=Nature%20Senses%20Chapadinha" target="_blank" rel="noopener"><span>Ver no Airbnb</span></a>
+        <a class="btn btn--gold" href="#reserva"><span class="btn__label">Consultar datas</span></a>
+        <a class="btn btn--line js-airbnb" href="https://www.airbnb.com.br/s/Cavalcante--GO/homes?query=Nature%20Senses%20Chapadinha" target="_blank" rel="noopener"><span class="btn__label">Ver no Airbnb</span></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ BANNER: DESCONECTE ============ -->
-<section class="banner banner--photo" aria-label="Desconecte para se reconectar">
-  <div class="banner__media" data-reveal="zoom"><img src="assets/img/fotos/por-do-sol-deck-1080.jpg" srcset="assets/img/fotos/por-do-sol-deck-640.jpg 640w, assets/img/fotos/por-do-sol-deck-1080.jpg 1080w" sizes="100vw" alt="Pôr do sol visto do deck do chalé, com a serra em silhueta" loading="lazy" data-parallax="0.14"></div>
+<!-- ============ BANNER ============ -->
+<section class="banner" aria-label="Fim de tarde no deck">
+  <div class="banner__bg ph-por-do-sol-deck" data-parallax-bg="0.08">
+    <img src="assets/img/fotos/por-do-sol-deck-1080.jpg" srcset="assets/img/fotos/por-do-sol-deck-640.jpg 640w, assets/img/fotos/por-do-sol-deck-1080.jpg 1080w" sizes="100vw" alt="" loading="lazy">
+  </div>
   <div class="banner__shade" aria-hidden="true"></div>
-  <div class="banner__content wrap">
-    <p class="eyebrow eyebrow--light" data-reveal>Fim de tarde no deck</p>
-    <h2 class="display" data-split>Desconecte <em>para</em> se reconectar</h2>
-    <p class="banner__text" data-reveal>O sinal some em alguns trechos da estrada. Pode desligar. O que importa está do lado de fora da janela.</p>
+  <div class="banner__content wrap" data-reveal="lg">
+    <p class="eyebrow eyebrow--light">Fim de tarde no deck</p>
+    <h2 class="display">Desconecte <em>para</em> se reconectar</h2>
+    <p class="banner__text">O sinal some em alguns trechos da estrada. Pode desligar. O que importa está do lado de fora da janela.</p>
   </div>
 </section>
 
-<!-- ============ CINCO SENTIDOS ============ -->
-<section class="senses light" id="sentidos">
+<!-- ============ EXPERIÊNCIAS ============ -->
+<section class="experiences light" id="experiencias">
   <div class="wrap">
-    <header class="section-head">
-      <p class="eyebrow" data-reveal>Experiências</p>
-      <h2 class="h2" data-split>Cinco sentidos, <em>uma Chapada</em></h2>
-      <p class="section-head__text" data-reveal>Nature Senses quer dizer isso: viver a natureza por inteiro. Passe o mouse ou toque em cada sentido.</p>
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">Experiências</p>
+      <h2 class="h2">Cinco sentidos, <em>uma Chapada</em></h2>
+      <p class="section-head__text">Nature Senses quer dizer isso: viver a natureza por inteiro, sem pressa.</p>
     </header>
-    <ul class="senses__list" data-stagger>
-      <li class="sense sense--ver is-open" tabindex="0" data-reveal>
-        <span class="sense__fx" aria-hidden="true"></span>
-        <svg class="sense__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
-        <h3>Ver</h3>
-        <p>O nascer do sol sobre as serras e a Via Láctea inteira à noite, sem poluição luminosa.</p>
+
+    <ul class="cards cards--3" data-stagger>
+      <li data-reveal>
+        <article class="card">
+          <figure class="card__media media ph-hidro-espumante" style="--pos: 50% 40%">
+            <img src="assets/img/fotos/hidro-espumante-640.jpg" alt="Hidromassagem borbulhando no deck, com espumante e chocolates à beira" loading="lazy">
+          </figure>
+          <div class="card__body">
+            <p class="card__tag">Tocar</p>
+            <h3>Hidro a dois</h3>
+            <p>Água quente no deck, com a serra à frente. Um jeito tranquilo de comemorar a dois.</p>
+          </div>
+        </article>
       </li>
-      <li class="sense sense--ouvir" tabindex="0" data-reveal>
-        <span class="sense__fx" aria-hidden="true"></span>
-        <svg class="sense__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 9a5.5 5.5 0 1 1 11 0c0 3-2.2 4.2-3 5.2-.8 1-1 2.2-1 3.3a3 3 0 0 1-6 0"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.6-1.6 2-1.6 3.2"/></svg>
-        <h3>Ouvir</h3>
-        <p>O barulho das cachoeiras, o vento no capim e o canto dos pássaros do cerrado ao amanhecer.</p>
+      <li data-reveal>
+        <article class="card">
+          <figure class="card__media media ph-por-do-sol-deck" style="--pos: 50% 55%">
+            <img src="assets/img/fotos/por-do-sol-deck-640.jpg" alt="Céu laranja do pôr do sol visto do deck, com a serra em silhueta" loading="lazy">
+          </figure>
+          <div class="card__body">
+            <p class="card__tag">Ver</p>
+            <h3>Pôr do sol no deck</h3>
+            <p>O fim de tarde pinta o céu de Cavalcante de laranja. As poltronas do deck são o melhor lugar para assistir.</p>
+          </div>
+        </article>
       </li>
-      <li class="sense sense--tocar" tabindex="0" data-reveal>
-        <span class="sense__fx" aria-hidden="true"></span>
-        <svg class="sense__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14c2.5-2 4.5-2 7 0s4.5 2 7 0 3.5-1.5 4-1.5"/><path d="M3 18.5c2.5-2 4.5-2 7 0s4.5 2 7 0 3.5-1.5 4-1.5"/><path d="M12 3c2.2 2.6 3.4 4.4 3.4 5.8a3.4 3.4 0 0 1-6.8 0C8.6 7.4 9.8 5.6 12 3z"/></svg>
-        <h3>Tocar</h3>
-        <p>A água fria e cristalina dos poços e a hidromassagem quente no fim do dia.</p>
+      <li data-reveal>
+        <article class="card">
+          <figure class="card__media media ph-chale-noite" style="--pos: 50% 30%">
+            <img src="assets/img/fotos/chale-noite-640.jpg" alt="Chalé em A iluminado sob o céu azul do anoitecer" loading="lazy">
+          </figure>
+          <div class="card__body">
+            <p class="card__tag">Sentir</p>
+            <h3>Noites estreladas</h3>
+            <p>Longe das luzes da cidade, a Via Láctea aparece a olho nu nas noites limpas de maio a setembro.</p>
+          </div>
+        </article>
       </li>
-      <li class="sense sense--cheirar" tabindex="0" data-reveal>
-        <span class="sense__fx" aria-hidden="true"></span>
-        <svg class="sense__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21c-2.2-2.2 2.2-4.3 0-6.5s2.2-4.3 0-6.5"/><path d="M12 21c-2.2-2.2 2.2-4.3 0-6.5s2.2-4.3 0-6.5"/><path d="M17 21c-2.2-2.2 2.2-4.3 0-6.5s2.2-4.3 0-6.5"/></svg>
-        <h3>Cheirar</h3>
-        <p>O cheiro de terra molhada do cerrado depois da chuva e das flores do jardim.</p>
+    </ul>
+
+    <ul class="senses" data-stagger>
+      <li data-reveal>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        <strong>Ver</strong><span>Serras ao amanhecer e a Via Láctea à noite.</span>
       </li>
-      <li class="sense sense--saborear" tabindex="0" data-reveal>
-        <span class="sense__fx" aria-hidden="true"></span>
-        <svg class="sense__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="14.5" r="6.5"/><path d="M11 8c0-2 .8-3.6 2.4-4.6"/><path d="M13 6.4c1.6-1.8 4.2-2.2 6.2-1-1.2 2.1-3.8 2.8-6.2 1z"/><path d="M8 13.2a3.2 3.2 0 0 1 2.6-2.4"/></svg>
-        <h3>Saborear</h3>
-        <p>Os frutos do cerrado, como pequi, baru e cagaita, na cozinha regional de Cavalcante.</p>
+      <li data-reveal>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 9a5.5 5.5 0 1 1 11 0c0 3-2.2 4.2-3 5.2-.8 1-1 2.2-1 3.3a3 3 0 0 1-6 0"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.6-1.6 2-1.6 3.2"/></svg>
+        <strong>Ouvir</strong><span>Cachoeiras, vento no capim e pássaros do cerrado.</span>
+      </li>
+      <li data-reveal>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14c2.5-2 4.5-2 7 0s4.5 2 7 0 3.5-1.5 4-1.5"/><path d="M3 18.5c2.5-2 4.5-2 7 0s4.5 2 7 0 3.5-1.5 4-1.5"/><path d="M12 3c2.2 2.6 3.4 4.4 3.4 5.8a3.4 3.4 0 0 1-6.8 0C8.6 7.4 9.8 5.6 12 3z"/></svg>
+        <strong>Tocar</strong><span>Água fria dos poços e quente na hidro.</span>
+      </li>
+      <li data-reveal>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21c-2.2-2.2 2.2-4.3 0-6.5s2.2-4.3 0-6.5"/><path d="M12 21c-2.2-2.2 2.2-4.3 0-6.5s2.2-4.3 0-6.5"/><path d="M17 21c-2.2-2.2 2.2-4.3 0-6.5s2.2-4.3 0-6.5"/></svg>
+        <strong>Cheirar</strong><span>Terra molhada do cerrado depois da chuva.</span>
+      </li>
+      <li data-reveal>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="14.5" r="6.5"/><path d="M11 8c0-2 .8-3.6 2.4-4.6"/><path d="M13 6.4c1.6-1.8 4.2-2.2 6.2-1-1.2 2.1-3.8 2.8-6.2 1z"/></svg>
+        <strong>Saborear</strong><span>Pequi, baru e cagaita na cozinha regional.</span>
       </li>
     </ul>
   </div>
 </section>
 
-<!-- ============ REGIÃO (scroll horizontal) ============ -->
+<!-- ============ REGIÃO ============ -->
 <section class="region" id="regiao">
-  <div class="region__sticky">
-    <p class="region__bg" aria-hidden="true">Cavalcante · Kalunga · Veadeiros</p>
-    <header class="wrap section-head section-head--row">
+  <div class="wrap">
+    <header class="section-head section-head--row" data-reveal>
       <div>
-        <p class="eyebrow eyebrow--light" data-reveal>Arredores</p>
-        <h2 class="h2" data-split>Onde a Chapada <em>acontece</em></h2>
+        <p class="eyebrow eyebrow--light">Arredores</p>
+        <h2 class="h2">Onde a Chapada <em>acontece</em></h2>
       </div>
-      <p class="section-head__text" data-reveal>Cavalcante é a porta de entrada para as cachoeiras do Território Kalunga, o maior território quilombola do Brasil. Contrate guias locais: além de obrigatórios em vários atrativos, eles contam a história do lugar.</p>
+      <p class="section-head__text">Cavalcante é a porta de entrada para as cachoeiras do Território Kalunga. Contrate guias locais: além de obrigatórios em vários atrativos, eles contam a história do lugar.</p>
     </header>
-    <div class="region__viewport">
-      <div class="region__track">
-        <article class="place">
-          <div class="place__art"><canvas class="scene" data-scene="dawn" data-static data-seed="31" aria-hidden="true"></canvas></div>
-          <p class="place__tag">Alto Paraíso · São Jorge</p>
-          <h3>Parque Nacional da Chapada dos Veadeiros</h3>
-          <p>Patrimônio Natural da Humanidade pela UNESCO. Cânions, os saltos do Rio Preto e trilhas pelo cerrado de altitude.</p>
-        </article>
-        <article class="place">
-          <div class="place__art"><canvas class="scene" data-scene="falls" data-palette="turquesa" data-static data-seed="5" aria-hidden="true"></canvas></div>
-          <p class="place__tag">Território Kalunga · Engenho II</p>
-          <h3>Cachoeira Santa Bárbara</h3>
-          <p>O poço azul-turquesa mais famoso da Chapada. Acesso com guia da comunidade Kalunga e número limitado de visitantes por dia.</p>
-        </article>
-        <article class="place">
-          <div class="place__art"><canvas class="scene" data-scene="falls" data-palette="ambar" data-static data-seed="9" aria-hidden="true"></canvas></div>
-          <p class="place__tag">Território Kalunga · Engenho II</p>
-          <h3>Cachoeira Capivara</h3>
-          <p>Queda alta e poço amplo para banho. Dá para combinar com Santa Bárbara no mesmo dia.</p>
-        </article>
-        <article class="place">
-          <div class="place__art"><canvas class="scene" data-scene="falls" data-palette="prata" data-static data-seed="21" aria-hidden="true"></canvas></div>
-          <p class="place__tag">Cavalcante</p>
-          <h3>Complexo do Prata</h3>
-          <p>Uma sequência de quedas e poços no meio da mata, para passar o dia de cachoeira em cachoeira.</p>
-        </article>
-        <article class="place">
-          <div class="place__art"><canvas class="scene" data-scene="night" data-static data-seed="11" aria-hidden="true"></canvas></div>
-          <p class="place__tag">São Jorge</p>
-          <h3>Vale da Lua</h3>
-          <p>Rochas esculpidas pelo Rio São Miguel, com crateras e piscinas naturais que lembram a superfície lunar.</p>
-        </article>
-      </div>
-    </div>
-    <div class="region__bar wrap" aria-hidden="true"><span><i></i></span></div>
-  </div>
-</section>
-
-<!-- ============ BANNER: CÉU ============ -->
-<section class="banner banner--night" data-scene="night" aria-label="Céu estrelado da Chapada">
-  <canvas class="scene" data-interactive data-cursor="Toque" aria-hidden="true"></canvas>
-  <div class="banner__shade" aria-hidden="true"></div>
-  <div class="banner__content banner__content--center wrap">
-    <p class="eyebrow eyebrow--light" data-reveal>De maio a setembro, noites limpas</p>
-    <h2 class="display" data-split>O espetáculo <em>continua</em> no céu</h2>
-    <p class="banner__text" data-reveal>Toque no céu para lançar uma estrela cadente. Na Chapada, é só esperar alguns minutos para ver uma de verdade.</p>
+    <ul class="places" data-stagger>
+      <li data-reveal><article class="place">
+        <p class="place__tag">Alto Paraíso · São Jorge</p>
+        <h3>Parque Nacional da Chapada dos Veadeiros</h3>
+        <p>Patrimônio Natural da Humanidade pela UNESCO. Cânions, os saltos do Rio Preto e trilhas pelo cerrado de altitude.</p>
+      </article></li>
+      <li data-reveal><article class="place">
+        <p class="place__tag">Território Kalunga · Engenho II</p>
+        <h3>Cachoeira Santa Bárbara</h3>
+        <p>O poço azul-turquesa mais famoso da Chapada. Acesso com guia da comunidade e número limitado de visitantes por dia.</p>
+      </article></li>
+      <li data-reveal><article class="place">
+        <p class="place__tag">Território Kalunga · Engenho II</p>
+        <h3>Cachoeira Capivara</h3>
+        <p>Queda alta e poço amplo para banho. Dá para combinar com Santa Bárbara no mesmo dia.</p>
+      </article></li>
+      <li data-reveal><article class="place">
+        <p class="place__tag">Cavalcante</p>
+        <h3>Complexo do Prata</h3>
+        <p>Uma sequência de quedas e poços no meio da mata, para passar o dia de cachoeira em cachoeira.</p>
+      </article></li>
+      <li data-reveal><article class="place">
+        <p class="place__tag">São Jorge</p>
+        <h3>Vale da Lua</h3>
+        <p>Rochas esculpidas pelo Rio São Miguel, com crateras e piscinas naturais que lembram a superfície lunar.</p>
+      </article></li>
+      <li data-reveal><article class="place">
+        <p class="place__tag">Cavalcante · Teresina · Monte Alegre</p>
+        <h3>Território Kalunga</h3>
+        <p>O maior território quilombola do Brasil. Visitar com guias da comunidade é a melhor forma de conhecer sua história e cultura.</p>
+      </article></li>
+    </ul>
   </div>
 </section>
 
 <!-- ============ GALERIA ============ -->
 <section class="gallery light" id="galeria">
   <div class="wrap">
-    <header class="section-head section-head--row">
+    <header class="section-head section-head--row" data-reveal>
       <div>
-        <p class="eyebrow" data-reveal>@naturesenseschapadinha</p>
-        <h2 class="h2" data-split>Momentos na <em>Chapada</em></h2>
+        <p class="eyebrow">@naturesenseschapadinha</p>
+        <h2 class="h2">Momentos na <em>Chapada</em></h2>
       </div>
-      <a class="btn btn--dark magnetic js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener" data-reveal>
+      <a class="btn btn--dark js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" class="fill"/></svg>
-        <span>Seguir no Instagram</span>
+        <span class="btn__label">Seguir no Instagram</span>
       </a>
     </header>
-    <div class="gallery__grid" data-stagger>
-      <button class="tile tile--tall" type="button" data-index="0" data-full="assets/img/fotos/chale-fachada-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Madeira e luz dourada">
-        <img src="assets/img/fotos/chale-fachada-1080.jpg" srcset="assets/img/fotos/chale-fachada-640.jpg 640w, assets/img/fotos/chale-fachada-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 300px" alt="Fachada de madeira do chalé em A entre galhos, na luz dourada do fim de tarde" loading="lazy">
-        <span class="tile__label">Madeira e luz dourada</span>
-      </button>
-      <button class="tile" type="button" data-index="1" data-full="assets/img/fotos/hidro-espumante-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Hidro a dois">
-        <img src="assets/img/fotos/hidro-espumante-1080.jpg" srcset="assets/img/fotos/hidro-espumante-640.jpg 640w, assets/img/fotos/hidro-espumante-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Hidromassagem borbulhando com espumante e chocolates à beira" loading="lazy">
-        <span class="tile__label">Hidro a dois</span>
-      </button>
-      <button class="tile" type="button" data-index="2" data-full="assets/img/fotos/por-do-sol-deck-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Pôr do sol no deck">
-        <img src="assets/img/fotos/por-do-sol-deck-1080.jpg" srcset="assets/img/fotos/por-do-sol-deck-640.jpg 640w, assets/img/fotos/por-do-sol-deck-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Céu laranja do pôr do sol visto do deck, com a serra em silhueta" loading="lazy">
-        <span class="tile__label">Pôr do sol no deck</span>
-      </button>
-      <button class="tile" type="button" data-index="3" data-full="assets/img/fotos/chale-noite-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Chalé ao anoitecer">
-        <img src="assets/img/fotos/chale-noite-1080.jpg" srcset="assets/img/fotos/chale-noite-640.jpg 640w, assets/img/fotos/chale-noite-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Chalé em A iluminado ao anoitecer" loading="lazy">
-        <span class="tile__label">Chalé ao anoitecer</span>
-      </button>
-      <button class="tile" type="button" data-index="4" data-full="assets/img/fotos/hidro-vista-serra-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Vista da hidro">
-        <img src="assets/img/fotos/hidro-vista-serra-1080.jpg" srcset="assets/img/fotos/hidro-vista-serra-640.jpg 640w, assets/img/fotos/hidro-vista-serra-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Hidromassagem de frente para a serra ao entardecer" loading="lazy">
-        <span class="tile__label">Vista da hidro</span>
-      </button>
-      <button class="tile" type="button" data-index="5" data-full="assets/img/fotos/chale-entardecer-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Entre as árvores">
-        <img src="assets/img/fotos/chale-entardecer-1080.jpg" srcset="assets/img/fotos/chale-entardecer-640.jpg 640w, assets/img/fotos/chale-entardecer-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Chalé em A visto entre galhos, com o sol se pondo atrás da serra" loading="lazy">
-        <span class="tile__label">Entre as árvores</span>
-      </button>
-      <button class="tile" type="button" data-index="6" data-full="assets/img/fotos/chale-deck-hidro-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Deck, hidro e churrasqueira">
-        <img src="assets/img/fotos/chale-deck-hidro-1080.jpg" srcset="assets/img/fotos/chale-deck-hidro-640.jpg 640w, assets/img/fotos/chale-deck-hidro-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Deck do chalé com hidromassagem, poltronas e churrasqueira, com a serra ao fundo" loading="lazy">
-        <span class="tile__label">Deck, hidro e churrasqueira</span>
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- ============ AVALIAÇÕES ============ -->
-<section class="reviews">
-  <div class="wrap reviews__grid">
-    <header class="reviews__head">
-      <p class="eyebrow eyebrow--light" data-reveal>Avaliações</p>
-      <h2 class="h2" data-split>Quem vem, <em>recomenda</em></h2>
-      <p class="section-head__text" data-reveal>Notas públicas dadas pelos hóspedes nas plataformas de reserva.</p>
-    </header>
-    <div class="ring" data-reveal data-ring="0.97">
-      <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="ring__track" cx="60" cy="60" r="52"/><circle class="ring__val" cx="60" cy="60" r="52" pathLength="100"/></svg>
-      <div class="ring__txt"><strong>9,7</strong><span>Booking.com</span><small>Excepcional</small></div>
-    </div>
-    <div class="ring" data-reveal data-ring="1">
-      <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="ring__track" cx="60" cy="60" r="52"/><circle class="ring__val" cx="60" cy="60" r="52" pathLength="100"/></svg>
-      <div class="ring__txt"><strong>5,0</strong><span>Airbnb</span><small>Chalé Orquídea</small></div>
-    </div>
+    <ul class="gallery__grid" data-stagger>
+      <li class="tile--tall" data-reveal><button class="tile" type="button" data-full="assets/img/fotos/chale-fachada-1080.jpg" aria-label="Ampliar foto: Madeira e luz dourada">
+        <span class="tile__media media ph-chale-fachada"><img src="assets/img/fotos/chale-fachada-640.jpg" alt="Fachada de madeira do chalé em A entre galhos, na luz dourada do fim de tarde" loading="lazy"></span>
+        <span class="tile__overlay"><span class="tile__label">Madeira e luz dourada</span></span>
+      </button></li>
+      <li data-reveal><button class="tile" type="button" data-full="assets/img/fotos/hidro-espumante-1080.jpg" aria-label="Ampliar foto: Hidro a dois">
+        <span class="tile__media media ph-hidro-espumante"><img src="assets/img/fotos/hidro-espumante-640.jpg" alt="Hidromassagem borbulhando com espumante e chocolates à beira" loading="lazy"></span>
+        <span class="tile__overlay"><span class="tile__label">Hidro a dois</span></span>
+      </button></li>
+      <li data-reveal><button class="tile" type="button" data-full="assets/img/fotos/por-do-sol-deck-1080.jpg" aria-label="Ampliar foto: Pôr do sol no deck">
+        <span class="tile__media media ph-por-do-sol-deck"><img src="assets/img/fotos/por-do-sol-deck-640.jpg" alt="Céu laranja do pôr do sol visto do deck, com a serra em silhueta" loading="lazy"></span>
+        <span class="tile__overlay"><span class="tile__label">Pôr do sol no deck</span></span>
+      </button></li>
+      <li data-reveal><button class="tile" type="button" data-full="assets/img/fotos/chale-noite-1080.jpg" aria-label="Ampliar foto: Chalé ao anoitecer">
+        <span class="tile__media media ph-chale-noite"><img src="assets/img/fotos/chale-noite-640.jpg" alt="Chalé em A iluminado ao anoitecer" loading="lazy"></span>
+        <span class="tile__overlay"><span class="tile__label">Chalé ao anoitecer</span></span>
+      </button></li>
+      <li data-reveal><button class="tile" type="button" data-full="assets/img/fotos/hidro-vista-serra-1080.jpg" aria-label="Ampliar foto: Vista da hidro">
+        <span class="tile__media media ph-hidro-vista-serra"><img src="assets/img/fotos/hidro-vista-serra-640.jpg" alt="Hidromassagem de frente para a serra ao entardecer" loading="lazy"></span>
+        <span class="tile__overlay"><span class="tile__label">Vista da hidro</span></span>
+      </button></li>
+      <li data-reveal><button class="tile" type="button" data-full="assets/img/fotos/chale-entardecer-1080.jpg" aria-label="Ampliar foto: Entre as árvores">
+        <span class="tile__media media ph-chale-entardecer"><img src="assets/img/fotos/chale-entardecer-640.jpg" alt="Chalé em A visto entre galhos, com o sol se pondo atrás da serra" loading="lazy"></span>
+        <span class="tile__overlay"><span class="tile__label">Entre as árvores</span></span>
+      </button></li>
+      <li data-reveal><button class="tile" type="button" data-full="assets/img/fotos/chale-deck-hidro-1080.jpg" aria-label="Ampliar foto: Deck, hidro e churrasqueira">
+        <span class="tile__media media ph-chale-deck-hidro"><img src="assets/img/fotos/chale-deck-hidro-640.jpg" alt="Deck do chalé com hidromassagem, poltronas e churrasqueira, com a serra ao fundo" loading="lazy"></span>
+        <span class="tile__overlay"><span class="tile__label">Deck, hidro e churrasqueira</span></span>
+      </button></li>
+    </ul>
   </div>
 </section>
 
 <!-- ============ COMO CHEGAR ============ -->
-<section class="route light" id="chegar">
+<section class="route" id="chegar">
   <div class="wrap route__grid">
-    <div class="route__text">
-      <p class="eyebrow" data-reveal>Como chegar</p>
-      <h2 class="h2" data-split>O caminho <em>faz parte</em></h2>
-      <address class="route__addr" data-reveal>
-        Estrada Cavalcante–Colinas do Sul<br>
-        Cavalcante · Goiás · CEP 73790-000
-      </address>
-      <ul class="route__tips" data-stagger>
+    <div class="route__text" data-stagger>
+      <header data-reveal>
+        <p class="eyebrow eyebrow--light">Como chegar</p>
+        <h2 class="h2">O caminho <em>faz parte</em></h2>
+        <address class="route__addr">Estrada Cavalcante–Colinas do Sul<br>Cavalcante · Goiás · CEP 73790-000</address>
+      </header>
+      <ul class="route__tips">
         <li data-reveal><strong>≈ 320 km de Brasília.</strong> Pela BR-020 e GO-118 até Alto Paraíso, depois Teresina de Goiás e GO-241 até Cavalcante.</li>
         <li data-reveal><strong>Trecho final de terra.</strong> Carros mais altos ajudam, principalmente na época das chuvas, de outubro a abril.</li>
         <li data-reveal><strong>Sinal de celular instável.</strong> Baixe o mapa offline e confirme a localização exata com a pousada ao reservar.</li>
       </ul>
-      <a class="btn btn--dark magnetic" href="https://www.google.com/maps/search/?api=1&amp;query=Nature%20Senses%20Chapadinha%20Cavalcante%20GO" target="_blank" rel="noopener" data-reveal><span>Abrir no Google Maps</span></a>
+      <div data-reveal>
+        <a class="btn btn--line" href="https://www.google.com/maps/search/?api=1&amp;query=Nature%20Senses%20Chapadinha%20Cavalcante%20GO" target="_blank" rel="noopener"><span class="btn__label">Abrir no Google Maps</span></a>
+      </div>
     </div>
-    <figure class="route__map" data-reveal="scale">
+    <figure class="route__map" data-reveal="lg">
       <svg viewBox="0 0 400 500" role="img" aria-label="Mapa esquemático: Brasília, São João d'Aliança, Alto Paraíso de Goiás, Teresina de Goiás, Cavalcante e a pousada, na estrada para Colinas do Sul">
         <g class="map__topo" fill="none">
           <path d="M40 150c40-30 120-40 170-10s60 90 10 120-150 20-180-30-20-60 0-80z"/>
@@ -456,9 +406,9 @@
         <path class="map__park" d="M70 118c30-26 120-34 150-6 22 22 4 62-30 76-40 16-110 10-128-16-12-18-8-38 8-54z"/>
         <text class="map__park-label" x="84" y="168">Parque Nacional</text>
         <text class="map__park-label" x="84" y="181">Chapada dos Veadeiros</text>
-        <path class="map__road map__road--side" d="M195 92 Q110 100 24 112"/>
+        <path class="map__road" d="M195 92 Q110 100 24 112"/>
         <text class="map__label map__label--muted" x="22" y="97">← Colinas do Sul</text>
-        <path id="rota" class="map__route" pathLength="1" d="M99 458 Q170 360 229 240 Q238 180 232 126 Q270 80 322 56 Q290 50 250 58 Q222 72 195 92"/>
+        <path class="map__route" d="M99 458 Q170 360 229 240 Q238 180 232 126 Q270 80 322 56 Q290 50 250 58 Q222 72 195 92"/>
         <g class="map__nodes">
           <circle cx="99" cy="458" r="5"/><circle cx="229" cy="240" r="4"/><circle cx="232" cy="126" r="4"/><circle cx="322" cy="56" r="4"/><circle cx="250" cy="58" r="5"/>
         </g>
@@ -470,13 +420,9 @@
           <text x="214" y="40">Cavalcante</text>
         </g>
         <g class="map__pin" transform="translate(195 92)">
-          <circle class="map__pulse" r="10"/>
           <circle r="7"/>
           <text x="-100" y="-14">Nature Senses</text>
         </g>
-        <circle class="map__car" r="4.5">
-          <animateMotion dur="7s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#rota"/></animateMotion>
-        </circle>
         <g class="map__compass" transform="translate(360 455)">
           <path d="M0 -18 L6 0 L0 -4 L-6 0Z"/>
           <text y="12" text-anchor="middle">N</text>
@@ -487,69 +433,104 @@
   </div>
 </section>
 
+<!-- ============ DÚVIDAS ============ -->
+<section class="faq light" id="duvidas">
+  <div class="wrap faq__grid">
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">Dúvidas frequentes</p>
+      <h2 class="h2">Antes de <em>vir</em></h2>
+      <p class="section-head__text">Não encontrou o que procurava? Fale com a pousada pelo Instagram.</p>
+    </header>
+    <div class="faq__list" data-stagger>
+      <div class="faq__item" data-reveal>
+        <h3><button type="button" aria-expanded="false" aria-controls="faq-1" id="faq-1-btn">Onde fica a pousada?<span class="faq__icon" aria-hidden="true"></span></button></h3>
+        <div class="faq__panel" id="faq-1" role="region" aria-labelledby="faq-1-btn"><div><p>Na Estrada Cavalcante–Colinas do Sul, em Cavalcante (GO), no lado norte da Chapada dos Veadeiros. A localização exata é enviada na confirmação da reserva.</p></div></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <h3><button type="button" aria-expanded="false" aria-controls="faq-2" id="faq-2-btn">Preciso de carro alto para chegar?<span class="faq__icon" aria-hidden="true"></span></button></h3>
+        <div class="faq__panel" id="faq-2" role="region" aria-labelledby="faq-2-btn"><div><p>O trecho final é de estrada de terra. Carros mais altos ajudam, principalmente de outubro a abril, na época das chuvas. Na seca, a maioria dos carros passa com cuidado.</p></div></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <h3><button type="button" aria-expanded="false" aria-controls="faq-3" id="faq-3-btn">O que tem no chalé?<span class="faq__icon" aria-hidden="true"></span></button></h3>
+        <div class="faq__panel" id="faq-3" role="region" aria-labelledby="faq-3-btn"><div><p>Sala com sofá, escada para o mezanino e deck com hidromassagem, poltronas e churrasqueira. Wi‑Fi e estacionamento privativo são gratuitos.</p></div></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <h3><button type="button" aria-expanded="false" aria-controls="faq-4" id="faq-4-btn">Qual a melhor época para visitar?<span class="faq__icon" aria-hidden="true"></span></button></h3>
+        <div class="faq__panel" id="faq-4" role="region" aria-labelledby="faq-4-btn"><div><p>De maio a setembro (seca), o céu fica limpo, as trilhas secas e as noites estreladas. De outubro a abril (chuvas), as cachoeiras ficam mais cheias e o cerrado mais verde. Agosto e setembro são a época dos ipês.</p></div></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <h3><button type="button" aria-expanded="false" aria-controls="faq-5" id="faq-5-btn">Preciso de guia para as cachoeiras?<span class="faq__icon" aria-hidden="true"></span></button></h3>
+        <div class="faq__panel" id="faq-5" role="region" aria-labelledby="faq-5-btn"><div><p>Em vários atrativos do Território Kalunga, como Santa Bárbara e Capivara, sim: o acesso é feito com guias da comunidade. Vale reservar com antecedência na alta temporada.</p></div></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <h3><button type="button" aria-expanded="false" aria-controls="faq-6" id="faq-6-btn">Como faço a reserva?<span class="faq__icon" aria-hidden="true"></span></button></h3>
+        <div class="faq__panel" id="faq-6" role="region" aria-labelledby="faq-6-btn"><div><p>Pelo formulário abaixo, que monta a mensagem com suas datas, ou direto pelo Instagram, Booking.com ou Airbnb.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ RESERVA ============ -->
 <section class="booking" id="reserva">
-  <canvas class="scene booking__bg" data-scene="dawn" data-static data-seed="77" aria-hidden="true"></canvas>
-  <div class="booking__shade" aria-hidden="true"></div>
   <div class="wrap booking__grid">
-    <div class="booking__intro">
-      <p class="eyebrow eyebrow--light" data-reveal>Reservas</p>
-      <h2 class="h2" data-split>Sua pausa <em>começa aqui</em></h2>
-      <p class="booking__text" data-reveal>Escolha as datas e monte sua mensagem. Você envia direto para a pousada e recebe a resposta da equipe.</p>
-      <ul class="channels" data-stagger>
-        <li data-reveal><a class="js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener">
+    <div class="booking__intro" data-stagger>
+      <header data-reveal>
+        <p class="eyebrow eyebrow--light">Reservas</p>
+        <h2 class="h2">Sua pausa <em>começa aqui</em></h2>
+        <p class="booking__text">Escolha as datas e monte sua mensagem. Você envia direto para a pousada e recebe a resposta da equipe.</p>
+      </header>
+      <ul class="channels">
+        <li data-reveal><a class="channel js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" class="fill"/></svg>
           <span><strong>Instagram</strong>@naturesenseschapadinha</span></a></li>
-        <li data-reveal><a class="js-booking" href="https://www.booking.com/searchresults.pt-br.html?ss=Nature%20Senses%20Chapadinha" target="_blank" rel="noopener">
+        <li data-reveal><a class="channel js-booking" href="https://www.booking.com/searchresults.pt-br.html?ss=Nature%20Senses%20Chapadinha" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
           <span><strong>Booking.com</strong>Nota 9,7 · Excepcional</span></a></li>
-        <li data-reveal><a class="js-airbnb" href="https://www.airbnb.com.br/s/Cavalcante--GO/homes?query=Nature%20Senses%20Chapadinha" target="_blank" rel="noopener">
+        <li data-reveal><a class="channel js-airbnb" href="https://www.airbnb.com.br/s/Cavalcante--GO/homes?query=Nature%20Senses%20Chapadinha" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4c-1.5 0-2.4 1.2-3.4 3.4L4.8 15.6c-1.4 3.1.6 5.4 2.9 5.4 1.6 0 3-1.1 4.3-2.6 1.3 1.5 2.7 2.6 4.3 2.6 2.3 0 4.3-2.3 2.9-5.4L15.4 7.4C14.4 5.2 13.5 4 12 4z"/><path d="M12 18.4c-1.6-1.9-2.7-3.7-2.7-5.1a2.7 2.7 0 0 1 5.4 0c0 1.4-1.1 3.2-2.7 5.1z"/></svg>
           <span><strong>Airbnb</strong>Chalé Orquídea · 5,0</span></a></li>
       </ul>
     </div>
 
-    <form class="form" id="form-reserva" novalidate data-reveal="scale">
-      <p class="form__title">Pedido de reserva</p>
-      <div class="field">
-        <label for="f-nome">Seu nome</label>
-        <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder="Como podemos te chamar?" required>
-      </div>
-      <div class="field-row">
+    <div data-reveal="lg">
+      <form class="form" id="form-reserva" novalidate>
+        <p class="form__title">Pedido de reserva</p>
         <div class="field">
-          <label for="f-in">Check-in</label>
-          <input id="f-in" name="checkin" type="date" required>
+          <input id="f-nome" name="nome" type="text" autocomplete="name" placeholder=" " required>
+          <label for="f-nome">Seu nome</label>
         </div>
-        <div class="field">
-          <label for="f-out">Check-out</label>
-          <input id="f-out" name="checkout" type="date" required>
+        <div class="field-row">
+          <div class="field field--fixed">
+            <input id="f-in" name="checkin" type="date" required>
+            <label for="f-in">Check-in</label>
+          </div>
+          <div class="field field--fixed">
+            <input id="f-out" name="checkout" type="date" required>
+            <label for="f-out">Check-out</label>
+          </div>
         </div>
-      </div>
-      <div class="field">
-        <label for="f-hosp">Hóspedes</label>
-        <div class="stepper">
-          <button type="button" data-step="-1" aria-label="Remover um hóspede">−</button>
+        <div class="field field--fixed">
           <input id="f-hosp" name="hospedes" type="number" min="1" max="12" value="2" inputmode="numeric">
-          <button type="button" data-step="1" aria-label="Adicionar um hóspede">+</button>
+          <label for="f-hosp">Hóspedes</label>
         </div>
-      </div>
-      <div class="field">
-        <label for="f-msg">Mensagem <span class="opt">(opcional)</span></label>
-        <textarea id="f-msg" name="mensagem" rows="3" placeholder="Ocasião especial, horário de chegada, dúvidas…"></textarea>
-      </div>
-      <button class="btn btn--gold btn--block magnetic" type="submit"><span>Montar mensagem de reserva</span></button>
-      <p class="form__error" id="form-erro" role="alert"></p>
+        <div class="field">
+          <textarea id="f-msg" name="mensagem" rows="3" placeholder=" "></textarea>
+          <label for="f-msg">Mensagem (opcional)</label>
+        </div>
+        <button class="btn btn--gold btn--block" type="submit" id="form-submit"><span class="btn__label">Montar mensagem de reserva</span><span class="btn__spinner" aria-hidden="true"></span></button>
+        <p class="msg msg--error" id="form-erro" role="alert"></p>
 
-      <div class="form__result" id="form-resultado" hidden>
-        <p class="form__result-title">Mensagem pronta</p>
-        <pre class="form__preview" id="form-preview"></pre>
-        <div class="form__result-actions">
-          <a class="btn btn--gold btn--sm" id="form-enviar" href="https://ig.me/m/naturesenseschapadinha" target="_blank" rel="noopener"><span>Enviar pelo Instagram</span></a>
-          <button class="btn btn--line-dark btn--sm" type="button" id="form-copiar"><span>Copiar mensagem</span></button>
+        <div class="form__result msg" id="form-resultado" aria-live="polite">
+          <p class="form__result-title">Mensagem pronta</p>
+          <pre class="form__preview" id="form-preview"></pre>
+          <div class="form__result-actions">
+            <a class="btn btn--gold btn--sm" id="form-enviar" href="https://ig.me/m/naturesenseschapadinha" target="_blank" rel="noopener"><span class="btn__label">Abrir Direct do Instagram</span></a>
+            <button class="btn btn--line-dark btn--sm" type="button" id="form-copiar"><span class="btn__label">Copiar mensagem</span><span class="btn__spinner" aria-hidden="true"></span></button>
+          </div>
+          <p class="form__status" id="form-status"></p>
         </div>
-        <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -557,11 +538,8 @@
 
 <!-- ============ RODAPÉ ============ -->
 <footer class="footer">
-  <svg class="footer__ridge" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0 120 V70 L90 62 L150 40 L300 36 L340 52 L430 46 L500 70 L620 64 L700 30 L860 26 L900 44 L1010 40 L1080 66 L1200 60 L1260 34 L1380 30 L1440 50 V120Z"/>
-  </svg>
-  <div class="wrap footer__grid">
-    <div class="footer__brand">
+  <div class="wrap footer__grid" data-stagger>
+    <div class="footer__brand" data-reveal>
       <svg class="brand__mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="24" cy="19" r="7.5"/>
         <path d="M4 36l8.5-8.5 5 3 5.5-6.5h7l5 5.5L44 36"/>
@@ -570,47 +548,51 @@
       </svg>
       <p>Chalé na natureza em Cavalcante, no lado norte da Chapada dos Veadeiros.</p>
     </div>
-    <nav class="footer__col" aria-label="Rodapé">
+    <nav class="footer__col" aria-label="Rodapé" data-reveal>
       <p class="footer__title">Navegue</p>
       <a href="#pousada">A pousada</a>
       <a href="#chale">Chalé Orquídea</a>
-      <a href="#sentidos">Experiências</a>
+      <a href="#experiencias">Experiências</a>
       <a href="#regiao">Região</a>
       <a href="#chegar">Como chegar</a>
     </nav>
-    <div class="footer__col">
+    <div class="footer__col" data-reveal>
       <p class="footer__title">Contato</p>
       <a class="js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener">Instagram · @naturesenseschapadinha</a>
       <a class="js-booking" href="https://www.booking.com/searchresults.pt-br.html?ss=Nature%20Senses%20Chapadinha" target="_blank" rel="noopener">Booking.com</a>
       <a class="js-airbnb" href="https://www.airbnb.com.br/s/Cavalcante--GO/homes?query=Nature%20Senses%20Chapadinha" target="_blank" rel="noopener">Airbnb</a>
     </div>
-    <div class="footer__col">
+    <div class="footer__col" data-reveal>
       <p class="footer__title">Endereço</p>
       <address>Estrada Cavalcante–Colinas do Sul<br>Cavalcante · GO · 73790-000</address>
       <p class="footer__coords">13°47′ S · 47°27′ O</p>
     </div>
   </div>
-  <p class="footer__giant" aria-hidden="true" data-reveal><span>Nature</span> <span>Senses</span></p>
+  <p class="footer__giant" aria-hidden="true" data-reveal="lg"><span>Nature</span> <span>Senses</span></p>
   <div class="wrap footer__bottom">
     <p>© <span class="js-year">2026</span> Nature Senses Chapadinha · Cavalcante, Goiás</p>
     <a class="footer__top" href="#inicio">Voltar ao topo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
   </div>
 </footer>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" hidden>
+<!-- Contato fixo: WhatsApp quando configurado; senão, Direct do Instagram -->
+<a class="fab js-contact" href="https://ig.me/m/naturesenseschapadinha" target="_blank" rel="noopener" aria-label="Falar com a pousada pelo Instagram">
+  <svg class="fab__ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" class="fill"/></svg>
+  <svg class="fab__wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.5-4.3a8.5 8.5 0 1 1 15.5-4.6z"/><path d="M8.8 8.6c.2-.5.5-.6.8-.6h.5c.2 0 .4.1.5.4l.7 1.6c.1.2 0 .4-.1.6l-.5.6c-.1.1-.1.3 0 .5.6 1.1 1.4 1.9 2.5 2.5.2.1.4.1.5 0l.6-.6c.2-.2.4-.2.6-.1l1.6.7c.3.1.4.3.4.5v.5c0 .3-.2.7-.6.8-.6.3-1.6.4-3-.2a8.6 8.6 0 0 1-4.3-4.3c-.6-1.4-.5-2.4-.2-3z"/></svg>
+</a>
+
+<!-- Foto ampliada -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" aria-hidden="true" inert>
   <button class="lightbox__close" type="button" aria-label="Fechar foto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <button class="lightbox__nav lightbox__nav--prev" type="button" data-dir="-1" aria-label="Foto anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
   <figure class="lightbox__fig">
-    <img class="lightbox__img" src="data:," alt="">
+    <img class="lightbox__img" alt="">
     <figcaption class="lightbox__cap"><span class="lightbox__label"></span><span class="lightbox__count"></span></figcaption>
   </figure>
   <button class="lightbox__nav lightbox__nav--next" type="button" data-dir="1" aria-label="Próxima foto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 </div>
 
-<a class="fab" href="#reserva" aria-label="Reservar estadia"><span>Reservar</span></a>
-
 </div>
-<script src="assets/js/scenes.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

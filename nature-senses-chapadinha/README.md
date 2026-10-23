@@ -12,22 +12,24 @@ Feito só com HTML, CSS e JavaScript puros. Não precisa instalar nada nem compi
 
 ## O que tem no site
 
+O motion segue um guia de movimento calmo e discreto: fades, deslocamentos de 8–24px e zoom de no máximo 1.03, só em `transform` e `opacity`.
+A especificação completa (tokens, efeitos por seção, versão reduzida e checklist) está em [`MOTION.md`](MOTION.md).
+
 | Seção | Conteúdo | Movimento |
 | --- | --- | --- |
-| Banners do topo | 3 banners com fotos reais (chalé, hidro, noite) | No computador: foto em arco sobre paisagem animada em canvas, com zoom, paralaxe e selo girando. No celular: foto em tela cheia. Troca com revelação circular, autoplay e arrastar |
-| Faixa | Palavras-chave da Chapada | Corre sozinha e acelera/inverte com a rolagem |
-| A pousada | Texto de apresentação e números (notas, distância) | Palavras acendem com a rolagem, contadores animados, cristal girando |
-| Chalé Orquídea | Foto do deck em arco + foto da hidro e comodidades | Inclinação 3D com o mouse, foto menor flutuando |
-| Banner "Desconecte" | Foto do pôr do sol no deck | Paralaxe e zoom ao entrar na tela |
-| Cinco sentidos | Ver, ouvir, tocar, cheirar, saborear | Painéis que se expandem |
-| Região | Parque Nacional, Santa Bárbara, Capivara, Complexo do Prata, Vale da Lua | Rolagem horizontal fixada (desktop) / arrastar (celular) |
-| Banner "Céu" | Via Láctea | Estrelas cadentes; clique/toque lança uma |
-| Galeria | 7 fotos | Zoom ao passar o mouse; toque abre a foto ampliada (setas, arrastar, Esc) |
-| Avaliações | 9,7 no Booking · 5,0 no Airbnb | Anéis que se preenchem |
-| Como chegar | Endereço, dicas de estrada e mapa esquemático | Rota se desenha e um carrinho percorre |
-| Reserva | Formulário que monta a mensagem de reserva | Envia por WhatsApp (se configurado) ou Direct do Instagram |
+| Topo | Logo, menu e "Reservar" | Fundo aparece em fade e o header encolhe ao rolar; sublinhado animado nos links |
+| Hero | 3 fotos reais em sequência, título e CTAs | Fade + scale 1.04 → 1.00, texto em fade-up com stagger, crossfade a cada 7s (com pausa), parallax leve |
+| A pousada | Apresentação e números (notas, distância) | Fade-up ao rolar |
+| Chalé Orquídea | 2 fotos, comodidades e CTAs | Fade-up, comodidades em sequência |
+| Banner | Pôr do sol no deck | Parallax leve no fundo |
+| Experiências | 3 cards com fotos + os cinco sentidos | Stagger na entrada; hover com elevação e zoom de 1.03 |
+| Região | 6 atrações (cachoeiras, Parque, Kalunga) | Stagger; hover com elevação |
+| Galeria | 7 fotos | Hover com zoom e legenda em fade; foto ampliada com fade + scale |
+| Como chegar | Endereço, dicas e mapa esquemático | Fade-up |
+| Dúvidas | 6 perguntas frequentes | Accordion com abertura suave |
+| Reserva | Formulário que monta a mensagem | Label flutuante, mensagens com fade + slide, estado de carregamento |
+| Botão fixo | WhatsApp (se configurado) ou Instagram | Aparece em fade; destaque discreto a cada 45s |
 
-Também: cursor personalizado, botões magnéticos, barra de progresso de leitura, menu que some ao rolar para baixo, menu de celular em tela cheia, botão flutuante "Reservar" no celular.
 Quem usa "reduzir movimento" no sistema vê o site completo e parado.
 
 ## Configurar
@@ -40,11 +42,11 @@ var CONFIG = {
   whatsapp: '',          // ex.: '5562999999999' (DDI + DDD + número)
   booking: '...',        // link do anúncio no Booking
   airbnb: '...',         // link do anúncio no Airbnb
-  autoplay: 7000         // tempo de cada banner, em ms
+  heroInterval: 7000     // tempo de cada foto do topo, em ms
 };
 ```
 
-Com o WhatsApp preenchido, o formulário abre o WhatsApp já com a mensagem escrita. Sem ele, copia a mensagem e abre o Direct do Instagram.
+Com o WhatsApp preenchido, o botão fixo e o formulário passam a usar o WhatsApp (com a mensagem já escrita). Sem ele, usam o Direct do Instagram.
 Os links de Booking e Airbnb hoje são buscas pelo nome da pousada. Troque pelos links diretos dos anúncios.
 
 ## Fotos
@@ -53,10 +55,9 @@ Ficam em `assets/img/fotos/`, cada uma em duas larguras (`-640.jpg` e `-1080.jpg
 As marcas d'água foram cortadas. Para trocar ou adicionar uma foto:
 
 1. Salve a foto em `.jpg` nas duas larguras com o mesmo nome (ex.: `cozinha-640.jpg` e `cozinha-1080.jpg`), até ~250 KB cada.
-2. **Galeria:** copie um bloco `<button class="tile" ...>` em `index.html`, troque o nome dos arquivos, o `alt` e a legenda, e ajuste `data-index` (0, 1, 2…).
-3. **Banners do topo:** troque o `<img>` dentro de `.slide__photo`. O enquadramento é ajustado por `--pos` (computador) e `--pos-m` (celular) no `style` de cada banner.
-
-Os cartões da seção Região (cachoeiras) continuam ilustrados. Se tiver fotos delas, troque o `<canvas>` do cartão por um `<img>`.
+2. **Galeria:** copie um bloco `<li>` da `.gallery__grid` em `index.html` e troque o nome dos arquivos, o `alt`, a legenda e a classe `ph-…`.
+3. **Hero:** troque o `<img>` de um `.hero__slide`. O enquadramento é ajustado por `--pos` (computador) e `--pos-m` (celular).
+4. **Placeholder desfocado:** cada foto tem uma classe `ph-nome` no fim de `style.css` com uma miniatura de 16 px em base64. Para uma foto nova, gere a miniatura (16 px de largura, JPEG) e adicione a classe; sem ela, aparece um fundo verde liso até a foto carregar.
 
 ## Publicar
 
