@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import type { WorldMaps } from './maps';
 import { MAPS_GLSL } from './maps';
 import { GLOBAL_UNIFORMS } from '../core/uniforms';
+import { styleFoliage } from '../env/stylize';
+import { STYLE } from '../data/graphics';
 import { VEGETATION, WATER_LEVEL } from '../data/world';
 import type { QualityPreset } from '../data/quality';
 
@@ -160,11 +162,13 @@ float gPl = length(gPd);
 float gPush = (1.0 - smoothstep(0.0, uPlayerPos.w, gPl)) * step(abs(gGround - uPlayerPos.y), 2.5);
 gp.xz += gPd / max(gPl, 0.001) * gPush * gBend * gHeight * 1.1;
 gp.y -= gPush * gBend * gHeight * 0.45;
+// tufo descartado (estrada, água, fora do raio): some por inteiro, sem lâmina deitada no chão
+gp *= step(0.02, gScale);
 vec3 transformed = vec3(gRoot.x + gp.x, gGround + gp.y, gRoot.y + gp.z);
 // cor: base do terreno, pontas mais claras/secas, variação por tufo
 vec3 gBase = texture(tWorldColor, gUv).rgb;
-vec3 gTip = gBase * vec3(1.35, 1.3, 0.95) + vec3(0.05, 0.05, 0.0) * gh2;
-vGrassCol = mix(gBase * 0.7, gTip, gH) * (0.85 + 0.3 * gh3);
+vec3 gTip = gBase * vec3(1.5, 1.42, 0.88) + vec3(0.07, 0.07, 0.0) * gh2;
+vGrassCol = mix(gBase * 0.8, gTip, gH * gH * 0.6 + gH * 0.4) * (0.88 + 0.26 * gh3);
 vGrassCol = mix(vGrassCol, vGrassCol * vec3(1.15, 1.05, 0.7), smoothstep(0.6, 1.0, gh1) * 0.5);
 vGrassCol *= 1.0 - 0.3 * uWetness;`,
         )
@@ -175,7 +179,8 @@ vGrassCol *= 1.0 - 0.3 * uWetness;`,
         .replace('#include <color_fragment>', 'diffuseColor.rgb *= vGrassCol;')
         .replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\nnormal = normalize(vNormal);');
     };
-    mat.customProgramCacheKey = () => 'grass-v1';
+    styleFoliage(mat, STYLE.translucency * 1.3, STYLE.rim * 0.3, STYLE.cel * 0.6);
+    mat.customProgramCacheKey = () => 'grass-v2';
     return mat;
   }
 
@@ -270,13 +275,13 @@ function buildGrassGeometry(cell: number, radius: number): THREE.InstancedBuffer
   const idx: number[] = [];
   for (let b = 0; b < blades; b++) {
     const a = (b / blades) * Math.PI * 2 + b * 0.7;
-    const r = 0.12 + (b % 3) * 0.1;
+    const r = 0.1 + (b % 3) * 0.09;
     const ox = Math.cos(a) * r;
     const oz = Math.sin(a) * r;
     const yaw = a + 1.2 + b;
     const cx = Math.cos(yaw);
     const sz = Math.sin(yaw);
-    const w = 0.085;
+    const w = 0.06;
     const lean = 0.15 + (b % 2) * 0.1;
     const base = pos.length / 3;
     const levels = [0, 0.45, 1];

@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { styleRim } from '../../env/stylize';
+import { STYLE } from '../../data/graphics';
 
 /**
  * Material dos modelos da IA: MeshStandardMaterial com cor por vértice + brilho por vértice
@@ -22,6 +24,7 @@ export interface CreatureUniforms {
 
 export type RigMaterial = THREE.MeshStandardMaterial & { rig: CreatureUniforms };
 
+
 export function createRigMaterial(opts: { roughness?: number; metalness?: number; transparent?: boolean } = {}): RigMaterial {
   const m = new THREE.MeshStandardMaterial({
     vertexColors: true,
@@ -29,6 +32,7 @@ export function createRigMaterial(opts: { roughness?: number; metalness?: number
     metalness: opts.metalness ?? 0.08,
     transparent: opts.transparent ?? false,
   }) as RigMaterial;
+  styleRim(m, STYLE.rim * 0.8);
   const u: CreatureUniforms = {
     uHit: { value: 0 },
     uHitColor: { value: new THREE.Color(1, 0.35, 0.25) },

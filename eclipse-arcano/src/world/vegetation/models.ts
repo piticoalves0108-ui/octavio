@@ -3,6 +3,8 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { RNG } from '../../core/rng';
 import { Simplex2 } from '../../core/noise';
 import { GLOBAL_UNIFORMS } from '../../core/uniforms';
+import { styleFoliage } from '../../env/stylize';
+import { STYLE } from '../../data/graphics';
 
 /**
  * Modelos procedurais de vegetação (originais): carvalho, pinheiro, árvore
@@ -129,7 +131,7 @@ function oak(lod: 0 | 1): THREE.BufferGeometry {
   const top = new THREE.Vector3(0.3, 4.2, 0.1);
   parts.push(limb(new THREE.Vector3(0, -0.5, 0), top, 0.55, 0.32, lod ? 5 : 8, bk, w, lod ? 1 : 3));
   const canopyC = new THREE.Vector3(0.2, 6.2, 0);
-  const blobs = lod ? 2 : 7;
+  const blobs = lod ? 2 : 6;
   if (!lod) {
     for (let i = 0; i < 4; i++) {
       const a = (i / 4) * Math.PI * 2 + 0.4;
@@ -142,13 +144,13 @@ function oak(lod: 0 | 1): THREE.BufferGeometry {
     const r = lod ? 0.9 : 1.6 + rng.next() * 0.8;
     const c = lod ? new THREE.Vector3(Math.cos(a) * 0.8, 6.3 + i * 0.4, Math.sin(a) * 0.8) : new THREE.Vector3(Math.cos(a) * r, 5.6 + rng.next() * 2.2, Math.sin(a) * r);
     const s = lod ? 3.2 : 1.8 + rng.next() * 0.9;
-    const geo = wobble(new THREE.IcosahedronGeometry(1, lod ? 0 : 1), 0.22, 1.7, i * 3.1);
-    const g = part(geo, M(c.x, c.y, c.z, s * 1.1, s * 0.85, s), leafColor([0.22, 0.4, 0.15], canopyC, 3.4), windBy(H, 1), 0, canopyC, 0.65);
+    const geo = wobble(new THREE.IcosahedronGeometry(1, lod ? 0 : 2), 0.22, 1.7, i * 3.1);
+    const g = part(geo, M(c.x, c.y, c.z, s * 1.1, s * 0.85, s), leafColor([0.27, 0.47, 0.17], canopyC, 3.4), windBy(H, 1), 0, canopyC, 0.9);
     parts.push(g);
   }
   if (!lod) {
-    const geo = wobble(new THREE.IcosahedronGeometry(1, 1), 0.2, 1.5, 9);
-    parts.push(part(geo, M(0.2, 7.6, 0, 2.2, 1.6, 2.2), leafColor([0.25, 0.44, 0.16], canopyC, 3.4), windBy(H, 1), 0, canopyC, 0.65));
+    const geo = wobble(new THREE.IcosahedronGeometry(1, 2), 0.2, 1.5, 9);
+    parts.push(part(geo, M(0.2, 7.6, 0, 2.2, 1.6, 2.2), leafColor([0.31, 0.52, 0.19], canopyC, 3.4), windBy(H, 1), 0, canopyC, 0.9));
   }
   return finish(parts);
 }
@@ -177,7 +179,7 @@ function pine(lod: 0 | 1): THREE.BufferGeometry {
       }
     }
     geo.computeVertexNormals();
-    parts.push(part(geo, M(0, y0 + h / 2, 0, 1, 1, 1, 0, i * 0.7, 0), leafColor([0.14, 0.32, 0.2], center, 5, 0.04), windBy(H, 0.6), 0, center, 0.35));
+    parts.push(part(geo, M(0, y0 + h / 2, 0, 1, 1, 1, 0, i * 0.7, 0), leafColor([0.16, 0.36, 0.21], center, 5, 0.04), windBy(H, 0.6), 0, center, 0.55));
     if (!lod) {
       // fundo da camada (sombra interna)
       const disc = new THREE.CircleGeometry(r * 0.95, 9);
@@ -203,8 +205,8 @@ function lumen(lod: 0 | 1): THREE.BufferGeometry {
     const a = (i / blobs) * Math.PI * 2;
     const c = new THREE.Vector3(Math.cos(a) * (lod ? 0.6 : 1.9), 6.6 + rng.next() * 1.6, Math.sin(a) * (lod ? 0.6 : 1.9));
     const s = lod ? 3 : 1.6 + rng.next() * 0.7;
-    const geo = wobble(new THREE.IcosahedronGeometry(1, lod ? 0 : 1), 0.25, 1.4, i * 7.7);
-    parts.push(part(geo, M(c.x, c.y, c.z, s, s * 0.8, s), leafColor([0.18, 0.44, 0.36], canopyC, 3.2, 0.15), windBy(H, 1), 0.08, canopyC, 0.6));
+    const geo = wobble(new THREE.IcosahedronGeometry(1, lod ? 0 : 2), 0.25, 1.4, i * 7.7);
+    parts.push(part(geo, M(c.x, c.y, c.z, s, s * 0.8, s), leafColor([0.2, 0.48, 0.38], canopyC, 3.2, 0.15), windBy(H, 1), 0.08, canopyC, 0.85));
   }
   // frutos/orbes luminosos pendurados
   const orbs = lod ? 3 : 10;
@@ -290,8 +292,8 @@ function bush(): THREE.BufferGeometry {
   for (let i = 0; i < 5; i++) {
     const a = (i / 5) * Math.PI * 2 + rng.next();
     const s = 0.5 + rng.next() * 0.35;
-    const geo = wobble(new THREE.IcosahedronGeometry(1, 0), 0.2, 2.2, i * 5);
-    parts.push(part(geo, M(Math.cos(a) * 0.45, 0.45 + rng.next() * 0.35, Math.sin(a) * 0.45, s * 1.15, s * 0.9, s), leafColor([0.24, 0.42, 0.16], center, 1.0, 0.1), () => [0.0, 1, 1], 0, center, 0.6));
+    const geo = wobble(new THREE.IcosahedronGeometry(1, 1), 0.2, 2.2, i * 5);
+    parts.push(part(geo, M(Math.cos(a) * 0.45, 0.45 + rng.next() * 0.35, Math.sin(a) * 0.45, s * 1.15, s * 0.9, s), leafColor([0.29, 0.49, 0.18], center, 1.0, 0.1), () => [0.0, 1, 1], 0, center, 0.88));
   }
   // frutinhas
   for (let i = 0; i < 3; i++) {
@@ -359,7 +361,8 @@ uniform float uTime;
 uniform vec2 uWindDir;
 uniform float uWindStrength;
 uniform vec4 uPlayerPos;
-varying float vGlow;`,
+varying float vGlow;
+varying float vLeaf;`,
       )
       .replace(
         '#include <project_vertex>',
@@ -384,6 +387,7 @@ vegW = modelMatrix * vegW;
   vegW.y -= push * 0.15 * hgt;
 }
 vGlow = aGlow;
+vLeaf = step(0.01, aWind.y);
 vec4 mvPosition = viewMatrix * vegW;
 gl_Position = projectionMatrix * mvPosition;`,
       )
@@ -400,7 +404,8 @@ vec4 worldPosition = vegW;
 uniform float uNight;
 uniform float uTime;
 uniform float uWetness;
-varying float vGlow;`,
+varying float vGlow;
+varying float vLeaf;`,
       )
       .replace('#include <color_fragment>', '#include <color_fragment>\ndiffuseColor.rgb *= 1.0 - 0.25 * uWetness;')
       .replace(
@@ -409,6 +414,8 @@ varying float vGlow;`,
 totalEmissiveRadiance += vColor.rgb * vGlow * (0.35 + 1.4 * uNight);`,
       );
   };
-  mat.customProgramCacheKey = () => 'vegetation-v1';
+  // folhas: luz atravessando contra o sol e borda iluminada (troncos e pedras não)
+  styleFoliage(mat, STYLE.translucency, STYLE.rim * 0.55, STYLE.cel, 'vLeaf');
+  mat.customProgramCacheKey = () => 'vegetation-v2';
   return mat;
 }

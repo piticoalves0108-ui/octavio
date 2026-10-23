@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { styleRim } from '../env/stylize';
+import { STYLE } from '../data/graphics';
 
 /**
  * Materiais do mago: MeshStandardMaterial com injeção de shader para runas,
@@ -167,6 +169,7 @@ totalEmissiveRadiance += mix(vec3(0.42, 0.5, 0.7), uRuneColor, 0.45) * eaRim * (
 export function createBodyMaterial(): THREE.MeshStandardMaterial {
   const m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.84, metalness: 0.04 });
   m.name = 'ea-mago-corpo';
+  styleRim(m, STYLE.rim * 0.7);
   m.onBeforeCompile = (s) => inject(s, false);
   m.customProgramCacheKey = () => 'ea-rune-body-v2';
   return m;
@@ -176,6 +179,7 @@ export function createBodyMaterial(): THREE.MeshStandardMaterial {
 export function createCloakMaterial(): THREE.MeshStandardMaterial {
   const m = new THREE.MeshStandardMaterial({ color: 0x252a4c, roughness: 0.88, metalness: 0.0, side: THREE.DoubleSide });
   m.name = 'ea-mago-capa';
+  styleRim(m, STYLE.rim * 0.6);
   m.onBeforeCompile = (s) => inject(s, true);
   m.customProgramCacheKey = () => 'ea-rune-cloak-v2';
   return m;

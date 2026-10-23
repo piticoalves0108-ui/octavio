@@ -181,6 +181,7 @@ void main() {
   #elif defined( REINHARD_TONE_MAPPING )
     c = ReinhardToneMapping(c);
   #endif
+  c = stylGrade( c );
   // gradação em espaço de exibição (linear 0..1 após o tone mapping)
   float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
   c = mix(vec3(l), c, uSaturation);

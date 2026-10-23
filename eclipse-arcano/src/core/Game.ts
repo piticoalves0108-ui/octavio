@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+// luz estilizada: altera os trechos de shader antes de qualquer material compilar
+import '../env/stylize';
 import type { GameContext, GameSystem, Systems } from './context';
 import { EventBus, type GameStateName } from './EventBus';
 import { Input } from './Input';

@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { STYLE } from '../data/graphics';
+import { addDefines } from '../env/stylize';
 import type { Heightfield } from './heightfield';
 import type { WorldMaps } from './maps';
 import { MAPS_GLSL } from './maps';
@@ -272,6 +274,8 @@ function buildNodeGeometry(n: number): THREE.InstancedBufferGeometry {
 /** Material do terreno: MeshStandardMaterial com deslocamento e mistura de camadas no shader. */
 function createTerrainMaterial(maps: WorldMaps, detailTex: THREE.Texture): THREE.MeshStandardMaterial {
   const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95, metalness: 0 });
+  // relevo: sombreamento estilizado mais suave que o das estruturas (colinas sem faixas duras)
+  addDefines(mat, { STYL_CEL: STYLE.terrainCel.toFixed(3) });
   const uniforms = {
     ...maps.uniforms(),
     tDetail: { value: detailTex },
