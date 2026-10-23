@@ -181,8 +181,7 @@ describe('Saveables reais (ida e volta)', () => {
 /** Todo Saveable registrado em Game.ts precisa de um teste de ida e volta neste arquivo. */
 describe('cobertura dos Saveables registrados', () => {
   it('a lista de registro do Game.ts bate com os testes de ida e volta', async () => {
-    const { readFileSync } = await import('node:fs');
-    const src = readFileSync(new URL('../src/core/Game.ts', import.meta.url), 'utf8');
+    const { default: src } = await import('../src/core/Game.ts?raw');
     const m = src.match(/for \(const s of \[([^\]]+)\]\) sys\.save\.register\(s\)/);
     expect(m, 'registro de saves não encontrado em Game.ts').toBeTruthy();
     const registered = m![1].split(',').map((x) => x.trim().replace(/^sys\./, '')).sort();
