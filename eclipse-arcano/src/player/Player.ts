@@ -5,7 +5,7 @@ import { Entity } from '../core/Entity';
 import { Health, type DamageInfo } from '../combat/Health';
 import { MAX_FLIGHT_ALTITUDE, PLAYABLE_HALF, PLAYER_START } from '../data/world';
 import { GLOBAL_UNIFORMS } from '../core/uniforms';
-import { angleDiff, clamp, damp, dampAngle } from '../core/math';
+import { angleDiff, clamp, damp, dampAngle, smoothstep } from '../core/math';
 import {
   ANIM_COMMIT,
   ANIM_DURATION,
@@ -15,6 +15,7 @@ import {
   DODGE,
   ENERGY,
   FLIGHT,
+  FOOT_IK,
   JUMP,
   LOCOMOTION,
   PLAYER_BODY,
@@ -29,6 +30,7 @@ import { PlayerFx } from './PlayerFx';
 import { JumpAssist, accelerateXZ, bankFromTurn, fallDamage, flightEnergyCost, type V2 } from './locomotion';
 import { ceilingAbove, colliderAt, colliderTop } from './probe';
 import { B } from './rig';
+import { FootIK } from './footIk';
 import type { Collider } from '../world/Collision';
 
 /**
@@ -148,6 +150,18 @@ export class Player implements GameSystem, Saveable {
   private deadStateSet = false;
   private wallN = new THREE.Vector3();
   private wallCollider: Collider | null = null;
+  /** Escalando o relevo (encosta/penhasco) em vez de um colisor. */
+  private climbTerrain = false;
+  /** Salto na parede em andamento (s desde o início; <0 = nenhum) e direção (lateral, vertical). */
+  private climbJumpT = -1;
+  private climbJumpX = 0;
+  private climbJumpY = 1;
+  /** Chuva: tempo até o próximo escorregão e escorregão em andamento. */
+  private slipNext = 3;
+  private slipT = 0;
+  private slipWarned = false;
+  /** Não agarra de novo logo depois de cair por cansaço. */
+  private regrabT = 0;
   private mantleT = -1;
   private mantleFrom = new THREE.Vector3();
   private mantleTo = new THREE.Vector3();
@@ -164,6 +178,7 @@ export class Player implements GameSystem, Saveable {
   private maxFallSpeed = 0;
   private wasInWater = false;
   private params = createLocoParams();
+  private readonly footIk = new FootIK();
   // vetores temporários (zero alocação por frame)
   private tv1 = new THREE.Vector3();
   private tv2 = new THREE.Vector3();
@@ -276,7 +291,8 @@ export class Player implements GameSystem, Saveable {
     }
 
     // Energia: regenera fora do voo, depois de um atraso.
-    if (this.state !== 'flight' && this.state !== 'dead' && ctx.elapsed - this.energySpentAt > ENERGY.regenDelay) {
+    if (this.regrabT > 0) this.regrabT -= dt;
+    if (this.state !== 'flight' && this.state !== 'dead' && this.state !== 'climb' && ctx.elapsed - this.energySpentAt > ENERGY.regenDelay) {
       this.energy.current = Math.min(this.energy.max, this.energy.current + this.energy.regen * dt);
     }
 
@@ -460,13 +476,28 @@ export class Player implements GameSystem, Saveable {
       }
     }
 
+    // Encosta íngreme logo à frente (na direção empurrada): escala o relevo, como num penhasco
+    if (onTerrain && wl > 0.3 && this.canStartClimb()) {
+      const ax = pos.x + (this.wish.x / wl) * (PLAYER_BODY.radius + 0.45);
+      const az = pos.z + (this.wish.z / wl) * (PLAYER_BODY.radius + 0.45);
+      if (ctx.physics.terrainHeight(ax, az) > pos.y + 0.45) {
+        ctx.heightfield.normalAt(ax, az, this.nrm);
+        if (this.nrm.y < Math.cos((CLIMB.terrainGrabDeg * Math.PI) / 180)) {
+          const nl = Math.hypot(this.nrm.x, this.nrm.z) || 1;
+          const nx = this.nrm.x / nl;
+          const nz = this.nrm.z / nl;
+          if (-(this.wish.x * nx + this.wish.z * nz) / wl > CLIMB.grabDot && this.startClimbTerrain(nx, nz)) return;
+        }
+      }
+    }
+
     // Move
     this.moveCapsule((this.hv.x + this.knock.x) * dt, 0, (this.hv.z + this.knock.z) * dt, true);
     const c = this.contact;
     if (c.collided) this.slideOffWall(this.hv);
 
     // Agarrar parede escalável
-    if (c.climbable && wl > 0.3 && c.collider) {
+    if (c.climbable && wl > 0.3 && c.collider && this.canStartClimb()) {
       const dot = -(this.wish.x * c.nx + this.wish.z * c.nz) / wl;
       if (dot > CLIMB.grabDot) {
         this.startClimb(c.nx, c.nz, c.collider);
@@ -553,11 +584,25 @@ export class Player implements GameSystem, Saveable {
     if (c.ceiling && this.vy > 0) this.vy = 0;
 
     // agarrar parede escalável no ar
-    if (c.climbable && c.collider && (wl > 0.3 || this.vy < 0)) {
+    if (c.climbable && c.collider && (wl > 0.3 || this.vy < 0) && this.canStartClimb()) {
       const dot = wl > 0.3 ? -(this.wish.x * c.nx + this.wish.z * c.nz) / wl : 1;
       if (dot > CLIMB.grabDot) {
         this.startClimb(c.nx, c.nz, c.collider);
         return;
+      }
+    }
+
+    // agarrar penhasco do relevo no ar (indo de encontro a ele)
+    if (wl > 0.3 && this.canStartClimb()) {
+      const ax = pos.x + (this.wish.x / wl) * (PLAYER_BODY.radius + 0.35);
+      const az = pos.z + (this.wish.z / wl) * (PLAYER_BODY.radius + 0.35);
+      const th = ctx.physics.terrainHeight(ax, az);
+      if (th > pos.y + 0.9 && th < pos.y + 6) {
+        ctx.heightfield.normalAt(ax, az, this.nrm);
+        if (this.nrm.y < Math.cos((CLIMB.terrainGrabDeg * Math.PI) / 180)) {
+          const nl = Math.hypot(this.nrm.x, this.nrm.z) || 1;
+          if (this.startClimbTerrain(this.nrm.x / nl, this.nrm.z / nl)) return;
+        }
       }
     }
 
@@ -688,8 +733,17 @@ export class Player implements GameSystem, Saveable {
   // =====================================================================
   // Escalada
   // =====================================================================
+  /** Pode agarrar uma parede agora (energia e intervalo depois de cair cansado)? */
+  private canStartClimb(): boolean {
+    return this.regrabT <= 0 && this.energy.current > 1 && this.moveLock <= 0;
+  }
+
   private startClimb(nx: number, nz: number, collider: Collider) {
     const e = this.entity;
+    this.climbTerrain = false;
+    this.climbJumpT = -1;
+    this.slipT = 0;
+    this.slipNext = CLIMB.slipIntervalMin + Math.random() * (CLIMB.slipIntervalMax - CLIMB.slipIntervalMin);
     this.wallN.set(nx, 0, nz).normalize();
     this.wallCollider = collider;
     this.hv.x = this.hv.z = 0;
@@ -730,7 +784,50 @@ export class Player implements GameSystem, Saveable {
       return;
     }
 
+    // Salto na parede em andamento (Espaço + direção): sobe/desliza rápido
+    if (this.climbJumpT >= 0) {
+      this.climbJumpT += dt;
+      const v = CLIMB.climbJumpDistance / CLIMB.climbJumpTime;
+      const k = Math.max(0, 1 - this.climbJumpT / CLIMB.climbJumpTime) * 1.6;
+      this.climbStep(this.climbJumpX * v * k, this.climbJumpY * v * k, dt, ctx);
+      if (this.climbJumpT >= CLIMB.climbJumpTime) this.climbJumpT = -1;
+      return;
+    }
+
+    // Chuva: a parede molhada escorrega de tempos em tempos
+    if (this.slipT > 0) {
+      this.slipT -= dt;
+      this.climbStep(0, -CLIMB.slipDistance / CLIMB.slipTime, dt, ctx);
+      return;
+    }
+    if (ctx.sys.env.wetness > CLIMB.slipWetness && this.mz > 0) {
+      this.slipNext -= dt;
+      if (this.slipNext <= 0) {
+        this.slipNext = CLIMB.slipIntervalMin + Math.random() * (CLIMB.slipIntervalMax - CLIMB.slipIntervalMin);
+        this.slipT = CLIMB.slipTime;
+        ctx.sys.audio.play('dodge', { position: pos, volume: 0.6 });
+        if (!this.slipWarned) {
+          this.slipWarned = true;
+          ctx.sys.ui.notify('A pedra molhada escorrega. Espere a chuva passar ou procure outro caminho.', 'warning');
+        }
+        return;
+      }
+    }
+
     // Soltar / pular da parede / voar
+    if (this.pressed('jump') && (this.mz !== 0 || this.mx !== 0)) {
+      // salto na parede na direção segurada (custa energia)
+      if (this.spendEnergy(CLIMB.climbJumpCost)) {
+        const l = Math.hypot(this.mx, this.mz) || 1;
+        this.climbJumpX = -this.mx / l;
+        this.climbJumpY = this.mz / l;
+        this.climbJumpT = 0;
+        ctx.sys.audio.play('jump', { position: pos, volume: 0.7 });
+        return;
+      }
+      this.fallTired();
+      return;
+    }
     if (this.pressed('jump')) {
       this.hv.x = n.x * CLIMB.wallJumpBack;
       this.hv.z = n.z * CLIMB.wallJumpBack;
@@ -754,7 +851,7 @@ export class Player implements GameSystem, Saveable {
     }
 
     // Movimento na parede: W/S vertical, A/D lateral (relativo à parede)
-    const sp = CLIMB.speed * this.health.moveMultiplier();
+    const sp = CLIMB.speed * this.health.moveMultiplier() * (this.climbTerrain ? CLIMB.terrainSpeedMul : 1);
     const rx = n.z; // direita do personagem olhando para a parede
     const rz = -n.x;
     const lockF = this.moveLock > 0 ? 0 : 1;
@@ -762,9 +859,15 @@ export class Player implements GameSystem, Saveable {
     const mxx = -this.mx * sp * lockF;
     if (CLIMB.energyPerSecond > 0 && (my !== 0 || mxx !== 0)) {
       if (!this.spendEnergy(CLIMB.energyPerSecond * dt)) {
-        this.setState('air');
+        this.fallTired();
         return;
       }
+    }
+    // parado na parede não gasta, mas também não recupera energia
+    if (my === 0 && mxx === 0) this.energySpentAt = ctx.elapsed;
+    if (this.climbTerrain) {
+      this.climbStep(mxx, my, dt, ctx);
+      return;
     }
     pos.x += rx * mxx * dt;
     pos.z += rz * mxx * dt;
@@ -786,13 +889,20 @@ export class Player implements GameSystem, Saveable {
     const chest = colliderAt(phys, fx, pos.y + 1.55, fz, 0.02, true);
     const waist = colliderAt(phys, fx, pos.y + 0.55, fz, 0.02, true) ?? colliderAt(phys, fx, pos.y + 0.15, fz, 0.02, true);
     if (!chest && waist && this.mz >= 0) {
-      // chegou ao topo: transpõe a borda
+      // chegou ao topo: transpõe a borda (só se houver onde pisar lá em cima)
       const top = colliderTop(waist);
-      this.mantleFrom.copy(pos);
-      this.mantleTo.set(pos.x - n.x * (R + 0.45), top + 0.02, pos.z - n.z * (R + 0.45));
-      this.mantleT = 0;
-      this.playInternal('mantle', CLIMB.mantleDuration * 1.05);
-      return;
+      const tx = pos.x - n.x * (R + 0.45);
+      const tz = pos.z - n.z * (R + 0.45);
+      const stand = phys.groundHeight(tx, tz, top + 0.4, 0.6, R * 2);
+      if (stand >= top - 0.35) {
+        this.mantleFrom.copy(pos);
+        this.mantleTo.set(tx, Math.max(top, stand) + 0.02, tz);
+        this.mantleT = 0;
+        this.playInternal('mantle', CLIMB.mantleDuration * 1.05);
+        return;
+      }
+      // topo sem apoio (muro fino, beiral): fica pendurado na borda
+      pos.y = Math.min(pos.y, top - 1.25);
     }
     if (!chest && !waist) {
       // saiu pela lateral / parede acabou
@@ -809,6 +919,168 @@ export class Player implements GameSystem, Saveable {
     }
     if (pos.y < g) pos.y = g;
     this.heightAboveGround = pos.y - g;
+  }
+
+  /** Cai da parede por cansaço (sem energia): solta e espera um pouco para agarrar de novo. */
+  private fallTired() {
+    const n = this.wallN;
+    this.hv.x = n.x * 1.0;
+    this.hv.z = n.z * 1.0;
+    this.vy = 0;
+    this.climbJumpT = -1;
+    this.slipT = 0;
+    this.regrabT = CLIMB.regrabDelay;
+    this.setState('air');
+    if (this.ctx.elapsed - this.tiredWarnAt > 8) {
+      this.tiredWarnAt = this.ctx.elapsed;
+      this.ctx.sys.ui.notify('Sem energia para continuar escalando.', 'warning');
+    }
+  }
+  private tiredWarnAt = -99;
+
+  /**
+   * Um passo de escalada: `lateral` e `up` em m/s, no plano da parede. Para colisores usa
+   * o mesmo empurrão/sondas da escalada normal; no relevo, mantém o corpo colado à encosta.
+   */
+  private climbStep(lateral: number, up: number, dt: number, ctx: GameContext) {
+    if (!this.climbTerrain) {
+      const pos = this.entity.position;
+      const n = this.wallN;
+      pos.x += n.z * lateral * dt;
+      pos.z += -n.x * lateral * dt;
+      pos.y += up * dt;
+      pos.x -= n.x * 0.12;
+      pos.z -= n.z * 0.12;
+      this.moveCapsule(0, 0, 0, false);
+      const g = this.groundAt(0.05);
+      if (pos.y < g) {
+        pos.y = g;
+        this.climbJumpT = -1;
+        this.slipT = 0;
+        this.setState('ground');
+      }
+      return;
+    }
+    this.climbTerrainStep(lateral, up, dt, ctx);
+  }
+
+  /** Começa a escalar o relevo (encosta íngreme). Falso se não há parede de verdade à frente. */
+  private startClimbTerrain(nx: number, nz: number): boolean {
+    const e = this.entity;
+    this.wallN.set(nx, 0, nz).normalize();
+    if (!this.snapToTerrainWall(false)) return false;
+    this.climbTerrain = true;
+    this.wallCollider = null;
+    this.climbJumpT = -1;
+    this.slipT = 0;
+    this.slipNext = CLIMB.slipIntervalMin + Math.random() * (CLIMB.slipIntervalMax - CLIMB.slipIntervalMin);
+    this.hv.x = this.hv.z = 0;
+    this.vy = 0;
+    this.knock.set(0, 0, 0);
+    this.mantleT = -1;
+    e.yaw = Math.atan2(-this.wallN.x, -this.wallN.z);
+    this.setState('climb');
+    this.grounded = false;
+    this.animator.stopActions(0.08);
+    return true;
+  }
+
+  /**
+   * Cola o corpo na encosta: procura, ao longo da normal horizontal, o ponto onde o relevo
+   * passa da altura do quadril e põe o jogador a um raio de distância dele. Atualiza a normal.
+   * Retorna false se não há encosta à frente (fim da parede).
+   */
+  private snapToTerrainWall(updateNormal = true): boolean {
+    const pos = this.entity.position;
+    const hf = this.ctx.heightfield;
+    const n = this.wallN;
+    const hc = pos.y + 0.8;
+    const f = (s: number) => hf.heightAt(pos.x - n.x * s, pos.z - n.z * s) - hc;
+    let a = -1.2;
+    let b = 2.6;
+    let fa = f(a);
+    const fb = f(b);
+    if (fb < 0) return false;
+    if (fa > 0) {
+      // já dentro da encosta: recua até sair
+      a = -3;
+      fa = f(a);
+      if (fa > 0) return false;
+    }
+    for (let i = 0; i < 12; i++) {
+      const m = (a + b) * 0.5;
+      if (f(m) > 0) b = m;
+      else a = m;
+    }
+    const s = (a + b) * 0.5;
+    const cx = pos.x - n.x * s;
+    const cz = pos.z - n.z * s;
+    if (updateNormal) {
+      hf.normalAt(cx, cz, this.nrm);
+      const nl = Math.hypot(this.nrm.x, this.nrm.z);
+      if (nl > 0.15) {
+        // suaviza a virada da normal (relevo em grade de 2 m)
+        n.x += (this.nrm.x / nl - n.x) * 0.35;
+        n.z += (this.nrm.z / nl - n.z) * 0.35;
+        const l = Math.hypot(n.x, n.z) || 1;
+        n.x /= l;
+        n.z /= l;
+      }
+    }
+    const off = PLAYER_BODY.radius + 0.08;
+    pos.x = cx + n.x * off;
+    pos.z = cz + n.z * off;
+    return true;
+  }
+
+  private climbTerrainStep(lateral: number, up: number, dt: number, ctx: GameContext) {
+    const e = this.entity;
+    const pos = e.position;
+    const n = this.wallN;
+    const hf = ctx.heightfield;
+    pos.x += n.z * lateral * dt;
+    pos.z += -n.x * lateral * dt;
+    pos.y += up * dt;
+    if (!this.snapToTerrainWall()) {
+      // a encosta acabou (borda lateral ou saliência): cai
+      this.climbJumpT = -1;
+      this.setState('air');
+      this.vy = 0;
+      return;
+    }
+    e.yaw = dampAngle(e.yaw, Math.atan2(-n.x, -n.z), 12, dt);
+    // não atravessa colisores (casas, rochas) encostados no penhasco
+    this.moveCapsule(0, 0, 0, false);
+
+    // topo: a encosta logo acima da cabeça fica caminhável → transpõe a borda
+    const hx = pos.x - n.x * (PLAYER_BODY.radius + 0.5);
+    const hz = pos.z - n.z * (PLAYER_BODY.radius + 0.5);
+    const topY = hf.heightAt(hx, hz);
+    hf.normalAt(hx, hz, this.nrm);
+    if (up >= 0 && topY < pos.y + 1.7 && this.nrm.y > Math.cos((CLIMB.terrainTopDeg * Math.PI) / 180)) {
+      this.climbJumpT = -1;
+      this.slipT = 0;
+      this.mantleFrom.copy(pos);
+      this.mantleTo.set(hx - n.x * 0.3, hf.heightAt(hx - n.x * 0.3, hz - n.z * 0.3) + 0.02, hz - n.z * 0.3);
+      this.mantleT = 0;
+      this.playInternal('mantle', CLIMB.mantleDuration * 1.05);
+      return;
+    }
+
+    // embaixo: chão caminhável sob os pés ao descer
+    const g = this.groundAt(0.05);
+    if (pos.y <= g + 0.02) {
+      hf.normalAt(pos.x, pos.z, this.nrm);
+      pos.y = g;
+      if (up <= 0 && this.nrm.y > Math.cos((PLAYER_BODY.maxSlopeDeg * Math.PI) / 180)) {
+        this.climbJumpT = -1;
+        this.slipT = 0;
+        this.lastGround = g;
+        this.setState('ground');
+        return;
+      }
+    }
+    this.heightAboveGround = Math.max(0, pos.y - g);
   }
 
   // =====================================================================
@@ -1323,6 +1595,9 @@ export class Player implements GameSystem, Saveable {
     p.aimWeight = damp(p.aimWeight, anim.faceAim || this.blocking ? 1 : 0, 8, dt);
 
     anim.update(dt, p);
+    // pés no chão em degraus e rampas (só apoiado no chão; menos correndo)
+    const ikW = this.state === 'ground' && this.grounded && this.mantleT < 0 ? 1 - (1 - FOOT_IK.runWeight) * smoothstep(LOCOMOTION.walkSpeed, LOCOMOTION.runSpeed, sp) : 0;
+    this.footIk.apply(anim.pose, ctx, e.position.x, e.position.y, e.position.z, e.yaw, ikW, dt);
     m.applyPose(anim.pose);
 
     // Passos

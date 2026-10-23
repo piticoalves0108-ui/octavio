@@ -138,15 +138,21 @@ describe('consultas de colisão sem alocação (probe)', () => {
   it('pointInCollider/colliderAt com caixa rotacionada e cilindro', () => {
     const w = flatWorld();
     const box = w.addBox(10, 2, 0, 1, 2, 3, Math.PI / 2, 'climbable');
-    const cyl = w.addCylinder(-10, 0, 2, 0, 5, 'rock');
+    const cyl = w.addCylinder(-10, 0, 2, 0, 5, 'tree');
     // caixa girada 90°: hx agora se estende em Z
     expect(pointInCollider(box, 10, 2, 0.9)).toBe(true);
     expect(pointInCollider(box, 12.5, 2, 0)).toBe(true);
     expect(pointInCollider(box, 10, 4.5, 0)).toBe(false);
     expect(pointInCollider(cyl, -10, 4, 1.9)).toBe(true);
     expect(colliderAt(w, 10, 1, 0, 0, true)).toBe(box);
+    // árvores não se escalam
     expect(colliderAt(w, -10, 1, 0, 0, true)).toBe(null);
     expect(colliderTop(box)).toBe(4);
+    // rochas, muros e casas se escalam por padrão; um colisor pode recusar
+    expect(w.addCylinder(30, 0, 2, 0, 5, 'rock').climbable).toBe(true);
+    expect(w.addBox(40, 2, 0, 1, 2, 1, 0, 'wall').climbable).toBe(true);
+    expect(w.addBox(50, 2, 0, 1, 2, 1, 0, 'building', { climbable: false }).climbable).toBe(false);
+    expect(w.addBox(60, 2, 0, 1, 2, 1, 0, 'gate').climbable).toBe(false);
   });
 
   it('ceilingAbove encontra a base de uma ilha acima', () => {

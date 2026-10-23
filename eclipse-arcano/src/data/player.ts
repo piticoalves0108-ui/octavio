@@ -88,8 +88,39 @@ export const CLIMB = {
   /** Impulso ao saltar da parede (para trás e para cima). */
   wallJumpBack: 4.5,
   wallJumpUp: 6.5,
-  /** Energia por segundo escalando (0 = grátis). */
-  energyPerSecond: 0,
+  /** Energia por segundo escalando em movimento (parado não gasta, mas também não recupera). */
+  energyPerSecond: 4.5,
+  /** Salto na parede (Espaço segurando uma direção): custo, distância e duração. */
+  climbJumpCost: 12,
+  climbJumpDistance: 1.8,
+  climbJumpTime: 0.38,
+  /** Encostas do relevo: inclinação mínima (graus) para agarrar e inclinação do topo para transpor. */
+  terrainGrabDeg: 50,
+  terrainTopDeg: 40,
+  /** Velocidade relativa escalando o relevo (pedra irregular). */
+  terrainSpeedMul: 0.9,
+  /** Chuva: com o mundo molhado acima disto, a parede escorrega de tempos em tempos. */
+  slipWetness: 0.45,
+  slipIntervalMin: 2.2,
+  slipIntervalMax: 4.2,
+  slipDistance: 1.3,
+  slipTime: 0.35,
+  /** Tempo (s) sem poder agarrar de novo depois de cair por cansaço. */
+  regrabDelay: 0.7,
+};
+
+/** Pés no chão (IK das pernas em degraus e rampas). */
+export const FOOT_IK = {
+  /** Maior desnível (m) que um pé compensa. */
+  maxStep: 0.45,
+  /** Suavização das alturas medidas (1/s). */
+  lambda: 18,
+  /** Suavização do peso ao começar/parar (pular, voar). */
+  blendLambda: 8,
+  /** Quanto o pé gira para ficar plano no chão (0..1). */
+  footAlign: 0.7,
+  /** Peso restante correndo (o ciclo de passada já tira os pés do chão). */
+  runWeight: 0.3,
 };
 
 export const SWIM = {

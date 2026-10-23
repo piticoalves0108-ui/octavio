@@ -36,6 +36,12 @@ export const BIOME_INFO: Record<BiomeId, { name: string; grass: number; trees: n
 
 export type LocationKind = 'settlement' | 'dungeon' | 'ruins' | 'landmark' | 'camp' | 'tower' | 'region' | 'secret' | 'arena';
 
+/**
+ * Colisores escaláveis por padrão (como num mundo aberto onde quase tudo se escala):
+ * muralhas, casas, torres e rochas. Um colisor pode recusar com `climbable: false`.
+ */
+export const CLIMBABLE_TAGS: readonly string[] = ['wall', 'building', 'rock', 'climbable'];
+
 export interface LocationDef {
   id: string;
   name: string;

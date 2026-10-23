@@ -526,4 +526,6 @@ export function buildArena(kit: SiteKit, gates: GateSystem) {
     gates.addBlocker('portao_ruinas', gx, fy + 4.5, gz, cw / 2 + 0.2, 4.5, 0.5, yawC);
   }
   b.pop();
+  // arena do chefe: nada se escala (não dá para fugir da luta pelas paredes)
+  for (const c of kit.physics.near(A.x, A.z, A.wallRadius + 24)) c.climbable = false;
 }

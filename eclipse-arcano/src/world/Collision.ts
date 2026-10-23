@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { Heightfield } from './heightfield';
-import { MAX_FLIGHT_ALTITUDE, PLAYABLE_HALF, WATER_LEVEL } from '../data/world';
+import { CLIMBABLE_TAGS, MAX_FLIGHT_ALTITUDE, PLAYABLE_HALF, WATER_LEVEL } from '../data/world';
 
 /**
  * Mundo de colisão estático: terreno (heightfield) + colisores simples
@@ -106,7 +106,7 @@ export class CollisionWorld {
       y0,
       y1,
       walkable: opts.walkable ?? (tag === 'platform' || tag === 'island' || tag === 'rock' || tag === 'bridge'),
-      climbable: opts.climbable ?? tag === 'climbable',
+      climbable: opts.climbable ?? CLIMBABLE_TAGS.includes(tag),
       blocksSight: opts.blocksSight ?? tag !== 'tree',
       surface: opts.surface,
       enabled: true,
@@ -133,7 +133,7 @@ export class CollisionWorld {
       cos,
       sin,
       walkable: opts.walkable ?? true,
-      climbable: opts.climbable ?? tag === 'climbable',
+      climbable: opts.climbable ?? CLIMBABLE_TAGS.includes(tag),
       blocksSight: opts.blocksSight ?? true,
       surface: opts.surface,
       enabled: true,
