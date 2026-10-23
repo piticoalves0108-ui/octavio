@@ -14,15 +14,15 @@ Feito só com HTML, CSS e JavaScript puros. Não precisa instalar nada nem compi
 
 | Seção | Conteúdo | Movimento |
 | --- | --- | --- |
-| Banners do topo | 3 banners: Amanhecer, Cachoeiras, Céu estrelado | Paisagens animadas em canvas, paralaxe com o mouse, troca com revelação circular, autoplay com barra de progresso, arrastar no celular |
+| Banners do topo | 3 banners com fotos reais (chalé, hidro, noite) | No computador: foto em arco sobre paisagem animada em canvas, com zoom, paralaxe e selo girando. No celular: foto em tela cheia. Troca com revelação circular, autoplay e arrastar |
 | Faixa | Palavras-chave da Chapada | Corre sozinha e acelera/inverte com a rolagem |
 | A pousada | Texto de apresentação e números (notas, distância) | Palavras acendem com a rolagem, contadores animados, cristal girando |
-| Chalé Orquídea | Ilustração do chalé e comodidades | Inclinação 3D com o mouse, vapor da hidromassagem, estrelas piscando |
-| Banner "Desconecte" | Entardecer com ipês-amarelos | Pétalas caindo, capim balançando |
+| Chalé Orquídea | Foto do deck em arco + foto da hidro e comodidades | Inclinação 3D com o mouse, foto menor flutuando |
+| Banner "Desconecte" | Foto do pôr do sol no deck | Paralaxe e zoom ao entrar na tela |
 | Cinco sentidos | Ver, ouvir, tocar, cheirar, saborear | Painéis que se expandem |
 | Região | Parque Nacional, Santa Bárbara, Capivara, Complexo do Prata, Vale da Lua | Rolagem horizontal fixada (desktop) / arrastar (celular) |
 | Banner "Céu" | Via Láctea | Estrelas cadentes; clique/toque lança uma |
-| Galeria | 6 cartões que levam ao Instagram | Zoom ao passar o mouse |
+| Galeria | 7 fotos | Zoom ao passar o mouse; toque abre a foto ampliada (setas, arrastar, Esc) |
 | Avaliações | 9,7 no Booking · 5,0 no Airbnb | Anéis que se preenchem |
 | Como chegar | Endereço, dicas de estrada e mapa esquemático | Rota se desenha e um carrinho percorre |
 | Reserva | Formulário que monta a mensagem de reserva | Envia por WhatsApp (se configurado) ou Direct do Instagram |
@@ -47,18 +47,16 @@ var CONFIG = {
 Com o WhatsApp preenchido, o formulário abre o WhatsApp já com a mensagem escrita. Sem ele, copia a mensagem e abre o Direct do Instagram.
 Os links de Booking e Airbnb hoje são buscas pelo nome da pousada. Troque pelos links diretos dos anúncios.
 
-## Trocar as ilustrações por fotos
+## Fotos
 
-As imagens do site são paisagens desenhadas por código (não consegui baixar as fotos do Instagram).
-Para usar fotos reais, salve-as em `assets/img/fotos/` e:
+Ficam em `assets/img/fotos/`, cada uma em duas larguras (`-640.jpg` e `-1080.jpg`); o navegador escolhe a certa.
+As marcas d'água foram cortadas. Para trocar ou adicionar uma foto:
 
-- **Galeria e Região:** troque o `<canvas class="scene" ...></canvas>` de cada cartão por
-  `<img src="assets/img/fotos/arquivo.jpg" alt="Descrição da foto" loading="lazy">`. O estilo já se ajusta.
-- **Chalé:** troque o `<svg class="chalet__svg">…</svg>` por
-  `<img class="chalet__svg" src="assets/img/fotos/chale.jpg" alt="Chalé Orquídea">`.
-- **Banners do topo:** podem continuar animados. Se preferir foto, troque o `<canvas>` do banner por um `<img>` com `style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"`.
+1. Salve a foto em `.jpg` nas duas larguras com o mesmo nome (ex.: `cozinha-640.jpg` e `cozinha-1080.jpg`), até ~250 KB cada.
+2. **Galeria:** copie um bloco `<button class="tile" ...>` em `index.html`, troque o nome dos arquivos, o `alt` e a legenda, e ajuste `data-index` (0, 1, 2…).
+3. **Banners do topo:** troque o `<img>` dentro de `.slide__photo`. O enquadramento é ajustado por `--pos` (computador) e `--pos-m` (celular) no `style` de cada banner.
 
-Use fotos com no máximo ~300 KB (formato `.jpg` ou `.webp`, 1600–2000 px de largura).
+Os cartões da seção Região (cachoeiras) continuam ilustrados. Se tiver fotos delas, troque o `<canvas>` do cartão por um `<img>`.
 
 ## Publicar
 
@@ -67,11 +65,13 @@ Use fotos com no máximo ~300 KB (formato `.jpg` ou `.webp`, 1600–2000 px de l
 
 ## Informações usadas (confira com a pousada)
 
-Levantadas em buscas públicas em outubro de 2026 (Booking.com, Airbnb, Tripadvisor). O Instagram não estava acessível daqui.
+Levantadas em buscas públicas em outubro de 2026 (Booking.com, Airbnb, Tripadvisor) e nas fotos enviadas pela pousada.
 
 - Endereço: Estrada Cavalcante–Colinas do Sul, Cavalcante – GO, 73790-000.
 - Booking.com: nota 9,7 ("Excepcional"); hidromassagem, jardim, Wi‑Fi e estacionamento privativo gratuitos.
 - Airbnb: "Chalé Orquídea – Nature Senses Chapadinha", nota 5,0.
+- Pelas fotos: chalé em A com fachada de vidro, deck com hidromassagem, poltronas e churrasqueira, sala com sofá e escada para o mezanino.
 - Distância de Brasília (~320 km) e rota são aproximadas.
+- O logo nas fotos escreve "Nature's Senses"; o site usa "Nature Senses", como no Instagram e no Booking.
 
-Faltam e vale pedir à pousada: telefone/WhatsApp, fotos oficiais, outros chalés (se houver), café da manhã, regras de check-in/check-out e capacidade de hóspedes.
+Faltam e vale pedir à pousada: telefone/WhatsApp, o logo em arquivo, fotos do interior e das cachoeiras, outros chalés (se houver), café da manhã, regras de check-in/check-out e capacidade de hóspedes.

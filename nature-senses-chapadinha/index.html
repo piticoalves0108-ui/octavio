@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="preload" as="image" href="assets/img/fotos/chale-entardecer-1080.jpg" imagesrcset="assets/img/fotos/chale-entardecer-640.jpg 640w, assets/img/fotos/chale-entardecer-1080.jpg 1080w" imagesizes="(max-width: 959px) 100vw, 480px">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>
   (function () {
@@ -74,13 +75,16 @@
 <section class="hero" id="inicio" aria-roledescription="carrossel" aria-label="Destaques da pousada">
   <div class="hero__slides">
 
-    <article class="slide is-active" data-scene="dawn" aria-roledescription="banner" aria-label="1 de 3: Amanhecer">
+    <article class="slide is-active" data-scene="dawn" style="--pos: 68% 50%; --pos-m: 80% 50%" aria-roledescription="banner" aria-label="1 de 3: O chalé">
       <canvas class="scene" data-intro aria-hidden="true"></canvas>
+      <figure class="slide__media">
+        <div class="slide__photo"><img src="assets/img/fotos/chale-entardecer-1080.jpg" srcset="assets/img/fotos/chale-entardecer-640.jpg 640w, assets/img/fotos/chale-entardecer-1080.jpg 1080w" sizes="(max-width: 959px) 100vw, 480px" alt="Chalé em A entre as árvores, com o sol baixo iluminando a serra ao fundo" fetchpriority="high"></div>
+      </figure>
       <div class="slide__shade" aria-hidden="true"></div>
       <div class="slide__content wrap">
         <p class="eyebrow eyebrow--light slide__eyebrow">Cavalcante · Chapada dos Veadeiros · GO</p>
         <h1 class="slide__title" data-split>Sinta a <em>Chapada</em> acordar</h1>
-        <p class="slide__text">Um chalé no meio do cerrado, com hidromassagem, céu de cristal e as cachoeiras de Cavalcante ao redor.</p>
+        <p class="slide__text">Um chalé em A no meio do cerrado, com hidromassagem no deck, vista para a serra e as cachoeiras de Cavalcante ao redor.</p>
         <div class="slide__actions">
           <a class="btn btn--gold magnetic" href="#reserva"><span>Reservar estadia</span></a>
           <a class="btn btn--line" href="#chale"><span>Conhecer o chalé</span></a>
@@ -88,21 +92,27 @@
       </div>
     </article>
 
-    <article class="slide" data-scene="falls" data-palette="turquesa" aria-roledescription="banner" aria-label="2 de 3: Cachoeiras" aria-hidden="true">
+    <article class="slide" data-scene="golden" style="--pos: 50% 60%; --pos-m: 38% 50%" aria-roledescription="banner" aria-label="2 de 3: Hidromassagem" aria-hidden="true">
       <canvas class="scene" aria-hidden="true"></canvas>
+      <figure class="slide__media">
+        <div class="slide__photo"><img src="assets/img/fotos/hidro-vista-serra-1080.jpg" srcset="assets/img/fotos/hidro-vista-serra-640.jpg 640w, assets/img/fotos/hidro-vista-serra-1080.jpg 1080w" sizes="(max-width: 959px) 100vw, 480px" alt="Hidromassagem no deck de madeira, de frente para a serra ao entardecer" loading="lazy"></div>
+      </figure>
       <div class="slide__shade" aria-hidden="true"></div>
       <div class="slide__content wrap">
-        <p class="eyebrow eyebrow--light slide__eyebrow">Território Kalunga · Complexo do Prata</p>
-        <h2 class="slide__title" data-split>Águas que <em>renovam</em></h2>
-        <p class="slide__text">Santa Bárbara, Capivara, Prata: as cachoeiras mais bonitas da Chapada estão do lado de cá.</p>
+        <p class="eyebrow eyebrow--light slide__eyebrow">Deck com vista para a serra</p>
+        <h2 class="slide__title" data-split>Água quente, <em>vista infinita</em></h2>
+        <p class="slide__text">A hidromassagem fica no deck, de frente para as serras de Cavalcante. Cada fim de tarde pinta um céu diferente.</p>
         <div class="slide__actions">
-          <a class="btn btn--gold magnetic" href="#regiao" tabindex="-1"><span>Explorar a região</span></a>
+          <a class="btn btn--gold magnetic" href="#chale" tabindex="-1"><span>Ver o chalé</span></a>
         </div>
       </div>
     </article>
 
-    <article class="slide" data-scene="night" aria-roledescription="banner" aria-label="3 de 3: Céu estrelado" aria-hidden="true">
+    <article class="slide" data-scene="night" style="--pos: 45% 62%; --pos-m: 42% 50%" aria-roledescription="banner" aria-label="3 de 3: Céu estrelado" aria-hidden="true">
       <canvas class="scene" aria-hidden="true"></canvas>
+      <figure class="slide__media">
+        <div class="slide__photo"><img src="assets/img/fotos/chale-noite-1080.jpg" srcset="assets/img/fotos/chale-noite-640.jpg 640w, assets/img/fotos/chale-noite-1080.jpg 1080w" sizes="(max-width: 959px) 100vw, 480px" alt="Chalé em A iluminado com luz dourada ao anoitecer, sob o céu azul" loading="lazy"></div>
+      </figure>
       <div class="slide__shade" aria-hidden="true"></div>
       <div class="slide__content wrap">
         <p class="eyebrow eyebrow--light slide__eyebrow">Depois que o sol se põe</p>
@@ -116,12 +126,18 @@
 
   </div>
 
+  <svg class="hero__seal" viewBox="0 0 120 120" aria-hidden="true">
+    <defs><path id="seal-circle" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs>
+    <text><textPath href="#seal-circle" textLength="286" lengthAdjust="spacing">NATURE SENSES · CHAPADINHA · CAVALCANTE GO · </textPath></text>
+    <path d="M60 47l2.6 7.4 7.4 2.6-7.4 2.6L60 67l-2.6-7.4-7.4-2.6 7.4-2.6z" stroke="none"/>
+  </svg>
+
   <div class="hero__ui wrap">
     <p class="hero__count" aria-hidden="true"><span class="hero__current">01</span><span class="hero__total">/ 03</span></p>
     <div class="hero__dots" role="group" aria-label="Escolher banner">
-      <button class="dot is-active" type="button" aria-label="Banner 1: Amanhecer" aria-current="true"><span class="dot__label">Amanhecer</span><span class="dot__bar"><i></i></span></button>
-      <button class="dot" type="button" aria-label="Banner 2: Cachoeiras"><span class="dot__label">Cachoeiras</span><span class="dot__bar"><i></i></span></button>
-      <button class="dot" type="button" aria-label="Banner 3: Céu estrelado"><span class="dot__label">Céu estrelado</span><span class="dot__bar"><i></i></span></button>
+      <button class="dot is-active" type="button" aria-label="Banner 1: O chalé" aria-current="true"><span class="dot__label">O chalé</span><span class="dot__bar"><i></i></span></button>
+      <button class="dot" type="button" aria-label="Banner 2: Hidromassagem"><span class="dot__label">A hidro</span><span class="dot__bar"><i></i></span></button>
+      <button class="dot" type="button" aria-label="Banner 3: Céu estrelado"><span class="dot__label">A noite</span><span class="dot__bar"><i></i></span></button>
     </div>
     <div class="hero__arrows">
       <button class="arrow magnetic" type="button" data-dir="-1" aria-label="Banner anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -153,7 +169,7 @@
     </header>
     <div class="about__body">
       <p class="about__lead" data-scrub>O Nature Senses Chapadinha fica na estrada entre Cavalcante e Colinas do Sul, no lado norte da Chapada dos Veadeiros. Aqui o dia começa com o canto dos pássaros e termina com a Via Láctea sobre o chalé. Um lugar feito para desacelerar e usar os cinco sentidos.</p>
-      <p class="about__note" data-reveal>Chalé privativo com hidromassagem, jardim, Wi‑Fi e estacionamento gratuitos. Perto do Território Kalunga e do Parque Nacional.</p>
+      <p class="about__note" data-reveal>Chalé privativo com hidromassagem e churrasqueira no deck, jardim, Wi‑Fi e estacionamento gratuitos. Perto do Território Kalunga e do Parque Nacional.</p>
     </div>
     <dl class="facts" data-stagger>
       <div class="fact" data-reveal>
@@ -180,117 +196,27 @@
 <section class="chalet" id="chale">
   <div class="wrap chalet__grid">
     <figure class="chalet__art" data-tilt data-reveal="scale" data-cursor="Chalé">
-      <svg class="chalet__svg" viewBox="0 0 600 760" role="img" aria-label="Ilustração do Chalé Orquídea ao entardecer, com hidromassagem fumegando ao lado">
-        <defs>
-          <linearGradient id="cg-sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#1a2140"/>
-            <stop offset=".38" stop-color="#5b3d63"/>
-            <stop offset=".62" stop-color="#d0786e"/>
-            <stop offset=".8" stop-color="#f3b26f"/>
-          </linearGradient>
-          <radialGradient id="cg-sun" cx=".5" cy=".5" r=".5">
-            <stop offset="0" stop-color="#ffe3a3" stop-opacity=".9"/>
-            <stop offset="1" stop-color="#ffb070" stop-opacity="0"/>
-          </radialGradient>
-          <linearGradient id="cg-glass" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#ffd98e"/>
-            <stop offset="1" stop-color="#f08a3e"/>
-          </linearGradient>
-          <radialGradient id="cg-glow" cx=".5" cy=".5" r=".5">
-            <stop offset="0" stop-color="#ffc56b" stop-opacity=".55"/>
-            <stop offset="1" stop-color="#ffc56b" stop-opacity="0"/>
-          </radialGradient>
-          <linearGradient id="cg-water" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#2e8c85"/>
-            <stop offset=".5" stop-color="#8fe0d3"/>
-            <stop offset="1" stop-color="#2e8c85"/>
-          </linearGradient>
-        </defs>
-        <g class="ly" style="--d:0">
-          <rect x="-40" y="-40" width="680" height="840" fill="url(#cg-sky)"/>
-          <g class="twinkle" fill="#fff">
-            <circle cx="80" cy="90" r="1.6"/><circle cx="170" cy="150" r="1.1"/><circle cx="300" cy="70" r="1.4"/><circle cx="420" cy="120" r="1"/><circle cx="520" cy="80" r="1.7"/><circle cx="470" cy="190" r="1.1"/><circle cx="120" cy="210" r="1"/><circle cx="250" cy="180" r="1.2"/>
-          </g>
-        </g>
-        <g class="ly" style="--d:.2">
-          <circle cx="420" cy="350" r="150" fill="url(#cg-sun)"/>
-          <circle cx="420" cy="350" r="40" fill="#ffe0a0"/>
-        </g>
-        <g class="ly" style="--d:.35">
-          <path d="M-40 380 L40 372 L96 318 L250 312 L282 328 L350 318 L404 350 L520 342 L640 334 V800 H-40Z" fill="#8a5d78"/>
-        </g>
-        <g class="ly" style="--d:.55">
-          <path d="M-40 446 L70 424 L140 436 L206 404 L330 410 L378 436 L470 420 L640 430 V800 H-40Z" fill="#3e3152"/>
-        </g>
-        <g class="ly" style="--d:.8">
-          <path d="M-40 530 Q150 492 300 510 T640 498 V800 H-40Z" fill="#1b2a23"/>
-          <!-- Buriti -->
-          <g fill="#101a15" stroke="#101a15" stroke-linecap="round">
-            <path d="M74 540 Q80 440 92 360" stroke-width="7" fill="none"/>
-            <path d="M88 366 q-6 18 -4 34 M96 366 q4 18 2 32 M92 368 v30" stroke-width="2.5" fill="none"/>
-            <g class="sway" style="transform-origin:92px 360px">
-              <path d="M92 360 Q60 352 30 366 L14 352 L22 344 L10 334 L24 330 L18 318 L34 320 L36 308 L50 318 Q66 340 92 360Z"/>
-              <path d="M92 360 Q72 330 66 300 L54 290 L66 286 L62 272 L76 278 L82 264 L92 276 L102 266 Q96 310 92 360Z"/>
-              <path d="M92 360 Q118 330 136 306 L134 290 L146 296 L152 284 L160 296 L172 292 L168 306 Q140 330 92 360Z"/>
-              <path d="M92 360 Q126 356 158 372 L174 362 L172 376 L186 380 L176 390 L184 400 L166 398 Q130 376 92 360Z"/>
-              <path d="M92 360 Q70 368 48 392 L34 390 L40 402 L28 410 L42 414 L40 426 L54 418 Q72 384 92 360Z"/>
-            </g>
-          </g>
-          <!-- Chalé A-frame -->
-          <ellipse cx="270" cy="580" rx="210" ry="80" fill="url(#cg-glow)" class="glow"/>
-          <path d="M146 590 L270 334 L394 590 Z" fill="#20160f"/>
-          <path d="M172 590 L270 388 L368 590 Z" fill="#3b2a20"/>
-          <path d="M204 590 L270 452 L336 590 Z" fill="url(#cg-glass)" class="window"/>
-          <path d="M270 452 V590 M237 520 H303 M222 556 H318" stroke="#3b2a20" stroke-width="4"/>
-          <rect x="126" y="588" width="300" height="14" rx="3" fill="#4a3426"/>
-          <path d="M140 602 v34 M410 602 v34" stroke="#2a1d15" stroke-width="8"/>
-          <!-- Varal de luzes -->
-          <path d="M392 560 Q450 590 512 548" fill="none" stroke="#2a1d15" stroke-width="1.5"/>
-          <g class="bulbs" fill="#ffd27a">
-            <circle cx="410" cy="571" r="3.4"/><circle cx="432" cy="578" r="3.4"/><circle cx="455" cy="579" r="3.4"/><circle cx="478" cy="572" r="3.4"/><circle cx="498" cy="560" r="3.4"/>
-          </g>
-          <path d="M512 548 V640" stroke="#2a1d15" stroke-width="5"/>
-          <!-- Hidromassagem -->
-          <path d="M408 612 h132 v30 a10 10 0 0 1 -10 10 h-112 a10 10 0 0 1 -10 -10 z" fill="#5a3e2c"/>
-          <ellipse cx="474" cy="612" rx="66" ry="12" fill="url(#cg-water)"/>
-          <g class="steam" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
-            <path d="M448 600 q-10 -16 0 -30 t0 -30"/>
-            <path d="M476 600 q-10 -16 0 -30 t0 -30"/>
-            <path d="M504 600 q-10 -16 0 -30 t0 -30"/>
-          </g>
-        </g>
-        <g class="ly" style="--d:1.2">
-          <path d="M-40 690 Q140 650 300 676 T640 660 V800 H-40Z" fill="#0d1612"/>
-          <!-- Orquídea -->
-          <g class="orchid" style="transform-origin:520px 760px">
-            <path d="M520 760 Q512 700 530 640" stroke="#24452f" stroke-width="5" fill="none"/>
-            <path d="M520 730 q-50 -10 -70 -40 q40 4 70 40z" fill="#2f5a3b"/>
-            <g transform="translate(532 630)">
-              <ellipse rx="13" ry="30" fill="#e58db4" transform="rotate(-60) translate(0 -26)"/>
-              <ellipse rx="13" ry="30" fill="#e58db4" transform="rotate(60) translate(0 -26)"/>
-              <ellipse rx="12" ry="26" fill="#f2a9c9" transform="rotate(0) translate(0 -26)"/>
-              <ellipse rx="10" ry="24" fill="#d9729f" transform="rotate(150) translate(0 -22)"/>
-              <ellipse rx="10" ry="24" fill="#d9729f" transform="rotate(-150) translate(0 -22)"/>
-              <path d="M-10 4 q10 26 20 0 q-10 -8 -20 0z" fill="#b84d7e"/>
-              <circle r="6" fill="#f6dd97"/>
-            </g>
-          </g>
-          <g class="flies" fill="#f6e48a">
-            <circle cx="120" cy="620" r="2.5"/><circle cx="330" cy="650" r="2"/><circle cx="560" cy="580" r="2.4"/><circle cx="60" cy="660" r="1.8"/>
-          </g>
-        </g>
-      </svg>
+      <div class="chalet__frame"><img class="chalet__photo" src="assets/img/fotos/chale-deck-hidro-1080.jpg" srcset="assets/img/fotos/chale-deck-hidro-640.jpg 640w, assets/img/fotos/chale-deck-hidro-1080.jpg 1080w" sizes="(max-width: 899px) 92vw, 480px" alt="Chalé em A com fachada de vidro, deck de madeira, hidromassagem, poltronas e churrasqueira, com a serra ao fundo" loading="lazy"></div>
+      <div class="chalet__inset"><img src="assets/img/fotos/hidro-espumante-1080.jpg" srcset="assets/img/fotos/hidro-espumante-640.jpg 640w, assets/img/fotos/hidro-espumante-1080.jpg 1080w" sizes="220px" alt="Hidromassagem borbulhando no deck, com espumante e chocolates à beira" loading="lazy"></div>
       <figcaption class="chalet__badge"><span>Avaliação</span><strong>5,0</strong><small>no Airbnb</small></figcaption>
     </figure>
 
     <div class="chalet__text">
       <p class="eyebrow eyebrow--light" data-reveal>Hospedagem</p>
       <h2 class="h2" data-split>Chalé <em>Orquídea</em></h2>
-      <p class="chalet__lead" data-reveal>Chalé privativo cercado de jardim e cerrado. Depois da trilha, a hidromassagem espera por você, de frente para as estrelas.</p>
+      <p class="chalet__lead" data-reveal>Chalé em A com fachada de vidro, cercado de árvores do cerrado e de frente para a serra. Por dentro, sala com sofá e escada para o mezanino. Do lado de fora, o deck com hidromassagem.</p>
       <ul class="amenities" data-stagger>
         <li data-reveal>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h18v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M8 9.5c-1-1 1-2 0-3.5M12 9.5c-1-1 1-2 0-3.5M16 9.5c-1-1 1-2 0-3.5"/></svg>
-          <div><strong>Hidromassagem</strong><span>Água quente para relaxar depois das cachoeiras.</span></div>
+          <div><strong>Hidromassagem</strong><span>No deck, de frente para a serra.</span></div>
+        </li>
+        <li data-reveal>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18"/><path d="M5 20v-6h14v6"/><path d="M5 14l2-4h10l2 4"/><path d="M9 10V7M15 10V7"/></svg>
+          <div><strong>Deck com vista</strong><span>Poltronas para ver o sol se pôr sobre o vale.</span></div>
+        </li>
+        <li data-reveal>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16a8 8 0 0 1-16 0z"/><path d="M8 17l-2 4M16 17l2 4"/><path d="M9 6c-.8-.8.8-1.6 0-2.5M12 6c-.8-.8.8-1.6 0-2.5M15 6c-.8-.8.8-1.6 0-2.5"/></svg>
+          <div><strong>Churrasqueira</strong><span>No deck, para o jantar ao ar livre.</span></div>
         </li>
         <li data-reveal>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20c0-8.5 6-15 15-15 0 9-6 15-14.5 15"/><path d="M5 20l8.5-8.5"/></svg>
@@ -322,11 +248,11 @@
 </section>
 
 <!-- ============ BANNER: DESCONECTE ============ -->
-<section class="banner banner--golden" data-scene="golden" aria-label="Desconecte para se reconectar">
-  <canvas class="scene" aria-hidden="true"></canvas>
+<section class="banner banner--photo" aria-label="Desconecte para se reconectar">
+  <div class="banner__media" data-reveal="zoom"><img src="assets/img/fotos/por-do-sol-deck-1080.jpg" srcset="assets/img/fotos/por-do-sol-deck-640.jpg 640w, assets/img/fotos/por-do-sol-deck-1080.jpg 1080w" sizes="100vw" alt="Pôr do sol visto do deck do chalé, com a serra em silhueta" loading="lazy" data-parallax="0.14"></div>
   <div class="banner__shade" aria-hidden="true"></div>
   <div class="banner__content wrap">
-    <p class="eyebrow eyebrow--light" data-reveal>Agosto e setembro: época dos ipês</p>
+    <p class="eyebrow eyebrow--light" data-reveal>Fim de tarde no deck</p>
     <h2 class="display" data-split>Desconecte <em>para</em> se reconectar</h2>
     <p class="banner__text" data-reveal>O sinal some em alguns trechos da estrada. Pode desligar. O que importa está do lado de fora da janela.</p>
   </div>
@@ -449,30 +375,34 @@
       </a>
     </header>
     <div class="gallery__grid" data-stagger>
-      <a class="tile tile--tall js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener" data-reveal="scale" data-cursor="Ver">
-        <canvas class="scene" data-scene="dawn" data-static data-seed="4" aria-hidden="true"></canvas>
-        <span class="tile__label">Amanhecer no cerrado</span>
-      </a>
-      <a class="tile js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener" data-reveal="scale" data-cursor="Ver">
-        <canvas class="scene" data-scene="night" data-static data-seed="8" aria-hidden="true"></canvas>
-        <span class="tile__label">Hidromassagem sob as estrelas</span>
-      </a>
-      <a class="tile tile--wide js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener" data-reveal="scale" data-cursor="Ver">
-        <canvas class="scene" data-scene="golden" data-static data-seed="2" aria-hidden="true"></canvas>
-        <span class="tile__label">Ipês em flor</span>
-      </a>
-      <a class="tile js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener" data-reveal="scale" data-cursor="Ver">
-        <canvas class="scene" data-scene="falls" data-palette="turquesa" data-static data-seed="13" aria-hidden="true"></canvas>
-        <span class="tile__label">Águas cristalinas</span>
-      </a>
-      <a class="tile js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener" data-reveal="scale" data-cursor="Ver">
-        <canvas class="scene" data-scene="golden" data-static data-seed="15" aria-hidden="true"></canvas>
-        <span class="tile__label">Fim de tarde</span>
-      </a>
-      <a class="tile js-instagram" href="https://www.instagram.com/naturesenseschapadinha/" target="_blank" rel="noopener" data-reveal="scale" data-cursor="Ver">
-        <canvas class="scene" data-scene="night" data-static data-seed="19" aria-hidden="true"></canvas>
-        <span class="tile__label">Via Láctea</span>
-      </a>
+      <button class="tile tile--tall" type="button" data-index="0" data-full="assets/img/fotos/chale-fachada-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Madeira e luz dourada">
+        <img src="assets/img/fotos/chale-fachada-1080.jpg" srcset="assets/img/fotos/chale-fachada-640.jpg 640w, assets/img/fotos/chale-fachada-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 300px" alt="Fachada de madeira do chalé em A entre galhos, na luz dourada do fim de tarde" loading="lazy">
+        <span class="tile__label">Madeira e luz dourada</span>
+      </button>
+      <button class="tile" type="button" data-index="1" data-full="assets/img/fotos/hidro-espumante-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Hidro a dois">
+        <img src="assets/img/fotos/hidro-espumante-1080.jpg" srcset="assets/img/fotos/hidro-espumante-640.jpg 640w, assets/img/fotos/hidro-espumante-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Hidromassagem borbulhando com espumante e chocolates à beira" loading="lazy">
+        <span class="tile__label">Hidro a dois</span>
+      </button>
+      <button class="tile" type="button" data-index="2" data-full="assets/img/fotos/por-do-sol-deck-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Pôr do sol no deck">
+        <img src="assets/img/fotos/por-do-sol-deck-1080.jpg" srcset="assets/img/fotos/por-do-sol-deck-640.jpg 640w, assets/img/fotos/por-do-sol-deck-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Céu laranja do pôr do sol visto do deck, com a serra em silhueta" loading="lazy">
+        <span class="tile__label">Pôr do sol no deck</span>
+      </button>
+      <button class="tile" type="button" data-index="3" data-full="assets/img/fotos/chale-noite-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Chalé ao anoitecer">
+        <img src="assets/img/fotos/chale-noite-1080.jpg" srcset="assets/img/fotos/chale-noite-640.jpg 640w, assets/img/fotos/chale-noite-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Chalé em A iluminado ao anoitecer" loading="lazy">
+        <span class="tile__label">Chalé ao anoitecer</span>
+      </button>
+      <button class="tile" type="button" data-index="4" data-full="assets/img/fotos/hidro-vista-serra-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Vista da hidro">
+        <img src="assets/img/fotos/hidro-vista-serra-1080.jpg" srcset="assets/img/fotos/hidro-vista-serra-640.jpg 640w, assets/img/fotos/hidro-vista-serra-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Hidromassagem de frente para a serra ao entardecer" loading="lazy">
+        <span class="tile__label">Vista da hidro</span>
+      </button>
+      <button class="tile" type="button" data-index="5" data-full="assets/img/fotos/chale-entardecer-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Entre as árvores">
+        <img src="assets/img/fotos/chale-entardecer-1080.jpg" srcset="assets/img/fotos/chale-entardecer-640.jpg 640w, assets/img/fotos/chale-entardecer-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Chalé em A visto entre galhos, com o sol se pondo atrás da serra" loading="lazy">
+        <span class="tile__label">Entre as árvores</span>
+      </button>
+      <button class="tile" type="button" data-index="6" data-full="assets/img/fotos/chale-deck-hidro-1080.jpg" data-reveal="scale" data-cursor="Ampliar" aria-label="Ampliar foto: Deck, hidro e churrasqueira">
+        <img src="assets/img/fotos/chale-deck-hidro-1080.jpg" srcset="assets/img/fotos/chale-deck-hidro-640.jpg 640w, assets/img/fotos/chale-deck-hidro-1080.jpg 1080w" sizes="(max-width: 759px) 50vw, 25vw" alt="Deck do chalé com hidromassagem, poltronas e churrasqueira, com a serra ao fundo" loading="lazy">
+        <span class="tile__label">Deck, hidro e churrasqueira</span>
+      </button>
     </div>
   </div>
 </section>
@@ -666,6 +596,16 @@
     <a class="footer__top" href="#inicio">Voltar ao topo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
   </div>
 </footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" hidden>
+  <button class="lightbox__close" type="button" aria-label="Fechar foto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="lightbox__nav lightbox__nav--prev" type="button" data-dir="-1" aria-label="Foto anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <figure class="lightbox__fig">
+    <img class="lightbox__img" src="data:," alt="">
+    <figcaption class="lightbox__cap"><span class="lightbox__label"></span><span class="lightbox__count"></span></figcaption>
+  </figure>
+  <button class="lightbox__nav lightbox__nav--next" type="button" data-dir="1" aria-label="Próxima foto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+</div>
 
 <a class="fab" href="#reserva" aria-label="Reservar estadia"><span>Reservar</span></a>
 

@@ -138,6 +138,7 @@
 
   // ---------- Banners do topo ----------
   var slides = $$('.slide', heroEl), dots = $$('.dot', heroEl);
+  var hx = 0, hy = 0, thx = 0, thy = 0;
   var cur = 0, busy = false;
   heroEl.style.setProperty('--dur', CONFIG.autoplay + 'ms');
   function sceneOf(slide) { var c = $('canvas', slide); return c && c.__scene; }
@@ -316,7 +317,8 @@
   var mx = -100, my = -100, rx = -100, ry = -100;
   window.addEventListener('pointermove', function (e) {
     mx = e.clientX; my = e.clientY;
-    if (Scenes) Scenes.pointer(mx / vw * 2 - 1, my / vh * 2 - 1);
+    thx = mx / vw * 2 - 1; thy = my / vh * 2 - 1;
+    if (Scenes) Scenes.pointer(thx, thy);
   }, { passive: true });
   if (fine && motion) {
     document.addEventListener('pointerover', function (e) {
@@ -428,6 +430,61 @@
     });
   });
 
+  // ---------- Galeria: foto ampliada ----------
+  var lb = $('#lightbox'), lbImg = $('.lightbox__img', lb), lbLabel = $('.lightbox__label', lb), lbCount = $('.lightbox__count', lb);
+  var lbClose = $('.lightbox__close', lb), lbNav = $$('.lightbox__nav', lb);
+  var tiles = $$('.gallery .tile'), lbIndex = 0, lbFrom = null, lbTimer = null, lbToken = 0;
+  function lbShow(i) {
+    lbIndex = (i + tiles.length) % tiles.length;
+    var t = tiles[lbIndex], thumb = $('img', t), src = t.dataset.full, token = ++lbToken;
+    lbImg.classList.remove('is-ready');
+    lbLabel.textContent = $('.tile__label', t).textContent;
+    lbCount.textContent = (lbIndex + 1) + ' / ' + tiles.length;
+    var pre = new Image();
+    pre.onload = pre.onerror = function () {
+      if (token !== lbToken) return;
+      lbImg.src = src; lbImg.alt = thumb.alt;
+      requestAnimationFrame(function () { requestAnimationFrame(function () { lbImg.classList.add('is-ready'); }); });
+    };
+    pre.src = src;
+  }
+  function lbOpen(i, from) {
+    lbFrom = from; clearTimeout(lbTimer);
+    lb.hidden = false;
+    requestAnimationFrame(function () { lb.classList.add('is-open'); });
+    document.body.classList.add('menu-open');
+    lbShow(i);
+    lbClose.focus();
+  }
+  function lbHide() {
+    lb.classList.remove('is-open'); lbImg.classList.remove('is-ready');
+    document.body.classList.remove('menu-open');
+    lbTimer = setTimeout(function () { lb.hidden = true; }, motion ? 450 : 0);
+    if (lbFrom) lbFrom.focus({ preventScroll: true });
+  }
+  tiles.forEach(function (t, i) { t.addEventListener('click', function () { lbOpen(i, t); }); });
+  lbClose.addEventListener('click', lbHide);
+  lbNav.forEach(function (b) { b.addEventListener('click', function () { lbShow(lbIndex + (+b.dataset.dir)); }); });
+  lb.addEventListener('click', function (e) { if (e.target === lb || e.target === $('.lightbox__fig', lb)) lbHide(); });
+  document.addEventListener('keydown', function (e) {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') lbHide();
+    else if (e.key === 'ArrowRight') lbShow(lbIndex + 1);
+    else if (e.key === 'ArrowLeft') lbShow(lbIndex - 1);
+    else if (e.key === 'Tab') { // mantém o foco dentro da foto ampliada
+      var f = [lbClose].concat(lbNav), k = f.indexOf(document.activeElement);
+      e.preventDefault();
+      f[(k + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+    }
+  });
+  var lbX = null;
+  lb.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') lbX = e.clientX; });
+  lb.addEventListener('pointerup', function (e) {
+    if (lbX === null) return;
+    var dx = e.clientX - lbX; lbX = null;
+    if (Math.abs(dx) > 50) lbShow(lbIndex + (dx < 0 ? 1 : -1));
+  });
+
   // ---------- Redimensionamento ----------
   var rT;
   window.addEventListener('resize', function () {
@@ -447,6 +504,14 @@
       updateChrome(y);
       updateRegion();
       if (motion) { updateParallax(); updateScrub(); }
+      if (motion && y < vh * 1.2) heroEl.style.setProperty('--hs', Math.round(Math.min(y, vh)));
+    }
+    if (motion && fine && y < vh) { // foto do banner acompanha o mouse
+      hx += (thx - hx) * 0.06; hy += (thy - hy) * 0.06;
+      if (Math.abs(thx - hx) > 0.001 || Math.abs(thy - hy) > 0.001) {
+        heroEl.style.setProperty('--hx', hx.toFixed(3));
+        heroEl.style.setProperty('--hy', hy.toFixed(3));
+      }
     }
     if (motion) {
       // faixa reage à velocidade da rolagem
