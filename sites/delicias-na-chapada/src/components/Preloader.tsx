@@ -122,7 +122,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
           </div>
           <LogoMark className="relative h-24 w-24 text-creme md:h-28 md:w-28" />
         </div>
-        <svg viewBox="0 0 520 90" className="mt-8 w-[min(80vw,420px)]" aria-hidden>
+        <svg viewBox="0 0 860 90" className="mt-8 w-[min(86vw,560px)]" aria-hidden>
           <text
             ref={word}
             x="50%"
@@ -139,7 +139,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
               strokeDashoffset: 520,
             }}
           >
-            BRASA &amp; FERRO
+            DELÍCIAS NA CHAPADA
           </text>
         </svg>
         <div className="mt-4 flex items-baseline gap-3 font-display text-ambar">

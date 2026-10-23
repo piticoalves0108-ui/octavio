@@ -26,12 +26,14 @@ const esc = (s: string) =>
 const horaSchema = (h: string) => (h === '24:00' ? '23:59' : h)
 
 export function tituloPagina() {
-  return `${site.nome} | ${site.ramo} em ${site.endereco.cidade}`
+  // A cidade só entra no título depois de confirmada (sai da lista de pendências).
+  const cidade = CAMPOS_A_CONFIRMAR.includes('cidade') ? '' : ` em ${site.endereco.cidade}`
+  return `${site.nome} | ${site.ramo}${cidade}`
 }
 
 function jsonLd() {
   const base = site.url
-  const telefone = site.contato.telefoneExibicao || undefined
+  const telefone = site.contato.telefoneInternacional || undefined
   const sameAs = [site.redes.instagram.url, site.redes.ifood, site.redes.tiktok].filter(Boolean)
 
   const categorias = cardapio.categorias.filter((c) => c.id !== 'todos')

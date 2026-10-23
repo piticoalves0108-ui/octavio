@@ -2,7 +2,7 @@
  * Gera o site inteiro num único arquivo HTML (JS, CSS, fontes, imagens e 3D
  * embutidos), que abre com dois cliques, sem servidor e sem instalar nada.
  *
- *   npm run build:html   →   entrega/brasa-e-ferro.html
+ *   npm run build:html   →   entrega/delicias-na-chapada.html
  *
  * O conteúdo continua pré-renderizado (SEO e leitura antes do JS carregar).
  */
@@ -14,7 +14,7 @@ import { build } from 'vite'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const cliente = join(root, 'dist-html')
 const servidor = join(root, 'dist-html-ssr')
-const saida = join(root, 'entrega', 'brasa-e-ferro.html')
+const saida = join(root, 'entrega', 'delicias-na-chapada.html')
 
 // 1) Navegador: um único JS e um único CSS, com fontes e imagens embutidas.
 await build({ root, mode: 'html', logLevel: 'warn' })

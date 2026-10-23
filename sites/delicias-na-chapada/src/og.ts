@@ -18,7 +18,7 @@ el.innerHTML = `
     <div style="display:flex;align-items:center;gap:14px;color:#e8a33d;font-size:18px;font-weight:600;letter-spacing:.3em;text-transform:uppercase">
       <span style="width:36px;height:1px;background:#e8a33d"></span>${site.ramo}
     </div>
-    <div style="font-family:'Bebas Neue';font-size:150px;line-height:.86;margin-top:22px">BRASA<span style="color:#e8a33d">&amp;</span><br/>FERRO</div>
+    <div style="font-family:'Bebas Neue';font-size:128px;line-height:.88;margin-top:22px">DELÍCIAS<br/><span style="color:#e8a33d">NA</span> CHAPADA</div>
     <div style="font-family:'Bebas Neue';font-size:46px;line-height:1;margin-top:26px;background:linear-gradient(90deg,#ffd27a,#e8a33d 35%,#ff7a2e 60%,#c1272d);-webkit-background-clip:text;color:transparent">Carne de verdade. Fogo de verdade.</div>
     <div style="margin-top:22px;font-size:20px;color:#aaa49b">@${site.redes.instagram.usuario}</div>
   </div>

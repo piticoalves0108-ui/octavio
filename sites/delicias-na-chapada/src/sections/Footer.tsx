@@ -118,7 +118,8 @@ export function Footer() {
     site.redes.tiktok ? { href: site.redes.tiktok, rotulo: 'TikTok', icon: <IconTikTok /> } : null,
   ].filter(Boolean) as { href: string; rotulo: string; icon: React.ReactNode }[]
 
-  const nome = 'BRASA&FERRO'
+  // Nome em duas linhas no logo gigante; "NA" em brasa.
+  const linhas = ['DELÍCIAS', 'NA CHAPADA']
 
   return (
     <footer className="relative overflow-hidden border-t border-white/[0.06]">
@@ -177,7 +178,12 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            {site.contato.telefoneExibicao && <p className="mt-5 text-sm text-cinza">{site.contato.telefoneExibicao}</p>}
+            {site.contato.telefoneExibicao && (
+              <a href={`tel:${site.contato.telefoneInternacional}`} className="link-ember mt-5 inline-block font-display text-2xl tracking-wide text-creme">
+                <span className="sr-only">Telefone: </span>
+                {site.contato.telefoneExibicao}
+              </a>
+            )}
             {site.contato.email && (
               <a href={`mailto:${site.contato.email}`} className="link-ember mt-1 inline-block text-sm text-cinza">
                 {site.contato.email}
@@ -188,11 +194,19 @@ export function Footer() {
 
         {/* Logo gigante */}
         <div ref={logo} className="mx-auto flex max-w-[1400px] items-end gap-4 overflow-hidden px-5 md:px-8" aria-hidden>
-          <LogoMark className="mb-[2vw] hidden h-[8vw] w-[8vw] shrink-0 text-creme/80 md:block" />
-          <p className="flex font-display text-[clamp(4rem,15.5vw,15rem)] leading-[0.8] whitespace-nowrap">
-            {nome.split('').map((c, i) => (
-              <span key={i} data-text={c} className={`foot-letter inline-block ${c === '&' ? 'text-ember' : 'metal-text'}`}>
-                {c}
+          <LogoMark className="mb-[1.5vw] hidden h-[9vw] w-[9vw] shrink-0 text-creme/80 md:block" />
+          <p className="font-display text-[clamp(4rem,13vw,13rem)] leading-[0.82] whitespace-nowrap">
+            {linhas.map((linha, l) => (
+              <span key={l} className="flex">
+                {linha.split('').map((c, i) => (
+                  <span
+                    key={i}
+                    data-text={c}
+                    className={`foot-letter inline-block ${l === 1 && i < 2 ? 'text-ember' : 'metal-text'}`}
+                  >
+                    {c === ' ' ? '\u00a0' : c}
+                  </span>
+                ))}
               </span>
             ))}
           </p>

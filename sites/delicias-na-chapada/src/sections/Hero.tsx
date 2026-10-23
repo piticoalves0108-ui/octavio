@@ -181,13 +181,13 @@ export function Hero({ ready }: { ready: boolean }) {
         <div ref={titleRef} className="absolute inset-0">
           <h1
             id="hero-titulo"
-            className="flex h-full flex-col items-center justify-start px-4 pt-[15svh] text-center font-display leading-[0.85] tracking-tight md:justify-between md:pt-[13svh] md:pb-[17svh]"
+            className="flex h-full flex-col items-center justify-start px-4 pt-[15svh] text-center font-display leading-[0.85] tracking-tight md:justify-between md:pt-[13svh] md:pb-[24svh]"
           >
             <span className="hero-line block overflow-hidden pb-[0.04em]">
-              <span className="hero-word block text-[clamp(3.6rem,13vw,13rem)] text-creme">{hero.tituloLinha1}</span>
+              <span className="hero-word block text-[clamp(3.6rem,min(13vw,19svh),13rem)] text-creme">{hero.tituloLinha1}</span>
             </span>
             <span className="hero-line block overflow-hidden pb-[0.06em]">
-              <span className="hero-word block text-[clamp(3.6rem,13vw,13rem)]">
+              <span className="hero-word block text-[clamp(3.6rem,min(13vw,19svh),13rem)]">
                 <span className="text-ember" data-text={hero.tituloLinha2}>{hero.tituloLinha2}</span>
               </span>
             </span>

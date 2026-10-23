@@ -15,6 +15,7 @@ import { Gallery } from './sections/Gallery'
 import { Testimonials } from './sections/Testimonials'
 import { Location } from './sections/Location'
 import { Footer } from './sections/Footer'
+import { depoimentos } from './data/site'
 import { loader } from './lib/loader'
 import { getGsap, prefersReducedMotion, startSmoothScroll } from './lib/motion'
 
@@ -72,7 +73,8 @@ export default function App() {
         <Menu />
         <Ingredients />
         <Gallery />
-        <Testimonials />
+        {/* Aparece quando houver avaliações reais em site.ts (depoimentos.itens). */}
+        {depoimentos.itens.length > 0 && <Testimonials />}
         <Location />
       </main>
       <Footer />

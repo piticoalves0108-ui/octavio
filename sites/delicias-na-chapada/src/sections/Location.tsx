@@ -7,7 +7,7 @@ import { canalPedido, enderecoCompleto, linkMapa, linkPedido, localizacao, site,
 import { statusAgora, type Status } from '../lib/hours'
 import { SectionHeading } from '../components/SectionHeading'
 import { ButtonLink } from '../components/Button'
-import { IconClock, IconFlame, IconPin } from '../components/Icons'
+import { IconClock, IconFlame, IconPin, IconWhatsApp } from '../components/Icons'
 
 const DIAS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
 
@@ -148,6 +148,17 @@ export function Location() {
               <p className="mt-2 text-sm text-cinza">{site.endereco.referencia}</p>
               <p className="sr-only">{enderecoCompleto()}</p>
             </div>
+
+            {site.contato.telefoneExibicao && (
+              <div>
+                <p className="flex items-center gap-2 text-sm text-cinza">
+                  <IconWhatsApp width={18} height={18} className="text-ambar" /> Telefone e WhatsApp
+                </p>
+                <a href={`tel:${site.contato.telefoneInternacional}`} className="link-ember mt-2 inline-block font-display text-3xl leading-tight md:text-4xl">
+                  {site.contato.telefoneExibicao}
+                </a>
+              </div>
+            )}
 
             <div className="flex flex-wrap gap-3">
               <ButtonLink href={linkMapa()} target="_blank" rel="noopener" aria-label="Como chegar (abre o Google Maps em nova aba)">

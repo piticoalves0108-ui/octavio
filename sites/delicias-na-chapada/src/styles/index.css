@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Brasa & Ferro: estilos globais (Tailwind v4 + utilitários próprios)
+   Delícias na Chapada: estilos globais (Tailwind v4 + utilitários próprios)
    ========================================================================== */
 @import 'tailwindcss';
 @import './fonts.css';
@@ -162,8 +162,11 @@ html.lenis body {
   background-position: 0% 0%;
 }
 
-/* Título com reflexo metálico */
+/* Título com reflexo metálico.
+   O padding no topo estica a área do gradiente para cobrir acentos (Á, Í, Ã),
+   que ficam acima da linha com line-height baixo e sumiriam com background-clip. */
 .metal-text {
+  padding-top: 0.16em;
   background: linear-gradient(100deg, #f5f0e8 0%, #cfc8bd 35%, #fff9ef 48%, #b9b1a5 60%, #f5f0e8 100%);
   background-size: 220% 100%;
   -webkit-background-clip: text;

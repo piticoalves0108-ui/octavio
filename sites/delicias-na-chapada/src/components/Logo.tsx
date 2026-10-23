@@ -1,9 +1,8 @@
 /**
- * Marca da Brasa & Ferro: chama dentro de um anel (como um ferro de marcar)
+ * Marca da Delícias na Chapada: chama dentro de um anel (como um selo de chapa)
  * + nome em letra condensada.
  */
 import { useId } from 'react'
-import { site } from '../data/site'
 
 export function LogoMark({ className = '', title }: { className?: string; title?: string }) {
   const gid = `lm-fire-${useId().replace(/:/g, '')}`
@@ -31,10 +30,9 @@ export function Logo({ className = '' }: { className?: string }) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <LogoMark className="h-9 w-9 text-creme" />
-      <span className="font-display text-[1.65rem] leading-none tracking-wide">
-        Brasa<span className="text-ambar">&amp;</span>Ferro
+      <span className="font-display text-[1.55rem] leading-none tracking-wide whitespace-nowrap">
+        Delícias <span className="text-ambar">na</span> Chapada
       </span>
-      <span className="sr-only">{site.nome}</span>
     </span>
   )
 }

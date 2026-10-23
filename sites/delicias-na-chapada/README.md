@@ -1,10 +1,10 @@
-# Brasa & Ferro: site one-page
+# Delícias na Chapada: site one-page
 
-Site premium de hamburgueria artesanal, em dark mode com âmbar, cobre e brasa. Tem um hambúrguer 3D em tempo real que se desmonta em camadas conforme o scroll, além de fumaça e brasas em WebGL e motion em todas as seções.
+Site premium da **Delícias na Chapada** ([@delicias_nachapada](https://www.instagram.com/delicias_nachapada/), telefone e WhatsApp (62) 99687-1621), em dark mode com âmbar, cobre e brasa. Tem um hambúrguer 3D em tempo real que se desmonta em camadas conforme o scroll, além de fumaça e brasas em WebGL e motion em todas as seções.
 
 - **Stack:** React 19, Vite 8, Three.js r186, GSAP 3 (ScrollTrigger), Lenis e Tailwind CSS v4.
 - **SEO:** HTML pré-renderizado no build, meta tags, Open Graph, schema.org `Restaurant` com cardápio e horários, sitemap e robots.
-- **Perfil do cliente:** os links de pedido e de redes apontam para o Instagram [@delicias_nachapada](https://www.instagram.com/delicias_nachapada/). O cardápio (10 lanches, preços artesanal e industrial, e adicionais) e a anatomia do X-Tudo vêm da foto do cardápio enviada pelo cliente. Veja [Antes de publicar](#antes-de-publicar).
+- **Dados do cliente:** nome, telefone e Instagram passados pelo cliente. Os botões "Peça Agora" abrem o WhatsApp com a mensagem pronta. O cardápio (10 lanches, preços artesanal e industrial, e adicionais) e a anatomia do X-Tudo vêm da foto do cardápio enviada pelo cliente. Veja [Antes de publicar](#antes-de-publicar).
 
 ---
 
@@ -21,12 +21,12 @@ npm run preview    # serve o dist/ localmente
 
 ### Arquivo HTML único
 
-`entrega/brasa-e-ferro.html` é o site inteiro num arquivo só (2,2 MB), com código, 3D, fontes e imagens embutidos. Basta abrir com dois cliques no navegador, sem instalar nada. Também dá para subir esse arquivo sozinho em qualquer hospedagem (renomeie para `index.html`).
+`entrega/delicias-na-chapada.html` é o site inteiro num arquivo só (2,5 MB), com código, 3D, fontes e imagens embutidos. Basta abrir com dois cliques no navegador, sem instalar nada. Também dá para subir esse arquivo sozinho em qualquer hospedagem (renomeie para `index.html`).
 
 Para gerar de novo depois de editar o conteúdo:
 
 ```bash
-npm run build:html   # → entrega/brasa-e-ferro.html
+npm run build:html   # → entrega/delicias-na-chapada.html
 ```
 
 Para publicar com o melhor desempenho, prefira o `npm run build` (pasta `dist/`). Nele, o 3D e as imagens carregam sob demanda, em AVIF e no tamanho certo para cada tela.
@@ -45,20 +45,19 @@ Os valores de exemplo estão marcados com `confirmar('campo', valor)`. O `npm ru
 
 | Campo | Valor de exemplo hoje |
 |---|---|
-| WhatsApp de pedidos | vazio: os botões "Peça Agora" abrem a DM do Instagram (`ig.me/m/delicias_nachapada`) |
-| Telefone, e-mail | vazios (ficam ocultos) |
-| Endereço, bairro, cidade, UF, CEP, referência | "Rua da Brasa, 180 — Centro, Sua Cidade" |
+| Telefone e WhatsApp | (62) 99687-1621. O cliente passou "62 9687-1621" (formato antigo, sem o 9). Confirmar que o número com o 9 abre o WhatsApp certo |
+| E-mail | vazio (fica oculto) |
+| Endereço, bairro, cidade, UF, CEP, referência | "Rua da Brasa, 180 — Centro, Sua Cidade". O DDD 62 é de Goiás |
 | Latitude e longitude | centro de Brasília (só para o schema) |
 | Horário de funcionamento | ter a qui 18h–23h, sex e sáb 18h–00h, dom 18h–23h |
-| Domínio do site | `https://brasaeferro.com.br` |
+| Domínio do site | `https://deliciasnachapada.com.br` |
 | Descrição para o Google | texto genérico |
 | Links do iFood e do TikTok | vazios (ícones ocultos) |
 | Endpoint da newsletter | vazio: o formulário só simula o envio |
-| História, números da casa (anos, hambúrgueres servidos…) | exemplos |
-| Seção "Ingredientes" (blend, pão, cheddar inglês, bacon defumado…) | exemplos: ainda não batem com o cardápio real |
-| Depoimentos | **exemplos fictícios**: troque por avaliações reais (Google, iFood) com autorização antes de publicar |
+| Texto do "Sobre" | escrito a partir do cardápio; os números (10 lanches, 14 ingredientes…) saem do cardápio |
+| Depoimentos | **vazio**: a seção e o link do menu só aparecem quando houver avaliações reais em `depoimentos.itens` (com autorização) |
 
-> **Pedido pelo WhatsApp:** preencha `contato.whatsapp` só com dígitos, com DDI e DDD (ex.: `5561999999999`). Todos os botões passam a abrir o WhatsApp com a mensagem pronta (e com o nome do lanche, nos cards do cardápio).
+> **Pedido pelo WhatsApp:** `contato.whatsapp` fica só com dígitos, com DDI e DDD (`5562996871621`). Todos os botões abrem o WhatsApp com a mensagem pronta (e com o nome do lanche, nos cards do cardápio). Se apagar o número, os botões voltam a abrir o direct do Instagram.
 
 > **Newsletter:** cole em `newsletterEndpoint` a URL de um serviço que aceite `POST` com JSON `{ "email": "..." }` (ex.: Formspree, Getform ou uma função serverless que fale com o Mailchimp/Brevo).
 
@@ -95,7 +94,7 @@ Depois ajuste `alt`, `legenda` e `formato` (`retrato`, `paisagem` ou `quadrado`)
 index.html                 página (o SEO entra no lugar de <!--seo-->)
 studio.html, og.html       páginas internas para gerar imagens (não vão para o build)
 seo/plugin.ts              plugin do Vite: meta tags, OG, JSON-LD Restaurant, robots, sitemap, manifest
-entrega/brasa-e-ferro.html site em um único arquivo HTML (npm run build:html)
+entrega/delicias-na-chapada.html site em um único arquivo HTML (npm run build:html)
 plugins/imagens.ts         embute as imagens no build de arquivo único
 scripts/
   render-assets.mjs        renderiza as imagens a partir do 3D
@@ -177,18 +176,18 @@ O build gera um site estático em `dist/`. Funciona em qualquer hospedagem está
 
 1. Suba o repositório no GitHub.
 2. Em vercel.com, use **Add New → Project** e importe o repositório.
-3. Em **Root Directory**, escolha `sites/brasa-e-ferro`. O preset **Vite** é detectado sozinho (build `npm run build`, output `dist`).
+3. Em **Root Directory**, escolha `sites/delicias-na-chapada`. O preset **Vite** é detectado sozinho (build `npm run build`, output `dist`).
 4. Clique em **Deploy**.
 5. Domínio próprio: **Settings → Domains → Add**. Siga as instruções de DNS (registro A `76.76.21.21` para o domínio raiz e CNAME `cname.vercel-dns.com` para o `www`).
 6. Atualize `site.url` em `src/data/site.ts` com o domínio final e faça um novo deploy. O canonical, o Open Graph e o sitemap dependem dele.
 
 ### Netlify
 
-**Add new site → Import an existing project**. Configure Base directory `sites/brasa-e-ferro`, Build command `npm run build` e Publish directory `sites/brasa-e-ferro/dist`.
+**Add new site → Import an existing project**. Configure Base directory `sites/delicias-na-chapada`, Build command `npm run build` e Publish directory `sites/delicias-na-chapada/dist`.
 
 ### Cloudflare Pages
 
-**Workers & Pages → Create → Pages → Connect to Git**. Configure Root directory `sites/brasa-e-ferro`, Build command `npm run build` e Output `dist`.
+**Workers & Pages → Create → Pages → Connect to Git**. Configure Root directory `sites/delicias-na-chapada`, Build command `npm run build` e Output `dist`.
 
 ### Depois de publicar
 
@@ -201,9 +200,9 @@ O build gera um site estático em `dist/`. Funciona em qualquer hospedagem está
 
 ## Antes de publicar
 
-- [ ] Confirmar com o dono **nome e marca**. O briefing pediu a marca "Brasa & Ferro" e os links apontam para o perfil `@delicias_nachapada`. Se o site for desse perfil com o nome dele, troque `site.nome`, `nomeCurto` e os textos em `src/data/site.ts`, o wordmark em `components/Logo.tsx` e no rodapé, o `og.ts` e o `favicon.svg`, e rode `npm run assets`.
-- [ ] Preencher todos os campos da tabela acima (o build avisa o que falta).
-- [ ] Trocar os depoimentos de exemplo por avaliações reais, com autorização.
+- [ ] Confirmar o telefone com o 9 a mais: (62) 99687-1621.
+- [ ] Preencher endereço, horários e os outros campos da tabela acima (o build avisa o que falta).
+- [ ] Adicionar avaliações reais de clientes, com autorização (a seção Depoimentos aparece sozinha).
 - [ ] Trocar as imagens da galeria por fotos reais do Instagram (com autorização), se o cliente preferir.
 - [ ] Configurar o domínio e atualizar `site.url`.
 

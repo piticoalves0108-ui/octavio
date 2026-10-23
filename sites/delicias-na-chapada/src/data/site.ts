@@ -108,26 +108,30 @@ export interface Adicional {
 const instagramUsuario = 'delicias_nachapada'
 
 export const site = {
-  nome: 'Brasa & Ferro',
-  nomeCurto: 'Brasa&Ferro',
+  nome: 'Delícias na Chapada',
+  nomeCurto: 'Delícias',
   ramo: 'Hamburgueria artesanal',
   slogan: 'Carne de verdade. Fogo de verdade.',
   sloganLongo: 'Carne de verdade. Fogo de verdade. Sabor que não se explica — se prova.',
   descricaoSeo: confirmar(
     'descrição para o Google',
-    'X-Tudo, X-Bacon, X-Picanha, X-Costela e mais: hambúrguer artesanal ou industrial feito na chapa. Peça pelo Instagram @delicias_nachapada.',
+    'X-Tudo, X-Bacon, X-Picanha, X-Costela e mais: hambúrguer artesanal ou industrial feito na chapa. Peça pelo WhatsApp (62) 99687-1621.',
   ),
 
   /** Domínio final, sem barra no fim. Usado no canonical, OG e sitemap. */
-  url: confirmar('domínio do site', 'https://brasaeferro.com.br'),
+  url: confirmar('domínio do site', 'https://deliciasnachapada.com.br'),
   idioma: 'pt-BR',
   corTema: '#0D0D0D',
 
   contato: {
     /** Só dígitos, com DDI e DDD (ex.: 5561999999999). Vazio = usa a DM do Instagram. */
-    whatsapp: confirmar('WhatsApp de pedidos', ''),
+    // O cliente passou "62 9687-1621" (formato antigo, de 8 dígitos). Todo celular
+    // de DDD 62 hoje tem o 9 na frente: (62) 99687-1621. Confirmar com o dono.
+    whatsapp: confirmar('WhatsApp (confirmar o 9 a mais)', '5562996871621'),
     /** Formato de exibição. */
-    telefoneExibicao: confirmar('telefone de exibição', ''),
+    telefoneExibicao: '(62) 99687-1621',
+    /** Para o link tel: e o schema (só dígitos, com +55). */
+    telefoneInternacional: '+5562996871621',
     email: confirmar('e-mail de contato', ''),
     mensagemPedido: 'Olá! Vim pelo site e quero fazer um pedido.',
   },
@@ -172,14 +176,14 @@ export const site = {
 // Seções
 // ---------------------------------------------------------------------------
 
-export const navegacao = [
+const todasAsSecoes = [
   { id: 'sobre', rotulo: 'Sobre' },
   { id: 'cardapio', rotulo: 'Cardápio' },
   { id: 'ingredientes', rotulo: 'Ingredientes' },
   { id: 'galeria', rotulo: 'Galeria' },
   { id: 'depoimentos', rotulo: 'Depoimentos' },
   { id: 'onde', rotulo: 'Onde estamos' },
-] as const
+]
 
 export const hero = {
   eyebrow: 'Hamburgueria artesanal',
@@ -217,17 +221,18 @@ export const anatomia = {
 export const sobre = {
   eyebrow: 'Nossa história',
   titulo: 'Nasceu na chapa.',
-  paragrafos: confirmar('história da casa', [
-    'Começou com uma chapa de ferro fundido, um saco de carvão e uma ideia teimosa: hambúrguer bom não tem atalho.',
-    'A carne é moída todo dia. O pão sai do forno de madrugada. O bacon passa a noite no defumador. Cada lanche é montado na hora, na sua frente.',
-    'Sem pressa. Sem congelado. Sem conversa fiada. Só fogo, ferro e respeito pelo que vai no prato.',
+  paragrafos: confirmar('texto do Sobre', [
+    'Delícias na Chapada é lanche de chapa do jeito que tem que ser: pão tostado, hambúrguer suculento e recheio que não economiza.',
+    'No cardápio, os tradicionais de sempre, como X-Tudo, X-Bacon e X-Salada, e os artesanais da casa, como X-Costela, X-Picanha e X-Burguer da Terra.',
+    'Nos tradicionais, você escolhe o hambúrguer: artesanal ou industrial. Escolheu? É só chamar no WhatsApp.',
   ]),
-  numeros: confirmar('números da casa', [
-    { valor: 6, sufixo: '', rotulo: 'anos na brasa' },
-    { valor: 120, sufixo: ' mil+', rotulo: 'hambúrgueres servidos' },
-    { valor: 180, sufixo: ' g', rotulo: 'de blend moído no dia' },
-    { valor: 8, sufixo: ' h', rotulo: 'de defumação do bacon' },
-  ]),
+  // Números tirados do próprio cardápio (atualize se o cardápio mudar).
+  numeros: [
+    { valor: 10, sufixo: '', rotulo: 'lanches no cardápio' },
+    { valor: 14, sufixo: '', rotulo: 'ingredientes no X-Tudo' },
+    { valor: 6, sufixo: '', rotulo: 'adicionais para turbinar' },
+    { valor: 2, sufixo: '', rotulo: 'opções de hambúrguer nos tradicionais' },
+  ],
   assinatura: 'Feito com fogo. Servido com orgulho.',
 }
 
@@ -371,46 +376,46 @@ export const burgerHero = (() => {
 
 export const ingredientes = {
   eyebrow: 'Ingredientes',
-  titulo: 'O que vai no fogo.',
-  subtitulo: 'Seis escolhas que fazem a diferença na primeira mordida.',
-  itens: confirmar('ingredientes e fornecedores', [
+  titulo: 'O que vai na chapa.',
+  subtitulo: 'Seis ingredientes que aparecem em quase todo o cardápio.',
+  itens: [
     {
       id: 'blend',
-      nome: 'Blend da casa',
-      texto: 'Costela e acém moídos todo dia, na proporção que levou dois anos para acertar. 180 g, ponto da casa.',
-      destaque: 'Moído no dia',
+      nome: 'Hambúrguer',
+      texto: 'Nos tradicionais, você escolhe: artesanal ou industrial. No X-Costela, o hambúrguer é de costela.',
+      destaque: 'Artesanal ou industrial',
     },
     {
       id: 'pao',
-      nome: 'Pão de fermentação lenta',
-      texto: 'Massa que descansa 12 horas. Sai do forno de madrugada e vai para a chapa com manteiga na hora de servir.',
-      destaque: '12 h de fermentação',
+      nome: 'Pão',
+      texto: 'Macio por dentro, tostado na chapa por fora, para segurar até os 14 ingredientes do X-Tudo.',
+      destaque: 'Tostado na chapa',
     },
     {
       id: 'queijo',
-      nome: 'Cheddar inglês',
-      texto: 'Fatiado na casa e derretido sob a cúpula de ferro até escorrer pela borda da carne.',
-      destaque: 'Derretido sob a cúpula',
+      nome: 'Mussarela e cheddar',
+      texto: 'Mussarela em quase todo o cardápio. No X-Caseirão, mussarela e cheddar juntos. No X-Burguer da Terra, creme de queijo.',
+      destaque: 'Derretidos',
     },
     {
       id: 'bacon',
-      nome: 'Bacon defumado',
-      texto: 'Barriga suína curada por três dias e defumada por oito horas em lenha de árvore frutífera.',
-      destaque: '8 h no defumador',
+      nome: 'Bacon',
+      texto: 'Em tiras, no X-Tudo, no X-Bacon, no X-Caseirão, no X-da Casa e no X-Burguer de Abacaxi. E ainda vira adicional.',
+      destaque: 'Em 6 lanches',
     },
     {
       id: 'folhas',
-      nome: 'Folhas e tomate',
-      texto: 'De pequenos produtores da região, entregues duas vezes por semana. Lavados e cortados no dia.',
-      destaque: 'Do produtor local',
+      nome: 'Alface e tomate',
+      texto: 'A dupla que deixa o lanche leve e fresco. Vai no X-Tudo, no X-Bacon, no X-Salada e no X-Caseirão.',
+      destaque: 'Frescos',
     },
     {
       id: 'molho',
-      nome: 'Molho da casa',
-      texto: 'Maionese defumada com alho assado na brasa. A receita fica com a gente.',
-      destaque: 'Receita guardada',
+      nome: 'Molho',
+      texto: 'O toque final que amarra tudo. Vai em 9 dos 10 lanches do cardápio.',
+      destaque: 'Em 9 de 10 lanches',
     },
-  ]),
+  ],
 }
 
 export const galeria = {
@@ -430,18 +435,26 @@ export const galeria = {
   ] as const,
 }
 
+export interface Depoimento {
+  nome: string
+  origem: string
+  nota: number
+  texto: string
+}
+
 export const depoimentos = {
   eyebrow: 'Depoimentos',
   titulo: 'Quem provou, voltou.',
-  /** EXEMPLOS. Troque por avaliações reais (Google, iFood) com autorização. */
-  itens: confirmar('depoimentos reais', [
-    { nome: 'Camila R.', origem: 'Google', nota: 5, texto: 'O melhor smash que já comi. A crosta da carne é outro nível. Voltei na mesma semana.' },
-    { nome: 'Diego M.', origem: 'iFood', nota: 5, texto: 'Chegou quente, pão firme, nada encharcado. O bacon defumado vale o pedido sozinho.' },
-    { nome: 'Juliana S.', origem: 'Instagram', nota: 5, texto: 'Atendimento rápido, lugar com clima e um hambúrguer que tem gosto de brasa de verdade.' },
-    { nome: 'Rafael T.', origem: 'Google', nota: 5, texto: 'Pedi o Duplo Ferro achando que ia sobrar. Não sobrou nada. Nem a batata.' },
-    { nome: 'Patrícia L.', origem: 'Google', nota: 5, texto: 'Finalmente um vegetariano que não é castigo. O Verde Brasa é muito bem feito.' },
-  ]),
+  /**
+   * Avaliações REAIS de clientes (Google, iFood, Instagram), com autorização.
+   * Enquanto a lista estiver vazia, a seção e o link do menu ficam escondidos.
+   * Exemplo: { nome: 'Ana S.', origem: 'Google', nota: 5, texto: 'O X-Tudo é enorme!' }
+   */
+  itens: [] as Depoimento[],
 }
+
+/** Seções do menu (Depoimentos só aparece quando houver avaliações). */
+export const navegacao = todasAsSecoes.filter((n) => n.id !== 'depoimentos' || depoimentos.itens.length > 0)
 
 export const localizacao = {
   eyebrow: 'Onde estamos',
