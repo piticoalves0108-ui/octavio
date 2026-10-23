@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!--seo-->
+    <!-- Evita o "flash" branco antes do CSS carregar. -->
+    <style>html{background:#0d0d0d;color:#f5f0e8}</style>
+    <!-- Marca que o JS está ativo (as animações de entrada só escondem conteúdo com JS). -->
+    <script>document.documentElement.classList.add('js')</script>
+    <!-- Sem JavaScript, o preloader some e o site continua legível. -->
+    <noscript><style>.preloader{display:none!important}</style></noscript>
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

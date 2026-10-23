@@ -1,0 +1,420 @@
+/* ==========================================================================
+   Brasa & Ferro: estilos globais (Tailwind v4 + utilitários próprios)
+   ========================================================================== */
+@import 'tailwindcss';
+@import '@fontsource/bebas-neue/400.css';
+@import '@fontsource-variable/inter';
+
+@theme {
+  /* Paleta */
+  --color-carvao: #0d0d0d;
+  --color-grafite: #151413;
+  --color-ferro: #1e1c1a;
+  --color-aco: #2b2825;
+  --color-ambar: #e8a33d;
+  --color-ambar-claro: #f6c56f;
+  --color-laranja: #e07a2e;
+  --color-brasa: #c1272d;
+  --color-creme: #f5f0e8;
+  /* Texto secundário: 7,8:1 sobre o carvão (WCAG AA folgado) */
+  --color-cinza: #aaa49b;
+
+  /* Tipografia */
+  --font-display: 'Bebas Neue', 'Anton', Impact, 'Arial Narrow', sans-serif;
+  --font-sans: 'Inter Variable', Inter, ui-sans-serif, system-ui, sans-serif;
+
+  --ease-brasa: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-carvao);
+    color: var(--color-creme);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-carvao);
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-ambar);
+    color: var(--color-carvao);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ambar);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 0.92;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Lenis (smooth scroll) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Com JS, os elementos com data-reveal começam escondidos (o GSAP revela). */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(36px);
+}
+
+/* Pular para o conteúdo */
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: -80px;
+  z-index: 200;
+  background: var(--color-ambar);
+  color: var(--color-carvao);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 16px;
+}
+
+/* Componentes ficam na camada "components": os utilitários do Tailwind (hidden, !px-5…) vencem. */
+@layer components {
+/* ---------------------------------------------------------------------------
+   Texturas: grão de filme e metal escovado
+   --------------------------------------------------------------------------- */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: -50%;
+  z-index: 90;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-6%, 4%); }
+  40% { transform: translate(5%, -7%); }
+  60% { transform: translate(-3%, 9%); }
+  80% { transform: translate(8%, 2%); }
+  100% { transform: translate(-2%, -4%); }
+}
+
+.metal {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0) 40%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 1px, rgba(0, 0, 0, 0) 1px 3px),
+    linear-gradient(135deg, #1d1b19, #121110 60%, #191715);
+}
+
+/* Borda fina com reflexo metálico que corre ao passar o mouse */
+.metal-border {
+  position: relative;
+  isolation: isolate;
+}
+.metal-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    130deg,
+    rgba(245, 240, 232, 0.16),
+    rgba(245, 240, 232, 0.03) 30%,
+    rgba(232, 163, 61, 0.35) 50%,
+    rgba(245, 240, 232, 0.03) 70%,
+    rgba(245, 240, 232, 0.12)
+  );
+  background-size: 250% 250%;
+  background-position: 100% 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: background-position 1.2s var(--ease-brasa);
+  pointer-events: none;
+  z-index: -1;
+}
+.metal-border:hover::before,
+.metal-border:focus-within::before {
+  background-position: 0% 0%;
+}
+
+/* Título com reflexo metálico */
+.metal-text {
+  background: linear-gradient(100deg, #f5f0e8 0%, #cfc8bd 35%, #fff9ef 48%, #b9b1a5 60%, #f5f0e8 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 7s ease-in-out infinite;
+}
+@keyframes sheen {
+  0%, 100% { background-position: 100% 0; }
+  50% { background-position: 0% 0; }
+}
+
+/* ---------------------------------------------------------------------------
+   Efeito "brasa": gradiente animado + brilho que tremula
+   --------------------------------------------------------------------------- */
+.text-ember {
+  position: relative;
+  display: inline-block;
+  /* folga para acentos (Á, Ã) não serem cortados pelo background-clip */
+  padding: 0.14em 0.04em 0.02em;
+  margin: -0.14em -0.04em -0.02em;
+  background: linear-gradient(90deg, #ffd27a, #e8a33d 25%, #ff7a2e 45%, #c1272d 60%, #ff9a3c 78%, #ffd27a);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: ember-flow 6s linear infinite;
+}
+/* O brilho fica numa cópia do texto por trás (filter + background-clip:text dá problema no Chrome). */
+.text-ember[data-text]::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  padding: inherit;
+  z-index: -1;
+  color: transparent;
+  text-shadow: 0 0 14px rgba(255, 110, 40, 0.45), 0 0 34px rgba(193, 39, 45, 0.3);
+  animation: ember-flicker 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes ember-flow {
+  to { background-position: 300% 0; }
+}
+@keyframes ember-flicker {
+  0%, 100% { opacity: 0.75; }
+  38% { opacity: 1; }
+  52% { opacity: 0.55; }
+  70% { opacity: 0.95; }
+}
+
+/* ---------------------------------------------------------------------------
+   Botões (ripple + glow). O texto escuro sobre âmbar/laranja tem contraste ≥ 6:1.
+   --------------------------------------------------------------------------- */
+.btn {
+  --glow: rgba(232, 163, 61, 0);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 48px;
+  padding: 0 1.6rem;
+  border-radius: 999px;
+  font-weight: 650;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    box-shadow 0.45s var(--ease-brasa),
+    transform 0.45s var(--ease-brasa),
+    background-color 0.3s,
+    color 0.3s,
+    border-color 0.3s;
+  box-shadow: 0 0 0 0 var(--glow), 0 10px 30px -12px var(--glow);
+}
+.btn-primary {
+  color: #120c06;
+  background: linear-gradient(100deg, #f6c56f, #e8a33d 35%, #e07a2e 70%, #e8a33d);
+  background-size: 220% 100%;
+  animation: ember-flow-btn 5s ease-in-out infinite;
+}
+@keyframes ember-flow-btn {
+  0%, 100% { background-position: 0% 0; }
+  50% { background-position: 100% 0; }
+}
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  --glow: rgba(232, 140, 50, 0.55);
+  box-shadow: 0 0 0 4px rgba(232, 163, 61, 0.14), 0 0 36px 2px rgba(232, 120, 40, 0.45), 0 14px 40px -10px rgba(193, 39, 45, 0.6);
+}
+.btn-ghost {
+  color: var(--color-creme);
+  background: rgba(245, 240, 232, 0.03);
+  border: 1px solid rgba(245, 240, 232, 0.2);
+  backdrop-filter: blur(8px);
+}
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  border-color: rgba(232, 163, 61, 0.7);
+  box-shadow: 0 0 28px -4px rgba(232, 163, 61, 0.35), inset 0 0 18px rgba(232, 163, 61, 0.08);
+}
+.btn .btn-label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.55), rgba(255, 220, 160, 0.15) 60%, transparent 70%);
+  animation: ripple 0.7s var(--ease-brasa) forwards;
+  z-index: 0;
+}
+.btn-ghost .ripple {
+  background: radial-gradient(circle, rgba(232, 163, 61, 0.45), rgba(232, 163, 61, 0.08) 60%, transparent 70%);
+}
+@keyframes ripple {
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Link com sublinhado que "acende" */
+.link-ember {
+  position: relative;
+  transition: color 0.3s;
+}
+.link-ember::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-ambar), var(--color-brasa));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease-brasa);
+}
+.link-ember:hover,
+.link-ember[aria-current='true'] {
+  color: var(--color-ambar-claro);
+}
+.link-ember:hover::after,
+.link-ember[aria-current='true']::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Rótulo pequeno acima dos títulos */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-ambar);
+}
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-ambar));
+}
+
+/* Carregamento elegante das imagens */
+.img-loading {
+  background:
+    linear-gradient(110deg, rgba(255, 255, 255, 0) 30%, rgba(232, 163, 61, 0.08) 50%, rgba(255, 255, 255, 0) 70%),
+    #141312;
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+/* Fumaça em CSS (seções sem WebGL) */
+.smoke-css {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  background: radial-gradient(circle, rgba(245, 240, 232, 0.07), transparent 65%);
+  animation: smoke-drift 18s ease-in-out infinite;
+}
+@keyframes smoke-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.6; }
+  50% { transform: translate3d(4%, -10%, 0) scale(1.25); opacity: 1; }
+}
+
+/* Calor da chapa: brilho pulsante na base do hero */
+.heat-glow {
+  background: radial-gradient(60% 55% at 50% 100%, rgba(224, 92, 30, 0.38), rgba(193, 39, 45, 0.14) 45%, transparent 75%);
+  animation: heat 4.5s ease-in-out infinite;
+}
+@keyframes heat {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+}
+
+/* Cursor personalizado (só com mouse) */
+.cursor-on,
+.cursor-on * {
+  cursor: none !important;
+}
+.cursor-on input,
+.cursor-on textarea {
+  cursor: text !important;
+}
+
+/* Barra de rolagem discreta */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 163, 61, 0.5) transparent;
+}
+
+/* Diálogo (lightbox) */
+dialog::backdrop {
+  background: rgba(8, 7, 6, 0.88);
+  backdrop-filter: blur(6px);
+}
+
+}
+
+/* ---------------------------------------------------------------------------
+   Movimento reduzido: sem animações contínuas, sem grão animado.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
