@@ -22,6 +22,7 @@ import { buildIslands } from './structures/sky';
 import { buildLab, buildCrystalShrine, buildCanyonArches, buildBridges, buildSigns, buildSwampProps } from './structures/landmarks';
 import { findPath as navFindPath, villageNav } from './nav';
 import { yieldFrame } from './maps';
+import { Exploration } from './exploration';
 
 /** Quantas luzes pontuais reais o mundo usa (posicionadas nas fontes mais próximas). */
 const LIGHT_SLOTS = 2;
@@ -41,6 +42,8 @@ export class World implements GameSystem, Saveable {
   readonly saveKey = 'world';
   /** Locais já descobertos (ids). */
   discovered = new Set<string>();
+  /** Névoa do mapa (células reveladas) e marcadores do jogador. */
+  readonly exploration = new Exploration();
   /** Local em que o jogador está agora (ou null). */
   currentLocation: LocationDef | null = null;
   protected ctx!: GameContext;
@@ -230,6 +233,7 @@ export class World implements GameSystem, Saveable {
     this.installHook();
     this.gates.update(dt);
     const p = ctx.sys.player.position;
+    this.exploration.update(dt, p.x, p.z, ctx.sys.player.heightAboveGround);
     let found: LocationDef | null = null;
     for (const l of LOCATIONS) {
       const d = Math.hypot(p.x - l.x, p.z - l.z);
@@ -440,6 +444,7 @@ export class World implements GameSystem, Saveable {
 
   onNewGame() {
     this.discovered.clear();
+    this.exploration.reset();
     this.currentLocation = null;
     this.gates?.reset();
   }
@@ -447,11 +452,14 @@ export class World implements GameSystem, Saveable {
   serialize() {
     const gates: Record<string, boolean> = {};
     if (this.gates) for (const [id, g] of this.gates.gates) gates[id] = g.open;
-    return { discovered: [...this.discovered], gates };
+    return { discovered: [...this.discovered], gates, exploration: this.exploration.serialize() };
   }
 
   deserialize(data: any) {
+    this.exploration.deserialize(data?.exploration);
     this.discovered = new Set(Array.isArray(data?.discovered) ? data.discovered.filter((s: unknown) => typeof s === 'string' && !!LOCATION_BY_ID[s as string]) : []);
+    // saves antigos (sem névoa salva): revela o entorno dos locais já descobertos
+    if (!data?.exploration) for (const id of this.discovered) this.exploration.reveal(LOCATION_BY_ID[id].x, LOCATION_BY_ID[id].z, LOCATION_BY_ID[id].discoverRadius * 1.5);
     if (this.gates) {
       this.gates.reset();
       const gs = data?.gates;
