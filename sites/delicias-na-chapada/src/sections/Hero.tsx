@@ -15,6 +15,7 @@ import { getGsap, scrollToId } from '../lib/motion'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { ButtonLink } from '../components/Button'
 import { Picture } from '../components/Picture'
+import { StatusBadge } from '../components/StatusBadge'
 import { IconArrowRight, IconFlame } from '../components/Icons'
 import type { BurgerExperience, LayerAnchor } from '../three/experience'
 
@@ -220,6 +221,9 @@ export function Hero({ ready }: { ready: boolean }) {
         {/* Interface do hero */}
         <div ref={uiRef} className="absolute inset-x-0 bottom-0 z-10 mx-auto flex max-w-[1400px] flex-col gap-6 px-5 pb-8 md:flex-row md:items-end md:justify-between md:px-8 md:pb-10">
           <div className="max-w-md">
+            <div className="mb-3 h-7">
+              <StatusBadge />
+            </div>
             <p className="hero-intro eyebrow">{hero.eyebrow}</p>
             <p className="hero-intro mt-3 text-lg text-creme/90 md:text-xl">{hero.subtitulo}</p>
             <div className="hero-intro mt-5 flex flex-wrap gap-3">

@@ -4,7 +4,7 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import { canalPedido, enderecoCompleto, linkMapa, linkPedido, localizacao, site, type DiaSemana, type Horario } from '../data/site'
-import { statusAgora, type Status } from '../lib/hours'
+import { useStatus } from '../lib/status'
 import { SectionHeading } from '../components/SectionHeading'
 import { ButtonLink } from '../components/Button'
 import { IconClock, IconPin, IconWhatsApp } from '../components/Icons'
@@ -90,15 +90,13 @@ function StyledMap({ active }: { active: boolean }) {
 export function Location() {
   const mapBox = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(false)
-  const [status, setStatus] = useState<Status | null>(null)
+  const loja = useStatus()
+  const status = loja.aberto === null ? null : { aberto: loja.aberto, texto: loja.texto }
   const [hoje, setHoje] = useState<number | null>(null)
 
   useEffect(() => {
     // Calculado no navegador (horário local do visitante).
-    const update = () => {
-      setStatus(statusAgora())
-      setHoje(new Date().getDay())
-    }
+    const update = () => setHoje(new Date().getDay())
     update()
     const t = window.setInterval(update, 60_000)
     const io = new IntersectionObserver(([e]) => e.isIntersecting && setActive(true), { threshold: 0.35 })

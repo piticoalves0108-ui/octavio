@@ -7,6 +7,7 @@ import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { formasDeEntrega, formasDePagamento } from '../data/pedido'
 import { canalPedido, formatarPreco, site } from '../data/site'
 import { useCarrinho } from '../lib/carrinho'
+import { useStatus } from '../lib/status'
 import { dadosVazios, lerValor, linkDoPedido, mensagemPedido, type DadosPedido } from '../lib/mensagem'
 import { scrollToId } from '../lib/motion'
 import { IconBag, IconCheck, IconClose, IconMinus, IconPlus, IconTrash, IconWhatsApp } from './Icons'
@@ -38,6 +39,7 @@ export function CartDrawer() {
   const [enviado, setEnviado] = useState<string | null>(null)
   const uid = useId()
   const itens = detalhar(formatarPreco)
+  const loja = useStatus()
 
   // Lembra nome, endereço e pagamento para o próximo pedido.
   useEffect(() => {
@@ -315,6 +317,12 @@ export function CartDrawer() {
 
             {/* Total + enviar */}
             <div className="border-t border-white/[0.07] bg-carvao/70 px-5 py-4 md:px-6">
+              {loja.manual && loja.aberto === false && (
+                <p role="status" className="mb-3 flex items-start gap-2 rounded-xl border border-[#ff6b5a]/40 bg-brasa/15 px-3 py-2.5 text-xs text-[#ffb3a8]">
+                  <span aria-hidden className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#ff6b5a]" />
+                  Estamos fechados agora. Você pode enviar o pedido, mas ele só será atendido quando abrirmos.
+                </p>
+              )}
               <div className="flex items-baseline justify-between">
                 <span className="text-sm text-cinza">Total{dados.entrega === 'delivery' ? ' (sem a entrega)' : ''}</span>
                 <span className="font-display text-4xl text-ambar">{formatarPreco(total)}</span>

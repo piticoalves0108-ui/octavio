@@ -9,6 +9,7 @@ import { Navbar } from './components/Navbar'
 import { CartButton } from './components/CartButton'
 import { CartDrawer } from './components/CartDrawer'
 import { ProductDialog } from './components/ProductDialog'
+import { OwnerPanel } from './components/OwnerPanel'
 import { Hero } from './sections/Hero'
 import { About } from './sections/About'
 import { Menu } from './sections/Menu'
@@ -20,6 +21,7 @@ import { Location } from './sections/Location'
 import { Footer } from './sections/Footer'
 import { depoimentos } from './data/site'
 import { CarrinhoProvider } from './lib/carrinho'
+import { StatusProvider } from './lib/status'
 import { loader } from './lib/loader'
 import { getGsap, prefersReducedMotion, startSmoothScroll } from './lib/motion'
 
@@ -63,6 +65,7 @@ export default function App() {
   }, [ready])
 
   return (
+    <StatusProvider>
     <CarrinhoProvider>
       <a href="#conteudo" className="skip-link">
         Pular para o conteúdo
@@ -86,6 +89,8 @@ export default function App() {
       <CartButton />
       <ProductDialog />
       <CartDrawer />
+      <OwnerPanel />
     </CarrinhoProvider>
+    </StatusProvider>
   )
 }

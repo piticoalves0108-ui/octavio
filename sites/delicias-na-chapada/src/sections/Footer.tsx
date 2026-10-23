@@ -221,7 +221,10 @@ export function Footer() {
 
         <div className="mx-auto flex max-w-[1400px] flex-col gap-4 border-t border-white/[0.06] px-5 py-6 text-xs text-cinza sm:flex-row sm:items-center sm:justify-between md:px-8">
           <p>
-            © {ano ?? ''} {site.nome}. {rodape.assinatura}
+            © {ano ?? ''} {site.nome}. {rodape.assinatura}{' '}
+            <a href="#painel" className="link-ember ml-2 text-cinza/80">
+              Área do dono
+            </a>
           </p>
           <button
             type="button"

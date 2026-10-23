@@ -105,6 +105,44 @@ Exemplo de mensagem:
 
 ---
 
+## Painel do dono (Aberto / Fechado)
+
+Uma página simples, com senha, para o dono avisar no site se a loja está aberta ou fechada.
+
+**Como abrir:** endereço do site + `#painel` (ex.: `deliciasnachapada.com.br/#painel` ou `delicias-na-chapada.html#painel`), ou o link **Área do dono** no rodapé. Digite a senha e toque em **Aberto** ou **Fechado**.
+
+**O que muda no site quando está fechado:**
+- faixa vermelha no topo de todas as telas: "Estamos fechados agora";
+- selo "Fechado agora" no topo da página e na barra do menu (computador);
+- "Onde estamos" mostra "Fechado agora";
+- o carrinho avisa que o pedido só será atendido quando a loja abrir. Ele ainda pode ser enviado.
+
+Quando o dono toca em **Aberto**, tudo isso some e aparece o selo verde "Aberto agora". O site confere o status a cada 30 segundos e sempre que o cliente volta para a aba.
+
+### Modo demonstração (como está agora)
+
+Sem configurar nada, o painel funciona com a senha **1234**, mas a mudança vale **só no navegador de quem clicou**. Serve para testar e mostrar ao cliente.
+
+### Ativar para todos os clientes (uns 10 minutos, gratuito)
+
+O status precisa ficar guardado online. Para isso usamos o **Google Apps Script**, na conta Google da loja. A senha fica guardada só lá, nunca no código do site.
+
+1. Entre em [script.google.com](https://script.google.com) com a conta Google da loja e clique em **Novo projeto**.
+2. Apague o código que aparece e cole o conteúdo inteiro de [`painel/status.gs`](painel/status.gs).
+3. Na linha `var SENHA = 'troque-esta-senha';`, coloque a senha do dono (mínimo de 6 caracteres). Salve (Ctrl+S).
+4. Clique em **Implantar → Nova implantação**. Na engrenagem, escolha **App da Web** e configure:
+   - **Executar como:** Eu
+   - **Quem pode acessar:** Qualquer pessoa
+5. Clique em **Implantar** e autorize. Como o script é seu, o Google mostra um aviso: clique em **Avançado → Acessar (não seguro)**.
+6. Copie a **URL do App da Web** (termina em `/exec`).
+7. Cole em `src/data/site.ts`, no campo `painel.url`. Depois rode `npm run build` (site) e `npm run build:html` (arquivo único).
+
+**Para trocar a senha depois:** mude a linha `SENHA`, salve e vá em **Implantar → Gerenciar implantações → lápis → Versão: Nova versão → Implantar**. A URL continua a mesma.
+
+**Segurança:** a senha é conferida no Apps Script. Quem errar a senha espera 1,5 s por tentativa, o que atrasa quem tenta adivinhar. Use uma senha que não seja óbvia (não use 1234 nem o telefone da loja).
+
+---
+
 ## Imagens
 
 As fotos do cardápio, ingredientes, galeria, o pôster do hero e a imagem de Open Graph são **renderizadas a partir do próprio 3D do site**: mesmo visual, sem banco de imagens, sem problema de licença.
@@ -137,6 +175,7 @@ index.html                 página (o SEO entra no lugar de <!--seo-->)
 studio.html, og.html       páginas internas para gerar imagens (não vão para o build)
 seo/plugin.ts              plugin do Vite: meta tags, OG, JSON-LD Restaurant, robots, sitemap, manifest
 entrega/delicias-na-chapada.html site em um único arquivo HTML (npm run build:html)
+painel/status.gs           código do Google Apps Script do painel do dono
 plugins/imagens.ts         embute as imagens no build de arquivo único
 scripts/
   render-assets.mjs        renderiza as imagens a partir do 3D
@@ -154,6 +193,8 @@ src/
   components/              Preloader, Cursor, Navbar, Button (ripple + glow), Picture, Logo, ícones
   sections/                Hero, About, Menu (lanches), MoreMenu (mais pratos), Ingredients, Gallery, Testimonials, Location, Footer
   data/pedido.ts           cardápio completo para pedidos (opções e preços)
+  lib/status.tsx           status aberto/fechado (painel do dono ou horário)
+  components/OwnerPanel.tsx, StatusBadge.tsx   painel do dono (#painel) e selo aberto/fechado
   lib/carrinho.tsx         carrinho (estado, preços, salvar no navegador)
   lib/mensagem.ts          mensagem do pedido para o WhatsApp
   components/ProductDialog.tsx, CartDrawer.tsx, CartButton.tsx   janela de opções, carrinho e botão flutuante
@@ -249,6 +290,7 @@ O build gera um site estático em `dist/`. Funciona em qualquer hospedagem está
 - [ ] Confirmar o telefone com o 9 a mais: (62) 99687-1621.
 - [ ] Preencher horários, taxa de entrega e os outros campos da tabela acima (o build avisa o que falta).
 - [ ] Fazer um pedido de teste até o fim e conferir se chega no WhatsApp da loja.
+- [ ] Ativar o painel do dono (Google Apps Script) e trocar a senha de teste.
 - [ ] Adicionar avaliações reais de clientes, com autorização (a seção Depoimentos aparece sozinha).
 - [ ] Trocar as imagens da galeria por fotos reais do Instagram (com autorização), se o cliente preferir.
 - [ ] Configurar o domínio e atualizar `site.url`.

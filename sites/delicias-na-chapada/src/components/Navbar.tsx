@@ -5,6 +5,8 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { formatarPreco, navegacao } from '../data/site'
 import { useCarrinho } from '../lib/carrinho'
+import { useStatus } from '../lib/status'
+import { StatusBadge } from './StatusBadge'
 import { getLenis, scrollToId } from '../lib/motion'
 import { ButtonLink } from './Button'
 import { IconBag, IconClose, IconFlame, IconMenu } from './Icons'
@@ -16,6 +18,7 @@ export function Navbar() {
   const [active, setActive] = useState('')
   const menuBtn = useRef<HTMLButtonElement>(null)
   const { quantidade, total, abrirCarrinho } = useCarrinho()
+  const loja = useStatus()
   const firstLink = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
@@ -63,10 +66,20 @@ export function Navbar() {
     <>
     <header
       className={`fixed inset-x-0 top-0 z-[80] transition-[padding,background-color,border-color,backdrop-filter] duration-500 ease-[var(--ease-brasa)] ${
-        scrolled ? 'border-b border-white/[0.06] bg-carvao/65 py-2.5 backdrop-blur-xl backdrop-saturate-150' : 'border-b border-transparent py-5'
+        scrolled ? 'border-b border-white/[0.06] bg-carvao/65 backdrop-blur-xl backdrop-saturate-150' : 'border-b border-transparent'
       }`}
     >
-      <nav aria-label="Principal" className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 md:px-8">
+      {/* Aviso de loja fechada (escolhido pelo dono no painel) */}
+      {loja.manual && loja.aberto === false && (
+        <p role="status" className="flex items-center justify-center gap-2 bg-[#7d1b1f] px-4 py-1.5 text-center text-xs font-medium text-creme sm:text-sm">
+          <span aria-hidden className="h-2 w-2 shrink-0 rounded-full bg-[#ff8a7a]" />
+          Estamos fechados agora. Os pedidos serão atendidos quando abrirmos.
+        </p>
+      )}
+      <nav
+        aria-label="Principal"
+        className={`mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 transition-[padding] duration-500 md:px-8 ${scrolled ? 'py-2.5' : 'py-5'}`}
+      >
         <a href="#inicio" onClick={go('inicio')} className={`transition-transform duration-500 ${scrolled ? 'scale-90' : ''} origin-left`} data-cursor="hover">
           <Logo />
         </a>
@@ -82,6 +95,9 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-3">
+          <span className="hidden xl:inline-flex">
+            <StatusBadge curto />
+          </span>
           <ButtonLink href="#cardapio" onClick={go('cardapio')} className={`hidden !min-h-11 sm:inline-flex ${scrolled ? '!px-5' : ''}`}>
             <IconFlame width={18} height={18} /> Peça Agora
           </ButtonLink>

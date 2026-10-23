@@ -167,6 +167,19 @@ export const site = {
   /** Texto para os dias sem horário cadastrado. */
   diaFechado: 'Segunda: chapa descansando',
 
+  /**
+   * Painel do dono (abre em /#painel): botões Aberto / Fechado com senha.
+   * `url`: endereço do App da Web do Google Apps Script (painel/status.gs; passo a
+   * passo no README). Vazio = modo demonstração: a mudança vale só no navegador
+   * de quem clicou, com a senha `senhaDemo`.
+   */
+  painel: {
+    url: confirmar('URL do painel do dono (Google Apps Script)', ''),
+    senhaDemo: '1234',
+    /** De quanto em quanto tempo o site confere se abriu ou fechou (ms). */
+    intervalo: 30000,
+  },
+
   /** Endpoint que recebe o POST da newsletter (Formspree, Mailchimp, etc.). Vazio = só simula. */
   newsletterEndpoint: confirmar('endpoint da newsletter', ''),
 
