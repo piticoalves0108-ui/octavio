@@ -3,7 +3,7 @@
  * carregamento, redes sociais e logo que acende ao aparecer.
  */
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { canalPedido, linkPedido, navegacao, rodape, site } from '../data/site'
+import { linkPedido, navegacao, rodape, site } from '../data/site'
 import { getGsap, prefersReducedMotion, scrollToId } from '../lib/motion'
 import { ButtonLink } from '../components/Button'
 import { IconArrowUp, IconCheck, IconFlame, IconInstagram, IconMail, IconTikTok, IconWhatsApp, IconBag } from '../components/Icons'
@@ -133,7 +133,14 @@ export function Footer() {
           <span className="text-ember" data-text={rodape.chamadaDestaque}>{rodape.chamadaDestaque}</span>
         </p>
         <div className="relative mt-10 flex justify-center" data-reveal>
-          <ButtonLink href={linkPedido()} target="_blank" rel="noopener" className="!min-h-14 !px-9 text-lg" aria-label={`Peça agora pelo ${canalPedido()} (abre em nova aba)`}>
+          <ButtonLink
+            href="#cardapio"
+            className="!min-h-14 !px-9 text-lg"
+            onClick={(e) => {
+              e.preventDefault()
+              scrollToId('cardapio')
+            }}
+          >
             <IconFlame /> Peça Agora
           </ButtonLink>
         </div>

@@ -6,16 +6,20 @@ import { useCallback, useEffect, useState } from 'react'
 import { Preloader } from './components/Preloader'
 import { Cursor } from './components/Cursor'
 import { Navbar } from './components/Navbar'
-import { FloatingOrder } from './components/FloatingOrder'
+import { CartButton } from './components/CartButton'
+import { CartDrawer } from './components/CartDrawer'
+import { ProductDialog } from './components/ProductDialog'
 import { Hero } from './sections/Hero'
 import { About } from './sections/About'
 import { Menu } from './sections/Menu'
+import { MoreMenu } from './sections/MoreMenu'
 import { Ingredients } from './sections/Ingredients'
 import { Gallery } from './sections/Gallery'
 import { Testimonials } from './sections/Testimonials'
 import { Location } from './sections/Location'
 import { Footer } from './sections/Footer'
 import { depoimentos } from './data/site'
+import { CarrinhoProvider } from './lib/carrinho'
 import { loader } from './lib/loader'
 import { getGsap, prefersReducedMotion, startSmoothScroll } from './lib/motion'
 
@@ -59,7 +63,7 @@ export default function App() {
   }, [ready])
 
   return (
-    <>
+    <CarrinhoProvider>
       <a href="#conteudo" className="skip-link">
         Pular para o conteúdo
       </a>
@@ -71,6 +75,7 @@ export default function App() {
         <Hero ready={ready} />
         <About />
         <Menu />
+        <MoreMenu />
         <Ingredients />
         <Gallery />
         {/* Aparece quando houver avaliações reais em site.ts (depoimentos.itens). */}
@@ -78,7 +83,9 @@ export default function App() {
         <Location />
       </main>
       <Footer />
-      <FloatingOrder />
-    </>
+      <CartButton />
+      <ProductDialog />
+      <CartDrawer />
+    </CarrinhoProvider>
   )
 }

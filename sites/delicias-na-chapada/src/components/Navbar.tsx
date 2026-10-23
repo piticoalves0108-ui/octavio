@@ -3,10 +3,11 @@
  * menu em tela cheia no celular (Esc fecha, foco volta para o botão).
  */
 import { useEffect, useRef, useState, type MouseEvent } from 'react'
-import { canalPedido, linkPedido, navegacao } from '../data/site'
+import { formatarPreco, navegacao } from '../data/site'
+import { useCarrinho } from '../lib/carrinho'
 import { getLenis, scrollToId } from '../lib/motion'
 import { ButtonLink } from './Button'
-import { IconClose, IconFlame, IconMenu } from './Icons'
+import { IconBag, IconClose, IconFlame, IconMenu } from './Icons'
 import { Logo } from './Logo'
 
 export function Navbar() {
@@ -14,6 +15,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('')
   const menuBtn = useRef<HTMLButtonElement>(null)
+  const { quantidade, total, abrirCarrinho } = useCarrinho()
   const firstLink = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
@@ -80,15 +82,23 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-3">
-          <ButtonLink
-            href={linkPedido()}
-            target="_blank"
-            rel="noopener"
-            className={`hidden !min-h-11 sm:inline-flex ${scrolled ? '!px-5' : ''}`}
-            aria-label={`Peça agora pelo ${canalPedido()} (abre em nova aba)`}
-          >
+          <ButtonLink href="#cardapio" onClick={go('cardapio')} className={`hidden !min-h-11 sm:inline-flex ${scrolled ? '!px-5' : ''}`}>
             <IconFlame width={18} height={18} /> Peça Agora
           </ButtonLink>
+          <button
+            type="button"
+            onClick={abrirCarrinho}
+            className="relative grid h-11 w-11 place-items-center rounded-full border border-white/15 text-creme transition-colors hover:border-ambar hover:text-ambar"
+            aria-label={quantidade ? `Ver pedido: ${quantidade} ${quantidade === 1 ? 'item' : 'itens'}, ${formatarPreco(total)}` : 'Ver pedido (vazio)'}
+            data-cursor="hover"
+          >
+            <IconBag />
+            {quantidade > 0 && (
+              <span aria-hidden className="absolute -top-1 -right-1 grid h-5 min-w-5 place-items-center rounded-full bg-ambar px-1 text-[0.7rem] font-bold text-carvao tabular-nums">
+                {quantidade}
+              </span>
+            )}
+          </button>
           <button
             ref={menuBtn}
             type="button"
@@ -133,8 +143,8 @@ export function Navbar() {
             </li>
           ))}
         </ul>
-        <ButtonLink href={linkPedido()} target="_blank" rel="noopener" tabIndex={open ? 0 : -1} className="w-full" magnetic={false}>
-          <IconFlame width={18} height={18} /> Peça Agora pelo {canalPedido()}
+        <ButtonLink href="#cardapio" onClick={go('cardapio')} tabIndex={open ? 0 : -1} className="w-full" magnetic={false}>
+          <IconFlame width={18} height={18} /> Peça Agora
         </ButtonLink>
       </div>
     </>

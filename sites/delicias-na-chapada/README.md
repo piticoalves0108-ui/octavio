@@ -47,9 +47,10 @@ Os valores de exemplo estão marcados com `confirmar('campo', valor)`. O `npm ru
 |---|---|
 | Telefone e WhatsApp | (62) 99687-1621. O cliente passou "62 9687-1621" (formato antigo, sem o 9). Confirmar que o número com o 9 abre o WhatsApp certo |
 | E-mail | vazio (fica oculto) |
-| Endereço, bairro, cidade, UF, CEP, referência | "Rua da Brasa, 180 — Centro, Sua Cidade". O DDD 62 é de Goiás |
-| Latitude e longitude | centro de Brasília (só para o schema) |
-| Horário de funcionamento | ter a qui 18h–23h, sex e sáb 18h–00h, dom 18h–23h |
+| Endereço | Rua 20, Qd. 26, Lt. 10B, Bairro Rodoviário, São João d'Aliança - GO (do cardápio do cliente). Confirmar o CEP 73760-000 |
+| Latitude e longitude | centro de São João d'Aliança (só para o schema): ajuste para o ponto exato |
+| Horário de funcionamento | **exemplo**: ter a qui 18h–23h, sex e sáb 18h–00h, dom 18h–23h |
+| Taxa de entrega | não informada: o pedido avisa "taxa de entrega a combinar" |
 | Domínio do site | `https://deliciasnachapada.com.br` |
 | Descrição para o Google | texto genérico |
 | Links do iFood e do TikTok | vazios (ícones ocultos) |
@@ -60,6 +61,47 @@ Os valores de exemplo estão marcados com `confirmar('campo', valor)`. O `npm ru
 > **Pedido pelo WhatsApp:** `contato.whatsapp` fica só com dígitos, com DDI e DDD (`5562996871621`). Todos os botões abrem o WhatsApp com a mensagem pronta (e com o nome do lanche, nos cards do cardápio). Se apagar o número, os botões voltam a abrir o direct do Instagram.
 
 > **Newsletter:** cole em `newsletterEndpoint` a URL de um serviço que aceite `POST` com JSON `{ "email": "..." }` (ex.: Formspree, Getform ou uma função serverless que fale com o Mailchimp/Brevo).
+
+---
+
+## Pedidos pelo WhatsApp
+
+O cliente monta o pedido no site e envia tudo pronto para o WhatsApp da loja:
+
+1. Toca em **Adicionar** num lanche ou em qualquer item de **Mais pratos** (porções, pastéis, massas, cachorro-quente, caldos e bebidas).
+2. Escolhe as opções: hambúrguer artesanal ou industrial, adicionais, tamanho da porção, sabor do suco, molho, massa… O preço se atualiza na hora.
+3. Abre o carrinho (ícone na barra do topo, ou o botão "Ver pedido"). Lá dá para mudar quantidades ou remover itens.
+4. Informa o nome, **delivery ou retirada** (com endereço, se for delivery), a **forma de pagamento** (Pix, crédito, débito ou dinheiro, com troco) e observações.
+5. Toca em **Enviar pedido no WhatsApp**. Abre a conversa com a mensagem completa: cada item, opções, preço, subtotal, total, entrega e pagamento.
+
+O carrinho e os dados do cliente ficam salvos no navegador da pessoa. Se ela fechar a página, o pedido continua lá.
+
+**Onde editar:**
+- `src/data/pedido.ts`: porções, pastéis, massas, caldos e bebidas (nomes, preços e opções), além das formas de entrega e de pagamento.
+- `src/data/site.ts`: os lanches e os adicionais (que também valem para o pedido).
+- `src/lib/mensagem.ts`: o texto da mensagem enviada.
+
+Exemplo de mensagem:
+
+```
+*PEDIDO*
+*2x X-Tudo* — R$ 33,00 cada
+   Hambúrguer: Industrial
+   Adicionais: Carne (+R$ 7,00), Bacon (+R$ 5,00)
+   Obs.: sem tomate
+   Subtotal: R$ 66,00
+
+*1x Suco natural* — R$ 10,00
+   Sabor: Laranja
+
+*TOTAL: R$ 76,00*
++ taxa de entrega (a combinar)
+
+*Nome:* Ana
+*Entrega:* Delivery
+*Endereço:* Rua 5, 120, Centro
+*Pagamento:* Dinheiro (troco para R$ 100,00)
+```
 
 ---
 
@@ -110,7 +152,11 @@ src/
   lib/                     motion (GSAP + Lenis), progresso do preloader, horário "aberto agora"
   hooks/                   movimento reduzido, efeito magnético
   components/              Preloader, Cursor, Navbar, Button (ripple + glow), Picture, Logo, ícones
-  sections/                Hero, About, Menu, Ingredients, Gallery, Testimonials, Location, Footer
+  sections/                Hero, About, Menu (lanches), MoreMenu (mais pratos), Ingredients, Gallery, Testimonials, Location, Footer
+  data/pedido.ts           cardápio completo para pedidos (opções e preços)
+  lib/carrinho.tsx         carrinho (estado, preços, salvar no navegador)
+  lib/mensagem.ts          mensagem do pedido para o WhatsApp
+  components/ProductDialog.tsx, CartDrawer.tsx, CartButton.tsx   janela de opções, carrinho e botão flutuante
   three/
     experience.ts          cena do hero: mouse, scroll, explosão, partículas, pausa fora da tela
     burger.ts              monta um hambúrguer a partir de uma receita e faz a vista explodida
@@ -201,7 +247,8 @@ O build gera um site estático em `dist/`. Funciona em qualquer hospedagem está
 ## Antes de publicar
 
 - [ ] Confirmar o telefone com o 9 a mais: (62) 99687-1621.
-- [ ] Preencher endereço, horários e os outros campos da tabela acima (o build avisa o que falta).
+- [ ] Preencher horários, taxa de entrega e os outros campos da tabela acima (o build avisa o que falta).
+- [ ] Fazer um pedido de teste até o fim e conferir se chega no WhatsApp da loja.
 - [ ] Adicionar avaliações reais de clientes, com autorização (a seção Depoimentos aparece sozinha).
 - [ ] Trocar as imagens da galeria por fotos reais do Instagram (com autorização), se o cliente preferir.
 - [ ] Configurar o domínio e atualizar `site.url`.

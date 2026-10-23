@@ -7,7 +7,7 @@ import { canalPedido, enderecoCompleto, linkMapa, linkPedido, localizacao, site,
 import { statusAgora, type Status } from '../lib/hours'
 import { SectionHeading } from '../components/SectionHeading'
 import { ButtonLink } from '../components/Button'
-import { IconClock, IconFlame, IconPin, IconWhatsApp } from '../components/Icons'
+import { IconClock, IconPin, IconWhatsApp } from '../components/Icons'
 
 const DIAS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
 
@@ -164,8 +164,8 @@ export function Location() {
               <ButtonLink href={linkMapa()} target="_blank" rel="noopener" aria-label="Como chegar (abre o Google Maps em nova aba)">
                 <IconPin width={18} height={18} /> Como chegar
               </ButtonLink>
-              <ButtonLink variant="ghost" href={linkPedido()} target="_blank" rel="noopener" aria-label={`Pedir pelo ${canalPedido()} (abre em nova aba)`}>
-                <IconFlame width={18} height={18} /> Pedir para levar
+              <ButtonLink variant="ghost" href={linkPedido()} target="_blank" rel="noopener" aria-label={`Falar no ${canalPedido()} (abre em nova aba)`}>
+                <IconWhatsApp width={18} height={18} /> Falar no {canalPedido()}
               </ButtonLink>
             </div>
 

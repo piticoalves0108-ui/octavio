@@ -148,14 +148,15 @@ export const site = {
   },
 
   endereco: {
-    rua: confirmar('endereço (rua e número)', 'Rua da Brasa, 180'),
-    bairro: confirmar('bairro', 'Centro'),
-    cidade: confirmar('cidade', 'Sua Cidade'),
-    uf: confirmar('estado (UF)', 'BR'),
-    cep: confirmar('CEP', '00000-000'),
-    referencia: confirmar('ponto de referência', 'Siga o cheiro de brasa.'),
-    /** Coordenadas para o schema e o link do mapa. */
-    geo: confirmar('latitude e longitude', { lat: -15.7939, lng: -47.8828 }),
+    // Endereço do rodapé do cardápio enviado pelo cliente.
+    rua: 'Rua 20, Qd. 26, Lt. 10B',
+    bairro: 'Bairro Rodoviário',
+    cidade: "São João d'Aliança",
+    uf: 'GO',
+    cep: confirmar('CEP', '73760-000'),
+    referencia: 'Portal da Chapada dos Veadeiros',
+    /** Coordenadas para o schema (centro da cidade; ajuste para o ponto exato). */
+    geo: confirmar('latitude e longitude exatas', { lat: -14.7069, lng: -47.5244 }),
   },
 
   horarios: confirmar<Horario[]>('horário de funcionamento', [
@@ -178,7 +179,8 @@ export const site = {
 
 const todasAsSecoes = [
   { id: 'sobre', rotulo: 'Sobre' },
-  { id: 'cardapio', rotulo: 'Cardápio' },
+  { id: 'cardapio', rotulo: 'Lanches' },
+  { id: 'mais', rotulo: 'Mais pratos' },
   { id: 'ingredientes', rotulo: 'Ingredientes' },
   { id: 'galeria', rotulo: 'Galeria' },
   { id: 'depoimentos', rotulo: 'Depoimentos' },
@@ -191,7 +193,7 @@ export const hero = {
   tituloLinha2: 'Fogo de verdade.',
   subtitulo: 'Sabor que não se explica — se prova.',
   cta: 'Peça Agora',
-  ctaSecundario: 'Ver cardápio',
+  ctaSecundario: 'Mais pratos',
   dica: 'Role para desmontar',
 }
 

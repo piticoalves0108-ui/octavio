@@ -3,7 +3,8 @@
  * segue o mouse e uma faixa de brilho que atravessa o card no hover.
  */
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
-import { cardapio, formatarPreco, linkPedido, canalPedido, type ItemCardapio } from '../data/site'
+import { cardapio, formatarPreco, type ItemCardapio } from '../data/site'
+import { useCarrinho } from '../lib/carrinho'
 import { getGsap, isFinePointer, prefersReducedMotion } from '../lib/motion'
 import { SectionHeading } from '../components/SectionHeading'
 import { Picture } from '../components/Picture'
@@ -38,7 +39,7 @@ function MenuCard({ item, index }: { item: ItemCardapio; index: number }) {
     tilt.current?.ry(0)
   }
 
-  const pedido = linkPedido(`Olá! Vim pelo site e quero pedir um ${item.nome}.`)
+  const { abrirProduto } = useCarrinho()
 
   return (
     <article
@@ -107,18 +108,17 @@ function MenuCard({ item, index }: { item: ItemCardapio; index: number }) {
                 {formatarPreco(item.preco)}
               </p>
             )}
-            <a
-              href={pedido}
-              target="_blank"
-              rel="noopener"
+            <button
+              type="button"
+              onClick={() => abrirProduto(item.id)}
               className="btn btn-ghost !min-h-11 !px-4 text-sm"
               data-cursor-label="Pedir"
-              aria-label={`Pedir ${item.nome} pelo ${canalPedido()} (abre em nova aba)`}
+              aria-label={`Adicionar ${item.nome} ao pedido`}
             >
               <span className="btn-label">
-                <IconBag width={17} height={17} /> Pedir
+                <IconBag width={17} height={17} /> Adicionar
               </span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -153,18 +153,9 @@ function Adicionais() {
         </ul>
       </div>
       <div className="relative flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.07] pt-6">
-        <p className="max-w-xs text-sm text-cinza">Escolha o lanche e diga os adicionais na hora do pedido.</p>
-        <a
-          href={linkPedido('Olá! Vim pelo site e quero fazer um pedido com adicionais.')}
-          target="_blank"
-          rel="noopener"
-          className="btn btn-primary !min-h-11 !px-5 text-sm"
-          aria-label={`Pedir com adicionais pelo ${canalPedido()} (abre em nova aba)`}
-        >
-          <span className="btn-label">
-            <IconBag width={17} height={17} /> Montar meu pedido
-          </span>
-        </a>
+        <p className="max-w-sm text-sm text-cinza">
+          Toque em <strong className="text-creme">Adicionar</strong> em qualquer lanche e marque os adicionais. O preço já sai somado no pedido.
+        </p>
       </div>
     </aside>
   )

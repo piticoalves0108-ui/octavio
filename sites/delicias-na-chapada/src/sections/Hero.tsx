@@ -9,7 +9,7 @@
  * aparece como lista.
  */
 import { useEffect, useRef, useState } from 'react'
-import { anatomia, burgerHero, canalPedido, hero, linkPedido } from '../data/site'
+import { anatomia, burgerHero, hero } from '../data/site'
 import { loader } from '../lib/loader'
 import { getGsap, scrollToId } from '../lib/motion'
 import { useReducedMotion } from '../hooks/useReducedMotion'
@@ -223,15 +223,21 @@ export function Hero({ ready }: { ready: boolean }) {
             <p className="hero-intro eyebrow">{hero.eyebrow}</p>
             <p className="hero-intro mt-3 text-lg text-creme/90 md:text-xl">{hero.subtitulo}</p>
             <div className="hero-intro mt-5 flex flex-wrap gap-3">
-              <ButtonLink href={linkPedido()} target="_blank" rel="noopener" aria-label={`${hero.cta} pelo ${canalPedido()} (abre em nova aba)`}>
-                <IconFlame width={18} height={18} /> {hero.cta}
-              </ButtonLink>
               <ButtonLink
-                variant="ghost"
                 href="#cardapio"
                 onClick={(e) => {
                   e.preventDefault()
                   scrollToId('cardapio')
+                }}
+              >
+                <IconFlame width={18} height={18} /> {hero.cta}
+              </ButtonLink>
+              <ButtonLink
+                variant="ghost"
+                href="#mais"
+                onClick={(e) => {
+                  e.preventDefault()
+                  scrollToId('mais')
                 }}
               >
                 {hero.ctaSecundario} <IconArrowRight width={18} height={18} />

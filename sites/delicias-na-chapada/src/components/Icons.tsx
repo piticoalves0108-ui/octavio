@@ -109,3 +109,18 @@ export const IconTikTok = (p: P) => (
     <path d="M14 3c.5 2.8 2.4 4.6 5 4.8" />
   </svg>
 )
+export const IconPlus = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M12 5v14M5 12h14" />
+  </svg>
+)
+export const IconMinus = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M5 12h14" />
+  </svg>
+)
+export const IconTrash = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+  </svg>
+)

@@ -16,6 +16,7 @@ import {
   site,
   type Horario,
 } from '../src/data/site.ts'
+import { categorias as maisCategorias } from '../src/data/pedido.ts'
 
 const DIAS_SCHEMA = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -108,6 +109,25 @@ function jsonLd() {
           offers: { '@type': 'Offer', price: a.preco.toFixed(2), priceCurrency: 'BRL' },
         })),
       },
+      // Porções, pastéis, massas, caldos e bebidas
+      ...maisCategorias.map((c) => ({
+        '@type': 'MenuSection',
+        name: c.titulo,
+        description: c.nota,
+        hasMenuItem: c.secoes.flatMap((s) =>
+          s.produtos.map((p) => {
+            const comPreco = p.grupos?.find((g) => g.opcoes.some((o) => o.preco !== undefined))
+            return {
+              '@type': 'MenuItem',
+              name: s.titulo && c.id === 'pasteis' ? `Pastel ${s.titulo.toLowerCase()}: ${p.nome}` : p.nome,
+              description: p.descricao,
+              offers: comPreco
+                ? comPreco.opcoes.map((o) => ({ '@type': 'Offer', name: o.nome, price: (o.preco ?? p.preco).toFixed(2), priceCurrency: 'BRL' }))
+                : { '@type': 'Offer', price: p.preco.toFixed(2), priceCurrency: 'BRL' },
+            }
+          }),
+        ),
+      })),
       ],
     },
   }
