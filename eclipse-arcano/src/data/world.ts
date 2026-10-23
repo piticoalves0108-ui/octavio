@@ -430,3 +430,18 @@ export const GATES: GateDef[] = [
   { id: 'portao_ferroluz', name: 'Portão de Ferroluz', defaultOpen: false },
   { id: 'portao_corvos', name: 'Portão do Acampamento dos Corvos', defaultOpen: true },
 ];
+
+/**
+ * Viagem rápida pelo mapa (como as torres/santuários): vale para locais descobertos
+ * destes tipos. Bloqueada em combate e durante lutas de chefe.
+ */
+export const FAST_TRAVEL = {
+  kinds: ['settlement', 'dungeon', 'ruins', 'landmark', 'camp', 'tower', 'secret'] as LocationKind[],
+  /** Distância mínima (m) do jogador para oferecer a viagem. */
+  minDistance: 60,
+  /** Escurecer e clarear a tela (s). */
+  fadeOut: 0.7,
+  fadeIn: 1.0,
+  /** Horas de jogo que passam por quilômetro viajado (0 = instantâneo). */
+  hoursPerKm: 0.25,
+};

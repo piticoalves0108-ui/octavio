@@ -353,7 +353,7 @@ export class Hud {
     show(this.reticle, playing && !locked && sys.player.health.alive);
     toggleClass(this.reticle, 'combat', sys.ai.inCombat());
     if (cast) {
-      show(this.castBar, true);
+      show(this.castBar, true, 'flex');
       const def = ABILITIES[cast.id as AbilityId];
       setText(this.castName, def?.name ?? '');
       setStyle(this.castFill, 'width', `${(Math.min(1, cast.progress) * 100).toFixed(0)}%`);

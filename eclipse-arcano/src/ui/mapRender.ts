@@ -177,15 +177,46 @@ export class MapBaseRenderer {
  * Névoa de exploração: canvas pequeno (1 pixel por célula de 16 m) com as áreas não
  * reveladas opacas. Desenhado ampliado com suavização, o que dá bordas macias.
  */
+export const FOG_PX = 512;
+
 export class FogRenderer {
+  /** Névoa suavizada (FOG_PX²) cobrindo o mundo inteiro. */
   readonly canvas = document.createElement('canvas');
+  private small = document.createElement('canvas');
   private version = -1;
   private img: ImageData;
+  private pattern: CanvasPattern | null = null;
 
   constructor(private exploration: Exploration) {
-    this.canvas.width = EXPLORE_RES;
-    this.canvas.height = EXPLORE_RES;
-    this.img = this.canvas.getContext('2d')!.createImageData(EXPLORE_RES, EXPLORE_RES);
+    this.small.width = EXPLORE_RES;
+    this.small.height = EXPLORE_RES;
+    this.canvas.width = FOG_PX;
+    this.canvas.height = FOG_PX;
+    this.img = this.small.getContext('2d')!.createImageData(EXPLORE_RES, EXPLORE_RES);
+  }
+
+  /** Textura da área não explorada: grade fina e hachuras, como um mapa ainda em branco. */
+  private makePattern(g: CanvasRenderingContext2D): CanvasPattern | null {
+    const c = document.createElement('canvas');
+    c.width = 32;
+    c.height = 32;
+    const p = c.getContext('2d')!;
+    p.strokeStyle = 'rgba(140, 170, 220, 0.10)';
+    p.lineWidth = 1;
+    p.beginPath();
+    p.moveTo(0, 0.5);
+    p.lineTo(32, 0.5);
+    p.moveTo(0.5, 0);
+    p.lineTo(0.5, 32);
+    p.stroke();
+    p.strokeStyle = 'rgba(140, 170, 220, 0.05)';
+    p.beginPath();
+    for (let k = -32; k < 32; k += 8) {
+      p.moveTo(k, 32);
+      p.lineTo(k + 32, 0);
+    }
+    p.stroke();
+    return g.createPattern(c, 'repeat');
   }
 
   /** Atualiza se a exploração mudou. Devolve true se redesenhou. */
@@ -201,7 +232,21 @@ export class FogRenderer {
       d[o + 2] = 44;
       d[o + 3] = cells[k] ? 0 : 236;
     }
-    this.canvas.getContext('2d')!.putImageData(this.img, 0, 0);
+    this.small.getContext('2d')!.putImageData(this.img, 0, 0);
+    const g = this.canvas.getContext('2d')!;
+    g.clearRect(0, 0, FOG_PX, FOG_PX);
+    g.imageSmoothingEnabled = true;
+    g.filter = 'blur(5px)';
+    g.drawImage(this.small, 0, 0, FOG_PX, FOG_PX);
+    g.filter = 'none';
+    // textura só onde há névoa
+    this.pattern ??= this.makePattern(g);
+    if (this.pattern) {
+      g.globalCompositeOperation = 'source-atop';
+      g.fillStyle = this.pattern;
+      g.fillRect(0, 0, FOG_PX, FOG_PX);
+      g.globalCompositeOperation = 'source-over';
+    }
     return true;
   }
 }

@@ -211,6 +211,19 @@ export class Input {
     for (const c of this.bindings[a]) if (this.releasedThisFrame.has(c)) return true;
     return false;
   }
+  /** Tecla (código) pressionada neste quadro, sem mapeamento de ação (menus e diálogos). */
+  pressedCode(code: string): boolean {
+    return this.pressedThisFrame.has(code);
+  }
+  /** Tecla (código) segurada agora. */
+  isDown(code: string): boolean {
+    return this.keys.has(code);
+  }
+  /** Consome o "pressionado" de uma ação neste quadro (outro sistema não reage à mesma tecla). */
+  consume(a: Action) {
+    for (const c of this.bindings[a]) this.pressedThisFrame.delete(c);
+  }
+
   /** Eixo -1..1 entre duas ações. */
   axis(neg: Action, pos: Action): number {
     return (this.down(pos) ? 1 : 0) - (this.down(neg) ? 1 : 0);

@@ -53,7 +53,8 @@ export class InteractionSystem implements GameSystem {
     const fwd = player.entity.getForward(this.tmp);
     let best: Interactable | null = null;
     let bestScore = -Infinity;
-    if (player.canInteract()) {
+    // só com o jogo rodando: em diálogo/cinemática o [E] é da interface (senão reabriria a conversa)
+    if (player.canInteract() && ctx.state === 'playing') {
       for (const it of this.items.values()) {
         if (!it.enabled) continue;
         const dx = it.position.x - p.x;
@@ -74,7 +75,7 @@ export class InteractionSystem implements GameSystem {
       this.current = best;
       ctx.sys.ui.setInteractPrompt(best ? best.prompt : null);
     }
-    if (best && ctx.input.pressed('interact')) {
+    if (best && ctx.state === 'playing' && ctx.input.pressed('interact')) {
       best.interact(ctx);
       ctx.events.emit('interact', { id: best.id, kind: best.kind });
     }

@@ -26,19 +26,17 @@ No navegador, `window.__game` expõe o `GameContext` para depuração.
 
 Concluídos e testados: núcleo, mundo, ambiente (céu, clima, dia/noite), jogador (movimento, voo, câmera),
 combate, IA (inimigos, chefe Guardião, criaturas), RPG (inventário, loot, lojas, progressão, talentos),
-narrativa (missões, diálogos, NPCs com rotinas), áudio procedural e salvamento.
-São 348 testes passando.
+narrativa (missões, diálogos, NPCs com rotinas), áudio procedural, salvamento e **interface completa**
+(HUD, minimapa, diálogos, menus, mapa interativo com névoa, carimbos e viagem rápida). Ver `docs/status/ui.md`.
 
-**Falta a interface.** `src/ui/UI.ts` ainda é um esboço provisório: só existem o menu principal e o aviso de
-interação [E]. Os outros métodos (`showDialogue`, `notify`, `showBossBar`, `showSubtitle`, `fadeOut/fadeIn`,
-`worldMarker`) não fazem nada. Por isso o jogador ainda não vê HUD (vida, energia, habilidades), diálogos,
-notificações, barra do chefe nem os menus (pausa, inventário, habilidades, diário, mapa, loja, baú, opções).
-O contrato entre a UI e os menus está em `src/ui/menus/index.ts` (`MenuHost`), e os nomes dos menus em
-`MenuName` (`src/core/EventBus.ts`). Os outros módulos já expõem os dados de que a UI precisa; veja as seções
-"Pedidos a outros módulos" e "Pendente" em `docs/status/*.md`.
+Próximas etapas pedidas pelo dono do projeto ("estilo Zelda"):
+1. Gráficos melhores (iluminação, pós-processamento, materiais, céu, água, grama).
+2. Movimentos mais realistas (inércia, inclinação, pés no chão, escalada livre com vigor, planador).
+3. Clima mais rico (poças, respingos, superfícies molhadas, escalada escorregadia na chuva, raios, neve, vento).
+4. Mundo interativo (objetos físicos, fogo que se espalha na grama, cortar arbustos, cozinhar).
+5. História até o final: Atos II a IV, chefes e os três finais (`docs/HISTORIA.md`).
 
-Outras pendências conhecidas: montaria, pathfinding de inimigos fora da vila e os Atos II a IV da campanha
-(hoje está implementado o Prólogo + Ato I).
+Outras pendências conhecidas: montaria e pathfinding de inimigos fora da vila.
 
 ## Regras do projeto
 
