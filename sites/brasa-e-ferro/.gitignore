@@ -5,3 +5,5 @@ dist-ssr
 *.local
 .DS_Store
 scripts/_*.mjs
+dist-html
+dist-html-ssr

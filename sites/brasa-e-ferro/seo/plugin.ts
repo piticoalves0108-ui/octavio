@@ -5,6 +5,8 @@
  *  - robots.txt, sitemap.xml e site.webmanifest no build
  *  - aviso no terminal com os campos que ainda precisam ser confirmados
  */
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import type { Plugin } from 'vite'
 import {
   CAMPOS_A_CONFIRMAR,
@@ -96,7 +98,11 @@ function jsonLd() {
   return JSON.stringify(data, null, 2).replace(/</g, '\\u003c')
 }
 
-export function headSeo() {
+/**
+ * @param favicon data URI do favicon (arquivo HTML único). Sem ele, usa os
+ *   arquivos de /public (favicon, ícones PNG e manifest).
+ */
+export function headSeo(favicon?: string) {
   const titulo = tituloPagina()
   const descricao = site.descricaoSeo
   const url = `${site.url}/`
@@ -133,10 +139,14 @@ export function headSeo() {
     `<meta name="twitter:description" content="${esc(descricao)}" />`,
     `<meta name="twitter:image" content="${esc(og)}" />`,
     // Ícones e manifest
-    `<link rel="icon" href="/favicon.svg" type="image/svg+xml" />`,
-    `<link rel="icon" href="/icons/icon-32.png" sizes="32x32" type="image/png" />`,
-    `<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />`,
-    `<link rel="manifest" href="/site.webmanifest" />`,
+    ...(favicon
+      ? [`<link rel="icon" href="${favicon}" type="image/svg+xml" />`]
+      : [
+          `<link rel="icon" href="/favicon.svg" type="image/svg+xml" />`,
+          `<link rel="icon" href="/icons/icon-32.png" sizes="32x32" type="image/png" />`,
+          `<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />`,
+          `<link rel="manifest" href="/site.webmanifest" />`,
+        ]),
     // Dados estruturados
     `<script type="application/ld+json">\n${jsonLd()}\n</script>`,
   ]
@@ -184,7 +194,11 @@ function manifest() {
   )
 }
 
-export function seoPlugin(): Plugin {
+/** @param single build de arquivo HTML único: favicon embutido, sem robots/sitemap/manifest. */
+export function seoPlugin({ single = false, root = process.cwd() } = {}): Plugin {
+  const favicon = single
+    ? `data:image/svg+xml,${encodeURIComponent(readFileSync(join(root, 'public', 'favicon.svg'), 'utf8').replace(/\s+/g, ' ').trim())}`
+    : undefined
   let ssr = false
   let command: 'build' | 'serve' = 'serve'
   return {
@@ -198,7 +212,7 @@ export function seoPlugin(): Plugin {
       handler(html, ctx) {
         // O SEO só vai para a página principal (o studio.html é só para gerar imagens).
         if (!ctx.filename.endsWith('index.html')) return html
-        return html.replace('<!--seo-->', headSeo())
+        return html.replace('<!--seo-->', headSeo(favicon))
       },
     },
     configureServer(server) {
@@ -216,7 +230,7 @@ export function seoPlugin(): Plugin {
       })
     },
     generateBundle() {
-      if (ssr) return
+      if (ssr || single) return
       this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robots() })
       this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap() })
       this.emitFile({ type: 'asset', fileName: 'site.webmanifest', source: manifest() })

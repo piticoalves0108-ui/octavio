@@ -19,6 +19,18 @@ npm run build      # gera dist/ (com o HTML pré-renderizado)
 npm run preview    # serve o dist/ localmente
 ```
 
+### Arquivo HTML único
+
+`entrega/brasa-e-ferro.html` é o site inteiro num arquivo só (2,2 MB), com código, 3D, fontes e imagens embutidos. Basta abrir com dois cliques no navegador, sem instalar nada. Também dá para subir esse arquivo sozinho em qualquer hospedagem (renomeie para `index.html`).
+
+Para gerar de novo depois de editar o conteúdo:
+
+```bash
+npm run build:html   # → entrega/brasa-e-ferro.html
+```
+
+Para publicar com o melhor desempenho, prefira o `npm run build` (pasta `dist/`). Nele, o 3D e as imagens carregam sob demanda, em AVIF e no tamanho certo para cada tela.
+
 Para testar a qualidade do 3D, acrescente `?qualidade=low`, `?qualidade=medium` ou `?qualidade=high` à URL.
 
 ---
@@ -84,9 +96,13 @@ Depois ajuste `alt`, `legenda` e `formato` (`retrato`, `paisagem` ou `quadrado`)
 index.html                 página (o SEO entra no lugar de <!--seo-->)
 studio.html, og.html       páginas internas para gerar imagens (não vão para o build)
 seo/plugin.ts              plugin do Vite: meta tags, OG, JSON-LD Restaurant, robots, sitemap, manifest
+entrega/brasa-e-ferro.html site em um único arquivo HTML (npm run build:html)
+plugins/imagens.ts         embute as imagens no build de arquivo único
 scripts/
   render-assets.mjs        renderiza as imagens a partir do 3D
   prerender.mjs            injeta o HTML do React no dist/index.html (SSG)
+  build-html.mjs           gera o arquivo HTML único
+  foto.mjs                 converte uma foto real para os tamanhos do site
 src/
   data/site.ts             TODO o conteúdo do site
   App.tsx                  ordem das seções, smooth scroll e revelação ao rolar
@@ -140,7 +156,7 @@ src/
 - **LOD por aparelho** (`three/quality.ts`): densidade das malhas, sementes de gergelim, partículas, sombras, oitavas de ruído nos shaders e resolução do canvas mudam conforme o aparelho (celular e máquinas fracas recebem a versão leve). Se o FPS cair, a resolução baixa sozinha.
 - **Lazy loading:** o Three.js fica num chunk separado (`import()` dinâmico). Até a cena ficar pronta, aparece o pôster estático. As imagens usam AVIF/WebP responsivos com `loading="lazy"`.
 - **Render sob demanda:** a cena para quando o hero sai da tela ou a aba fica oculta.
-- **Fontes locais** (Bebas Neue e Inter via Fontsource): sem requisição ao Google Fonts.
+- **Fontes locais** (Bebas Neue e Inter via Fontsource, só o subconjunto latino, que cobre o português): sem requisição ao Google Fonts.
 
 ---
 

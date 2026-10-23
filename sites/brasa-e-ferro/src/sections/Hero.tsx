@@ -14,6 +14,7 @@ import { loader } from '../lib/loader'
 import { getGsap, scrollToId } from '../lib/motion'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { ButtonLink } from '../components/Button'
+import { Picture } from '../components/Picture'
 import { IconArrowRight, IconFlame } from '../components/Icons'
 import type { BurgerExperience, LayerAnchor } from '../three/experience'
 
@@ -197,19 +198,18 @@ export function Hero({ ready }: { ready: boolean }) {
           aria-hidden={mode === '3d'}
           className={`pointer-events-none absolute inset-0 grid place-items-center transition-opacity duration-700 ${mode === '3d' ? 'opacity-0' : 'opacity-100'}`}
         >
-          <picture>
-            <source type="image/avif" srcSet="/images/hero/poster-600.avif 600w, /images/hero/poster-1000.avif 1000w" sizes="(min-width: 768px) 60vh, 90vw" />
-            <img
-              src="/images/hero/poster-1000.webp"
-              srcSet="/images/hero/poster-600.webp 600w, /images/hero/poster-1000.webp 1000w"
-              sizes="(min-width: 768px) 60vh, 90vw"
-              alt="Hambúrguer artesanal com pão de gergelim, bacon, cheddar derretido, carne grelhada, tomate e alface"
-              width={1000}
-              height={1000}
-              fetchPriority="high"
-              className="h-auto w-[min(88vw,64svh)] max-w-none translate-y-[3%]"
-            />
-          </picture>
+          <Picture
+            pasta="hero"
+            id="poster"
+            larguras={[1000, 600]}
+            sizes="(min-width: 768px) 64svh, 88vw"
+            alt="Hambúrguer artesanal com pão de gergelim, bacon, cheddar derretido, carne grelhada, tomate e alface"
+            width={1000}
+            height={1000}
+            priority
+            className="!bg-transparent"
+            imgClassName="h-auto w-[min(88vw,64svh)] max-w-none translate-y-[3%]"
+          />
         </div>
 
         {/* Canvas WebGL */}

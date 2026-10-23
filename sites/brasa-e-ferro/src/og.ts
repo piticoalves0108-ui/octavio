@@ -1,6 +1,5 @@
 /** Monta a arte do Open Graph (1200x630) com as fontes e cores do site. */
-import '@fontsource/bebas-neue/400.css'
-import '@fontsource-variable/inter'
+import './styles/fonts.css'
 import { site } from './data/site'
 
 declare global {

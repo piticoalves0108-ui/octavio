@@ -2,8 +2,7 @@
    Brasa & Ferro: estilos globais (Tailwind v4 + utilitários próprios)
    ========================================================================== */
 @import 'tailwindcss';
-@import '@fontsource/bebas-neue/400.css';
-@import '@fontsource-variable/inter';
+@import './fonts.css';
 
 @theme {
   /* Paleta */

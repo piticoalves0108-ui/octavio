@@ -16,5 +16,5 @@
     "noUnusedParameters": true,
     "skipLibCheck": true
   },
-  "include": ["vite.config.ts", "seo"]
+  "include": ["vite.config.ts", "seo", "plugins"]
 }
