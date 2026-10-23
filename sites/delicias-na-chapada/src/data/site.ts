@@ -174,7 +174,7 @@ export const site = {
    * de quem clicou, com a senha `senhaDemo`.
    */
   painel: {
-    url: confirmar('URL do painel do dono (Google Apps Script)', ''),
+    url: 'https://script.google.com/macros/s/AKfycbzSjAF4_qW-aM3jMxFRuvEAJACyFQrKHkP-rppo8RgPV_vyGIvSxogtMufP3shtHHr-0Q/exec',
     senhaDemo: '1234',
     /** De quanto em quanto tempo o site confere se abriu ou fechou (ms). */
     intervalo: 30000,
