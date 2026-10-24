@@ -68,6 +68,11 @@ export class Scatter {
   private lastCellKey = -1;
   private lastRadius = 0;
   private maintTimer = 0;
+  /** Arbustos cortados/queimados: chave da célula → instante (s) em que voltam a crescer. */
+  private cutUntil = new Map<number, number>();
+  /** Relógio dos arbustos (s), posto pelo mundo interativo. */
+  now = 0;
+  private treeHit = { species: 'oak' as SpeciesId, x: 0, y: 0, z: 0, s: 1 };
   /** Estatísticas (debug). */
   stats = { chunks: 0, colliderChunks: 0, instances: 0, built: 0, peakBuildMs: 0, peakAssembleMs: 0, lastAssembleMs: 0 };
 
@@ -390,6 +395,8 @@ export class Scatter {
         const dens = (BIOME_INFO[biome].grass * 0.25 + BIOME_INFO[biome].trees * 0.3) * pd;
         if (h0 > dens) continue;
         if (this.maps.blockedAt(x, z)) continue;
+        const until = this.cutUntil.get(this.bushKey(x, z));
+        if (until !== undefined && until > this.now) continue; // cortado/queimado: ainda não voltou
         const y = hf.heightAt(x, z);
         if (y < WATER_LEVEL + 0.3) continue;
         if (hf.slopeAt(x, z) > VEGETATION.bushMaxSlope) continue; // nada de arbusto grudado em paredão
@@ -472,6 +479,125 @@ export class Scatter {
       default:
         return h < 0.75 ? 'oak' : 'pine';
     }
+  }
+
+  private bushKey(x: number, z: number) {
+    const bs = VEGETATION.bushSpacing;
+    return (Math.floor(z / bs) + 4096) * 8192 + (Math.floor(x / bs) + 4096);
+  }
+
+  private chunkAt(x: number, z: number): Chunk | undefined {
+    const cs = TERRAIN.chunkSize;
+    const i = Math.floor((x + WORLD_HALF) / cs);
+    const j = Math.floor((z + WORLD_HALF) / cs);
+    if (i < 0 || j < 0 || i >= this.chunksPerSide || j >= this.chunksPerSide) return undefined;
+    return this.chunks.get(this.key(i, j));
+  }
+
+  /**
+   * Remove (corta ou queima) arbustos a até `r` m de (x, z). Escreve x, y, z, escala de cada
+   * um em `out` (se dado) e devolve quantos. Eles voltam em `regrowAt` (no relógio `now`).
+   */
+  removeBushes(x: number, z: number, r: number, regrowAt: number, out: Float32Array | null = null, max = 8): number {
+    let n = 0;
+    const cs = TERRAIN.chunkSize;
+    const t = SP_INDEX.bush;
+    const i0 = Math.floor((x - r - 2 + WORLD_HALF) / cs);
+    const i1 = Math.floor((x + r + 2 + WORLD_HALF) / cs);
+    const j0 = Math.floor((z - r - 2 + WORLD_HALF) / cs);
+    const j1 = Math.floor((z + r + 2 + WORLD_HALF) / cs);
+    for (let j = j0; j <= j1; j++) {
+      for (let i = i0; i <= i1; i++) {
+        if (i < 0 || j < 0 || i >= this.chunksPerSide || j >= this.chunksPerSide) continue;
+        const c = this.chunks.get(this.key(i, j));
+        if (!c) continue;
+        const td = c.types[t];
+        for (let k = 0; k < td.count && n < max; k++) {
+          const bx = td.xz[k * 2];
+          const bz = td.xz[k * 2 + 1];
+          const o = k * 16;
+          if (td.mats[o + 15] === 0) continue; // já removido
+          const sc = Math.hypot(td.mats[o], td.mats[o + 2]);
+          if (Math.hypot(bx - x, bz - z) > r + sc * 0.6) continue;
+          if (out && (n + 1) * 4 <= out.length) {
+            out[n * 4] = bx;
+            out[n * 4 + 1] = td.mats[o + 13];
+            out[n * 4 + 2] = bz;
+            out[n * 4 + 3] = sc;
+          }
+          td.mats.fill(0, o, o + 16);
+          this.cutUntil.set(this.bushKey(bx, bz), regrowAt);
+          n++;
+        }
+      }
+    }
+    if (n) this.dirty = true;
+    return n;
+  }
+
+  /** Arbustos voltam a crescer: refaz os chunks onde o prazo venceu. */
+  regrowBushes(now: number) {
+    this.now = now;
+    let any = false;
+    for (const [k, until] of this.cutUntil) {
+      if (until > now) continue;
+      this.cutUntil.delete(k);
+      const bs = VEGETATION.bushSpacing;
+      const gx = (k % 8192) - 4096;
+      const gz = Math.floor(k / 8192) - 4096;
+      const cs = TERRAIN.chunkSize;
+      const i = Math.floor(((gx + 0.5) * bs + WORLD_HALF) / cs);
+      const j = Math.floor(((gz + 0.5) * bs + WORLD_HALF) / cs);
+      const ck = this.key(i, j);
+      const c = this.chunks.get(ck);
+      if (c) {
+        this.dropColliders(c);
+        this.chunks.delete(ck);
+        any = true;
+      }
+    }
+    if (any) {
+      this.dirty = true;
+      this.lastCellKey = -1; // força a nova varredura (o chunk volta a ser construído)
+    }
+  }
+
+  /** Esquece cortes (novo jogo). */
+  resetBushes() {
+    if (!this.cutUntil.size) return;
+    const keys = [...this.cutUntil.keys()];
+    for (const k of keys) this.cutUntil.set(k, -1);
+    this.regrowBushes(this.now);
+  }
+
+  /** Árvore mais próxima de (x, z) até `r` m do tronco (objeto reutilizado; null se nenhuma). */
+  treeNear(x: number, z: number, r: number): { species: SpeciesId; x: number; y: number; z: number; s: number } | null {
+    const c = this.chunkAt(x, z);
+    if (!c) return null;
+    let best = -1;
+    let bestT = 0;
+    let bestD = r;
+    for (let t = 0; t < TREE_SPECIES.length; t++) {
+      const td = c.types[t];
+      for (let k = 0; k < td.count; k++) {
+        const d = Math.hypot(td.xz[k * 2] - x, td.xz[k * 2 + 1] - z);
+        if (d < bestD) {
+          bestD = d;
+          best = k;
+          bestT = t;
+        }
+      }
+    }
+    if (best < 0) return null;
+    const td = c.types[bestT];
+    const o = best * 16;
+    const h = this.treeHit;
+    h.species = ALL[bestT];
+    h.x = td.xz[best * 2];
+    h.z = td.xz[best * 2 + 1];
+    h.y = td.mats[o + 13];
+    h.s = td.mats[o + 5];
+    return h;
   }
 
   /** Quantos colisores de vegetação estão ativos (debug/testes). */

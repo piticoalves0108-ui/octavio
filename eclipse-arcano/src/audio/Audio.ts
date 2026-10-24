@@ -77,7 +77,13 @@ export type SfxId =
   | 'amb_crackle'
   | 'amb_howl'
   | 'amb_drip'
-  | 'amb_gust';
+  | 'amb_gust'
+  // mundo interativo
+  | 'fire_ignite'
+  | 'wood_break'
+  | 'grass_cut'
+  | 'stasis'
+  | 'cook';
 
 export interface PlayOptions {
   position?: THREE.Vector3;

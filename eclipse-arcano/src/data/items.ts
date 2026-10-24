@@ -46,7 +46,13 @@ export type ItemIconShape =
   | 'amulet'
   | 'ring'
   | 'robe'
-  | 'coin';
+  | 'coin'
+  | 'apple'
+  | 'mushroom'
+  | 'meat'
+  | 'berries'
+  | 'dish'
+  | 'bowl';
 
 export interface ItemIcon {
   /** Caractere simples (fallback de texto). */
@@ -57,7 +63,7 @@ export interface ItemIcon {
 }
 
 /** Grupo de recarga compartilhada entre consumíveis. */
-export type CooldownGroup = 'potion' | 'elixir';
+export type CooldownGroup = 'potion' | 'elixir' | 'food';
 
 export interface ConsumableEffect {
   /** Cura instantânea (pontos). */
@@ -102,6 +108,7 @@ export interface ItemDef {
 export const CONSUMABLE_COOLDOWNS: Record<CooldownGroup, number> = {
   potion: 3,
   elixir: 40,
+  food: 1,
 };
 
 /** Capacidades do inventário. */
@@ -227,6 +234,169 @@ const OTHER: ItemDef[] = [
     value: 120,
     maxStack: 10,
     use: { buff: { id: 'furia', name: 'Fúria', duration: 30, mods: { meleePower: 0.25, spellPower: 0.25, critChance: 0.05 } }, cooldownGroup: 'elixir' },
+  }),
+
+  // --- Ingredientes (comem-se crus ou vão para a panela numa fogueira) ---
+  item({
+    id: 'maca',
+    name: 'Maçã',
+    description: 'Vermelha e crocante. Cai dos carvalhos quando alguém sacode o tronco. Assada fica melhor.',
+    category: 'consumable',
+    rarity: 'common',
+    icon: { glyph: '●', shape: 'apple', color: '#e0473c' },
+    value: 3,
+    use: { heal: 8, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'frutas_silvestres',
+    name: 'Frutas Silvestres',
+    description: 'Um punhado de amoras colhidas nos arbustos. Doces e um pouco azedas.',
+    category: 'consumable',
+    rarity: 'common',
+    icon: { glyph: '⁂', shape: 'berries', color: '#7a4ad8' },
+    value: 3,
+    use: { heal: 5, energy: 8, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'cogumelo',
+    name: 'Cogumelo-do-Bosque',
+    description: 'Cresce à sombra das árvores. Cru é borrachudo; cozido rende um bom ensopado.',
+    category: 'consumable',
+    rarity: 'common',
+    icon: { glyph: '♠', shape: 'mushroom', color: '#c8603a' },
+    value: 4,
+    use: { heal: 6, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'carne_crua',
+    name: 'Carne Crua',
+    description: 'Carne fresca de caça. Precisa de fogo antes de ir para o estômago.',
+    category: 'consumable',
+    rarity: 'common',
+    icon: { glyph: '◗', shape: 'meat', color: '#d0605a' },
+    value: 6,
+    use: { heal: 4, cooldownGroup: 'food' },
+  }),
+  // --- Pratos (cozinhados na fogueira) ---
+  item({
+    id: 'maca_assada',
+    name: 'Maçã Assada',
+    description: 'Casca tostada, miolo macio e quente.',
+    category: 'consumable',
+    rarity: 'common',
+    icon: { glyph: '●', shape: 'apple', color: '#b0582a' },
+    value: 8,
+    use: { heal: 22, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'frutas_quentes',
+    name: 'Frutas Quentes',
+    description: 'Amoras aquecidas até virarem quase geleia.',
+    category: 'consumable',
+    rarity: 'common',
+    icon: { glyph: '⁂', shape: 'bowl', color: '#8a4ad8' },
+    value: 8,
+    use: { heal: 14, energy: 25, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'cogumelo_assado',
+    name: 'Cogumelo Assado',
+    description: 'No espeto, com um pouco de cinza para dar sabor.',
+    category: 'consumable',
+    rarity: 'common',
+    icon: { glyph: '♠', shape: 'mushroom', color: '#9a5a2a' },
+    value: 9,
+    use: { heal: 20, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'espetinho',
+    name: 'Espetinho de Carne',
+    description: 'Carne de caça assada na brasa. Simples e honesta.',
+    category: 'consumable',
+    rarity: 'common',
+    icon: { glyph: '◗', shape: 'meat', color: '#a0582a' },
+    value: 14,
+    use: { heal: 45, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'assado_farto',
+    name: 'Assado Farto',
+    description: 'Dois pedaços de carne assados devagar. Dá para dividir, mas ninguém divide.',
+    category: 'consumable',
+    rarity: 'uncommon',
+    icon: { glyph: '◗', shape: 'dish', color: '#a0582a' },
+    value: 30,
+    use: { heal: 70, buff: { id: 'regeneracao', name: 'Regeneração', duration: 90, mods: { healthRegen: 4 } }, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'ensopado_cogumelos',
+    name: 'Ensopado de Cogumelos',
+    description: 'Grosso, cheiroso e quente. Devolve a vida e o fôlego mágico.',
+    category: 'consumable',
+    rarity: 'uncommon',
+    icon: { glyph: '♨', shape: 'bowl', color: '#c89a5a' },
+    value: 24,
+    use: { heal: 40, energy: 40, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'torta_frutas',
+    name: 'Torta de Frutas',
+    description: 'Maçã e amoras numa massa improvisada. Dá vontade de correr o mundo.',
+    category: 'consumable',
+    rarity: 'uncommon',
+    icon: { glyph: '◒', shape: 'dish', color: '#d89a4a' },
+    value: 26,
+    use: { heal: 35, buff: { id: 'vigor', name: 'Vigor', duration: 180, mods: { energyRegen: 4, moveSpeed: 0.08 } }, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'prato_cacador',
+    name: 'Prato do Caçador',
+    description: 'Carne com cogumelos. A refeição de quem vai enfrentar coisa grande.',
+    category: 'consumable',
+    rarity: 'uncommon',
+    icon: { glyph: '◗', shape: 'dish', color: '#b86a3a' },
+    value: 40,
+    use: { heal: 60, buff: { id: 'forca_cacador', name: 'Força do Caçador', duration: 150, mods: { meleePower: 0.2, damageReduction: 0.05 } }, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'cha_lumen',
+    name: 'Chá de Lúmen',
+    description: 'Erva-lúmen com frutas silvestres. A mente clareia e os feitiços fluem.',
+    category: 'consumable',
+    rarity: 'uncommon',
+    icon: { glyph: '♨', shape: 'bowl', color: '#7ad89a' },
+    value: 36,
+    use: { energy: 60, buff: { id: 'mente_clara', name: 'Mente Clara', duration: 150, mods: { spellPower: 0.18, cooldownReduction: 0.1 } }, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'caldo_eter',
+    name: 'Caldo de Éter',
+    description: 'Um caldo azul que brilha. Tem gosto de chuva e de relâmpago.',
+    category: 'consumable',
+    rarity: 'rare',
+    icon: { glyph: '♨', shape: 'bowl', color: '#5ac8ff' },
+    value: 60,
+    use: { energy: 100, healPct: 0.2, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'banquete_arcano',
+    name: 'Banquete Arcano',
+    description: 'Carne, cogumelos, maçã e erva-lúmen. Um prato digno do Império antigo.',
+    category: 'consumable',
+    rarity: 'epic',
+    icon: { glyph: '✦', shape: 'dish', color: '#e8b84a' },
+    value: 120,
+    use: { heal: 100, healPct: 0.2, buff: { id: 'banquete', name: 'Banquete Arcano', duration: 240, mods: { maxHealth: 30, healthRegen: 2, spellPower: 0.1, meleePower: 0.1 } }, cooldownGroup: 'food' },
+  }),
+  item({
+    id: 'comida_duvidosa',
+    name: 'Comida Duvidosa',
+    description: 'Ninguém sabe bem o que é. Mas alimenta... mais ou menos.',
+    category: 'consumable',
+    rarity: 'common',
+    icon: { glyph: '?', shape: 'bowl', color: '#7a7a6a' },
+    value: 3,
+    use: { heal: 6, cooldownGroup: 'food' },
   }),
 
   // --- Materiais ---

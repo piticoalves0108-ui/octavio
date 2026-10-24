@@ -77,7 +77,7 @@ export class Inventory implements GameSystem, Saveable {
   /** Aprimoramentos gratuitos concedidos pela história (ex.: Doran após o martelo). */
   freeUpgrades = 0;
   /** Recargas restantes dos consumíveis (s). */
-  readonly cooldowns: Record<CooldownGroup, number> = { potion: 0, elixir: 0 };
+  readonly cooldowns: Record<CooldownGroup, number> = { potion: 0, elixir: 0, food: 0 };
   /** Saque no mundo (baús, itens soltos, ervas). */
   loot!: LootWorld;
   protected ctx!: GameContext;

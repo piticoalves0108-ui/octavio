@@ -286,6 +286,8 @@ function createTerrainMaterial(maps: WorldMaps, detailTex: THREE.Texture): THREE
     uRain: GLOBAL_UNIFORMS.uRain,
     uSnow: GLOBAL_UNIFORMS.uSnow,
     uFogColorP: GLOBAL_UNIFORMS.uFogColor,
+    tGround: GLOBAL_UNIFORMS.tGround,
+    uGroundRect: GLOBAL_UNIFORMS.uGroundRect,
   };
   mat.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms);
@@ -319,6 +321,8 @@ uniform float uNight;
 uniform float uRain;
 uniform float uSnow;
 uniform vec3 uFogColorP;
+uniform sampler2D tGround;
+uniform vec4 uGroundRect;
 ${MAPS_GLSL}
 ${RIPPLE_GLSL}`,
       )
@@ -336,10 +340,11 @@ nonPerturbedNormal = normal;`,
 // poças refletem o céu (mais na beirada rasante)
 float pFres = pow(1.0 - clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0), 4.0);
 totalEmissiveRadiance += uFogColorP * tPuddle * (0.04 + 0.32 * pFres) * (1.0 - 0.75 * uNight);
+totalEmissiveRadiance += vec3(1.0, 0.3, 0.05) * tEmber;
 totalEmissiveRadiance += vec3(0.55, 0.12, 0.95) * tVein * (0.04 + 0.96 * uNight) * (0.65 + 0.35 * sin(uTime * 1.3 + vTerrainPos.x * 0.07 + vTerrainPos.z * 0.05));`,
       );
   };
-  mat.customProgramCacheKey = () => 'terrain-v3';
+  mat.customProgramCacheKey = () => 'terrain-v4';
   return mat;
 }
 
@@ -428,6 +433,17 @@ float tPuddle = smoothstep(0.665, 0.69, pudN) * smoothstep(0.975, 0.995, wn.y)
 tPuddle *= 1.0 - smoothstep(0.55, 0.8, d1.a); // pedriscos furam a lâmina d'água
 col *= 1.0 - 0.5 * tPuddle;
 tRough = mix(tRough, 0.06, tPuddle);
+// chão queimado (mundo interativo) e brasas sob o fogo
+float tEmber = 0.0;
+{
+  vec2 guv = (wxz - uGroundRect.xy) / max(uGroundRect.z, 1.0);
+  if (uGroundRect.w > 0.5 && guv.x > 0.0 && guv.y > 0.0 && guv.x < 1.0 && guv.y < 1.0) {
+    vec4 gs = texture(tGround, guv);
+    float charN = 0.75 + 0.5 * d1.r;
+    col = mix(col, vec3(0.055, 0.047, 0.04) * (0.8 + 0.5 * d1.b), 0.82 * clamp(max(gs.g, gs.b) * charN, 0.0, 1.0));
+    tEmber = gs.b * smoothstep(0.35, 0.8, d1.b + d1.r * 0.4) * (0.6 + 0.4 * sin(uTime * 6.0 + wxz.x * 3.0 + wxz.y * 2.0));
+  }
+}
 // ondinhas da chuva (só perto: some ao longe)
 vec2 rip = rainRipples(wxz, uTime) * uRain * (1.0 - uSnow) * (1.0 - smoothstep(12.0, 35.0, camDist));
 tN = normalize(mix(tN, normalize(vec3(rip.x * 0.35, 1.0, rip.y * 0.35)), tPuddle));

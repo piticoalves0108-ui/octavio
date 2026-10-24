@@ -27,4 +27,10 @@ export const GLOBAL_UNIFORMS = {
   uRain: { value: 0 },
   /** Neve no lugar da chuva (0..1, nas montanhas altas). */
   uSnow: { value: 0 },
+  /**
+   * Estado do chão em volta do jogador (mundo interativo): R = grama cortada,
+   * G = queimada, B = em chamas. `uGroundRect` = (x0, z0, tamanho, 1 = ligada).
+   */
+  tGround: { value: null as THREE.Texture | null },
+  uGroundRect: { value: new THREE.Vector4(0, 0, 0, 0) },
 };

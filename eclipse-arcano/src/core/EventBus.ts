@@ -93,6 +93,15 @@ export interface GameEvents {
   'time:hour': { hour: number; day: number };
   'weather:changed': { weather: WeatherKind };
   'lightning': { position: Vector3 };
+  /**
+   * Golpe/explosão/feixe/projétil atingiu uma área do mundo (com ou sem alvo). O mundo
+   * interativo reage: corta grama, acende fogo, empurra e quebra objetos.
+   */
+  'world:strike': WorldStrike;
+  /** Fogo pegou na grama (centro aproximado) / fogueira acesa / prato cozinhado. */
+  'fire:ignited': { position: Vector3; cells: number };
+  'campfire:lit': { id: string };
+  'cooking:done': { itemId: string; ingredients: string[] };
 
   'ui:notify': { text: string; kind?: 'info' | 'quest' | 'loot' | 'warning' | 'level' | 'discovery' };
   'ui:menu': { menu: MenuName | null };
@@ -100,8 +109,26 @@ export interface GameEvents {
   'music:intensity': { state: MusicState };
 }
 
+/** Área atingida por um ataque (ver evento 'world:strike'). */
+export interface WorldStrike {
+  /** 'sphere' = explosão/impacto; 'arc' = golpe corpo a corpo; 'beam' = feixe reto. */
+  shape: 'sphere' | 'arc' | 'beam';
+  /** Centro (esfera) ou origem (arco/feixe). */
+  origin: Vector3;
+  /** Frente do golpe (arco, no plano XZ) ou direção do feixe. */
+  dir?: Vector3;
+  /** Raio (esfera), alcance (arco) ou largura (feixe). */
+  radius: number;
+  /** Comprimento do feixe. */
+  length?: number;
+  /** Abertura do arco (graus). */
+  arcDeg?: number;
+  info: DamageInfo;
+  source: Entity | null;
+}
+
 export type GameStateName = 'boot' | 'menu' | 'loading' | 'playing' | 'paused' | 'dialogue' | 'dead' | 'cinematic';
-export type MenuName = 'main' | 'pause' | 'inventory' | 'skills' | 'journal' | 'map' | 'settings' | 'shop' | 'stash' | 'credits' | 'gameover';
+export type MenuName = 'main' | 'pause' | 'inventory' | 'skills' | 'journal' | 'map' | 'settings' | 'shop' | 'stash' | 'credits' | 'gameover' | 'cooking';
 export type WeatherKind = 'clear' | 'cloudy' | 'rain' | 'storm' | 'fog';
 export type MusicState = 'menu' | 'explore' | 'village' | 'night' | 'combat' | 'boss' | 'victory' | 'silence';
 export type SurfaceType = 'grass' | 'dirt' | 'stone' | 'wood' | 'water' | 'metal' | 'sand' | 'mud';

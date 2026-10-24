@@ -479,6 +479,7 @@ export class Projectiles {
     };
     if (p.hits > 0 && p.pierceFalloff > 0) info.amount *= Math.pow(1 - p.pierceFalloff, p.hits);
     combat.applyDamage(target, info);
+    ctx.events.emit('world:strike', { shape: 'sphere', origin: point.clone(), radius: Math.max(0.4, p.pradius + 0.2), info, source: p.owner ?? null });
     p.hits++;
     this.stats.hitsEntity++;
     const vfx = ctx.sys.vfx;
@@ -502,6 +503,15 @@ export class Projectiles {
     if (p.explodeRadius > 0) {
       this.detonate(p, point);
       return;
+    }
+    if (!water) {
+      ctx.events.emit('world:strike', {
+        shape: 'sphere',
+        origin: point.clone(),
+        radius: Math.max(0.5, p.pradius + 0.3),
+        info: { ...p.damage, source: p.owner, point: point.clone(), direction: this.dir.clone(), tag: p.damage.tag ?? 'projectile' },
+        source: p.owner ?? null,
+      });
     }
     const vfx = ctx.sys.vfx;
     vfx.burst(water ? 'splash' : p.vis.impact, point, { scale: water ? 0.6 : p.vis.impactScale, color: water ? undefined : p.color ?? p.vis.core, direction: this.tmp.copy(this.dir).negate() });

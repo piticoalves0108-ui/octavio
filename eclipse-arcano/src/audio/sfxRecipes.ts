@@ -936,6 +936,61 @@ const flightLoopOneShot: Recipe = (h, t, out, p) => {
   return 0.65;
 };
 
+// ------------------------------------------------------------------ mundo interativo
+
+/** Fogo pegando: sopro grave que cresce + estalos. */
+const fireIgnite: Recipe = (h, t, out, p) => {
+  whoosh(h, t, 0.55, 180 * p.pitch, 900 * p.pitch, 300 * p.pitch, 1.2, 0.55, out);
+  const d = crack(h, t + 0.08, out, 0.35, 0.35);
+  return Math.max(0.6, d + 0.1);
+};
+
+/** Madeira quebrando: estalo seco + tábuas caindo. */
+const woodBreak: Recipe = (h, t, out, p) => {
+  thump(h, t, 190 * p.pitch, 70, 0.14, 0.8, out);
+  tick(h, t, 1800 * p.pitch, 0.05, 0.7, out, 'bandpass', h.pink);
+  for (let i = 0; i < 4; i++) {
+    const tt = t + 0.05 + i * r(h, 0.04, 0.09);
+    tick(h, tt, r(h, 700, 1400) * p.pitch, 0.06, r(h, 0.2, 0.45), out, 'bandpass', h.pink);
+    thump(h, tt, r(h, 160, 260) * p.pitch, 90, 0.08, 0.25, out);
+  }
+  return 0.55;
+};
+
+/** Grama cortada: chiado curto e agudo. */
+const grassCut: Recipe = (h, t, out, p) => {
+  whoosh(h, t, 0.12, 2600 * p.pitch, 5200 * p.pitch, 3000 * p.pitch, 2.4, 0.45, out, h.white);
+  tick(h, t + 0.03, 4200, 0.03, 0.25, out);
+  return 0.16;
+};
+
+/** Estase Temporal: tique-taque de relógio com brilho. */
+const stasis: Recipe = (h, t, out, p) => {
+  for (let i = 0; i < 3; i++) {
+    const tt = t + i * 0.12;
+    tick(h, tt, 3200, 0.025, 0.5, out, 'bandpass');
+    partials(h, tt, 880 * p.pitch * (1 + i * 0.5), [1, 2.01, 3.03], [0.16, 0.08, 0.04], [0.25, 0.18, 0.1], out);
+  }
+  whoosh(h, t, 0.6, 400 * p.pitch, 2000 * p.pitch, 800 * p.pitch, 3, 0.25, out);
+  return 0.7;
+};
+
+/** Cozinhar: chiado da panela e um sininho de "pronto". */
+const cook: Recipe = (h, t, out, p) => {
+  const g = gain(h, 0, out);
+  adsr(g.gain, t, 0.08, 0.1, 0.4, 0.5, 0.6, 0.35);
+  const f = filter(h, 'highpass', 2500, 0.7, g);
+  noise(h, h.white, t, 1.0, f);
+  for (let i = 0; i < 6; i++) tick(h, t + r(h, 0, 0.8), r(h, 1500, 3000), 0.02, 0.2, out, 'bandpass');
+  for (let i = 0; i < 2; i++) {
+    const tt = t + 0.95 + i * 0.09;
+    const gg = gain(h, 0, out);
+    perc(gg.gain, tt, 0.4, 0.003, 0.3);
+    osc(h, 'sine', (i ? 1568 : 1175) * p.pitch, tt, 0.32, gg);
+  }
+  return 1.35;
+};
+
 export const RECIPES: Record<SfxId, Recipe> = {
   ui_click: uiClick,
   quest_update: questUpdate,
@@ -1003,4 +1058,9 @@ export const RECIPES: Record<SfxId, Recipe> = {
   amb_howl: ambHowl,
   amb_drip: ambDrip,
   amb_gust: ambGust,
+  fire_ignite: fireIgnite,
+  wood_break: woodBreak,
+  grass_cut: grassCut,
+  stasis,
+  cook,
 };

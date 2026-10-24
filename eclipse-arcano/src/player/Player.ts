@@ -116,6 +116,11 @@ export class Player implements GameSystem, Saveable {
   /** Voo: turbo ativo / planando sem energia / em decolagem. */
   boosting = false;
   gliding = false;
+  /**
+   * Corrente de ar quente sob o jogador (m/s², posta pelo mundo interativo a cada quadro:
+   * fogo na grama). Voando, empurra para cima e quase não gasta energia.
+   */
+  externalLift = 0;
   /** Multiplicadores atuais vindos da progressão (atualizados por refreshStats). */
   readonly stats = { moveSpeed: 1, flightSpeed: 1, flightCost: 1, dodgeCost: 1 };
   /** Altura sobre o chão (m) — útil para HUD/câmera. */
@@ -199,6 +204,10 @@ export class Player implements GameSystem, Saveable {
   get speed(): number {
     if (this.state === 'flight') return this.flightV.length();
     return Math.hypot(this.hv.x + this.knock.x, this.hv.z + this.knock.z);
+  }
+  /** Direção de movimento pedida pelo jogador (XZ, comprimento 0..1). Somente leitura. */
+  get wishDir(): Readonly<THREE.Vector3> {
+    return this.wish;
   }
   /** Velocidade horizontal atual (m/s). */
   get horizontalSpeed(): number {
@@ -1259,6 +1268,8 @@ export class Player implements GameSystem, Saveable {
       vSpeed += Math.sin(ly) * F.boostSpeed * F.boostPitchFactor * mul;
     }
     if (this.gliding) vSpeed = Math.min(vSpeed, 0) - F.glideSinkSpeed;
+    // ar quente do fogo: sobe planando (como numa aventura em mundo aberto)
+    if (this.externalLift > 0.01) vSpeed = Math.max(vSpeed, 0) + this.externalLift * 0.5;
     // teto de voo (desacelera a subida perto do limite)
     const ceilRoom = MAX_FLIGHT_ALTITUDE - pos.y;
     if (vSpeed > 0 && ceilRoom < F.ceilingMargin) {
@@ -1318,7 +1329,7 @@ export class Player implements GameSystem, Saveable {
     // Energia
     // Forma Ascendente: voo gratuito (o custo não é cobrado enquanto `abilities.ascended`).
     if ((!inTakeoff || this.takeoffT > 0.2) && !ctx.sys.abilities?.ascended) {
-      const cost = flightEnergyCost(dt, moving, this.boosting, up, this.stats.flightCost);
+      const cost = flightEnergyCost(dt, moving, this.boosting, up, this.stats.flightCost) * (this.externalLift > 1 ? 0.25 : 1);
       if (cost > 0) {
         this.energy.current = Math.max(0, this.energy.current - cost);
         this.energySpentAt = ctx.elapsed;

@@ -20,6 +20,8 @@ export type Action =
   | 'ability3'
   | 'ability4'
   | 'ultimate'
+  | 'spark' // Centelha (fogo utilitário)
+  | 'stasis' // Estase Temporal (congela um objeto)
   | 'interact'
   | 'lockOn'
   | 'potion'
@@ -50,6 +52,8 @@ export const DEFAULT_BINDINGS: Record<Action, string[]> = {
   ability3: ['Digit3'],
   ability4: ['Digit4'],
   ultimate: ['KeyR'],
+  spark: ['KeyG'],
+  stasis: ['KeyT'],
   interact: ['KeyE'],
   lockOn: ['Mouse1', 'Tab'],
   potion: ['KeyH'],
@@ -81,6 +85,8 @@ export const ACTION_LABELS: Record<Action, string> = {
   ability3: 'Habilidade 3',
   ability4: 'Habilidade 4',
   ultimate: 'Forma Ascendente',
+  spark: 'Centelha (fogo)',
+  stasis: 'Estase Temporal',
   interact: 'Interagir',
   lockOn: 'Travar alvo',
   potion: 'Poção rápida',

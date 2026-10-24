@@ -226,6 +226,8 @@ export class Combat implements GameSystem {
     this.stats.sweeps++;
     const cosHalf = Math.cos(((Math.min(360, arcDeg) * Math.PI) / 180) * 0.5);
     const vReach = opts.verticalReach ?? 2.2;
+    // o mundo reage ao golpe (grama, arbustos, objetos), com ou sem alvo
+    this.ctx.events.emit('world:strike', { shape: 'arc', origin: origin.clone(), dir: forward.clone(), radius: range, arcDeg, info, source: attacker });
     const candidates = this.ctx.entities.queryRadius(origin, range + 1.5, this.list);
     // ordena por distância (mais perto primeiro)
     candidates.sort((a, b) => a.position.distanceToSquared(origin) - b.position.distanceToSquared(origin));
@@ -265,6 +267,7 @@ export class Combat implements GameSystem {
   explode(center: THREE.Vector3, radius: number, info: DamageInfo, source: Entity | null, opts: { falloff?: boolean; hitSource?: boolean; filter?: (e: Entity) => boolean; ignoreWalls?: boolean } = {}): Entity[] {
     const hits: Entity[] = [];
     this.stats.explosions++;
+    this.ctx.events.emit('world:strike', { shape: 'sphere', origin: center.clone(), radius, info, source });
     const candidates = this.ctx.entities.queryRadius(center, radius, this.list).slice();
     const c0 = this.tmp3.copy(center);
     c0.y += 0.3;
@@ -311,6 +314,7 @@ export class Combat implements GameSystem {
       }
     }
     end.copy(origin).addScaledVector(dir, maxLen);
+    this.ctx.events.emit('world:strike', { shape: 'beam', origin: origin.clone(), dir: dir.clone(), radius: width, length: maxLen, info, source });
     // candidatos ao longo do segmento
     const mid = this.tmp.copy(origin).add(end).multiplyScalar(0.5);
     const cands = this.ctx.entities.queryRadius(mid, maxLen * 0.5 + width + 2, this.beamList);

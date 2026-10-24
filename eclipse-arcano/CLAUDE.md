@@ -22,19 +22,24 @@ No navegador, `window.__game` expõe o `GameContext` para depuração.
 - `docs/HISTORIA.md`: bíblia narrativa (personagens, atos, escolhas, finais, missões).
 - `docs/status/*.md`: o que cada módulo já faz, como foi testado e o que está pendente.
 
-## Estado atual (23/10/2026)
+## Estado atual (24/10/2026)
 
-Concluídos e testados: núcleo, mundo, ambiente (céu, clima, dia/noite), jogador (movimento, voo, câmera),
-combate, IA (inimigos, chefe Guardião, criaturas), RPG (inventário, loot, lojas, progressão, talentos),
-narrativa (missões, diálogos, NPCs com rotinas), áudio procedural, salvamento e **interface completa**
-(HUD, minimapa, diálogos, menus, mapa interativo com névoa, carimbos e viagem rápida). Ver `docs/status/ui.md`.
+Concluídos e testados:
+- núcleo e mundo;
+- ambiente (céu, clima, dia/noite);
+- jogador (movimento, voo, câmera);
+- combate e IA (inimigos, chefe Guardião, criaturas);
+- RPG (inventário, loot, lojas, progressão, talentos);
+- narrativa (missões, diálogos, NPCs com rotinas), áudio procedural e salvamento;
+- interface completa (`docs/status/ui.md`).
 
-Próximas etapas pedidas pelo dono do projeto ("estilo Zelda"):
-1. Gráficos melhores (iluminação, pós-processamento, materiais, céu, água, grama).
-2. Movimentos mais realistas (inércia, inclinação, pés no chão, escalada livre com vigor, planador).
-3. Clima mais rico (poças, respingos, superfícies molhadas, escalada escorregadia na chuva, raios, neve, vento).
-4. Mundo interativo (objetos físicos, fogo que se espalha na grama, cortar arbustos, cozinhar).
-5. História até o final: Atos II a IV, chefes e os três finais (`docs/HISTORIA.md`).
+Etapas "estilo Zelda" pedidas pelo dono do projeto:
+1. Gráficos (luz estilizada, folhagem, cores pintadas, grama): **feito**.
+2. Movimentos (escalada livre com vigor, escorregar na chuva, pés no chão): **feito** (`docs/status/player.md`).
+3. Clima (poças, neve nas alturas, arco-íris, raios perigosos, rajadas visíveis): **feito** (`docs/status/env.md`).
+4. Mundo interativo (fogo na grama, cortar grama e arbustos, objetos físicos, Centelha/Estase, fogueiras e
+   cozinha): **feito** (`docs/status/interactive.md`).
+5. História até o final: Atos II a IV, chefes e os três finais (`docs/HISTORIA.md`). **Próxima etapa.**
 
 Outras pendências conhecidas: montaria e pathfinding de inimigos fora da vila.
 

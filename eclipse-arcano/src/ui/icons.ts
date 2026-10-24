@@ -88,6 +88,30 @@ const ITEM_SHAPES: Record<ItemIconShape, (c: string, l: string, d: string) => st
     `<path d="M22 6 L42 6 L50 16 L58 26 L50 32 L46 26 L48 58 L16 58 L18 26 L14 32 L6 26 L14 16 Z" fill="${c}" ${STROKE}/><path d="M32 8 L32 58" stroke="${d}" stroke-width="2"/><path d="M26 6 L32 16 L38 6" fill="none" stroke="${l}" stroke-width="2.5"/><circle cx="32" cy="30" r="4" fill="${l}"/>`,
   coin: (_c, l) =>
     `<circle cx="32" cy="32" r="22" fill="#e8b84a" ${STROKE}/><circle cx="32" cy="32" r="15" fill="none" stroke="#a87a1e" stroke-width="2.5"/><path d="M32 22 L36 30 L44 32 L36 34 L32 42 L28 34 L20 32 L28 30 Z" fill="#fff2b8"/><circle cx="24" cy="22" r="3" fill="${l}" opacity=".7"/>`,
+  apple: (c, l, d) =>
+    `<path d="M32 18 Q44 10 52 20 Q60 34 50 48 Q42 58 32 52 Q22 58 14 48 Q4 34 12 20 Q20 10 32 18 Z" fill="${c}" ${STROKE}/>` +
+    `<path d="M32 18 Q30 10 34 4" fill="none" stroke="#5a3e28" stroke-width="3.5"/><path d="M34 10 Q44 4 48 10 Q40 16 34 10 Z" fill="#6ac84a" ${STROKE}/>` +
+    `<path d="M20 26 Q18 34 22 40" fill="none" stroke="${l}" stroke-width="3" stroke-linecap="round"/><path d="M32 52 L32 46" stroke="${d}" stroke-width="2"/>`,
+  mushroom: (c, l, d) =>
+    `<path d="M24 34 L22 54 Q32 58 42 54 L40 34 Z" fill="#efe2c8" ${STROKE}/>` +
+    `<path d="M6 34 Q8 10 32 8 Q56 10 58 34 Q32 40 6 34 Z" fill="${c}" ${STROKE}/>` +
+    `<circle cx="20" cy="22" r="4" fill="${l}"/><circle cx="36" cy="16" r="3" fill="${l}"/><circle cx="46" cy="26" r="3.5" fill="${l}"/><path d="M14 33 Q32 37 50 33" fill="none" stroke="${d}" stroke-width="2"/>`,
+  meat: (c, l, d) =>
+    `<path d="M44 8 L56 20 L50 26 L38 14 Z" fill="#efe2c8" ${STROKE}/><circle cx="54" cy="10" r="5" fill="#efe2c8" ${STROKE}/>` +
+    `<path d="M40 18 Q52 30 42 44 Q30 60 14 52 Q4 44 12 30 Q22 14 40 18 Z" fill="${c}" ${STROKE}/>` +
+    `<path d="M18 36 Q26 28 36 30" fill="none" stroke="${l}" stroke-width="3" stroke-linecap="round"/><path d="M16 46 Q24 50 34 44" fill="none" stroke="${d}" stroke-width="2"/>`,
+  berries: (c, l, d) =>
+    `<path d="M30 14 Q34 6 44 6" fill="none" stroke="#3a7a2a" stroke-width="3"/><path d="M34 10 Q24 4 18 10 Q26 16 34 10 Z" fill="#6ac84a" ${STROKE}/>` +
+    `<circle cx="24" cy="30" r="9" fill="${c}" ${STROKE}/><circle cx="40" cy="28" r="9" fill="${c}" ${STROKE}/><circle cx="32" cy="44" r="10" fill="${c}" ${STROKE}/><circle cx="18" cy="46" r="7" fill="${d}" ${STROKE}/>` +
+    `<circle cx="21" cy="27" r="2.5" fill="${l}"/><circle cx="37" cy="25" r="2.5" fill="${l}"/><circle cx="29" cy="41" r="2.5" fill="${l}"/>`,
+  dish: (c, l, d) =>
+    `<ellipse cx="32" cy="44" rx="28" ry="12" fill="#e6e2d8" ${STROKE}/><ellipse cx="32" cy="42" rx="20" ry="7" fill="#cfc8b8"/>` +
+    `<path d="M14 40 Q16 22 32 20 Q48 22 50 40 Q32 46 14 40 Z" fill="${c}" ${STROKE}/><path d="M22 30 Q30 24 40 28" fill="none" stroke="${l}" stroke-width="3" stroke-linecap="round"/>` +
+    `<path d="M24 16 Q22 10 26 6 M34 14 Q32 8 36 4 M42 16 Q40 10 44 6" fill="none" stroke="#ffffff" stroke-opacity=".7" stroke-width="2"/><circle cx="40" cy="36" r="3" fill="${d}"/>`,
+  bowl: (c, l, d) =>
+    `<path d="M8 30 L56 30 Q56 54 32 56 Q8 54 8 30 Z" fill="#8a6440" ${STROKE}/><ellipse cx="32" cy="30" rx="24" ry="7" fill="${c}" ${STROKE}/>` +
+    `<circle cx="24" cy="30" r="3" fill="${l}"/><circle cx="38" cy="29" r="2.5" fill="${d}"/>` +
+    `<path d="M22 20 Q20 14 24 10 M32 18 Q30 12 34 8 M42 20 Q40 14 44 10" fill="none" stroke="#ffffff" stroke-opacity=".7" stroke-width="2"/>`,
 };
 
 export function itemIcon(shape: ItemIconShape, color: string): string {

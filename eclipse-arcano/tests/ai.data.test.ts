@@ -33,6 +33,11 @@ const C6_ITEMS = new Set([
   'talisma_viajante',
   'anel_runico',
   'amuleto_guardiao',
+  // ingredientes (mundo interativo)
+  'carne_crua',
+  'maca',
+  'cogumelo',
+  'frutas_silvestres',
 ]);
 
 function checkDrops(id: string, xp: number, gold: [number, number], drops: { itemId: string; chance: number; qty?: [number, number] }[]) {

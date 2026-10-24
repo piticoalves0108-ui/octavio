@@ -70,6 +70,22 @@ Acréscimos fora da área (permitidos): eventos `player:jump` e `player:lockOn` 
 - `health.moveMultiplier()` é respeitado em todos os modos.
 - Eventos: `player:footstep` (superfície via `world.surfaceAt` ou do colisor sob os pés), `player:landed`, `player:dodge`, `player:jump`, `player:flightStart` e `player:flightEnd`.
 
+### Escalada livre e pés no chão (etapa "estilo Zelda", 23–24/10/2026)
+- **Escalada livre** em paredes, prédios, rochas e penhascos do próprio relevo:
+  - no relevo, o personagem gruda na encosta íngreme achada por bisseção (`snapToTerrainWall`) e sobe até o topo;
+  - em colisores, sobe e passa pela borda só se houver onde pisar lá em cima; senão, fica pendurado na borda.
+- **Vigor**:
+  - escalar gasta energia (`CLIMB.energyPerSecond`); parado na parede não gasta, mas também não recupera;
+  - o salto de escalada custa `CLIMB.climbJumpCost`;
+  - sem energia, o personagem cai e espera um pouco para agarrar de novo.
+- **Chuva**: com a parede molhada, o personagem escorrega de tempos em tempos.
+- Arenas de chefe não são escaláveis.
+- **Pés no chão** (`footIk.ts`): IK de duas articulações por perna sobre a pose animada. O quadril desce até o
+  pé mais baixo, e a outra perna dobra em degraus e rampas. O pé acompanha a inclinação do chão.
+- Validado no navegador: penhasco de 44 m com cansaço e queda, parede e telhado de casa, escorregões na chuva.
+- `externalLift` (mundo interativo): ar quente do fogo empurra o voo para cima e reduz o gasto de energia.
+  `wishDir` (somente leitura): direção pedida pelo jogador.
+
 ### Voo (mecânica principal)
 - **F** alterna o voo. A decolagem tem impulso, clipe, anel de centelhas e um tremor leve.
 - Controles: WASD relativo à câmera, **Espaço** sobe, **C/Ctrl** desce e **Shift** liga o turbo. No turbo, mergulha ou sobe conforme a inclinação da câmera em relação à neutra, com zona morta.

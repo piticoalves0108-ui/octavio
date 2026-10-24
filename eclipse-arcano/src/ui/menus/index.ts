@@ -10,6 +10,7 @@ import { MapPanel } from './MapPanel';
 import { SettingsPanel } from './SettingsPanel';
 import { ShopPanel } from './ShopPanel';
 import { StashPanel } from './StashPanel';
+import { CookingPanel } from './CookingPanel';
 import { MainMenu, PausePanel, SavePanel, GameOverPanel, CreditsPanel } from './screens';
 
 /**
@@ -92,6 +93,8 @@ export function createMenuHost(ctx: GameContext, root: HTMLElement, maybeHooks?:
   shop.onExit = () => hooks.resume();
   const stash = new StashPanel(ctx);
   stash.onExit = () => hooks.resume();
+  const cooking = new CookingPanel(ctx);
+  cooking.onExit = () => hooks.resume();
   const saves = new SavePanel(ctx);
   saves.onLoad = (slot) => hooks.continueGame(slot);
   saves.onBack = () => back();
@@ -128,7 +131,7 @@ export function createMenuHost(ctx: GameContext, root: HTMLElement, maybeHooks?:
     loadLast: () => hooks.continueGame(),
     quit: () => hooks.quitToMenu(),
   });
-  const soloPanels: Partial<Record<MenuName, Panel>> = { main, pause, shop, stash, credits, gameover };
+  const soloPanels: Partial<Record<MenuName, Panel>> = { main, pause, shop, stash, credits, gameover, cooking };
 
   let current: MenuName | null = null;
   let active: Panel | null = null;

@@ -54,6 +54,8 @@ export class GrassField {
       uWindStrength: GLOBAL_UNIFORMS.uWindStrength,
       uPlayerPos: GLOBAL_UNIFORMS.uPlayerPos,
       uWetness: GLOBAL_UNIFORMS.uWetness,
+      tGround: GLOBAL_UNIFORMS.tGround,
+      uGroundRect: GLOBAL_UNIFORMS.uGroundRect,
     };
     this.flowerUniforms = {
       ...maps.uniforms(),
@@ -66,6 +68,8 @@ export class GrassField {
       uWindStrength: GLOBAL_UNIFORMS.uWindStrength,
       uPlayerPos: GLOBAL_UNIFORMS.uPlayerPos,
       uNight: GLOBAL_UNIFORMS.uNight,
+      tGround: GLOBAL_UNIFORMS.tGround,
+      uGroundRect: GLOBAL_UNIFORMS.uGroundRect,
     };
     this.mesh = new THREE.Mesh(new THREE.InstancedBufferGeometry(), this.createGrassMaterial());
     this.mesh.name = 'grama';
@@ -120,7 +124,10 @@ export class GrassField {
           `#include <common>
 ${GRASS_GLSL}
 uniform float uWetness;
-varying vec3 vGrassCol;`,
+uniform sampler2D tGround;
+uniform vec4 uGroundRect;
+varying vec3 vGrassCol;
+varying float vBurn;`,
         )
         .replace(
           '#include <beginnormal_vertex>',
@@ -137,6 +144,10 @@ float gGround = worldHeight(gRoot);
 float gKeep = step(gh3, gData.b * uDensity) * step(${(WATER_LEVEL + 0.25).toFixed(2)}, gGround);
 float gFade = 1.0 - smoothstep(uRadius * 0.7, uRadius, gDist);
 float gScale = gKeep * gFade * (0.65 + 0.7 * gData.b);
+// mundo interativo: grama cortada (R), queimada (G) e em chamas (B)
+vec4 gGs = vec4(0.0);
+vec2 gGuv = (gRoot - uGroundRect.xy) / max(uGroundRect.z, 1.0);
+if (uGroundRect.w > 0.5 && gGuv.x > 0.0 && gGuv.y > 0.0 && gGuv.x < 1.0 && gGuv.y < 1.0) gGs = texture(tGround, gGuv);
 vec3 objectNormal = normalize(vec3(normal.x * 0.35, 1.0, normal.z * 0.35));`,
         )
         .replace(
@@ -149,6 +160,7 @@ vec3 gp = position;
 gp.xz = vec2(gp.x * gc - gp.z * gs, gp.x * gs + gp.z * gc);
 float gH = position.y; // 0..1 (altura relativa da lâmina)
 float gHeight = mix(${VEGETATION.bladeHeight[0].toFixed(2)}, ${VEGETATION.bladeHeight[1].toFixed(2)}, gh2) * gScale * (0.7 + 0.6 * gData.b);
+gHeight *= (1.0 - 0.82 * gGs.r) * (1.0 - 0.8 * gGs.g) * (1.0 - 0.4 * gGs.b);
 gp.y = gH * gHeight;
 gp.xz *= 0.8 + gh3 * 0.5;
 // vento: balanço de baixa frequência + rajadas que percorrem o campo
@@ -170,17 +182,22 @@ vec3 gBase = texture(tWorldColor, gUv).rgb;
 vec3 gTip = gBase * vec3(1.5, 1.42, 0.88) + vec3(0.07, 0.07, 0.0) * gh2;
 vGrassCol = mix(gBase * 0.8, gTip, gH * gH * 0.6 + gH * 0.4) * (0.88 + 0.26 * gh3);
 vGrassCol = mix(vGrassCol, vGrassCol * vec3(1.15, 1.05, 0.7), smoothstep(0.6, 1.0, gh1) * 0.5);
-vGrassCol *= 1.0 - 0.3 * uWetness;`,
+vGrassCol *= 1.0 - 0.3 * uWetness;
+// cortada: tocos mais secos; queimada: carvão; em chamas: brasa nas pontas
+vGrassCol = mix(vGrassCol, vGrassCol * vec3(1.1, 1.0, 0.6), gGs.r * 0.6);
+vGrassCol = mix(vGrassCol, vec3(0.045, 0.038, 0.032), max(gGs.g, gGs.b * 0.8));
+vBurn = gGs.b * gH;`,
         )
         .replace('#include <project_vertex>', 'vec4 mvPosition = viewMatrix * vec4(transformed, 1.0);\ngl_Position = projectionMatrix * mvPosition;')
         .replace('#include <worldpos_vertex>', '#if defined( USE_SHADOWMAP )\nvec4 worldPosition = vec4(transformed, 1.0);\n#endif');
       shader.fragmentShader = shader.fragmentShader
-        .replace('#include <common>', '#include <common>\nvarying vec3 vGrassCol;')
+        .replace('#include <common>', '#include <common>\nvarying vec3 vGrassCol;\nvarying float vBurn;')
         .replace('#include <color_fragment>', 'diffuseColor.rgb *= vGrassCol;')
-        .replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\nnormal = normalize(vNormal);');
+        .replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\nnormal = normalize(vNormal);')
+        .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(1.0, 0.34, 0.06) * vBurn * 2.2;');
     };
     styleFoliage(mat, STYLE.translucency * 1.3, STYLE.rim * 0.3, STYLE.cel * 0.6);
-    mat.customProgramCacheKey = () => 'grass-v2';
+    mat.customProgramCacheKey = () => 'grass-v3';
     return mat;
   }
 
@@ -195,6 +212,8 @@ vGrassCol *= 1.0 - 0.3 * uWetness;`,
           `#include <common>
 ${GRASS_GLSL}
 uniform float uNight;
+uniform sampler2D tGround;
+uniform vec4 uGroundRect;
 varying vec3 vFlowerCol;
 varying float vGlow;`,
         )
@@ -211,6 +230,12 @@ float gDist = length(gRoot - cameraPosition.xz);
 float gGround = worldHeight(gRoot);
 float gKeep = step(gh3, gData.a * 1.4) * step(${(WATER_LEVEL + 0.3).toFixed(2)}, gGround);
 float gScale = gKeep * (1.0 - smoothstep(uRadius * 0.75, uRadius, gDist)) * (0.85 + 0.5 * gh2);
+// flores cortadas ou queimadas somem (mundo interativo)
+vec2 gGuv = (gRoot - uGroundRect.xy) / max(uGroundRect.z, 1.0);
+if (uGroundRect.w > 0.5 && gGuv.x > 0.0 && gGuv.y > 0.0 && gGuv.x < 1.0 && gGuv.y < 1.0) {
+  vec4 gGs = texture(tGround, gGuv);
+  gScale *= 1.0 - step(0.3, max(max(gGs.r, gGs.g), gGs.b));
+}
 vec3 objectNormal = vec3(0.0, 1.0, 0.0);`,
         )
         .replace(
@@ -247,7 +272,7 @@ vGlow = color.r * (0.05 + 0.85 * uNight + 0.55 * gNear) * (0.8 + 0.2 * sin(uTime
         .replace('#include <color_fragment>', 'diffuseColor.rgb *= mix(vec3(0.25, 0.5, 0.2), vFlowerCol, step(0.5, vColor.g));')
         .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += vFlowerCol * vGlow;');
     };
-    mat.customProgramCacheKey = () => 'flowers-v2';
+    mat.customProgramCacheKey = () => 'flowers-v3';
     return mat;
   }
 

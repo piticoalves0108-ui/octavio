@@ -370,7 +370,7 @@ export class Hud {
     else if (pl.isClimbing()) list = [[keyLabel(b.jump[0]), 'Saltar'], [keyLabel(b.dodge[0]), 'Soltar']];
     else if (pl.isSwimming()) list = [[keyLabel(b.fly[0]), 'Voar'], [keyLabel(b.sprint[0]), 'Nadar rápido']];
     else if (sys.ai.inCombat()) list = [[keyLabel(b.lockOn[1] ?? b.lockOn[0]), 'Travar alvo'], [keyLabel(b.dodge[0]), 'Esquivar'], [keyLabel(b.block[0]), 'Defender']];
-    else list = [[keyLabel(b.map[0]), 'Mapa'], [keyLabel(b.inventory[0]), 'Inventário'], [keyLabel(b.journal[0]), 'Diário'], [keyLabel(b.fly[0]), 'Voar']];
+    else list = [[keyLabel(b.map[0]), 'Mapa'], [keyLabel(b.inventory[0]), 'Inventário'], [keyLabel(b.fly[0]), 'Voar'], [keyLabel(b.spark[0]), 'Centelha'], [keyLabel(b.stasis[0]), 'Estase']];
     const key = list.map((x) => x.join(':')).join('|');
     if (key === this.hintKey) return;
     this.hintKey = key;

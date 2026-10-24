@@ -119,6 +119,11 @@ export const SFX_DEFS: Record<SfxId, SfxDef> = {
   amb_howl: D('ambient', 2, 0.35, 1, true, 30, 600, 0.5, 1),
   amb_drip: D('ambient', 1, 0.25, 3, true, 3, 40, 0.6, 3),
   amb_gust: D('ambient', 2, 0.35, 2, false, 1, 1, 0.1, 1),
+  fire_ignite: D('sfx', 5, 0.6, 3, true, 4, 60, 0.2, 1.5),
+  wood_break: D('sfx', 6, 0.75, 4, true, 4, 70, 0.25, 1.2),
+  grass_cut: D('sfx', 3, 0.4, 3, true, 2, 25, 0.05, 2),
+  stasis: D('sfx', 7, 0.65, 2, true, 6, 60, 0.35, 0.3),
+  cook: D('ui', 6, 0.6, 1, false, 1, 1, 0.1, 0.2),
 };
 
 /** Limite de vozes simultâneas (efeitos + ambiência pontual) por preset de qualidade. */

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 // luz estilizada: altera os trechos de shader antes de qualquer material compilar
 import '../env/stylize';
+import { InteractiveWorld } from '../interactive/InteractiveWorld';
 import type { GameContext, GameSystem, Systems } from './context';
 import { EventBus, type GameStateName } from './EventBus';
 import { Input } from './Input';
@@ -153,6 +154,7 @@ export class Game {
       audio: new AudioSystem(),
       save: new SaveSystem(),
       perf: new PerfMonitor(),
+      interactive: new InteractiveWorld(),
     };
     ctx.sys = sys;
 
@@ -174,6 +176,7 @@ export class Game {
       sys.abilities,
       sys.ai,
       sys.npcs,
+      sys.interactive,
       sys.quests,
       sys.dialogue,
       sys.interaction,
@@ -189,6 +192,7 @@ export class Game {
       sys.ai,
       sys.npcs,
       sys.combat,
+      sys.interactive,
       sys.vfx,
       sys.interaction,
       sys.quests,
@@ -201,7 +205,7 @@ export class Game {
     this.lateOrder = [sys.camera, sys.ui, sys.audio, sys.perf];
 
     // Registro de saves (ordem importa: progressão/inventário antes do jogador).
-    for (const s of [clock, sys.story, sys.progression, sys.inventory, sys.abilities, sys.world, sys.env, sys.ai, sys.npcs, sys.quests, sys.player]) sys.save.register(s);
+    for (const s of [clock, sys.story, sys.progression, sys.inventory, sys.abilities, sys.world, sys.env, sys.ai, sys.npcs, sys.quests, sys.player, sys.interactive]) sys.save.register(s);
 
     for (let i = 0; i < this.all.length; i++) {
       const s = this.all[i];

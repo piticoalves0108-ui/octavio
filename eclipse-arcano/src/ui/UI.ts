@@ -16,7 +16,7 @@ import './fonts.css';
 import './ui.css';
 
 /** Menus que pausam o jogo enquanto abertos. */
-const PAUSING: MenuName[] = ['pause', 'inventory', 'skills', 'journal', 'map', 'settings', 'shop', 'stash'];
+const PAUSING: MenuName[] = ['pause', 'inventory', 'skills', 'journal', 'map', 'settings', 'shop', 'stash', 'cooking'];
 
 const TIPS = [
   'Voar gasta energia. Pouse antes que a roda azul se esvazie.',

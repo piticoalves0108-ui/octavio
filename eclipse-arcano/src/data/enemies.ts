@@ -331,7 +331,7 @@ const LIST: EnemyDef[] = [
     retreatBelow: 0.3,
     xp: 18,
     gold: [0, 0],
-    drops: [{ itemId: 'couro_lobo', chance: 0.6, qty: [1, 2] }],
+    drops: [{ itemId: 'couro_lobo', chance: 0.6, qty: [1, 2] }, { itemId: 'carne_crua', chance: 0.45 }],
   },
   {
     id: 'alfa_lobo',
@@ -370,6 +370,7 @@ const LIST: EnemyDef[] = [
     gold: [10, 25],
     drops: [
       { itemId: 'couro_lobo', chance: 1, qty: [2, 4] },
+      { itemId: 'carne_crua', chance: 1, qty: [1, 2] },
       { itemId: 'fragmento_eter', chance: 0.5, qty: [1, 2] },
       { itemId: 'amuleto_floresta', chance: 0.08 },
     ],

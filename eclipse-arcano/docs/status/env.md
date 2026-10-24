@@ -70,6 +70,27 @@ Nenhum arquivo fora da área foi alterado (os eventos `weather:changed`/`lightni
 - Com `q.bloom`: `EffectComposer` com alvo HDR half-float (MSAA ×4 se `q.antialias`) → `UnrealBloomPass` (cadeia interna começa em meia resolução) → passe final único que faz tone mapping ACES + sRGB + gradação (saturação/contraste), vinheta, tinta noturna azulada, tinta de tempestade, tinta/vinheta roxa com `uCorruption` e clarão. Bloom mais forte à noite (runas/eclipse brilham).
 - Substitui `ctx.render`; o tamanho é conferido a cada quadro com o drawing buffer (resize e pixel ratio). Sem bloom: render simples (o tone mapping do renderer continua valendo).
 
+### J) Clima rico (etapa "estilo Zelda", 24/10/2026)
+- **Poças** (shader do terreno): aparecem em manchas no chão plano e baixo (estradas, baixadas) quando a umidade
+  passa de `WEATHER_FX.puddleWetness`. Ficam escuras e lisas e refletem o céu, mais na visão rasante. Enquanto
+  chove, mostram ondinhas (anéis animados que perturbam a normal).
+- **Neve**: com a câmera acima de `WEATHER_FX.snowLine`, a chuva vira flocos que caem devagar e balançam
+  (`uSnow` no shader das gotas). A neve desce pela montanha (`uSnow` no terreno), e os respingos somem.
+- **Arco-íris**: aparece depois de mais de 25 s de chuva, quando ela para e o sol está baixo (de dia). Tem arco
+  primário e secundário, de cores invertidas, do lado oposto ao sol (shader do céu, `uRainbow`).
+- **Raios perigosos** (`stormHazard.ts`):
+  - na tempestade, ao ar livre, um raio cai perto do jogador a cada 16–34 s;
+  - antes do raio há aviso: círculo no chão e estalos;
+  - armas de metal (espada, adaga, lança, manopla) atraem o raio e fazem os raios virem mais cedo; o jogo avisa
+    uma vez;
+  - o raio fere o jogador e os inimigos no círculo.
+- **Rajadas visíveis** (`WindStreaks.ts`): riscos brancos curvos (com um caracol no fim) que cruzam o ar com
+  vento forte. São instanciados, em 1 draw call.
+- Uniforms globais novos: `uRain` e `uSnow`.
+- Correção: a luz estilizada (`stylize.ts`) não era aplicada aos materiais Standard/Physical no build,
+  porque o texto do three compilado tem outro espaçamento. Agora os trechos casam por regex.
+- Validado no navegador: poças na chuva e depois dela, arco-íris duplo, neve no pico, raio com aviso e rajadas.
+
 ## Correções feitas na revisão final (retomada)
 
 - **Chuva invisível (bug real)**: os quads das gotas e o anel dos respingos eram orientados no vertex shader com a ordem de vértices "de costas" para a câmera e o material usava `FrontSide` → o back-face culling descartava tudo (as checagens numéricas diziam 3.500+ gotas ativas, mas nada aparecia nas capturas). Agora `DoubleSide`; diagnosticado com captura em cor de depuração; teste de regressão em `tests/env.parts.test.ts`.

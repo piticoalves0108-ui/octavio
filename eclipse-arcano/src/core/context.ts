@@ -25,6 +25,7 @@ import type { UI } from '../ui/UI';
 import type { AudioSystem } from '../audio/Audio';
 import type { SaveSystem } from '../save/SaveSystem';
 import type { PerfMonitor } from '../perf/PerfMonitor';
+import type { InteractiveWorld } from '../interactive/InteractiveWorld';
 
 /**
  * Um sistema de jogo. A ordem de atualização é definida em Game.ts.
@@ -74,6 +75,8 @@ export interface Systems {
   audio: AudioSystem;
   save: SaveSystem;
   perf: PerfMonitor;
+  /** Mundo interativo: fogo na grama, objetos físicos, Centelha/Estase, fogueiras e cozinha. */
+  interactive: InteractiveWorld;
 }
 
 export interface GameContext {

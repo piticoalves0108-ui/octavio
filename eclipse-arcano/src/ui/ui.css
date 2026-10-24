@@ -3345,3 +3345,72 @@ body {
     width: 280px;
   }
 }
+
+/* ---------------------------------------------------------------- fogueira (cozinhar) */
+.ui-cook .ui-stash-col .ui-grid {
+  grid-template-columns: repeat(4, 64px);
+  grid-auto-rows: 64px;
+  gap: 8px;
+}
+.ui-cook-pot {
+  min-width: 300px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 130, 50, 0.22), transparent 70%), rgba(10, 8, 18, 0.45);
+  border: 1px solid rgba(255, 170, 90, 0.25);
+}
+.ui-cook-preview {
+  min-height: 26px;
+  margin-top: 12px;
+  color: var(--ink-dim);
+}
+.ui-cook-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.ui-cook-result {
+  margin-top: 14px;
+}
+.ui-cook-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 200, 120, 0.08);
+  border: 1px solid rgba(255, 200, 120, 0.3);
+  animation: ui-cook-pop 0.45s ease-out;
+}
+.ui-cook-card .ui-det-icon {
+  width: 56px;
+  height: 56px;
+}
+.ui-cook-made {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.ui-empty-note {
+  grid-column: 1 / -1;
+  max-width: 280px;
+  color: var(--ink-dim);
+  font-size: 13px;
+  line-height: 1.4;
+}
+@keyframes ui-cook-pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@media (max-width: 760px) {
+  .ui-cook .ui-stash-cols {
+    flex-direction: column;
+  }
+}

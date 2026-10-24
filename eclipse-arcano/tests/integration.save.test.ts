@@ -161,6 +161,26 @@ describe('Saveables reais (ida e volta)', () => {
     expect(() => des(b, null, undefined)).toThrow();
   });
 
+  it('interactive: fogueiras acesas, cogumelos colhidos e dicas vistas', async () => {
+    const { InteractiveWorld } = await import('../src/interactive/InteractiveWorld');
+    const data = {
+      campfires: [
+        { id: 'fogueira_lago', lit: true, found: true },
+        { id: 'inexistente', lit: true, found: true },
+      ],
+      forage: [[3, 2], [-1, 4], ['x', 1]],
+      hints: ['fire', 'cook', 'nada'],
+    };
+    const a = new InteractiveWorld();
+    des(a, json(data), fakeCtx());
+    const saved = json(a.serialize());
+    expect(saved).toEqual({ campfires: [{ id: 'fogueira_lago', lit: true, found: true }], forage: [[3, 2]], hints: ['fire', 'cook'] });
+    const b = new InteractiveWorld();
+    des(b, saved, fakeCtx());
+    expect(json(b.serialize())).toEqual(saved);
+    expect(() => des(b, null, fakeCtx())).toThrow();
+  });
+
   it('env: clima, umidade, eclipse e vento', () => {
     const ctx = fakeCtx();
     const make = () => new Environment();
@@ -185,7 +205,7 @@ describe('cobertura dos Saveables registrados', () => {
     const m = src.match(/for \(const s of \[([^\]]+)\]\) sys\.save\.register\(s\)/);
     expect(m, 'registro de saves não encontrado em Game.ts').toBeTruthy();
     const registered = m![1].split(',').map((x) => x.trim().replace(/^sys\./, '')).sort();
-    const tested = ['clock', 'abilities', 'ai', 'world', 'env', 'player', 'story', 'progression', 'inventory', 'quests', 'npcs'].sort();
+    const tested = ['clock', 'abilities', 'ai', 'world', 'env', 'player', 'story', 'progression', 'inventory', 'quests', 'npcs', 'interactive'].sort();
     expect(registered).toEqual(tested);
   });
 });
