@@ -8,6 +8,7 @@ import { GLOBAL_UNIFORMS } from '../core/uniforms';
 import { Simplex2 } from '../core/noise';
 import { clamp, smoothstep } from '../core/math';
 import { TERRAIN, WORLD_HALF } from '../data/world';
+import { WEATHER_FX } from '../data/weather';
 import type { QualityPreset } from '../data/quality';
 
 /**
@@ -282,6 +283,9 @@ function createTerrainMaterial(maps: WorldMaps, detailTex: THREE.Texture): THREE
     uTime: GLOBAL_UNIFORMS.uTime,
     uWetness: GLOBAL_UNIFORMS.uWetness,
     uNight: GLOBAL_UNIFORMS.uNight,
+    uRain: GLOBAL_UNIFORMS.uRain,
+    uSnow: GLOBAL_UNIFORMS.uSnow,
+    uFogColorP: GLOBAL_UNIFORMS.uFogColor,
   };
   mat.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms);
@@ -312,9 +316,13 @@ uniform sampler2D tDetail;
 uniform float uTime;
 uniform float uWetness;
 uniform float uNight;
-${MAPS_GLSL}`,
+uniform float uRain;
+uniform float uSnow;
+uniform vec3 uFogColorP;
+${MAPS_GLSL}
+${RIPPLE_GLSL}`,
       )
-      .replace('#include <map_fragment>', TERRAIN_ALBEDO_GLSL)
+      .replace('#include <map_fragment>', TERRAIN_ALBEDO_GLSL.replaceAll('PUDDLE_WET', WEATHER_FX.puddleWetness.toFixed(3)))
       .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = tRough;')
       .replace(
         '#include <normal_fragment_begin>',
@@ -325,12 +333,35 @@ nonPerturbedNormal = normal;`,
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
+// poças refletem o céu (mais na beirada rasante)
+float pFres = pow(1.0 - clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0), 4.0);
+totalEmissiveRadiance += uFogColorP * tPuddle * (0.04 + 0.32 * pFres) * (1.0 - 0.75 * uNight);
 totalEmissiveRadiance += vec3(0.55, 0.12, 0.95) * tVein * (0.04 + 0.96 * uNight) * (0.65 + 0.35 * sin(uTime * 1.3 + vTerrainPos.x * 0.07 + vTerrainPos.z * 0.05));`,
       );
   };
-  mat.customProgramCacheKey = () => 'terrain-v2';
+  mat.customProgramCacheKey = () => 'terrain-v3';
   return mat;
 }
+
+/** Ondinhas de chuva nas poças: anéis que se abrem em células sorteadas (duas camadas). */
+const RIPPLE_GLSL = /* glsl */ `
+float rHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+vec2 rippleLayer(vec2 p, float t, float seed) {
+  vec2 c = floor(p);
+  vec2 f = fract(p) - 0.5;
+  float h = rHash(c + seed);
+  vec2 o = vec2(rHash(c + seed + 3.7), rHash(c + seed + 9.1)) - 0.5;
+  vec2 d = f - o * 0.3;
+  float ph = fract(t * (0.9 + 0.4 * h) + h);
+  float r = length(d);
+  float R = ph * 0.34;
+  float ring = sin((r - R) * 48.0) * smoothstep(0.07, 0.0, abs(r - R)) * (1.0 - ph);
+  return d / max(r, 1e-3) * ring;
+}
+vec2 rainRipples(vec2 p, float t) {
+  return rippleLayer(p * 2.3, t, 0.0) + rippleLayer(p * 3.4 + 17.3, t * 1.13, 41.0) * 0.7;
+}
+`;
 
 /** Composição do albedo do terreno (biomas, solo, estradas, rocha por inclinação, neve, corrupção, umidade). */
 const TERRAIN_ALBEDO_GLSL = /* glsl */ `
@@ -371,7 +402,8 @@ vec3 rockCol = mix(vec3(0.38, 0.36, 0.33), vec3(0.6, 0.57, 0.52), r2.b * 0.75 + 
 rockCol *= mix(vec3(1.0), clamp(base * 2.3, vec3(0.55), vec3(1.45)), 0.4);
 col = mix(col, rockCol, rockW);
 // neve nos picos
-float snow = smoothstep(160.0, 215.0, vTerrainPos.y + (d2.r - 0.5) * 45.0) * smoothstep(0.62, 0.3, slope);
+float snowStart = mix(160.0, 132.0, uSnow); // nevando: a neve desce pela montanha
+float snow = smoothstep(snowStart, snowStart + 55.0, vTerrainPos.y + (d2.r - 0.5) * 45.0) * smoothstep(0.62, 0.3, slope);
 col = mix(col, vec3(0.86, 0.89, 0.95) * (0.92 + 0.08 * d1.r), snow);
 // terra corrompida: tons arroxeados em manchas (multiplicativos — um acréscimo
 // fixo saturava demais o solo escuro) e veios em rede só em parte do chão
@@ -388,6 +420,17 @@ float wet = uWetness * (0.55 + 0.45 * tN.y) * (1.0 - snow);
 col *= 1.0 - 0.4 * wet;
 float tRough = mix(0.97, 0.38, wet);
 tRough = mix(tRough, 0.82, rockW * (1.0 - wet));
+// poças: chão plano e baixo (vales, estradas) quando o mundo está molhado
+// manchas raras (~10% do chão plano), mais comuns em estradas e baixadas
+float pudN = texture(tDetail, wxz * (1.0 / 23.0) + 0.73).b + road * 0.06 + clamp((0.45 - wn.w) * 0.3, -0.05, 0.06);
+float tPuddle = smoothstep(0.665, 0.69, pudN) * smoothstep(0.975, 0.995, wn.y)
+  * smoothstep(PUDDLE_WET, PUDDLE_WET + 0.25, uWetness) * (1.0 - snow) * (1.0 - rockW) * (1.0 - farF * 0.7);
+tPuddle *= 1.0 - smoothstep(0.55, 0.8, d1.a); // pedriscos furam a lâmina d'água
+col *= 1.0 - 0.5 * tPuddle;
+tRough = mix(tRough, 0.06, tPuddle);
+// ondinhas da chuva (só perto: some ao longe)
+vec2 rip = rainRipples(wxz, uTime) * uRain * (1.0 - uSnow) * (1.0 - smoothstep(12.0, 35.0, camDist));
+tN = normalize(mix(tN, normalize(vec3(rip.x * 0.35, 1.0, rip.y * 0.35)), tPuddle));
 diffuseColor.rgb *= col;
 `;
 

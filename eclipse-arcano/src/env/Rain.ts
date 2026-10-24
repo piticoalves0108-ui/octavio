@@ -9,6 +9,7 @@
  */
 import * as THREE from 'three';
 import { RAIN } from '../data/weather';
+import { GLOBAL_UNIFORMS } from '../core/uniforms';
 import { WATER_LEVEL } from '../data/world';
 
 /** Marcador de respingo inativo (nascimento muito antigo → invisível no shader). */
@@ -28,6 +29,8 @@ export class Rain {
     uPixelAngle: { value: 0.001 },
     uOpacity: { value: 0.3 },
     uColor: { value: new THREE.Color(0.7, 0.75, 0.82) },
+    /** 0 = chuva, 1 = neve (flocos lentos, redondos, balançando). */
+    uSnow: GLOBAL_UNIFORMS.uSnow,
   };
   readonly splashUniforms = {
     uSplashTime: { value: 0 },
@@ -240,14 +243,18 @@ uniform float uFall;
 uniform float uLen;
 uniform float uWidth;
 uniform float uPixelAngle;
+uniform float uSnow;
 varying float vAlpha;
 varying vec2 vUv;
 void main() {
   float W = uBox.x;
   float H = uBox.y;
-  float speed = uFall * (0.82 + 0.36 * aSeed.w);
+  // neve: cai devagar (≈1,1 m/s) e o vento a leva mais
+  float speed = mix(uFall * (0.82 + 0.36 * aSeed.w), 0.8 + 0.6 * aSeed.w, uSnow);
   float y = mod(aSeed.y * H - uRainTime * speed, H);
-  vec2 xz = aSeed.xz * W + uWindOff;
+  vec2 xz = aSeed.xz * W + uWindOff * (1.0 + uSnow * 0.6);
+  // flocos balançam
+  xz += uSnow * vec2(sin(uRainTime * (0.9 + aSeed.w) + aSeed.y * 40.0), cos(uRainTime * (0.7 + aSeed.x) + aSeed.z * 40.0)) * 0.6;
   vec2 rel = mod(xz - cameraPosition.xz + 0.5 * W, W) - 0.5 * W;
   vec3 p = vec3(cameraPosition.x + rel.x, cameraPosition.y - H * 0.42 + y, cameraPosition.z + rel.y);
   vec3 vel = vec3(uWindVel.x, -speed, uWindVel.y);
@@ -255,9 +262,12 @@ void main() {
   vec3 toCam = cameraPosition - p;
   float dist = length(toCam);
   vec3 side = normalize(cross(axis, toCam / max(dist, 1e-3)));
+  // neve: quadradinho virado para a câmera (floco redondo no fragment)
+  vec3 camUp = normalize(cross(side, toCam / max(dist, 1e-3)));
+  axis = normalize(mix(axis, -camUp, uSnow));
   // largura mínima de ~1,2 px: ao longe a gota fica mais larga e mais transparente
-  float w = max(uWidth, dist * uPixelAngle * 0.6);
-  float len = uLen * (0.7 + 0.6 * aSeed.w) * (speed / uFall);
+  float w = max(mix(uWidth, 0.035 + 0.025 * aSeed.x, uSnow), dist * uPixelAngle * 0.6);
+  float len = mix(uLen * (0.7 + 0.6 * aSeed.w) * (speed / uFall), w * 2.0, uSnow);
   vec3 wp = p - axis * len * position.y + side * position.x * w;
   vAlpha = (uWidth / w)
     * smoothstep(W * 0.5, W * 0.3, length(rel))
@@ -271,13 +281,17 @@ void main() {
 const DROP_FRAG = /* glsl */ `
 uniform float uOpacity;
 uniform vec3 uColor;
+uniform float uSnow;
 varying float vAlpha;
 varying vec2 vUv;
 void main() {
   float a = (1.0 - abs(vUv.x)) * smoothstep(0.0, 0.35, vUv.y) * (0.55 + 0.45 * vUv.y);
+  // floco: disco macio e mais opaco
+  float flake = smoothstep(1.0, 0.25, length(vec2(vUv.x, vUv.y * 2.0 - 1.0))) * 2.4;
+  a = mix(a, flake, uSnow);
   a *= vAlpha * uOpacity;
   if (a < 0.002) discard;
-  gl_FragColor = vec4(uColor, a);
+  gl_FragColor = vec4(mix(uColor, vec3(0.96, 0.97, 1.0), uSnow), min(1.0, a));
   #include <colorspace_fragment>
 }
 `;

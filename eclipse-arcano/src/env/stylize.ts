@@ -44,14 +44,15 @@ float stylNdotL( float x ) {
 }
 `;
 
-  const physOld = 'float dotNL = saturate( dot( geometryNormal, directLight.direction ) );\n\n\tvec3 irradiance = dotNL * directLight.color;';
-  if (!C.lights_physical_pars_fragment.includes(physOld)) console.warn('[stylize] trecho físico mudou; luz estilizada parcial');
+  // o texto dos trechos muda de espaçamento entre o código-fonte e o build do three: casa por regex
+  const physOld = /float dotNL = saturate\( dot\( geometryNormal, directLight\.direction \) \);\s*vec3 irradiance = dotNL \* directLight\.color;/;
+  if (!physOld.test(C.lights_physical_pars_fragment)) console.warn('[stylize] trecho físico mudou; luz estilizada parcial');
   C.lights_physical_pars_fragment = C.lights_physical_pars_fragment.replace(
     physOld,
-    'float dotNL = saturate( dot( geometryNormal, directLight.direction ) );\n\n\tvec3 irradiance = stylNdotL( dot( geometryNormal, directLight.direction ) ) * directLight.color;',
+    'float dotNL = saturate( dot( geometryNormal, directLight.direction ) );\n\tvec3 irradiance = stylNdotL( dot( geometryNormal, directLight.direction ) ) * directLight.color;',
   );
-  const lambOld = 'float dotNL = saturate( dot( geometryNormal, directLight.direction ) );\n\tvec3 irradiance = dotNL * directLight.color;';
-  if (!C.lights_lambert_pars_fragment.includes(lambOld)) console.warn('[stylize] trecho Lambert mudou; luz estilizada parcial');
+  const lambOld = /float dotNL = saturate\( dot\( geometryNormal, directLight\.direction \) \);\s*vec3 irradiance = dotNL \* directLight\.color;/;
+  if (!lambOld.test(C.lights_lambert_pars_fragment)) console.warn('[stylize] trecho Lambert mudou; luz estilizada parcial');
   C.lights_lambert_pars_fragment = C.lights_lambert_pars_fragment.replace(lambOld, 'vec3 irradiance = stylNdotL( dot( geometryNormal, directLight.direction ) ) * directLight.color;');
 
   // borda iluminada e translucidez (só onde o material pede)

@@ -23,4 +23,8 @@ export const GLOBAL_UNIFORMS = {
   uNight: { value: 0 },
   /** Intensidade da corrupção perto do jogador (0..1), para efeitos de tela/terreno. */
   uCorruption: { value: 0 },
+  /** Chuva caindo agora (0..1): ondinhas nas poças, respingos. */
+  uRain: { value: 0 },
+  /** Neve no lugar da chuva (0..1, nas montanhas altas). */
+  uSnow: { value: 0 },
 };

@@ -5,7 +5,7 @@ import { GLOBAL_UNIFORMS } from '../core/uniforms';
 import { clamp, damp, lerp, smoothstep } from '../core/math';
 import { RNG } from '../core/rng';
 import { Simplex2 } from '../core/noise';
-import { CLOUDS, DAY_CYCLE, ECLIPSE, FOG, GROUND_FOG, LIGHTNING, POST, RAIN, SHADOWS, WEATHER, WEATHER_LABEL, WEATHER_TIMING, WETNESS } from '../data/weather';
+import { CLOUDS, DAY_CYCLE, ECLIPSE, FOG, GROUND_FOG, LIGHTNING, POST, RAIN, SHADOWS, WEATHER, WEATHER_FX, WEATHER_LABEL, WEATHER_TIMING, WETNESS } from '../data/weather';
 import { WATER_LEVEL, WORLD_HALF, type BiomeId } from '../data/world';
 import { createSkySample, eclipseDirection, lightLevels, moonDirection, moonPhase, nightFactor, sampleSky, sunDirection, timeOfDayLabel, type LightLevels } from './dayCycle';
 import { WeatherMachine, isWeatherKind } from './weatherMachine';
@@ -17,6 +17,8 @@ import { Rain } from './Rain';
 import { LightningBolt } from './Lightning';
 import { GroundFog, type GroundFogSampler } from './GroundFog';
 import { PostFX, type PostParams } from './PostFX';
+import { StormHazard } from './stormHazard';
+import { WindStreaks } from './WindStreaks';
 
 const LUMA = new THREE.Vector3(0.2126, 0.7152, 0.0722);
 const WHITE = new THREE.Color(1, 1, 1);
@@ -131,6 +133,16 @@ export class Environment implements GameSystem, Saveable {
   private splashP = { x: 0, y: 0, z: 0 };
   private splashFromY = 0;
   private lastBiome: BiomeId = 'meadow';
+  /** Raios perigosos perto do jogador nas tempestades. */
+  readonly hazard = new StormHazard(() => this.rng.next());
+  /** Rajadas de vento visíveis. */
+  streaks!: WindStreaks;
+  /** Arco-íris: tempo restante (s) e intensidade atual; chuva acumulada antes dele. */
+  private rainbowT = 0;
+  rainbow = 0;
+  private rainedFor = 0;
+  /** Neve no lugar da chuva (0..1, pela altitude da câmera). */
+  snow = 0;
 
   constructor() {
     this.machine = new WeatherMachine(this.rnd);
@@ -156,6 +168,8 @@ export class Environment implements GameSystem, Saveable {
     this.bolt = new LightningBolt();
     this.groundFog = new GroundFog(noise);
     ctx.scene.add(this.sky.mesh, this.rain.drops, this.rain.splashes, this.bolt.mesh, this.groundFog.mesh);
+    this.streaks = new WindStreaks(WEATHER_FX.windStreaks);
+    ctx.scene.add(this.streaks.mesh);
     this.fogSampler = {
       biomeAt: (x, z) => ctx.heightfield.biomeAt(x, z),
       heightAt: (x, z) => ctx.heightfield.heightAt(x, z),
@@ -270,6 +284,7 @@ export class Environment implements GameSystem, Saveable {
     }
 
     this.updateLightning(dt);
+    this.updateWeatherFx(dt, ctx);
     this.applyVisuals(dt, false);
 
     // chuva e respingos (sem chuva dentro de interiores)
@@ -281,7 +296,8 @@ export class Environment implements GameSystem, Saveable {
     this.rain.update(dt, this.rainIntensity * outside, this.windDir.x * wv, this.windDir.y * wv, pixelAngle);
     const highUp = cam.position.y - ctx.heightfield.heightAt(cam.position.x, cam.position.z) > 70;
     this.splashFromY = p.y + 2;
-    this.rain.updateSplashes(dt, highUp ? 0 : this.rainIntensity * outside, p.x, p.z, this.groundFn, this.rnd);
+    // neve não respinga
+    this.rain.updateSplashes(dt, highUp ? 0 : this.rainIntensity * outside * (1 - this.snow), p.x, p.z, this.groundFn, this.rnd);
     this.groundFog.update(dt, p.x, p.z, 1 - this.indoorK, this.fogSampler);
   }
 
@@ -303,6 +319,40 @@ export class Environment implements GameSystem, Saveable {
     if (WEATHER[kind].lightningPerMin > 0) this.nextStrike = forced ? 2 + this.rnd() * 3 : 8 + this.rnd() * 10;
     this.groundFog.invalidate();
     this.ctx.events.emit('weather:changed', { weather: kind });
+  }
+
+  // ======================================================================
+  // Neve, arco-íris, raios perigosos e rajadas
+  // ======================================================================
+  private updateWeatherFx(dt: number, ctx: GameContext) {
+    const G = GLOBAL_UNIFORMS;
+    // neve: acima da linha de neve a chuva vira flocos
+    const [s0, s1] = WEATHER_FX.snowLine;
+    this.snow = damp(this.snow, smoothstep(s0, s1, ctx.camera.position.y), 2, dt);
+    G.uSnow.value = this.snow;
+    G.uRain.value = this.rainIntensity * (1 - this.indoorK) * (1 - this.snow);
+    // arco-íris: a chuva parou de dia, com o sol baixo o bastante para o arco aparecer
+    if (this.rainIntensity > RAIN.rainingThreshold) {
+      this.rainedFor += dt;
+      this.rainbowT = 0;
+    } else {
+      if (this.rainedFor > 25 && this.sunDirection.y > 0.04 && this.sunDirection.y < 0.62 && this.wetness > WEATHER_FX.rainbowMinWetness) {
+        this.rainbowT = WEATHER_FX.rainbowDuration;
+      }
+      this.rainedFor = 0;
+    }
+    if (this.rainbowT > 0) this.rainbowT -= dt;
+    const life = WEATHER_FX.rainbowDuration;
+    const env = this.rainbowT > 0 ? smoothstep(0, 20, this.rainbowT) * smoothstep(life, life - 8, this.rainbowT) : 0;
+    const sunOk = smoothstep(0.02, 0.08, this.sunDirection.y) * smoothstep(0.68, 0.55, this.sunDirection.y);
+    this.rainbow = damp(this.rainbow, env * sunOk * (1 - 0.6 * this.machine.mix.cloudCover) * WEATHER_FX.rainbowStrength, 1.5, dt);
+    this.sky.uniforms.uRainbow.value = this.rainbow;
+    // raios perigosos perto do jogador
+    const storming = this.weather === 'storm' && this.rainIntensity > 0.4;
+    this.hazard.update(dt, ctx, storming, this.indoorK < 0.5, (pos) => this.lightningFlash(pos));
+    // rajadas visíveis com vento forte (ao ar livre)
+    const gustK = smoothstep(WEATHER_FX.windStreakMin, WEATHER_FX.windStreakMin + 0.6, this.windStrength + this.gust * 0.5);
+    this.streaks.update(gustK * (1 - this.indoorK) * (ctx.settings.q.maxParticles >= 1000 ? 1 : 0.6));
   }
 
   // ======================================================================
@@ -649,6 +699,10 @@ export class Environment implements GameSystem, Saveable {
   onNewGame() {
     this.resetWeather();
     this.wetness = 0;
+    this.hazard.reset();
+    this.rainbowT = 0;
+    this.rainbow = 0;
+    this.rainedFor = 0;
     this.strikeAge = 99;
     this.flash = 0;
     this.eclipse = this.eclipseTarget = ECLIPSE.intensity;

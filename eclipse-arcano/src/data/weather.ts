@@ -316,3 +316,29 @@ export const TIME_OF_DAY_LABELS: readonly { until: number; label: string }[] = [
   { until: 19.5, label: 'Entardecer' },
   { until: 24, label: 'Noite' },
 ];
+
+/** Efeitos de clima extras: neve nas alturas, poças, arco-íris, raios perigosos e rajadas visíveis. */
+export const WEATHER_FX = {
+  /** Altitude (m) em que a chuva vira neve (começo e fim da transição). */
+  snowLine: [150, 178] as const,
+  /** Poças: umidade a partir da qual aparecem. */
+  puddleWetness: 0.35,
+  /** Arco-íris depois da chuva (de dia): duração (s), força e umidade mínima. */
+  rainbowDuration: 110,
+  rainbowStrength: 0.42,
+  rainbowMinWetness: 0.25,
+  /** Raios perigosos nas tempestades: intervalo (s) entre raios perto do jogador. */
+  strikeInterval: [16, 34] as const,
+  /** Distância (m) do jogador onde o raio cai (sem arma de metal). */
+  strikeNear: [7, 24] as const,
+  /** Chance de o raio buscar o jogador quando ele carrega arma de metal. */
+  metalAttraction: 0.6,
+  /** Aviso antes do raio (s): estalos e brilho no chão. */
+  strikeWarning: 1.2,
+  strikeDamage: 38,
+  strikeRadius: 3.4,
+  strikeKnockback: 7,
+  /** Rajadas de vento visíveis (riscos brancos curvos). */
+  windStreaks: 22,
+  windStreakMin: 0.5,
+};

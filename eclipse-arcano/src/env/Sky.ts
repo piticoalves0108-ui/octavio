@@ -44,6 +44,8 @@ export class Sky {
     uCorona: { value: new THREE.Color(ECLIPSE.coronaColor) },
     uRuneColor: { value: new THREE.Color(ECLIPSE.runeColor) },
     uNoise: { value: null as THREE.Texture | null },
+    /** Arco-íris depois da chuva (0..1). */
+    uRainbow: { value: 0 },
   };
 
   constructor(noise: THREE.Texture) {
@@ -115,6 +117,7 @@ uniform float uEclipseR;
 uniform vec3 uCorona;
 uniform vec3 uRuneColor;
 uniform sampler2D uNoise;
+uniform float uRainbow;
 varying vec3 vDir;
 
 float hash13(vec3 p) {
@@ -266,6 +269,21 @@ void main() {
     // as nuvens rareiam perto do horizonte (a camada de nuvens fica "acima" da névoa)
     float a = c * smoothstep(0.01, 0.2, h) * 0.97;
     col = mix(col, cc, a);
+  }
+
+  // --- arco-íris (oposto ao sol): arco principal a ~41° e secundário a ~51° com cores invertidas
+  if (uRainbow > 0.001 && h > -0.02) {
+    vec3 anti = -uSunDir;
+    float ang = acos(clamp(dot(d, anti), -1.0, 1.0));
+    float u1 = (ang - 0.700) / 0.042;
+    float u2 = (ang - 0.885) / 0.060;
+    float b1 = smoothstep(0.0, 0.18, u1) * smoothstep(1.0, 0.82, u1);
+    float b2 = smoothstep(0.0, 0.2, u2) * smoothstep(1.0, 0.8, u2) * 0.35;
+    vec3 k = vec3(1.0, 2.0 / 3.0, 1.0 / 3.0);
+    vec3 c1 = clamp(abs(fract(vec3(0.8 * (1.0 - clamp(u1, 0.0, 1.0))) + k) * 6.0 - 3.0) - 1.0, 0.0, 1.0);
+    vec3 c2 = clamp(abs(fract(vec3(0.8 * clamp(u2, 0.0, 1.0)) + k) * 6.0 - 3.0) - 1.0, 0.0, 1.0);
+    float fadeLow = smoothstep(-0.02, 0.08, h);
+    col += (c1 * b1 + c2 * b2) * uRainbow * fadeLow * (0.35 + 0.65 * length(col));
   }
 
   // --- horizonte: exatamente a cor da névoa (casa com o terreno distante)
