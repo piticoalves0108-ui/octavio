@@ -47,7 +47,9 @@ Depois do pedido original:
 - Montaria (cavalos mansos e selvagens, domar, marchas, esporas, pulo, assobio): **feito** (`docs/status/mount.md`).
 - Arquivo único jogável: `npm run build:single`.
 
-Outras pendências conhecidas: pathfinding de inimigos fora da vila.
+- Inimigos contornam obstáculos em campo aberto (A* local): **feito** (`docs/status/ai.md`).
+
+Outras pendências conhecidas: navegação de inimigos em interiores e na cripta (hoje só desvio simples).
 
 ## Regras do projeto
 

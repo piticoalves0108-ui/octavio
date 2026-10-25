@@ -91,6 +91,24 @@ Cada tipo define vida, armadura, resistências e fraquezas, postura, velocidades
 - `onStoryBossDefeated` marca `defeatedBosses`, dissolve as invocações e emite `boss:defeated`. Darian se rende (estado `yield`) sem morrer; os roteiros `darian_redimir` (`depart`) ou `darian_matar` (`combat.kill`) decidem o resto.
 - A luta reseta se o jogador morrer ou ficar fora da arena além do tempo de `STORY_BOSS_RULES`.
 
+### Navegação em campo aberto (`fieldNav.ts`, `FIELD_NAV` em `src/data/enemies.ts`)
+- Fora da vila e do acampamento, um inimigo andando até o objetivo verifica a reta a cada ~1,2 s:
+  - colisores na altura do corpo e água funda contam como bloqueio (`CollisionWorld.blockedAt`);
+  - se a reta estiver bloqueada, roda um A* numa grade local de células de 1 m (até 72×72) e segue o caminho alisado;
+  - se não achar rota, tenta de novo com uma grade maior (obstáculo maior que a área).
+- Encostado no obstáculo, parte da célula livre mais perto. Objetivo longe ou cercado: caminho parcial até o ponto
+  mais perto.
+- Orçamento: 1 busca por quadro para todos os inimigos (`ai.takeNavBudget()`). Uma busca típica custa menos de
+  1 ms. Travar (o detector que já existia) força uma reavaliação imediata.
+- Testes: `tests/ai.fieldnav.test.ts` (7 testes):
+  - muro com passagem, reta livre, objetivo cercado e objetivo longe;
+  - partida encostada no obstáculo;
+  - desempenho;
+  - muro real no `CollisionWorld`.
+- No navegador (muro de 26 m numa campina, saqueador de um lado e jogador do outro):
+  - com a rota: contorna e alcança o jogador em 8 s, com 3 buscas;
+  - sem a rota (orçamento zerado): trava no muro e desiste (estado `search`).
+
 ### Criaturas (`creatures/Creature.ts`, `creatures/BirdFlocks.ts`, `src/data/creatures.ts`)
 - Temperamentos:
   - arisco: foge da ameaça e de sons altos;
@@ -165,8 +183,9 @@ Cada tipo define vida, armadura, resistências e fraquezas, postura, velocidades
 - Ajustes de dados: antecipação do giro final da Ravena 0,4 → 0,5 s (golpe forte legível); bloqueio do saqueador 0,45 → 0,5.
 
 ## Pendente / limitações (honestidade)
-- **Montaria e domar criaturas: não implementado.** Cavalos e grifo existem só como fauna.
-- Sem pathfinding de verdade para inimigos. Eles usam direção direta, separação, desvio lateral quando travados, trela e retorno. Em geometria complexa (vila, interiores, cripta) um inimigo pode travar e desistir. `world.findPath` existe, mas não foi integrado à IA.
+- Montaria: feita para cavalos (`docs/status/mount.md`). O grifo continua só como fauna.
+- Navegação: dentro da vila usa o grafo (`world.findPath`), no acampamento usa o portão da paliçada e em campo aberto
+  usa o A* local (abaixo). Em interiores e na cripta continua o desvio simples: um inimigo pode travar num canto e desistir.
 - "Procurar comida" é simplificado: os animais vagam até um ponto e pastam. Não há fontes de comida no mundo.
 - Os modelos são low-poly de primitivas. Inimigos humanoides usam ~11 chamadas de desenho cada (uma por osso, mais as de sombra) e não há LOD de malha por distância; com 15 humanoides na tela isso dá ~165 chamadas a mais. A densidade moderada das zonas e o limite `q.maxActiveEnemies` seguram isso.
 - O FPS real em GPU de PC comum não foi medido aqui (só SwiftShader). O custo de CPU da IA está bem abaixo de 1 ms.
