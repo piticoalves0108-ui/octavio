@@ -1156,6 +1156,8 @@ body {
 }
 .ui-subtitle {
   position: absolute;
+  /* acima do escurecimento (.ui-fader): legendas e títulos aparecem sobre a tela preta das cinemáticas */
+  z-index: 95;
   left: 50%;
   bottom: 150px;
   transform: translateX(-50%);
@@ -1184,6 +1186,7 @@ body {
 }
 .ui-titlecard {
   position: absolute;
+  z-index: 95;
   left: 50%;
   top: 42%;
   transform: translate(-50%, -50%);
@@ -1208,6 +1211,14 @@ body {
   font: 700 54px var(--f-title);
   letter-spacing: 0.08em;
   text-shadow: 0 3px 10px rgba(0, 0, 0, 0.9);
+}
+.ui-titlecard.on-white .ui-titlecard-title {
+  color: #2a2440;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
+}
+.ui-titlecard.on-white .ui-titlecard-sub {
+  color: #8a6420;
+  text-shadow: none;
 }
 .ui-titlecard-sub {
   font: 500 18px var(--f-title);
@@ -1270,6 +1281,10 @@ body {
   transition-timing-function: ease-in-out;
   pointer-events: none;
   z-index: 90;
+}
+/* clarão branco das memórias (a legenda tem fundo escuro e continua legível) */
+.ui-fader.white {
+  background: #f4f1ff;
 }
 .ui-letterbox .top,
 .ui-letterbox .bottom {

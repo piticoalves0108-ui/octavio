@@ -38,6 +38,9 @@ A classe `UI` (`ctx.sys.ui`) manteve todos os membros públicos do stub com as m
   (lugar descoberto, nova missão, missão concluída/fracassada, novo nível) em fila, nome do lugar ao entrar,
   legendas ("Nome: fala" com o nome destacado), cartão de título, combinações de magia, "Aparo perfeito!",
   indicador de salvamento e escurecimento de tela (`fadeOut/fadeIn`).
+- `fadeOut(duração, cor)` aceita `'white'` para o clarão das memórias; sobre o branco, o cartão de título fica escuro.
+- Legendas e cartões de título ficam acima do escurecimento. Antes ficavam escondidos atrás da tela preta,
+  inclusive na abertura do jogo e nos epílogos.
 - Faixas pretas e dica "Esc pular" nas cinemáticas.
 
 ### Diálogo (`DialogueBox.ts`)

@@ -251,9 +251,9 @@ export class UI implements GameSystem {
   }
 
   /** Escurece a tela (transições/cinemáticas). */
-  async fadeOut(duration = 0.5): Promise<void> {
+  async fadeOut(duration = 0.5, color: 'black' | 'white' = 'black'): Promise<void> {
     this.build();
-    await this.overlays.fade(1, duration);
+    await this.overlays.fade(1, duration, color);
   }
 
   async fadeIn(duration = 0.5): Promise<void> {

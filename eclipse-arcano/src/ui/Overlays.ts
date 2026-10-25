@@ -237,8 +237,12 @@ export class Overlays {
   // Escurecimento
   // ---------------------------------------------------------------------------
 
-  fade(to: 0 | 1, duration: number): Promise<void> {
+  fade(to: 0 | 1, duration: number, color: 'black' | 'white' = 'black'): Promise<void> {
     const f = this.fader;
+    // a cor só muda ao escurecer; ao clarear mantém a cor atual até sumir
+    if (to) f.classList.toggle('white', color === 'white');
+    // título escuro sobre o clarão branco
+    this.title.classList.toggle('on-white', !!to && color === 'white');
     f.style.transitionDuration = `${Math.max(0.01, duration)}s`;
     f.style.pointerEvents = to ? 'auto' : 'none';
     void f.offsetWidth;

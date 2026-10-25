@@ -84,13 +84,21 @@ Etapa 5 do pedido "estilo Zelda": terminar a campanha. A bíblia narrativa está
   - o Selo Eterno está sempre disponível;
   - os epílogos mostram só os destinos certos.
 - `tests/narrative.data.test.ts` valida todas as referências: diálogos, roteiros, pontos, itens, estágios e âncoras.
-- No navegador (Playwright + SwiftShader), cada chefe foi testado pelo estágio da missão:
-  - surge na arena e luta;
-  - troca de fase;
-  - ao morrer, avança a missão.
-  - A conversa com Darian, a Cidadela vista de baixo e de perto e o final com cinemáticas ligadas também foram testados.
+- No navegador (Playwright + SwiftShader), os 7 chefes foram testados pelo estágio da missão, sem nenhum erro no console:
+  - cada um surge na arena certa, usa ao menos 3 tipos de ataque e passa pelas fases;
+  - ao cair, avança a missão (Morgana → pegar o Coração; Vyrmathal → pegar o Cristal; Devorador → `q_pantano` concluída;
+    Guardião → Selo; Rei → escolha final);
+  - Darian se rende com 12% da vida. A conversa de redenção funciona: ele some num clarão, `q_darian` termina,
+    a Cidadela aparece e o eclipse começa a crescer;
+  - a Cidadela foi vista de baixo (Desfiladeiro das Cinzas) e de perto, e o Rei lutou no topo dela;
+  - no Coração do Eclipse, a Ascensão Sombria aparece bloqueada com o motivo. A Reunificação toca a cinemática,
+    define `final`, conclui `q_eclipse`, tira o eclipse do céu, e o jogo volta ao mundo aberto.
+- Correção achada nesse teste: o rio Prata cortava o Pico das Tempestades ao meio. O pico foi movido para um pico
+  natural da serra norte (-640, -820), longe do rio.
 
 ## Pendente / limitações
 - A Cidadela só é alcançável voando: a energia de voo precisa estar cheia na subida.
 - Os aliados da luta final são efeitos (fumaça, canhões, escudo). Eles não são personagens com IA própria.
 - Depois do final o mundo continua aberto, mas os NPCs comuns não comentam o final escolhido (só o Barão, se redimido).
+- Legendas e títulos duram tempo real, e a cinemática anda no tempo do jogo. Num computador muito lento (bem abaixo de
+  30 quadros por segundo), uma legenda pode sumir um pouco antes do próximo passo.

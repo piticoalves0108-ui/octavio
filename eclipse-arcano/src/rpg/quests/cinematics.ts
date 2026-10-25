@@ -105,7 +105,7 @@ export class CinematicPlayer {
       const d = s.duration ?? 0.8;
       if (s.fade === 'out') {
         this.faded = true;
-        void ui.fadeOut(d);
+        void ui.fadeOut(d, s.color ?? 'black');
       } else {
         this.faded = false;
         void ui.fadeIn(d);
