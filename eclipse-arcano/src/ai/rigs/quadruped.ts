@@ -43,6 +43,9 @@ export const QUAD_LOOKS: Record<string, QuadLook> = {
   cervo: { body: 0x8a5a36, belly: 0xd8c0a0, dark: 0x3a2618, eyes: 0x111111, bodyL: 1.0, bodyH: 0.5, bodyW: 0.34, legH: 0.85, legR: 0.04, neckL: 0.55, headL: 0.36, headH: 0.18, tailL: 0.14, ears: 'round', antlers: 0xc8b49a, neckUp: 1.0 },
   cervo_luminoso: { body: 0xbfeaff, belly: 0xffffff, dark: 0x7fd8ff, eyes: 0xffffff, eyeGlow: 2.5, bodyL: 1.0, bodyH: 0.5, bodyW: 0.34, legH: 0.9, legR: 0.04, neckL: 0.58, headL: 0.36, headH: 0.18, tailL: 0.16, ears: 'round', antlers: 0x9ff4ff, glow: 0.9, neckUp: 1.05 },
   cavalo: { body: 0x5a3a22, belly: 0x6a4a30, dark: 0x1a120c, eyes: 0x111111, bodyL: 1.4, bodyH: 0.62, bodyW: 0.46, legH: 0.95, legR: 0.07, neckL: 0.7, headL: 0.55, headH: 0.24, tailL: 0.6, ears: 'pointy', mane: 0x1a120c, neckUp: 0.85 },
+  cavalo_baio: { body: 0xb08850, belly: 0xc8a470, dark: 0x2a1c10, eyes: 0x111111, bodyL: 1.4, bodyH: 0.62, bodyW: 0.46, legH: 0.97, legR: 0.07, neckL: 0.7, headL: 0.55, headH: 0.24, tailL: 0.65, ears: 'pointy', mane: 0x2a1c10, neckUp: 0.9 },
+  cavalo_tordilho: { body: 0xc8c6c0, belly: 0xe2e0da, dark: 0x6a6866, eyes: 0x111111, bodyL: 1.42, bodyH: 0.62, bodyW: 0.45, legH: 0.98, legR: 0.068, neckL: 0.72, headL: 0.55, headH: 0.24, tailL: 0.7, ears: 'pointy', mane: 0xeeeeea, neckUp: 0.92 },
+  cavalo_negro: { body: 0x1e1a1c, belly: 0x2a2628, dark: 0x0c0a0c, eyes: 0x111111, bodyL: 1.45, bodyH: 0.64, bodyW: 0.47, legH: 1.0, legR: 0.072, neckL: 0.74, headL: 0.56, headH: 0.25, tailL: 0.75, ears: 'pointy', mane: 0x0a0809, neckUp: 0.95 },
   ovelha: { body: 0xe8e2d4, belly: 0xd8d0c0, dark: 0x2a2420, eyes: 0x111111, bodyL: 0.8, bodyH: 0.5, bodyW: 0.5, legH: 0.42, legR: 0.04, neckL: 0.18, headL: 0.28, headH: 0.18, tailL: 0.12, ears: 'long', wool: 0xf0ece0, neckUp: 0.35 },
   coelho: { body: 0x9a8a76, belly: 0xe0d8c8, dark: 0x4a4036, eyes: 0x111111, bodyL: 0.3, bodyH: 0.2, bodyW: 0.18, legH: 0.12, legR: 0.03, neckL: 0.05, headL: 0.14, headH: 0.12, tailL: 0.05, ears: 'long', hop: true, neckUp: 0.6 },
   grifo: { body: 0xb08a4a, belly: 0xe0c890, dark: 0x5a4020, eyes: 0xffc040, eyeGlow: 1.5, bodyL: 1.5, bodyH: 0.6, bodyW: 0.55, legH: 0.8, legR: 0.08, neckL: 0.5, headL: 0.45, headH: 0.3, tailL: 0.9, ears: 'pointy', wings: 0xe8e0d0, beak: 0xe0a020, mane: 0xf0ece0, neckUp: 0.9 },
@@ -130,6 +133,27 @@ function buildQuadBone(L: QuadLook, bone: number, b: PartBuilder) {
   }
 }
 
+/** Sela do cavalo domado: manta azul com barra dourada, assento de couro e estribos. */
+function buildSaddle(L: QuadLook, b: PartBuilder) {
+  const top = L.bodyH * 0.55;
+  const w = L.bodyW;
+  const blanket = 0x24467a;
+  const gold = 0xc89a3a;
+  const leather = 0x5a3418;
+  b.box(w * 1.12, 0.04, L.bodyL * 0.44, blanket, { y: top - 0.01, z: 0.02 });
+  for (const sx of [1, -1]) {
+    b.box(0.03, L.bodyH * 0.5, L.bodyL * 0.4, blanket, { x: sx * w * 0.56, y: top - L.bodyH * 0.24, z: 0.02 });
+    b.box(0.034, 0.035, L.bodyL * 0.41, gold, { x: sx * w * 0.57, y: top - L.bodyH * 0.49, z: 0.02 });
+    // correia e estribo
+    b.box(0.025, 0.46, 0.045, 0x2a1a0e, { x: sx * w * 0.6, y: top - 0.26, z: 0.03 });
+    b.box(0.09, 0.03, 0.11, 0x9a9aa2, { x: sx * w * 0.62, y: top - 0.5, z: 0.03 });
+  }
+  b.box(w * 0.62, 0.08, L.bodyL * 0.3, leather, { y: top + 0.05, z: 0.02 });
+  b.box(w * 0.36, 0.13, 0.07, leather, { y: top + 0.1, z: L.bodyL * 0.17 });
+  b.box(w * 0.5, 0.15, 0.07, leather, { y: top + 0.11, z: -L.bodyL * 0.14 });
+  b.box(w * 0.38, 0.02, 0.02, gold, { y: top + 0.17, z: -L.bodyL * 0.14 });
+}
+
 export class QuadrupedRig implements Rig {
   readonly root = new THREE.Group();
   readonly meshes: THREE.Mesh[] = [];
@@ -146,10 +170,16 @@ export class QuadrupedRig implements Rig {
   private sit = 0;
   private side = 0;
   private wing = 0;
+  private rearW = 0;
+  private buckW = 0;
+
+  private material: THREE.Material;
+  private saddleMesh: THREE.Mesh | null = null;
 
   constructor(lookId: string, material: THREE.Material) {
     const L = QUAD_LOOKS[lookId] ?? QUAD_LOOKS.lobo;
     this.look = L;
+    this.material = material;
     const count = L.wings !== undefined ? 11 : 9;
     for (let i = 0; i < count; i++) {
       const o = new THREE.Group();
@@ -199,6 +229,25 @@ export class QuadrupedRig implements Rig {
       this.meshes.push(merged);
       this.merged = merged;
     }
+  }
+
+  /** Mostra/esconde a sela (cavalo domado). */
+  setSaddle(on: boolean) {
+    if (on && !this.saddleMesh) {
+      const L = this.look;
+      const g = cachedGeometry(`q:sela:${L.bodyW}:${L.bodyH}:${L.bodyL}`, (b) => buildSaddle(L, b));
+      if (!g) return;
+      const m = new THREE.Mesh(g, this.material);
+      m.castShadow = this.meshes[0]?.castShadow ?? true;
+      m.name = 'sela';
+      this.bones[QB.BODY].add(m);
+      this.saddleMesh = m;
+    }
+    if (this.saddleMesh) this.saddleMesh.visible = on;
+  }
+
+  get hasSaddle(): boolean {
+    return !!this.saddleMesh?.visible;
   }
 
   /** Malha fundida (null se a fusão estiver desligada: ?rigmerge=0). */
@@ -287,6 +336,15 @@ export class QuadrupedRig implements Rig {
       tPitch -= 0.25 * a.hit;
       tHead += 0.3 * a.hit;
     }
+    // cavalo: empinar (nariz para cima, apoiado nas patas de trás) / escoicear (garupa para cima)
+    const rearUp = Math.max(0, a.rear);
+    const buck = Math.max(0, -a.rear);
+    if (rearUp > 0 || buck > 0) {
+      tPitch += -0.85 * rearUp + 0.45 * buck;
+      tY += rearUp * L.legH * 0.55 + buck * L.legH * 0.18;
+      tHead += 0.5 * rearUp - 0.7 * buck;
+      lambda = 14;
+    }
     if (a.stagger) {
       tSide += Math.sin(a.time * 9) * 0.25;
       tCrouch += 0.3;
@@ -338,10 +396,14 @@ export class QuadrupedRig implements Rig {
     body.rotation.set(this.bodyPitch + gp - sit * 0.55, 0, this.side);
     // pernas (dobram ao agachar/deitar/sentar)
     const fold = lie * 1.4;
-    b[QB.FL].rotation.set(-fl - cr * 0.3 - fold + sit * 0.55, 0, 0);
-    b[QB.FR].rotation.set(-fr - cr * 0.3 - fold + sit * 0.55, 0, 0);
-    b[QB.BL].rotation.set(-bl + cr * 0.4 + fold - sit * 0.9, 0, 0);
-    b[QB.BR].rotation.set(-br + cr * 0.4 + fold - sit * 0.9, 0, 0);
+    // empinar: patas da frente dobram no ar; de trás compensam a inclinação. Coice: de trás chutam
+    const rw = this.rearW += (rearUp - this.rearW) * Math.min(1, dt * 10);
+    const bw = this.buckW += (buck - this.buckW) * Math.min(1, dt * 10);
+    const kick = bw * (0.9 + 0.3 * Math.sin(a.time * 14));
+    b[QB.FL].rotation.set(-fl - cr * 0.3 - fold + sit * 0.55 - rw * 1.3 + Math.sin(a.time * 9) * rw * 0.35 + bw * 0.25, 0, 0);
+    b[QB.FR].rotation.set(-fr - cr * 0.3 - fold + sit * 0.55 - rw * 1.1 - Math.sin(a.time * 9) * rw * 0.35 + bw * 0.25, 0, 0);
+    b[QB.BL].rotation.set(-bl + cr * 0.4 + fold - sit * 0.9 - rw * 0.75 + kick, 0, 0);
+    b[QB.BR].rotation.set(-br + cr * 0.4 + fold - sit * 0.9 - rw * 0.75 + kick * 0.9, 0, 0);
     // pescoço/cabeça (olha para o alvo)
     const ly = Math.max(-0.8, Math.min(0.8, a.lookYaw));
     b[QB.NECK].rotation.set(-this.headPitch * 0.7 + Math.PI * 0.5 - 0.1, ly * 0.5, 0);

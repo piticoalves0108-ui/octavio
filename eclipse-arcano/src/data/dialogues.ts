@@ -1486,6 +1486,7 @@ const RUMORS: { when: Cond[]; lines: string[] }[] = [
       'As abelhas do Anselmo não voam mais para o norte. Ele diz que é mau sinal. Ele diz isso de tudo.',
       'O Vovô Ernesto jura que viu um dragão de novo. Do tamanho de três celeiros. Sempre três.',
       'Os guardas andam dobrando o turno. Alguém abre o portão leste de madrugada.',
+      'Tem cavalos selvagens nos campos ao sul da vila. Chegando de mansinho, dá para montar. Segurar é outra história.',
     ],
   },
 ];

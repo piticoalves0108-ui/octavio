@@ -1,7 +1,8 @@
 /**
  * Criaturas (fauna e seres ambientes): temperamento, velocidades, percepção, condições de
  * aparição e (opcionalmente) recompensas — o rpg pode ouvir 'creature:killed'.
- * Montaria/domar: NÃO implementado (pendente).
+ * Cavalos com `mount` podem ser montados (src/mount/Mounts.ts): 'tame' monta direto,
+ * 'wild' precisa ser domado.
  */
 import type { DamageType } from '../combat/Health';
 import type { DropDef } from './enemies';
@@ -55,6 +56,8 @@ export interface CreatureDef {
   gold: [number, number];
   drops: DropDef[];
   description: string;
+  /** Montaria: manso (monta direto) ou selvagem (precisa domar). */
+  mount?: 'tame' | 'wild';
 }
 
 const LIST: CreatureDef[] = [
@@ -62,7 +65,11 @@ const LIST: CreatureDef[] = [
   { id: 'cervo_luminoso', name: 'Cervo Luminoso', rig: 'deer', temperament: 'neutral', scale: 1.15, hp: 120, radius: 0.55, height: 1.9, walk: 1.2, run: 8, notice: 18, flee: 6, wander: 14, idleBias: 0.7, glow: 1.4, xp: 0, gold: [0, 0], drops: [], description: 'Espírito da Floresta de Lúmen em forma de cervo. Só aparece à noite, na clareira.' },
   { id: 'coelho', name: 'Coelho', rig: 'rabbit', temperament: 'skittish', scale: 1, hp: 8, radius: 0.2, height: 0.35, walk: 1.2, run: 7, notice: 12, flee: 8, wander: 14, idleBias: 0.6, xp: 1, gold: [0, 0], drops: [{ itemId: 'carne_crua', chance: 0.6 }], description: 'Saltita entre as moitas.' },
   { id: 'passaro', name: 'Pássaro', rig: 'bird', temperament: 'skittish', scale: 1, hp: 2, radius: 0.15, height: 0.2, walk: 1, run: 9, notice: 14, flee: 10, wander: 20, idleBias: 0.6, flyHeight: 18, xp: 0, gold: [0, 0], drops: [], description: 'Bandos que levantam voo quando alguém se aproxima.' },
-  { id: 'cavalo', name: 'Cavalo', rig: 'horse', temperament: 'neutral', scale: 1, hp: 90, radius: 0.6, height: 1.8, walk: 1.3, run: 9.5, notice: 10, flee: 4, wander: 16, idleBias: 0.7, xp: 0, gold: [0, 0], drops: [], description: 'Cavalos de tração de Brumafria. (Montaria: ainda não disponível.)' },
+  { id: 'cavalo', name: 'Cavalo', rig: 'horse', temperament: 'neutral', scale: 1.15, hp: 90, radius: 0.6, height: 1.8, walk: 1.3, run: 9.5, notice: 10, flee: 4, wander: 16, idleBias: 0.7, xp: 0, gold: [0, 0], drops: [], mount: 'tame', description: 'Cavalo manso do pasto de Brumafria. Dá para montar direto.' },
+  // cavalos selvagens dos campos: chegue andando devagar e dome (gasta energia)
+  { id: 'cavalo_baio', name: 'Cavalo Selvagem', rig: 'horse', temperament: 'neutral', scale: 1.15, hp: 90, radius: 0.6, height: 1.8, walk: 1.4, run: 11, notice: 18, flee: 5, wander: 30, idleBias: 0.65, xp: 0, gold: [0, 0], drops: [], mount: 'wild', description: 'Cavalo baio dos campos. Ande devagar até ele e segure firme para domar.' },
+  { id: 'cavalo_tordilho', name: 'Cavalo Selvagem', rig: 'horse', temperament: 'neutral', scale: 1.18, hp: 95, radius: 0.6, height: 1.85, walk: 1.4, run: 11.5, notice: 20, flee: 5.5, wander: 30, idleBias: 0.65, xp: 0, gold: [0, 0], drops: [], mount: 'wild', description: 'Cavalo tordilho, quase branco. Arisco e veloz.' },
+  { id: 'cavalo_negro', name: 'Cavalo Selvagem', rig: 'horse', temperament: 'neutral', scale: 1.22, hp: 110, radius: 0.62, height: 1.9, walk: 1.5, run: 12, notice: 22, flee: 6, wander: 34, idleBias: 0.6, xp: 0, gold: [0, 0], drops: [], mount: 'wild', description: 'Cavalo negro de crina longa. Raro e difícil de domar.' },
   { id: 'ovelha', name: 'Ovelha', rig: 'sheep', temperament: 'neutral', scale: 1, hp: 25, radius: 0.45, height: 0.95, walk: 0.8, run: 4.5, notice: 8, flee: 3, wander: 6, idleBias: 0.75, xp: 0, gold: [0, 0], drops: [], description: 'Rebanho do cercado da vila.' },
   { id: 'galinha', name: 'Galinha', rig: 'chicken', temperament: 'skittish', scale: 1, hp: 6, radius: 0.2, height: 0.45, walk: 0.9, run: 4, notice: 5, flee: 2.6, wander: 4, idleBias: 0.5, xp: 0, gold: [0, 0], drops: [], description: 'Cisca o dia inteiro no galinheiro.' },
   {

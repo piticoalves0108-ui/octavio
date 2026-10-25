@@ -3,7 +3,9 @@ import type { GameContext } from '../core/context';
 import { Entity } from '../core/Entity';
 import type { DamageInfo, DamageResult } from '../combat/Health';
 import type { VfxHandle } from '../combat/VFX';
-import { AI_RULES, DEFAULT_BLOCK_REDUCTION, type AttackDef, type EnemyDef } from '../data/enemies';
+import { AI_RULES, DEFAULT_BLOCK_REDUCTION, FIELD_NAV, type AttackDef, type EnemyDef } from '../data/enemies';
+import { findFieldPath, straightClear } from './fieldNav';
+import { WATER_LEVEL } from '../data/world';
 import { EnemyHealth } from './EnemyHealth';
 import { createRigMaterial, type RigMaterial } from './rigs/material';
 import { createEnemyRig } from './rigs/factory';
@@ -171,6 +173,13 @@ export class Enemy extends Entity {
   navPath: { x: number; z: number }[] | null = null;
   navIdx = 0;
   navT = Math.random() * 0.6;
+  /** Célula bloqueada para este inimigo (colisores na altura do corpo, água funda). */
+  private readonly navBlocked = (x: number, z: number): boolean => {
+    const ph = this.ctx.physics;
+    const gy = ph.terrainHeight(x, z);
+    if (WATER_LEVEL - gy > FIELD_NAV.deepWater) return true;
+    return ph.blockedAt(x, z, gy + 0.45, gy + Math.max(1.2, this.height), this.radius + FIELD_NAV.clearance);
+  };
   readonly navPoint = new THREE.Vector3();
   /** Rota reutilizada pelo portal do portão da paliçada (sem alocar a cada recálculo). */
   private readonly campPath: { x: number; z: number }[] = [
@@ -1265,6 +1274,8 @@ export class Enemy extends Entity {
           this.unstickDir.set((-dz / l) * side, 0, (dx / l) * side);
           this.unstickT = rand(0.6, 1.1);
           this.strafeSign *= -1;
+          // travado: reavalia a rota já (fora da vila, a grade local contorna o obstáculo)
+          this.navT = Math.min(this.navT, 0.05);
         }
         this.stuckT = 0;
         this.stuckRef.copy(p);
@@ -1297,10 +1308,12 @@ export class Enemy extends Entity {
       const CR = CAMP.palisadeRadius + 14;
       if (cdx * cdx + cdz * cdz < CR * CR) return this.updateCampNav(dt, ctx, cdx, cdz);
     }
-    if (this.isFlyer || vdx * vdx + vdz * vdz > R * R) {
+    if (this.isFlyer) {
       this.navPath = null;
       return false;
     }
+    // fora da vila e do acampamento: grade local (rochas, ruínas, muros, água funda)
+    if (vdx * vdx + vdz * vdz > R * R) return this.updateFieldNav(dt, ctx);
     this.navT -= dt;
     if (this.navT <= 0) {
       this.navT = 1.1 + Math.random() * 0.4;
@@ -1391,6 +1404,32 @@ export class Enemy extends Entity {
       this.campPath[3].x = this.goal.x;
       this.campPath[3].z = this.goal.z;
     }
+    return this.followNavPath();
+  }
+
+  /**
+   * Campo aberto: só quando a reta até o objetivo está bloqueada; a busca (A* local) entra na
+   * fila do sistema de IA (`FIELD_NAV.perFrame` por quadro). Sem vaga, mantém a rota atual e
+   * tenta no próximo quadro.
+   */
+  private updateFieldNav(dt: number, ctx: GameContext): boolean {
+    const p = this.position;
+    this.navT -= dt;
+    if (this.navT <= 0) {
+      const gx = this.goal.x - p.x;
+      const gz = this.goal.z - p.z;
+      if (gx * gx + gz * gz < 9 || straightClear(p.x, p.z, this.goal.x, this.goal.z, this.navBlocked)) {
+        this.navPath = null;
+        this.navT = FIELD_NAV.recheck + Math.random() * 0.4;
+      } else if (this.ai.takeNavBudget()) {
+        this.navT = FIELD_NAV.recheck + Math.random() * 0.4;
+        const r = findFieldPath(p.x, p.z, this.goal.x, this.goal.z, this.navBlocked);
+        this.ai.stats.fieldPaths++;
+        this.navPath = r && r.points.length >= 2 ? r.points : null;
+        this.navIdx = 1;
+      } else this.navT = 0.05;
+    }
+    void ctx;
     return this.followNavPath();
   }
 

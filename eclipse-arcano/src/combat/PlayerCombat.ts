@@ -358,6 +358,8 @@ export class PlayerCombat implements CombatApi {
   private canStartCharge(): boolean {
     const p = this.ctx.sys.player;
     if (p.isFlying() && !this.isShooter()) return false;
+    // montado: só armas de disparo (cajado, artefato); lâminas não alcançam do alto do cavalo
+    if (p.isRiding() && !this.isShooter()) return false;
     if (p.isSwimming() || p.isClimbing()) return false;
     if (this.phase === 'idle') return !p.isBusy();
     return (this.phase === 'swing' || this.phase === 'shot') && this.impactDone;

@@ -30,7 +30,8 @@ export interface CreatureSpawnOptions {
  * vagar, pastar/descansar, reagir a sons, fugir de ameaças, defender território (grifo),
  * emergir e morder (serpente do lago), seguir à distância (espíritos), pousar e partir (fênix),
  * atravessar o céu (dragão distante). Neutras/fujonas/hostis conforme `temperament`.
- * Montaria/domar: NÃO implementado.
+ * Montaria (cavalos com `def.mount`): quando `ridden`, a IA para e src/mount/Mounts.ts
+ * move o corpo; `owned` = cavalo do jogador (não foge dele, vem quando chamado).
  */
 export class Creature extends Entity {
   readonly def: CreatureDef;
@@ -73,6 +74,15 @@ export class Creature extends Entity {
   barHeight: number;
   elite = false;
   level = 1;
+  /** Montado pelo jogador: a IA fica parada e Mounts move o corpo. */
+  ridden = false;
+  /** Cavalo do jogador (domado). */
+  owned = false;
+  /** Chamado pelo assobio: corre até `callGoal`. */
+  calling = false;
+  readonly callGoal = new THREE.Vector3();
+  /** Distância (m) em que para quando chamado. */
+  callStop = 3.5;
 
   constructor(def: CreatureDef, opts: CreatureSpawnOptions = {}) {
     super('creature', def.temperament === 'hostile' ? 'wild' : 'neutral');
@@ -172,6 +182,15 @@ export class Creature extends Entity {
     }
     this.stateT += dt;
     this.hitFlash = Math.max(0, this.hitFlash - dt * 5);
+    if (this.ridden) {
+      this.updateVisual(dt, ctx);
+      return;
+    }
+    if (this.calling) {
+      this.updateCalled(dt, ctx);
+      this.updateVisual(dt, ctx);
+      return;
+    }
     switch (this.def.rig) {
       case 'dragon':
         this.updateDragon(dt, ctx);
@@ -198,8 +217,47 @@ export class Creature extends Entity {
     if (this.leaving && this.deadT < 0) ctx.entities.remove(this);
   }
 
+  /** Chamado pelo assobio: vem correndo (mais devagar ao chegar) e para perto do jogador. */
+  callTo(pos: THREE.Vector3, stopAt: number) {
+    // chamado: sai do cercado/ponto onde foi deixado (senão o alvo seria preso ao "home")
+    this.confined = false;
+    this.calling = true;
+    this.callStop = stopAt;
+    this.callGoal.copy(pos);
+    this.setState('follow');
+  }
+
+  private updateCalled(dt: number, ctx: GameContext) {
+    const d = distXZ(this.position, this.callGoal);
+    if (d <= this.callStop) {
+      this.calling = false;
+      this.home.copy(this.position);
+      if (this.owned) this.confined = true;
+      this.speed = 0;
+      this.hasGoal = false;
+      this.faceYaw = yawTo(this.position.x, this.position.z, this.callGoal.x, this.callGoal.z);
+      this.setState('alert');
+      this.move(dt, ctx);
+      return;
+    }
+    this.goal.copy(this.callGoal);
+    this.hasGoal = true;
+    this.speed = d > 18 ? this.def.run : d > 7 ? this.def.run * 0.55 : this.def.walk * 1.6;
+    this.move(dt, ctx);
+    // preso (água funda/obstáculo): desiste e fica onde está
+    if (!this.hasGoal) {
+      this.calling = false;
+      this.home.copy(this.position);
+      if (this.owned) this.confined = true;
+    }
+  }
+
   /** Ameaça percebida: jogador perto (mais longe se correndo/voando baixo) ou hostil próximo. */
   private perceiveThreat(ctx: GameContext): number {
+    if (this.owned) {
+      this.threat = null;
+      return Infinity;
+    }
     const pl = ctx.sys.player.entity;
     if (!pl.alive) return Infinity;
     const d = distXZ(this.position, pl.position);
@@ -211,7 +269,7 @@ export class Creature extends Entity {
 
   /** Som alto por perto (magia, combate). */
   hear(pos: THREE.Vector3, loud: boolean) {
-    if (this.deadT >= 0 || this.leaving) return;
+    if (this.deadT >= 0 || this.leaving || this.owned || this.ridden) return;
     const d = distXZ(this.position, pos);
     if (this.def.temperament === 'skittish' && (loud || d < this.def.flee * 1.5)) {
       this.startFlee(pos, rand(3, 6));
@@ -692,6 +750,7 @@ export class Creature extends Entity {
   override onDamaged(info: DamageInfo, result: DamageResult, ctx: GameContext): void {
     this.hitFlash = 1;
     this.anim.hit = 1;
+    if (this.ridden) return;
     const src = info.source;
     if (this.def.temperament === 'territorial' && src) {
       this.angry = true;

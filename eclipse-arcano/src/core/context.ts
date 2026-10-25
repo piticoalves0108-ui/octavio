@@ -26,6 +26,7 @@ import type { AudioSystem } from '../audio/Audio';
 import type { SaveSystem } from '../save/SaveSystem';
 import type { PerfMonitor } from '../perf/PerfMonitor';
 import type { InteractiveWorld } from '../interactive/InteractiveWorld';
+import type { Mounts } from '../mount/Mounts';
 
 /**
  * Um sistema de jogo. A ordem de atualização é definida em Game.ts.
@@ -77,6 +78,8 @@ export interface Systems {
   perf: PerfMonitor;
   /** Mundo interativo: fogo na grama, objetos físicos, Centelha/Estase, fogueiras e cozinha. */
   interactive: InteractiveWorld;
+  /** Montaria: domar, montar, cavalgar e assobiar para o seu cavalo. */
+  mounts: Mounts;
 }
 
 export interface GameContext {

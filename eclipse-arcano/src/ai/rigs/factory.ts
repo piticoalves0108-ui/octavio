@@ -2,7 +2,7 @@ import type * as THREE from 'three';
 import type { RigKind } from '../../data/enemies';
 import type { CreatureRig } from '../../data/creatures';
 import { HumanoidRig } from './humanoid';
-import { QuadrupedRig } from './quadruped';
+import { QUAD_LOOKS, QuadrupedRig } from './quadruped';
 import { FlyerRig, SerpentRig } from './flyer';
 import { PillarRig, SpiritRig } from './misc';
 import type { Rig } from './anim';
@@ -31,7 +31,7 @@ export function createCreatureRig(kind: CreatureRig, material: THREE.Material, i
     case 'rabbit':
       return new QuadrupedRig('coelho', material);
     case 'horse':
-      return new QuadrupedRig('cavalo', material);
+      return new QuadrupedRig(QUAD_LOOKS[id] ? id : 'cavalo', material);
     case 'sheep':
       return new QuadrupedRig('ovelha', material);
     case 'griffin':

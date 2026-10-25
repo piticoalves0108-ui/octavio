@@ -43,7 +43,11 @@ Etapas "estilo Zelda" pedidas pelo dono do projeto:
 5. História até o final: Atos II a IV, 7 chefes novos, Cidadela Celeste e os três finais: **feito**
    (`docs/status/story.md`, bíblia em `docs/HISTORIA.md`).
 
-Outras pendências conhecidas: montaria e pathfinding de inimigos fora da vila.
+Depois do pedido original:
+- Montaria (cavalos mansos e selvagens, domar, marchas, esporas, pulo, assobio): **feito** (`docs/status/mount.md`).
+- Arquivo único jogável: `npm run build:single`.
+
+Outras pendências conhecidas: pathfinding de inimigos fora da vila.
 
 ## Regras do projeto
 

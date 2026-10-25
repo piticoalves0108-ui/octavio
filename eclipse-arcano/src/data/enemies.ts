@@ -827,3 +827,26 @@ export const AI_RULES = {
   /** Inimigos "circulam" (strafe) a esta velocidade relativa enquanto esperam token. */
   circleSpeed: 0.75,
 };
+
+/**
+ * Navegação em campo aberto (src/ai/fieldNav.ts): A* numa grade local quando a reta até o
+ * objetivo está bloqueada (rochas, ruínas, muros, água funda).
+ */
+export const FIELD_NAV = {
+  /** Tamanho da célula (m). */
+  cell: 1,
+  /** Folga (m) em volta do início e do objetivo. */
+  margin: 8,
+  /** Lado máximo da grade (células): objetivo mais longe → caminho parcial até a borda. */
+  maxCells: 72,
+  /** Teto de células expandidas por busca. */
+  maxExpand: 2600,
+  /** Intervalo (s) entre reavaliações da rota por inimigo. */
+  recheck: 1.2,
+  /** Buscas por quadro (todos os inimigos). */
+  perFrame: 1,
+  /** Folga (m) somada ao raio do inimigo ao marcar células bloqueadas. */
+  clearance: 0.15,
+  /** Profundidade (m) de água que bloqueia. */
+  deepWater: 1,
+};

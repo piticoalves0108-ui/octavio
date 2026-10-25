@@ -83,7 +83,10 @@ export type SfxId =
   | 'wood_break'
   | 'grass_cut'
   | 'stasis'
-  | 'cook';
+  | 'cook'
+  | 'hoof'
+  | 'horse_neigh'
+  | 'whistle';
 
 export interface PlayOptions {
   position?: THREE.Vector3;

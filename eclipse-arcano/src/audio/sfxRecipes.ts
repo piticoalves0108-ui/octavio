@@ -991,6 +991,47 @@ const cook: Recipe = (h, t, out, p) => {
   return 1.35;
 };
 
+/** Casco de cavalo: batida surda na terra com estalo seco. */
+const hoof: Recipe = (h, t, out, p) => {
+  const n = p.intensity > 1 ? 2 : 1;
+  for (let i = 0; i < n; i++) {
+    const tt = t + i * r(h, 0.05, 0.08);
+    thump(h, tt, 150 * p.pitch, 55, 0.09, 0.55 * Math.min(1.4, p.intensity), out);
+    tick(h, tt, r(h, 700, 1100) * p.pitch, 0.035, 0.22 * Math.min(1.4, p.intensity), out, 'bandpass', h.pink);
+  }
+  return 0.2;
+};
+
+/** Relincho: vogal nasal que sobe e treme, terminando num bufo. */
+const horseNeigh: Recipe = (h, t, out, p) => {
+  const k = p.pitch;
+  const src = gain(h, 0);
+  adsr(src.gain, t, 0.55, 0.06, 0.15, 0.75, 0.55, 0.3);
+  const o = osc(h, 'sawtooth', 420 * k, t, 1.05, src);
+  o.frequency.linearRampToValueAtTime(760 * k, t + 0.18);
+  o.frequency.linearRampToValueAtTime(640 * k, t + 0.6);
+  o.frequency.linearRampToValueAtTime(380 * k, t + 1.0);
+  const vib = gain(h, 38 * k, o.frequency);
+  osc(h, 'sine', 13, t, 1.05, vib);
+  formants(h, src, out, VOWELS.e, 7, 2);
+  // bufo no fim
+  whoosh(h, t + 0.95, 0.3, 300 * k, 900 * k, 400 * k, 1.2, 0.3, out);
+  return 1.3;
+};
+
+/** Assobio do mago: duas notas subindo. */
+const whistle: Recipe = (h, t, out, p) => {
+  for (let i = 0; i < 2; i++) {
+    const tt = t + i * 0.22;
+    const g = gain(h, 0, out);
+    adsr(g.gain, tt, 0.35, 0.02, 0.05, 0.8, 0.12, 0.06);
+    const o = osc(h, 'sine', (i ? 1760 : 1320) * p.pitch, tt, 0.22, g);
+    o.frequency.linearRampToValueAtTime((i ? 2090 : 1480) * p.pitch, tt + 0.15);
+    noise(h, h.white, tt, 0.2, filter(h, 'bandpass', 2400, 3, gain(h, 0.04, out)));
+  }
+  return 0.5;
+};
+
 export const RECIPES: Record<SfxId, Recipe> = {
   ui_click: uiClick,
   quest_update: questUpdate,
@@ -1063,4 +1104,7 @@ export const RECIPES: Record<SfxId, Recipe> = {
   grass_cut: grassCut,
   stasis,
   cook,
+  hoof,
+  horse_neigh: horseNeigh,
+  whistle,
 };

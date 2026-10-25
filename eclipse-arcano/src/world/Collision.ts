@@ -395,6 +395,33 @@ export class CollisionWorld {
     return best;
   }
 
+  /**
+   * Algum colisor ocupa o cilindro vertical (x, z, raio) entre as alturas y0..y1? Usado pela
+   * navegação em campo aberto para marcar células bloqueadas. Fora do mapa conta como bloqueado.
+   */
+  blockedAt(x: number, z: number, y0: number, y1: number, radius: number): boolean {
+    if (Math.abs(x) > PLAYABLE_HALF || Math.abs(z) > PLAYABLE_HALF) return true;
+    for (const c of this.near(x, z, radius + 2)) {
+      if (c.type === 'cylinder') {
+        if (y1 <= c.y0 || y0 >= c.y1) continue;
+        const dx = x - c.x;
+        const dz = z - c.z;
+        const min = c.radius + radius;
+        if (dx * dx + dz * dz < min * min) return true;
+      } else {
+        if (y1 <= c.y - c.hy || y0 >= c.y + c.hy) continue;
+        const rx = x - c.x;
+        const rz = z - c.z;
+        const lx = Math.abs(rx * c.cos - rz * c.sin) - c.hx;
+        const lz = Math.abs(rx * c.sin + rz * c.cos) - c.hz;
+        const dx = Math.max(0, lx);
+        const dz = Math.max(0, lz);
+        if (dx * dx + dz * dz < radius * radius) return true;
+      }
+    }
+    return false;
+  }
+
   /** Visão livre entre dois pontos (ignora árvores por padrão). */
   lineOfSight(a: THREE.Vector3, b: THREE.Vector3, ignoreTrees = true): boolean {
     const dir = TMPV.subVectors(b, a);

@@ -218,6 +218,11 @@ export class Abilities implements GameSystem, Saveable {
     if (!p.entity.alive || !p.canAct() || p.isClimbing()) return this.fail(abilityId, 'state');
     if (def.heavy && !p.canCastHeavy()) return this.fail(abilityId, 'state');
     if (!def.canFly && p.isFlying()) return this.fail(abilityId, 'state');
+    // montado: teletransporte e Forma Ascendente tirariam o mago da sela
+    if (p.isRiding() && (abilityId === 'blink' || abilityId === ULTIMATE_ID)) {
+      this.notifyOnce('Desça do cavalo para isso.');
+      return this.fail(abilityId, 'state');
+    }
     if (p.isBusy() && !this.combat.isAttacking()) return this.fail(abilityId, 'state');
     const rank = this.rank(abilityId);
     if (abilityId === ULTIMATE_ID && this.ultimateCharge < ULTIMATE.max) {

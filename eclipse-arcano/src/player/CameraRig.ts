@@ -3,6 +3,7 @@ import type { GameContext, GameSystem } from '../core/context';
 import type { Entity } from '../core/Entity';
 import { clamp, damp, dampAngle, angleDiff } from '../core/math';
 import { CAMERA, FLIGHT, LOCOMOTION } from '../data/player';
+import { RIDE_CAMERA } from '../data/mounts';
 import { sphereCast, ceilingAbove } from './probe';
 import { pickLockTarget, type LockCandidate } from './locomotion';
 
@@ -143,7 +144,8 @@ export class CameraRig implements GameSystem {
     this.mode = mode;
 
     // ---- Foco (ponto seguido) ----
-    const tgtY = flying ? 1.05 : player.state === 'swim' ? 0.85 : player.state === 'dodge' ? 1.15 : CAMERA.targetHeight;
+    const riding = player.state === 'ride';
+    const tgtY = flying ? 1.05 : player.state === 'swim' ? 0.85 : player.state === 'dodge' ? 1.15 : riding ? CAMERA.targetHeight + RIDE_CAMERA.extraHeight : CAMERA.targetHeight;
     const fx = pp.x;
     const fy = pp.y + tgtY;
     const fz = pp.z;
@@ -201,6 +203,11 @@ export class CameraRig implements GameSystem {
       wantDist = CAMERA.dialogueDistance;
     }
     if (player.state === 'ground' && player.horizontalSpeed > LOCOMOTION.runSpeed + 1.2) wantFov += CAMERA.sprintFovBoost;
+    if (riding && mode !== 'dialogue') {
+      const sp = Math.abs(player.ride.speed);
+      wantDist = Math.max(wantDist, RIDE_CAMERA.distance + sp * RIDE_CAMERA.distancePerSpeed);
+      wantFov += RIDE_CAMERA.gallopFov * clamp((sp - 9) / 5, 0, 1);
+    }
 
     // interiores: teto acima do jogador → câmera mais próxima
     this.indoorTimer -= dt;

@@ -181,6 +181,22 @@ describe('Saveables reais (ida e volta)', () => {
     expect(() => des(b, null, fakeCtx())).toThrow();
   });
 
+  it('mounts: o seu cavalo (tipo, nome, posição); tipos que não são montaria são descartados', async () => {
+    const { Mounts } = await import('../src/mount/Mounts');
+    const data = { horse: { typeId: 'cavalo_negro', name: 'Trovão', x: 10, y: 20, z: -5, yaw: 1.2 } };
+    const a = new Mounts();
+    des(a, json(data), fakeCtx());
+    expect(json(a.serialize())).toEqual(data);
+    const b = new Mounts();
+    des(b, json({ horse: { ...data.horse, typeId: 'lobo' } }), fakeCtx());
+    expect(json(b.serialize())).toEqual({ horse: null });
+    des(b, json({ horse: { ...data.horse, x: 'a' } }), fakeCtx());
+    expect(json(b.serialize())).toEqual({ horse: null });
+    des(b, json({ horse: null }), fakeCtx());
+    expect(json(b.serialize())).toEqual({ horse: null });
+    expect(() => des(b, null, fakeCtx())).toThrow();
+  });
+
   it('env: clima, umidade, eclipse e vento', () => {
     const ctx = fakeCtx();
     const make = () => new Environment();
@@ -205,7 +221,7 @@ describe('cobertura dos Saveables registrados', () => {
     const m = src.match(/for \(const s of \[([^\]]+)\]\) sys\.save\.register\(s\)/);
     expect(m, 'registro de saves não encontrado em Game.ts').toBeTruthy();
     const registered = m![1].split(',').map((x) => x.trim().replace(/^sys\./, '')).sort();
-    const tested = ['clock', 'abilities', 'ai', 'world', 'env', 'player', 'story', 'progression', 'inventory', 'quests', 'npcs', 'interactive'].sort();
+    const tested = ['clock', 'abilities', 'ai', 'world', 'env', 'player', 'story', 'progression', 'inventory', 'quests', 'npcs', 'interactive', 'mounts'].sort();
     expect(registered).toEqual(tested);
   });
 });

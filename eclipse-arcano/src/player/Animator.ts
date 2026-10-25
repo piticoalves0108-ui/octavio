@@ -12,7 +12,7 @@ import { LOCOMOTION } from '../data/player';
  * Zero alocação por frame: todas as poses são buffers pré-alocados.
  */
 
-export type LocoMode = 'ground' | 'air' | 'flight' | 'climb' | 'swim' | 'dodge' | 'dead';
+export type LocoMode = 'ground' | 'air' | 'flight' | 'climb' | 'swim' | 'dodge' | 'dead' | 'ride';
 
 /** Parâmetros que o Player preenche a cada frame (objeto reutilizado). */
 export interface LocoParams {
@@ -49,6 +49,11 @@ export interface LocoParams {
   lookPitch: number;
   /** Intensidade (0..1) de mira ativa (gira o tronco junto com a cabeça). */
   aimWeight: number;
+  /** Montado: andadura do cavalo (0 parado .. 1 galope), pulo (0..1), coices ao domar (0..1), curva (-1..1). */
+  rideGait: number;
+  rideJump: number;
+  rideBuck: number;
+  rideTurn: number;
 }
 
 export function createLocoParams(): LocoParams {
@@ -75,6 +80,10 @@ export function createLocoParams(): LocoParams {
     lookYaw: 0,
     lookPitch: 0,
     aimWeight: 0,
+    rideGait: 0,
+    rideJump: 0,
+    rideBuck: 0,
+    rideTurn: 0,
   };
 }
 
@@ -90,7 +99,7 @@ interface ActionLayer {
 }
 
 const TAU = Math.PI * 2;
-const MODES: LocoMode[] = ['ground', 'air', 'flight', 'climb', 'swim', 'dodge', 'dead'];
+const MODES: LocoMode[] = ['ground', 'air', 'flight', 'climb', 'swim', 'dodge', 'dead', 'ride'];
 
 export class Animator {
   /** Pose final (aplicada ao modelo). */
@@ -103,6 +112,7 @@ export class Animator {
   phase = 0;
   private climbPhase = 0;
   private swimPhase = 0;
+  private ridePhase = 0;
   private time = 0;
   private gaitSmooth = 0;
   private airBlend = 0;
@@ -281,6 +291,9 @@ export class Animator {
           break;
         case 'dead':
           this.idlePose(mp, 0);
+          break;
+        case 'ride':
+          this.ridePose(mp, p, dt);
           break;
       }
       poseAddScaled(pose, mp, wi);
@@ -579,6 +592,49 @@ export class Animator {
     o[R_PITCH] = pitch;
     o[R_ROLL] = p.flightBank;
     o[R_OFFY] = 0.05 * bob * hov + 0.015 * Math.sin(t * 9) * bst;
+  }
+
+  /**
+   * Montado: pernas abertas na sela com os pés nos estribos, mãos nas rédeas, tronco
+   * inclinado conforme a andadura (o quadril acompanha o balanço do cavalo). Domando,
+   * o corpo é jogado para trás e para a frente e um braço vai para o alto.
+   */
+  private ridePose(o: Pose, p: LocoParams, dt: number) {
+    const g = p.rideGait;
+    const buck = p.rideBuck;
+    const jump = p.rideJump;
+    this.ridePhase = (this.ridePhase + dt * (g < 0.05 ? 0.25 : 1.1 + g * 1.7 + buck * 2)) % 1;
+    const a = this.ridePhase * TAU;
+    const s = Math.sin(a);
+    const c = Math.cos(a);
+    // balanço: trote quica, galope rola
+    const bob = (0.012 + g * 0.045) * Math.abs(s) + buck * 0.06 * Math.abs(Math.sin(a * 1.5));
+    const lean = 0.06 + g * 0.24 - jump * 0.15 + buck * 0.3 * Math.sin(a * 1.5);
+    setBone(o, B.spine, 0.04 + g * 0.08 + buck * 0.25 * Math.sin(a * 1.5 + 0.6), 0, 0);
+    setBone(o, B.chest, 0.03 + g * 0.06 - jump * 0.1, 0, -p.rideTurn * 0.06);
+    setBone(o, B.neck, -0.04 - g * 0.06, 0, 0);
+    setBone(o, B.head, -0.06 - g * 0.12 - buck * 0.2 * s, 0, 0);
+    // pernas: coxas para a frente e abertas (montaria), joelhos dobrados, pés nos estribos
+    const grip = 0.05 * g * c;
+    setBone(o, B.thighL, -1.32 + grip - jump * 0.2, 0.08, 0.5 + buck * 0.15);
+    setBone(o, B.shinL, 1.45 - grip * 2 + jump * 0.3, 0, 0);
+    setBone(o, B.footL, -0.3, 0, 0);
+    setBone(o, B.thighR, -1.32 - grip - jump * 0.2, -0.08, -0.5 - buck * 0.15);
+    setBone(o, B.shinR, 1.45 + grip * 2 + jump * 0.3, 0, 0);
+    setBone(o, B.footR, -0.3, 0, 0);
+    // rédeas: as duas mãos à frente do peito, acompanhando o balanço
+    const rein = 0.06 * g * s;
+    setBone(o, B.upperArmL, -0.62 - rein, 0, 0.16);
+    setBone(o, B.foreArmL, -1.05 + rein, 0, 0);
+    setBone(o, B.handL, 0.25, 0, 0.15);
+    // domando: o braço direito vai para o alto
+    setBone(o, B.upperArmR, -0.62 - rein - buck * 1.9, 0, -0.16 - buck * 0.25);
+    setBone(o, B.foreArmR, -1.05 + rein + buck * 0.75, 0, 0);
+    setBone(o, B.handR, 0.25, 0, -0.15);
+    o[R_OFFY] = bob + jump * 0.08;
+    o[R_OFFZ] = -0.02;
+    o[R_PITCH] = lean;
+    o[R_ROLL] = -p.rideTurn * 0.12 * (0.4 + g);
   }
 
   private climbPose(o: Pose, p: LocoParams, dt: number) {

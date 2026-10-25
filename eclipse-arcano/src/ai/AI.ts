@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { GameContext, GameSystem, Saveable } from '../core/context';
 import type { Entity } from '../core/Entity';
 import type { MusicState } from '../core/EventBus';
-import { AI_RULES, getEnemyDef } from '../data/enemies';
+import { AI_RULES, FIELD_NAV, getEnemyDef } from '../data/enemies';
 import { CREATURES, DISTANT_DRAGON } from '../data/creatures';
 import { GUARDIAN, BOSS_GATES } from '../data/bosses';
 import { PLACES } from '../data/places';
@@ -79,7 +79,9 @@ export class AI implements GameSystem, Saveable {
   private dragon: Creature | null = null;
   /** Desliga a população ambiente (testes). */
   ambient = true;
-  stats = { enemies: 0, engaged: 0, creatures: 0, tokens: 0, enemyMs: 0, spawned: 0, killed: 0 };
+  stats = { enemies: 0, engaged: 0, creatures: 0, tokens: 0, enemyMs: 0, spawned: 0, killed: 0, fieldPaths: 0 };
+  /** Buscas de caminho em campo aberto ainda permitidas neste quadro. */
+  private navBudget = FIELD_NAV.perFrame;
   /** Tempo (ms) gasto nos updates dos inimigos no quadro anterior (acumulado pelas entidades). */
   enemyAcc = 0;
 
@@ -261,6 +263,20 @@ export class AI implements GameSystem, Saveable {
     c.position.copy(position);
     this.ctx.entities.add(c);
     return c;
+  }
+
+  /** Reserva uma busca de caminho em campo aberto neste quadro (false = tente no próximo). */
+  takeNavBudget(): boolean {
+    if (this.navBudget <= 0) return false;
+    this.navBudget--;
+    return true;
+  }
+
+  /** Tira uma criatura do controle da sua zona (cavalo domado): a zona repõe outra depois. */
+  releaseCreature(c: Creature) {
+    this.spawner.onDeath(c.slot, c.zoneId, this.ctx);
+    c.zoneId = undefined;
+    c.slot = undefined;
   }
 
   /** Inimigos vivos dentro do raio (reutiliza `out`). */
@@ -483,6 +499,7 @@ export class AI implements GameSystem, Saveable {
   // =====================================================================
   update(dt: number, ctx: GameContext) {
     this.time += dt;
+    this.navBudget = FIELD_NAV.perFrame;
     this.stats.enemyMs = this.stats.enemyMs * 0.95 + this.enemyAcc * 0.05;
     this.enemyAcc = 0;
     const pl = ctx.sys.player.entity;

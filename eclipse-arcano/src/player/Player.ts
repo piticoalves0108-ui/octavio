@@ -41,7 +41,7 @@ import type { Collider } from '../world/Collision';
  * O jogador NÃO decide ataques/bloqueio/habilidades: o módulo de combate chama as APIs públicas
  * (playAnimation, lockMovement, setBlocking, getHandWorldPosition, getAimRay...).
  */
-export type PlayerState = 'ground' | 'air' | 'flight' | 'dodge' | 'climb' | 'swim' | 'stagger' | 'dead';
+export type PlayerState = 'ground' | 'air' | 'flight' | 'dodge' | 'climb' | 'swim' | 'stagger' | 'dead' | 'ride';
 
 /** Animações/ações que outros sistemas podem disparar no modelo do jogador. */
 export type PlayerAnim =
@@ -127,6 +127,8 @@ export class Player implements GameSystem, Saveable {
   heightAboveGround = 0;
   /** Superfície da água acima dos pés (m) — profundidade atual (0 = seco). */
   waterDepth = 0;
+  /** Montado: andadura do cavalo (0 parado .. 1 galope), salto e inclinação (src/mount/Mounts.ts). */
+  readonly ride = { gait: 0, speed: 0, jump: 0, buck: 0, turn: 0 };
 
   // ---- estado interno ----
   private hv: V2 = { x: 0, z: 0 };
@@ -267,7 +269,7 @@ export class Player implements GameSystem, Saveable {
 
     // Morte / atordoamento
     if (this.state !== 'dead' && (!h.alive || !e.alive)) this.die();
-    if (this.state !== 'dead' && this.state !== 'stagger' && this.state !== 'flight' && h.staggered && this.mantleT < 0) this.enterStagger();
+    if (this.state !== 'dead' && this.state !== 'stagger' && this.state !== 'flight' && this.state !== 'ride' && h.staggered && this.mantleT < 0) this.enterStagger();
 
     this.readInput(ctx);
     this.jump.tick(dt, this.grounded, this.canControl() && ctx.input.pressed('jump'));
@@ -296,6 +298,13 @@ export class Player implements GameSystem, Saveable {
         break;
       case 'dead':
         this.updateDead(dt, ctx);
+        break;
+      case 'ride':
+        // posição e giro vêm do cavalo (Mounts.update roda antes do jogador)
+        this.grounded = true;
+        this.vy = 0;
+        this.heightAboveGround = 0;
+        this.knock.set(0, 0, 0);
         break;
     }
 
@@ -1448,6 +1457,10 @@ export class Player implements GameSystem, Saveable {
   /** Morte: animação, evento e, após um tempo, o estado de jogo 'dead'. */
   private die() {
     if (this.state === 'dead') return;
+    if (this.state === 'ride') {
+      this.entity.position.y = this.groundAt(1);
+      this.hv.x = this.hv.z = 0;
+    }
     const wasFlying = this.state === 'flight';
     if (wasFlying) this.ctx.events.emit('player:flightEnd', {});
     this.entity.alive = false;
@@ -1560,10 +1573,17 @@ export class Player implements GameSystem, Saveable {
       case 'stagger':
         mode = this.staggerFrom === 'swim' ? 'swim' : this.grounded ? 'ground' : 'air';
         break;
+      case 'ride':
+        mode = 'ride';
+        break;
       default:
         mode = 'ground';
     }
     p.mode = mode;
+    p.rideGait = this.ride.gait;
+    p.rideJump = this.ride.jump;
+    p.rideBuck = this.ride.buck;
+    p.rideTurn = this.ride.turn;
     const sy = Math.sin(e.yaw);
     const cy = Math.cos(e.yaw);
     const vx = this.state === 'flight' ? this.flightV.x : this.hv.x;
@@ -1788,7 +1808,55 @@ export class Player implements GameSystem, Saveable {
   // API pública (contrato)
   // =====================================================================
   canInteract(): boolean {
-    return this.state !== 'dead' && this.state !== 'flight' && this.state !== 'climb' && this.state !== 'dodge';
+    return this.state !== 'dead' && this.state !== 'flight' && this.state !== 'climb' && this.state !== 'dodge' && this.state !== 'ride';
+  }
+  /** Montado num cavalo. */
+  isRiding(): boolean {
+    return this.state === 'ride';
+  }
+  /** Sobe no cavalo (Mounts cuida da posição a cada quadro). */
+  startRide(): boolean {
+    if (this.state === 'dead' || !this.entity.alive) return false;
+    if (this.isFlying()) this.endFlight(true);
+    this.lockTarget = null;
+    this.blocking = false;
+    this.health.blocking = false;
+    this.mantleT = -1;
+    this.hv.x = this.hv.z = 0;
+    this.vy = 0;
+    this.knock.set(0, 0, 0);
+    this.animator.stopActions(0.1);
+    this.setState('ride');
+    this.model?.cape.reset();
+    return true;
+  }
+  /** Posição/giro/velocidade do assento neste quadro (chamado por Mounts). */
+  setRideTransform(pos: THREE.Vector3, yaw: number, vx: number, vz: number) {
+    if (this.state !== 'ride') return;
+    const e = this.entity;
+    e.position.copy(pos);
+    e.yaw = yaw;
+    this.hv.x = vx;
+    this.hv.z = vz;
+  }
+  /** Desce do cavalo em `pos` (no chão ou no ar, conforme a altura). */
+  endRide(pos: THREE.Vector3, yaw?: number, vy = 0) {
+    if (this.state !== 'ride') return;
+    const e = this.entity;
+    e.position.copy(pos);
+    if (yaw !== undefined) e.yaw = yaw;
+    this.ride.gait = this.ride.jump = this.ride.buck = this.ride.turn = 0;
+    this.vy = vy;
+    const g = this.groundAt(0.6);
+    if (vy > 0 || pos.y - g > 0.4) {
+      this.grounded = false;
+      this.setState('air');
+    } else {
+      e.position.y = g;
+      this.grounded = true;
+      this.setState('ground');
+    }
+    this.lastGround = e.position.y;
   }
   canAct(): boolean {
     return this.state !== 'dead' && this.state !== 'stagger' && this.state !== 'dodge' && this.state !== 'climb' && this.mantleT < 0;
@@ -1817,6 +1885,7 @@ export class Player implements GameSystem, Saveable {
   }
   teleport(pos: THREE.Vector3, yaw?: number) {
     const e = this.entity;
+    if (this.state === 'ride') this.setState('ground');
     e.position.copy(pos);
     e.velocity.set(0, 0, 0);
     this.lastVel.set(0, 0, 0);

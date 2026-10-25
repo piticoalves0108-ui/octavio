@@ -224,6 +224,10 @@ export const CREATURE_ZONES: CreatureZone[] = [
   { id: 'cercado_ovelhas', name: 'Cercado das ovelhas', place: 'cercado_ovelhas', radius: 5.5, respawnHours: 24, activateRange: 140, confined: true, entries: [{ typeId: 'ovelha', count: 5 }] },
   { id: 'cercado_galinhas', name: 'Galinheiro', place: 'cercado_galinhas', radius: 3.5, respawnHours: 24, activateRange: 120, confined: true, entries: [{ typeId: 'galinha', count: 6 }] },
   { id: 'pasto_cavalos', name: 'Pasto dos cavalos', x: -470, z: 425, radius: 12, respawnHours: 24, activateRange: 150, confined: true, entries: [{ typeId: 'cavalo', count: 2 }] },
+  // manadas de cavalos selvagens nos campos abertos (para domar)
+  { id: 'manada_sul', name: 'Campos ao sul de Brumafria', x: -270, z: 470, radius: 34, respawnHours: 24, activateRange: 200, entries: [{ typeId: 'cavalo_baio', count: 2 }, { typeId: 'cavalo_tordilho', count: 1 }] },
+  { id: 'manada_oeste', name: 'Campos do Oeste', x: -700, z: -130, radius: 40, respawnHours: 24, activateRange: 200, entries: [{ typeId: 'cavalo_baio', count: 2 }, { typeId: 'cavalo_negro', count: 1, chance: 0.6 }] },
+  { id: 'manada_leste', name: 'Planície do Leste', x: 460, z: 160, radius: 40, respawnHours: 24, activateRange: 200, entries: [{ typeId: 'cavalo_tordilho', count: 2 }, { typeId: 'cavalo_baio', count: 1 }] },
   { id: 'ninho_grifo', name: 'Ninho do Grifo', place: 'ninho_grifo', radius: 40, respawnHours: 48, activateRange: 420, entries: [{ typeId: 'grifo', count: 1 }] },
   { id: 'poleiro_fenix', name: 'Poleiro da Fênix', place: 'poleiro_fenix', radius: 20, respawnHours: 1, activateRange: 260, entries: [{ typeId: 'fenix', count: 1, time: 'dawn', chance: 0.4 }] },
   { id: 'lago_serpente', name: 'Lago Espelhado', place: 'lago_margem', radius: 22, respawnHours: 48, activateRange: 140, entries: [{ typeId: 'serpente_lago', count: 1, chance: 0.3 }, { typeId: 'passaro', count: 0, flocks: 1, time: 'day' }] },

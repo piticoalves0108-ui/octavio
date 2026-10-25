@@ -102,6 +102,9 @@ export interface GameEvents {
   'fire:ignited': { position: Vector3; cells: number };
   'campfire:lit': { id: string };
   'cooking:done': { itemId: string; ingredients: string[] };
+  'mount:mounted': { typeId: string; taming: boolean };
+  'mount:dismounted': { typeId: string };
+  'mount:tamed': { typeId: string; name: string; wild: boolean };
 
   'ui:notify': { text: string; kind?: 'info' | 'quest' | 'loot' | 'warning' | 'level' | 'discovery' };
   'ui:menu': { menu: MenuName | null };

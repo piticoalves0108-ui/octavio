@@ -48,6 +48,8 @@ export interface AnimInput {
   rest: boolean;
   /** Superaquecido (constructos): ombros caídos, vapor. */
   overheat: boolean;
+  /** Cavalo: empinar (> 0, 0..1) ou escoicear (< 0, 0..-1). */
+  rear: number;
 }
 
 export function makeAnimInput(): AnimInput {
@@ -77,6 +79,7 @@ export function makeAnimInput(): AnimInput {
     graze: false,
     rest: false,
     overheat: false,
+    rear: 0,
   };
 }
 

@@ -124,6 +124,9 @@ export const SFX_DEFS: Record<SfxId, SfxDef> = {
   grass_cut: D('sfx', 3, 0.4, 3, true, 2, 25, 0.05, 2),
   stasis: D('sfx', 7, 0.65, 2, true, 6, 60, 0.35, 0.3),
   cook: D('ui', 6, 0.6, 1, false, 1, 1, 0.1, 0.2),
+  hoof: D('sfx', 2, 0.42, 6, true, 4, 60, 0.12, 0.6),
+  horse_neigh: D('sfx', 5, 0.6, 2, true, 6, 120, 0.3, 0.15),
+  whistle: D('sfx', 5, 0.55, 1, true, 4, 80, 0.3, 0.08),
 };
 
 /** Limite de vozes simultâneas (efeitos + ambiência pontual) por preset de qualidade. */

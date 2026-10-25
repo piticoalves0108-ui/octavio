@@ -7,6 +7,7 @@
 import type { GameContext } from '../core/context';
 import { ABILITIES, ULTIMATE, type AbilityId } from '../data/abilities';
 import { ITEMS } from '../data/items';
+import { HORSE } from '../data/mounts';
 import { el, htmlEl, setText, setStyle, show, toggleClass, projectToScreen, keyLabel, fmtDec } from './dom';
 import { abilityIcon, itemIcon, hexToCss, heartIcon } from './icons';
 import type { StatusId } from '../combat/Health';
@@ -50,6 +51,9 @@ export class Hud {
   private xpFill!: HTMLElement;
   private points!: HTMLElement;
   private effects!: HTMLElement;
+  /** Esporas do cavalo (só montado). */
+  private spurs!: HTMLElement;
+  private spurPips: HTMLElement[] = [];
   private effectKey = '';
   private ghost = 1;
   private lastHp = -1;
@@ -128,6 +132,10 @@ export class Hud {
     this.xpFill = el('div', 'hud-xp-fill', xp);
     this.points = el('div', 'hud-points', box);
     this.effects = el('div', 'hud-effects', box);
+    this.spurs = el('div', 'hud-spurs', box);
+    el('span', 'hud-spurs-label', this.spurs, 'Esporas');
+    for (let i = 0; i < HORSE.spurs; i++) this.spurPips.push(el('span', 'hud-spur', this.spurs));
+    show(this.spurs, false);
   }
 
   private makeSlot(parent: HTMLElement, cls: string, key: string): SlotEls {
@@ -180,6 +188,7 @@ export class Hud {
     this.updateWheel(dt);
     this.updateReticle(playing);
     this.updateHints();
+    this.updateRide();
     this.hurtT = Math.max(0, this.hurtT - dt * 2.2);
     setStyle(this.hurtFlash, 'opacity', this.hurtT.toFixed(2));
   }
@@ -352,7 +361,14 @@ export class Hud {
     const locked = !!sys.player.lockTarget;
     show(this.reticle, playing && !locked && sys.player.health.alive);
     toggleClass(this.reticle, 'combat', sys.ai.inCombat());
-    if (cast) {
+    const tame = sys.mounts?.taming ?? -1;
+    if (tame >= 0) {
+      // domando: a mesma barra mostra o progresso
+      show(this.castBar, true, 'flex');
+      setText(this.castName, 'Domando o cavalo… segure firme');
+      setStyle(this.castFill, 'width', `${(Math.min(1, tame) * 100).toFixed(0)}%`);
+      this.castBar.style.setProperty('--ab', '#e0b050');
+    } else if (cast) {
       show(this.castBar, true, 'flex');
       const def = ABILITIES[cast.id as AbilityId];
       setText(this.castName, def?.name ?? '');
@@ -361,12 +377,27 @@ export class Hud {
     } else show(this.castBar, false);
   }
 
+  /** Montado: esporas disponíveis (cada pip enche ao recarregar). */
+  private updateRide() {
+    const m = this.ctx.sys.mounts;
+    const riding = !!m?.ridden && m.taming < 0;
+    show(this.spurs, riding, 'flex');
+    if (!riding) return;
+    const s = m.ride.spurs;
+    for (let i = 0; i < this.spurPips.length; i++) {
+      const f = Math.max(0, Math.min(1, s - i));
+      setStyle(this.spurPips[i], '--f', f.toFixed(2));
+      toggleClass(this.spurPips[i], 'full', f >= 1);
+    }
+  }
+
   private updateHints() {
     const { sys, input } = this.ctx;
     const pl = sys.player;
     const b = input.bindings;
     let list: [string, string][];
-    if (pl.isFlying()) list = [[keyLabel(b.jump[0]), 'Subir'], [keyLabel(b.descend[0]), 'Descer'], [keyLabel(b.sprint[0]), 'Acelerar'], [keyLabel(b.fly[0]), 'Pousar']];
+    if (pl.isRiding()) list = sys.mounts.taming >= 0 ? [['', 'Domando: a energia vai acabando']] : [[keyLabel(b.forward[0]), 'Acelerar'], [keyLabel(b.sprint[0]), 'Espora'], [keyLabel(b.jump[0]), 'Pular'], [keyLabel(b.interact[0]), 'Desmontar'], [keyLabel(b.fly[0]), 'Saltar e voar']];
+    else if (pl.isFlying()) list = [[keyLabel(b.jump[0]), 'Subir'], [keyLabel(b.descend[0]), 'Descer'], [keyLabel(b.sprint[0]), 'Acelerar'], [keyLabel(b.fly[0]), 'Pousar']];
     else if (pl.isClimbing()) list = [[keyLabel(b.jump[0]), 'Saltar'], [keyLabel(b.dodge[0]), 'Soltar']];
     else if (pl.isSwimming()) list = [[keyLabel(b.fly[0]), 'Voar'], [keyLabel(b.sprint[0]), 'Nadar rápido']];
     else if (sys.ai.inCombat()) list = [[keyLabel(b.lockOn[1] ?? b.lockOn[0]), 'Travar alvo'], [keyLabel(b.dodge[0]), 'Esquivar'], [keyLabel(b.block[0]), 'Defender']];
@@ -374,6 +405,6 @@ export class Hud {
     const key = list.map((x) => x.join(':')).join('|');
     if (key === this.hintKey) return;
     this.hintKey = key;
-    this.hints.innerHTML = list.map(([k, t]) => `<span><span class="ui-key">${k}</span>${t}</span>`).join('');
+    this.hints.innerHTML = list.map(([k, t]) => `<span>${k ? `<span class="ui-key">${k}</span>` : ''}${t}</span>`).join('');
   }
 }

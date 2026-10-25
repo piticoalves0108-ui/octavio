@@ -330,6 +330,31 @@ body {
   box-shadow: 0 0 6px var(--gold);
   transition: width 0.4s ease;
 }
+.hud-spurs {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 6px 0 0 52px;
+}
+.hud-spurs-label {
+  font: 600 11px var(--f-body);
+  color: var(--ink-dim);
+  text-shadow: var(--shadow-text);
+  margin-right: 2px;
+}
+.hud-spur {
+  --f: 0;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(232, 196, 110, 0.75);
+  background: conic-gradient(var(--gold) calc(var(--f) * 360deg), rgba(0, 0, 0, 0.35) 0);
+  opacity: 0.75;
+}
+.hud-spur.full {
+  opacity: 1;
+  box-shadow: 0 0 6px rgba(232, 196, 110, 0.6);
+}
 .hud-points {
   margin: 8px 0 0 52px;
   font: 700 12px var(--f-body);

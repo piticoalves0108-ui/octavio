@@ -23,6 +23,7 @@ export type Action =
   | 'spark' // Centelha (fogo utilitário)
   | 'stasis' // Estase Temporal (congela um objeto)
   | 'interact'
+  | 'whistle' // assobiar (chamar o cavalo)
   | 'lockOn'
   | 'potion'
   | 'inventory'
@@ -55,6 +56,7 @@ export const DEFAULT_BINDINGS: Record<Action, string[]> = {
   spark: ['KeyG'],
   stasis: ['KeyT'],
   interact: ['KeyE'],
+  whistle: ['KeyV'],
   lockOn: ['Mouse1', 'Tab'],
   potion: ['KeyH'],
   inventory: ['KeyI'],
@@ -88,6 +90,7 @@ export const ACTION_LABELS: Record<Action, string> = {
   spark: 'Centelha (fogo)',
   stasis: 'Estase Temporal',
   interact: 'Interagir',
+  whistle: 'Assobiar (chamar o cavalo)',
   lockOn: 'Travar alvo',
   potion: 'Poção rápida',
   inventory: 'Inventário',
