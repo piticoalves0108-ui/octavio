@@ -10,6 +10,7 @@ npm ci
 npm run dev          # servidor de desenvolvimento (abre em http://localhost:5173)
 npm test             # testes unitários (vitest)
 npm run build        # checagem de tipos + build de produção (pasta dist/)
+npm run build:single  # um único arquivo jogável: dist-single/eclipse-arcano.html (abre com dois cliques)
 node scripts/smoke.mjs   # abre o jogo no Chromium headless, joga alguns segundos e tira uma captura
 ```
 
