@@ -4,6 +4,7 @@
  */
 import type { DamageType } from '../combat/Health';
 import type { DropDef } from './enemies';
+import { STORY_BOSSES } from './storyBosses';
 
 export interface BossAttackNumbers {
   damage: number;
@@ -129,7 +130,7 @@ export const GUARDIAN: BossDef & {
   leashRadius: 60,
 };
 
-export const BOSSES: Record<string, BossDef> = { [GUARDIAN.id]: GUARDIAN };
+export const BOSSES: Record<string, BossDef> = { [GUARDIAN.id]: GUARDIAN, ...STORY_BOSSES };
 
 /** Id de portão travado durante a luta e id da arena (src/data/world.ts BOSS_ARENAS). */
 export const BOSS_GATES: Record<string, string> = { guardiao_mecanico: 'arena_guardiao' };

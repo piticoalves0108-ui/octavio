@@ -355,8 +355,8 @@ export class WorldOverlay {
     else this.bossGhostV = frac;
     setStyle(this.bossFill, 'width', `${(frac * 100).toFixed(2)}%`);
     setStyle(this.bossGhost, 'width', `${(this.bossGhostV * 100).toFixed(2)}%`);
-    const phase = (b as unknown as { phase?: number }).phase;
-    setText(this.bossPhase, phase ? `Fase ${phase} de 3` : '');
+    const bp = b as unknown as { phase?: number; phaseCount?: number };
+    setText(this.bossPhase, bp.phase ? `Fase ${bp.phase} de ${bp.phaseCount ?? 3}` : '');
     show(this.boss, this.ctx.state === 'playing' || this.ctx.state === 'dead' || this.ctx.state === 'cinematic');
   }
 }

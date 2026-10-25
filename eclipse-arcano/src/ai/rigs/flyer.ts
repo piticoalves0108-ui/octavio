@@ -31,6 +31,7 @@ export const FLYER_LOOKS: Record<string, FlyerLook> = {
   corvo_cristal: { body: 0x1a1c26, wing: 0x2a3a4a, accent: 0x7fe8ff, eyes: 0x9ff4ff, bodyL: 0.7, bodyR: 0.2, span: 0.9, neckL: 0.12, tailL: 0.45, beak: 0x8ad8ff, glow: 1.4, crystals: true },
   fenix: { body: 0xff7a20, wing: 0xffb040, accent: 0xffe060, eyes: 0xffffff, bodyL: 0.9, bodyR: 0.24, span: 1.4, neckL: 0.3, tailL: 1.2, beak: 0xffd040, glow: 1.8 },
   dragao: { body: 0x2a2a34, wing: 0x3a3440, accent: 0xff5a30, eyes: 0xffa040, bodyL: 1.4, bodyR: 0.3, span: 2.2, neckL: 0.9, tailL: 1.6, beak: 0x1a1a20, glow: 0.4, dragon: true },
+  dragao_cristal: { body: 0x3a4a62, wing: 0x5a7a9a, accent: 0x9ff0ff, eyes: 0xd040ff, bodyL: 1.4, bodyR: 0.32, span: 2.4, neckL: 0.9, tailL: 1.7, beak: 0x2a3448, glow: 1.2, dragon: true, crystals: true },
   galinha: { body: 0xf0e8dc, wing: 0xe0d6c4, accent: 0xd03020, eyes: 0x111111, bodyL: 0.32, bodyR: 0.13, span: 0.2, neckL: 0.12, tailL: 0.15, beak: 0xe0a020, glow: 0, legs: 0xe0a020, comb: 0xd02020 },
 };
 

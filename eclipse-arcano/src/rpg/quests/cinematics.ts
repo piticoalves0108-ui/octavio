@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import type { GameContext } from '../../core/context';
 import { CINEMATICS, type CineStep, type CineVec } from '../../data/quests';
 import type { NarrativeBridge } from './bridge';
+import { evalAll } from '../dialogue/script';
 
 const V1 = new THREE.Vector3();
 const V2 = new THREE.Vector3();
@@ -52,7 +53,7 @@ export class CinematicPlayer {
     if (!CINEMATICS[id]) return false;
     if (!this.enabled) {
       // resolvida na hora: só os efeitos
-      for (const s of CINEMATICS[id]) if ('effects' in s) this.bridge.applyAll(s.effects);
+      for (const s of CINEMATICS[id]) if ('effects' in s && this.passes(s)) this.bridge.applyAll(s.effects);
       this.seen.add(id);
       this.stats.skipped++;
       this.ctx.events.emit('cinematic:start', { id });
@@ -92,8 +93,14 @@ export class CinematicPlayer {
     if (this.steps && this.idx >= this.steps.length && this.waitT <= 0) this.finish(false);
   }
 
+  /** Passo condicional (`when`): só vale se as condições passarem agora. */
+  private passes(s: CineStep): boolean {
+    return !s.when || evalAll(s.when, this.bridge.env);
+  }
+
   private exec(s: CineStep): number {
     const ui = this.ctx.sys.ui;
+    if (!this.passes(s)) return 0;
     if ('fade' in s) {
       const d = s.duration ?? 0.8;
       if (s.fade === 'out') {
@@ -166,7 +173,7 @@ export class CinematicPlayer {
     if (!this.steps) return;
     for (; this.idx < this.steps.length; this.idx++) {
       const s = this.steps[this.idx];
-      if ('effects' in s) this.bridge.applyAll(s.effects);
+      if ('effects' in s && this.passes(s)) this.bridge.applyAll(s.effects);
     }
     this.stats.skipped++;
     this.ctx.sys.ui.showSubtitle('', 0.01);

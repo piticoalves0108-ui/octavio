@@ -650,6 +650,52 @@ export const NPCS: NpcDef[] = [
     ],
     lines: { hello: ['Estou de olho em você.', 'Mãos onde eu possa ver. As duas.'], about: 'Alguém abre o portão leste de madrugada. Ainda descubro quem.' },
   },
+  // ===================================================== FERROLUZ (Ato II)
+  {
+    id: 'barao',
+    name: 'Teodric Vael',
+    title: 'Barão de Ferroluz',
+    role: 'scholar',
+    faction: 'villager',
+    home: 'ferroluz_barao',
+    personality: 'Engenheiro-nobre idealista, fala rápido e sonha alto. Confia demais numa voz que só ele ouve.',
+    goal: 'Religar a Forja Celeste e "devolver a tecnologia ao povo".',
+    story: true,
+    look: { sex: 'm', height: 1.02, build: 0.95, skin: C.skinFair, hair: C.hairAuburn, hairStyle: 'short', beard: 'mustache', shirt: 0x2a3858, pants: 0x1e2434, cloak: 0xb87a20, belt: 0x6a4a1a, boots: 0x1a1a22, tool: 'book', glasses: true },
+    schedule: [
+      { from: 23, to: 6, act: 'sleep', at: 'ferroluz_barao' },
+      { from: 6, to: 12, act: 'read', at: 'ferroluz_barao' },
+      { from: 12, to: 14, act: 'wander', tag: 'ferroluz' },
+      { from: 14, to: 20, act: 'work', at: 'ferroluz_oficina' },
+      { from: 20, to: 23, act: 'read', at: 'ferroluz_barao' },
+    ],
+    overrides: [
+      // exposto diante dos engenheiros: some de Ferroluz
+      { when: [{ flag: 'barao_exposto' }], schedule: [{ from: 0, to: 24, act: 'sleep', at: 'ferroluz_barao' }] },
+      // durante a primeira visita fica de pé diante da torre, esperando o "herói da era antiga"
+      { when: [{ questStage: 'q_ferroluz', stage: ['portao', 'barao', 'pedido'] }], schedule: [{ from: 0, to: 24, act: 'idle', at: 'ferroluz_patio' }] },
+      { when: [{ questStage: 'q_forja', stage: ['forja', 'confronto'] }], schedule: [{ from: 0, to: 24, act: 'idle', at: 'ferroluz_forja' }] },
+    ],
+    lines: {
+      hello: ['Ah, o herói da era antiga! Venha, venha, há tanto a mostrar!', 'Engrenagem e runa, mestre Kaelen. Engrenagem e runa.'],
+      about: 'Ferroluz guarda o que o Império deixou. Eu só quero que volte a funcionar, para todos.',
+      worry: 'O sábio anda quieto. Quando ele fica quieto, eu durmo mal.',
+    },
+  },
+  {
+    id: 'sentinela_ferroluz',
+    name: 'Mirela Ancoraço',
+    title: 'Sentinela de Ferroluz',
+    role: 'guard',
+    faction: 'guard',
+    home: 'ferroluz_guarda_portao_1',
+    personality: 'Seca e eficiente. Cumpre ordens, mas não gosta das que o Barão anda dando.',
+    goal: 'Manter o portão fechado até que o Barão diga o contrário.',
+    story: true,
+    look: { sex: 'f', height: 1.04, build: 1.08, skin: C.skinBrown, hair: C.hairBlack, hairStyle: 'braid', shirt: 0x3a4a6a, pants: 0x2a3040, armor: true, hat: 'helmet', hatColor: 0x7a8496, tool: 'spear', boots: 0x1e2028 },
+    schedule: [{ from: 0, to: 24, act: 'guard', at: 'ferroluz_guarda_portao_1' }],
+    lines: { hello: ['Portão de Ferroluz. Diga o que quer e seja breve.', 'Engenheiros dentro, curiosos fora.'], about: 'O Barão fechou o portão há meses. Diz que é para nossa proteção. Contra o quê, ele não diz.' },
+  },
 ];
 
 export const NPC_BY_ID: Record<string, NpcDef> = Object.fromEntries(NPCS.map((n) => [n.id, n]));
@@ -663,4 +709,9 @@ export const SPEAKERS: Record<string, { name: string; title?: string }> = {
   rei: { name: 'Voz Antiga' },
   cacador: { name: 'Caçador Furtivo', title: 'Forasteiro armado' },
   quadro: { name: 'Quadro de Missões', title: 'Taverna do Javali Rúnico' },
+  darian: { name: 'Darian', title: 'Cavaleiro do Eclipse' },
+  morgana: { name: 'Morgana', title: 'Bruxa das Tempestades' },
+  aldric: { name: 'Aldric Valmora', title: 'O Antigo Rei' },
+  coracao: { name: 'Coração do Eclipse' },
+  forja: { name: 'Forja Celeste', title: 'Ferroluz' },
 };

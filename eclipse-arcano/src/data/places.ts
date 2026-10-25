@@ -12,6 +12,7 @@
  * Use `place(id)`, `placesWithTag(tag)` e `PATROL_ROUTES` nos módulos de NPCs, IA e missões.
  */
 import { BOSS_ARENAS, FLOATING_ISLANDS, LOCATION_BY_ID } from './world';
+import { SKY_CITADEL } from './storyBosses';
 
 // ---------------------------------------------------------------------------
 // Utilitários geométricos (puros)
@@ -480,6 +481,30 @@ addS(LAB, 'laboratorio_entrada', 'poi', ...rotYaw(LAB.yaw, 0, 10.5), { yaw: LAB.
 addS(CRYSTAL_SHRINE, 'santuario_cristal_altar', 'quest', 0, 0, { y: CRYSTAL_SHRINE.y + 0.45, label: 'Altar do Santuário de Cristal', tags: ['santuario_cristal', 'missao', 'checkpoint'] });
 addS(CRYSTAL_SHRINE, 'poleiro_fenix', 'creature', 17, -6, { y: CRYSTAL_SHRINE.y + 15.2, label: 'Poleiro da Fênix', tags: ['santuario_cristal', 'criatura', 'fenix'] });
 addS(CANYON, 'desfiladeiro_arco', 'poi', 0, 10, { label: 'Arco de pedra do desfiladeiro', tags: ['desfiladeiro'] });
+
+// --- Atos II a IV: arenas e pontos de missão ---
+{
+  const sp = (id: string) => ({ ...pick(LOCATION_BY_ID[id]), y: LOCATION_BY_ID[id].flattenTo! });
+  const STORM = sp('pico_tempestades');
+  addS(STORM, 'tempestade_centro', 'poi', 0, 0, { y: STORM.y, label: 'Círculo dos menires', tags: ['tempestade', 'arena', 'missao'] });
+  addS(STORM, 'tempestade_altar', 'quest', 0, -9, { y: STORM.y + 0.4, label: 'Altar da Tempestade', tags: ['tempestade', 'missao'] });
+  const NEST = sp('picos_cristal');
+  addS(NEST, 'cristal_ninho', 'poi', 0, 0, { y: NEST.y, label: 'Ninho do Dragão de Cristal', tags: ['cristal', 'arena', 'missao'] });
+  addS(NEST, 'cristal_primordial_ponto', 'quest', 0, 4, { y: NEST.y + 0.3, label: 'Cristal Primordial', tags: ['cristal', 'missao'] });
+  const BOG = sp('coracao_pantano');
+  addS(BOG, 'pantano_coracao', 'poi', 0, 0, { y: BOG.y, label: 'Ilha de raízes negras', tags: ['pantano', 'arena', 'missao'] });
+  const TEMPLE = sp('templo_submerso');
+  addS(TEMPLE, 'templo_centro', 'poi', 0, 0, { y: TEMPLE.y + 0.5, label: 'Salão do Templo Submerso', tags: ['templo', 'arena', 'missao'] });
+  addS(TEMPLE, 'templo_entrada', 'poi', 0, 24, { y: TEMPLE.y, label: 'Escadaria do templo', tags: ['templo', 'missao'] });
+  addS(TEMPLE, 'templo_selo', 'quest', 0, -12, { y: TEMPLE.y + 0.5, label: 'Selo da Primeira Era', tags: ['templo', 'missao'] });
+  addS(TOWER, 'torre_duelo', 'poi', 0, -24, { label: 'Círculo de duelo diante da torre', tags: ['torre', 'arena', 'missao'] });
+  addS(FERROLUZ, 'ferroluz_arena', 'poi', -8, -8, { y: FERROLUZ.y, label: 'Pátio de testes de Ferroluz', tags: ['ferroluz', 'arena', 'missao'] });
+  addS(FERROLUZ, 'ferroluz_forja', 'quest', 4, 22, { y: FERROLUZ.y, label: 'Forja Celeste', tags: ['ferroluz', 'forja', 'missao'] });
+  addS(FERROLUZ, 'ferroluz_arquivo', 'quest', 12, 10, { y: FERROLUZ.y, yaw: PI, label: 'Arquivo do Barão', tags: ['ferroluz', 'arquivo', 'missao'] });
+  add('cidadela_centro', 'poi', SKY_CITADEL.x, SKY_CITADEL.z, { y: SKY_CITADEL.y, label: 'Cidadela Celeste', tags: ['cidadela', 'arena', 'voo', 'missao'] });
+  add('cidadela_coracao', 'quest', SKY_CITADEL.x, SKY_CITADEL.z - 22, { y: SKY_CITADEL.y + 1.2, label: 'Coração do Eclipse', tags: ['cidadela', 'missao'] });
+  add('cidadela_borda', 'poi', SKY_CITADEL.x, SKY_CITADEL.z + 36, { y: SKY_CITADEL.y, label: 'Borda da Cidadela', tags: ['cidadela', 'voo'] });
+}
 
 // --- Habitats de criaturas e áreas de inimigos ---
 add('campina_cervos', 'creature', -250, 120, { label: 'Campina dos cervos', tags: ['criatura', 'cervo', 'campina'] });

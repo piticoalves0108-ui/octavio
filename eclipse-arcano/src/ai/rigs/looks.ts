@@ -17,7 +17,7 @@ export interface HumanoidLook {
   hood?: number;
   cape?: number;
   robe?: number;
-  head: 'crow' | 'visor' | 'hood' | 'hat' | 'hair' | 'construct' | 'stone' | 'guardian';
+  head: 'crow' | 'visor' | 'hood' | 'hat' | 'hair' | 'construct' | 'stone' | 'guardian' | 'crown';
   eyes?: number;
   right: RightHand;
   left: LeftHand;
@@ -49,6 +49,12 @@ export const HUMANOID_LOOKS: Record<string, HumanoidLook> = {
   sentinela: { build: 'heavy', skin: 0x8a6a3a, torso: 0x9a7642, trim: 0x5a4024, legs: 0x7a5c34, boots: 0x4a3620, head: 'construct', eyes: 0x5fe8ff, right: 'fist', left: 'fist', core: 0x58d8ff, runes: 0x48c8ff, metal: true, pauldrons: 0xa88450 },
   errante: { build: 'heavy', skin: 0x5a5450, torso: 0x6a5e56, trim: 0x2e2a28, legs: 0x4e4844, boots: 0x2a2624, head: 'construct', eyes: 0xff8a30, right: 'hammer', left: 'cannon', core: 0xff9a40, runes: 0xff7a20, metal: true, pauldrons: 0x7a6a5e },
   golem: { build: 'golem', skin: 0x6f6a62, torso: 0x77726a, trim: 0x4a5a3a, legs: 0x66615a, boots: 0x55514b, head: 'stone', eyes: 0x7ff0ff, right: 'fist', left: 'fist', core: 0x7ff0ff, crystals: 0x6fe0ff, stone: true },
+  // --- chefes da história (Atos II a IV) ---
+  colosso: { build: 'colossus', skin: 0x6a5a48, torso: 0x8a6a48, trim: 0x3a2a20, legs: 0x6a5240, boots: 0x3a2e24, head: 'construct', eyes: 0xffa040, right: 'hammer', left: 'cannon', core: 0xff8a30, runes: 0xff9a40, metal: true, pauldrons: 0xa07a50 },
+  bruxa: { build: 'slim', skin: 0xb8c4d0, torso: 0x24304a, trim: 0x0e1424, legs: 0x1c2438, boots: 0x10141e, robe: 0x2a3858, hood: 0x1a2440, cape: 0x30406a, head: 'hood', eyes: 0xbfe6ff, right: 'staff', left: 'none', runes: 0x9fd8ff },
+  primeira_era: { build: 'colossus', skin: 0x8a8070, torso: 0x9a907e, trim: 0x5a5244, legs: 0x7a7060, boots: 0x4a443a, head: 'stone', eyes: 0xffe08a, right: 'fist', left: 'fist', core: 0xffd060, crystals: 0xffe08a, runes: 0xffd060, stone: true },
+  darian: { build: 'normal', skin: 0x6a6070, torso: 0x241c2a, trim: 0x8a6a2a, legs: 0x1e1824, boots: 0x140f18, sleeves: 0x2a2230, head: 'visor', eyes: 0xff6a90, right: 'longsword', left: 'fist', pauldrons: 0x30263a, runes: 0xff4a7a, metal: true, cape: 0x3a0e22 },
+  rei: { build: 'normal', skin: 0xd8c0a8, torso: 0x4a1a2a, trim: 0xd8a840, legs: 0x2a1018, boots: 0x1a0c10, sleeves: 0x5a2030, robe: 0x3a0e1e, cape: 0x6a1428, head: 'crown', eyes: 0xffc860, right: 'longsword', left: 'none', runes: 0xffc860, pauldrons: 0xd8a840 },
   guardiao: { build: 'colossus', skin: 0x7c7f88, torso: 0x8a8e98, trim: 0x3a3e48, legs: 0x6c7078, boots: 0x44484f, head: 'guardian', eyes: 0x6ff6ff, right: 'fist', left: 'fist', core: 0x7ff8ff, runes: 0x48d8ff, metal: true, pauldrons: 0x9a9ea8 },
 };
 

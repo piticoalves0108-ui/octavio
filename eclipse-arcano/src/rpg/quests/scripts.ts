@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import type { GameContext } from '../../core/context';
 import type { Entity } from '../../core/Entity';
-import { CINEMATICS, QUEST_RULES } from '../../data/quests';
+import { CINEMATICS, ECLIPSE_STORY, QUEST_RULES } from '../../data/quests';
+import type { StoryBoss } from '../../ai/bosses/StoryBoss';
 import { PLACES } from '../../data/places';
 import type { CinematicPlayer } from './cinematics';
 import type { NarrativeBridge } from './bridge';
@@ -9,7 +10,7 @@ import type { NarrativeBridge } from './bridge';
 /**
  * Roteiros nomeados (efeito `{ script: id }`): cinemáticas e lógica de mundo das
  * missões — destino de Ravena, tenda dos Corvos, núcleo do Guardião, caçadores e
- * Cervo de Luz, bênção do Irmão Calen.
+ * Cervo de Luz, bênção do Irmão Calen, Forja Celeste, Barão, Darian e os finais.
  */
 export interface ScriptHost {
   readonly ctx: GameContext;
@@ -23,6 +24,27 @@ export interface ScriptHost {
 }
 
 const V = new THREE.Vector3();
+const V2 = new THREE.Vector3();
+
+/** Darian (chefe da história rendido), se ainda estiver no mundo. */
+function darianEntity(ctx: GameContext): StoryBoss | null {
+  const b = ctx.sys.ai?.storyBoss;
+  return b && !b.removed && b.bossId === 'cavaleiro_eclipse' ? b : null;
+}
+
+/** Clarão do final, no Coração do Eclipse: coluna de luz, anel e tremor. */
+function endingBurst(h: ScriptHost, color: number, kind: 'time' | 'void') {
+  const sys = h.ctx.sys;
+  if (!sys.world.placePosition('cidadela_coracao', V)) V.copy(sys.player.entity.position);
+  V.y += 1.2;
+  sys.vfx.burst(kind, V, { count: 70, scale: 2.6, color });
+  sys.vfx.burst('shockwave', V, { scale: 4, color });
+  sys.vfx.beam(V, V2.copy(V).setY(V.y + 120), color, 1.2, 3);
+  sys.vfx.runeCircle(V, 8, color, 4, 0.8);
+  sys.vfx.sustainedLight(V, color, 8, 6, null, 40);
+  sys.audio.play('cast_ascend', { position: V, volume: 1 });
+  sys.camera.shake(0.7, 2);
+}
 
 /** Inimigo único vivo (ou null). */
 export function uniqueEnemy(ctx: GameContext, uid: string): (Entity & { sp?: { standDown: boolean }; setState?: (s: string) => void; fleeT?: number; engage?: (t: Entity, c: boolean, d?: number) => void; cancelAction?: () => void }) | null {
@@ -166,6 +188,76 @@ export function runQuestScript(id: string, h: ScriptHost): void {
         sys.progression.addBuff('bencao_aurora', 'Bênção da Aurora', 600, { healthRegen: 2, damageReduction: 0.05 });
         sys.ui.notify('Bênção da Aurora: regeneração de vida e −5% de dano recebido por 10 minutos.', 'info');
       }
+      break;
+    }
+    // ------------------------------------------------ Ato II: Ferroluz
+    case 'forja_acesa': {
+      if (sys.world.placePosition('ferroluz_forja', V)) {
+        V.y += 2;
+        sys.vfx.burst('fire', V, { count: 50, scale: 2.2, color: 0x6ab8ff });
+        sys.vfx.burst('arcaneBurst', V, { count: 40, scale: 1.8, color: 0x7fd8ff });
+        sys.vfx.beam(V, V2.copy(V).setY(V.y + 40), 0x7fd8ff, 0.7, 2.4);
+        sys.vfx.sustainedLight(V, 0x6ab8ff, 7, 8, null, 30);
+        sys.audio.play('explosion', { position: V, volume: 0.8, pitch: 0.7 });
+      }
+      sys.camera.shake(0.5, 1.4);
+      h.cine.play('memoria_forja');
+      break;
+    }
+    case 'barao_exposto': {
+      sys.story.set('ferroluz_revolta', true);
+      sys.ui.showSubtitle('(Os engenheiros levam Teodric para dentro da torre. Ferroluz grita o nome dele, e não é de carinho.)', 5);
+      sys.ui.notify('Ferroluz se volta contra o Barão.', 'warning');
+      break;
+    }
+    case 'barao_convencido': {
+      if (sys.world.placePosition('ferroluz_barao', V)) {
+        V.y += 6;
+        sys.vfx.burst('crystalShatter', V, { count: 40, scale: 1.4, color: 0xb070ff });
+        sys.audio.play('hit_magic', { position: V, volume: 0.8, pitch: 0.6 });
+      }
+      sys.ui.notify('Ferroluz será sua aliada no Eclipse.', 'quest');
+      break;
+    }
+    // ------------------------------------------------ Ato III: Darian
+    case 'darian_redimir': {
+      const b = darianEntity(ctx);
+      if (b) b.depart(ctx);
+      else if (sys.world.placePosition('torre_duelo', V)) sys.vfx.burst('time', V, { scale: 2, count: 50, color: 0xffd880 });
+      sys.ui.notify('Darian lutará ao seu lado na batalha final.', 'quest');
+      break;
+    }
+    case 'darian_matar': {
+      const b = darianEntity(ctx);
+      if (b && b.alive) {
+        b.health.invulnerable = 0;
+        sys.combat.kill(b);
+      } else if (sys.world.placePosition('torre_duelo', V)) sys.vfx.burst('void', V, { scale: 2, count: 40 });
+      sys.camera.shake(0.4, 0.8);
+      break;
+    }
+    // ------------------------------------------------ Ato IV e finais
+    case 'eclipse_avanca': {
+      sys.env.setEclipse(ECLIPSE_STORY.ato4, 20);
+      break;
+    }
+    case 'fim_reunificacao': {
+      sys.env.setEclipse(ECLIPSE_STORY.reunificacao, 8);
+      sys.env.lockWeather(null);
+      sys.env.setWeather('clear', 6);
+      endingBurst(h, 0xffd880, 'time');
+      break;
+    }
+    case 'fim_selo': {
+      sys.env.setEclipse(ECLIPSE_STORY.selo, 8);
+      sys.env.lockWeather(null);
+      endingBurst(h, 0x7fd8ff, 'time');
+      break;
+    }
+    case 'fim_sombrio': {
+      sys.env.setEclipse(ECLIPSE_STORY.sombrio, 6);
+      endingBurst(h, 0x9a4aff, 'void');
+      sys.vfx.burst('corruption', sys.player.entity.position, { count: 50, scale: 1.8 });
       break;
     }
     default:

@@ -20,6 +20,7 @@ import { buildRuins, buildArena } from './structures/ruins';
 import { buildCamp, buildTower, buildFerroluz } from './structures/outposts';
 import { buildIslands } from './structures/sky';
 import { buildLab, buildCrystalShrine, buildCanyonArches, buildBridges, buildSigns, buildSwampProps } from './structures/landmarks';
+import { buildStorySites, type CitadelParts } from './structures/storySites';
 import { findPath as navFindPath, villageNav } from './nav';
 import { yieldFrame } from './maps';
 import { Exploration } from './exploration';
@@ -61,6 +62,11 @@ export class World implements GameSystem, Saveable {
   /** Atalho para os uniforms globais (depuração/automação: window.__game.sys.world.uniforms). */
   readonly uniforms = GLOBAL_UNIFORMS;
   private structureMeshes: THREE.Mesh[] = [];
+  /** Cidadela Celeste (Ato IV): malha e colisores, escondidos até a flag 'cidadela_surgiu'. */
+  private citadel: CitadelParts | null = null;
+  private citadelMesh: THREE.Mesh | null = null;
+  /** A Cidadela Celeste está no céu (visível e sólida)? */
+  citadelVisible = false;
   private kit!: SiteKit;
   private lightSpecs: LightSpec[] = [];
   private lightSlots: THREE.PointLight[] = [];
@@ -110,6 +116,7 @@ export class World implements GameSystem, Saveable {
     buildCanyonArches(this.kit);
     buildBridges(this.kit);
     buildSwampProps(this.kit);
+    this.citadel = buildStorySites(this.kit);
     const signs = buildSigns(this.kit, this.root);
     this.structureMeshes.push(signs);
     progress(0.75, 'Assentando o relevo…');
@@ -117,6 +124,8 @@ export class World implements GameSystem, Saveable {
     this.maps.upload();
     this.kit.finish(this.root);
     this.structureMeshes.push(...this.kit.meshes);
+    this.citadelMesh = this.kit.meshes.find((m) => m.name === 'cidadela') ?? null;
+    this.setCitadelVisible(false);
     this.root.add(this.gates.root);
     this.lightSpecs = this.kit.lights;
 
@@ -145,6 +154,9 @@ export class World implements GameSystem, Saveable {
     villageNav(); // grafo da vila pronto antes do primeiro pedido dos NPCs
     this.applySettings();
     ctx.events.on('settings:changed', () => this.applySettings());
+    ctx.events.on('story:flag', ({ key }) => {
+      if (key === 'cidadela_surgiu') this.syncCitadel();
+    });
     this.installHook();
     progress(1, 'Mundo pronto');
   }
@@ -447,6 +459,19 @@ export class World implements GameSystem, Saveable {
     this.exploration.reset();
     this.currentLocation = null;
     this.gates?.reset();
+    this.setCitadelVisible(false);
+  }
+
+  /** Mostra/esconde a Cidadela Celeste (malha e colisores). */
+  setCitadelVisible(on: boolean) {
+    this.citadelVisible = on;
+    if (this.citadelMesh) this.citadelMesh.visible = on;
+    if (this.citadel) for (const c of this.citadel.colliders) this.ctx?.physics.setEnabled(c, on);
+  }
+
+  /** Acompanha a história: a Cidadela surge no Ato IV. */
+  syncCitadel() {
+    this.setCitadelVisible(!!this.ctx?.sys.story?.is('cidadela_surgiu'));
   }
 
   serialize() {
@@ -465,6 +490,7 @@ export class World implements GameSystem, Saveable {
       const gs = data?.gates;
       if (gs && typeof gs === 'object') for (const [id, open] of Object.entries(gs)) if (typeof open === 'boolean') this.gates.set(id, open, true);
     }
+    this.syncCitadel();
   }
 
   dispose() {

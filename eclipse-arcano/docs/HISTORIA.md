@@ -1,6 +1,6 @@
 # Eclipse Arcano: O Mago do Tempo Perdido — Bíblia narrativa
 
-> Documento de design da campanha completa. A **fatia vertical** implementada agora cobre o **Prólogo** e o **Ato I**, na região do Vale de Brumafria. Os demais atos estão descritos para orientar a expansão.
+> Documento de design da campanha completa. A campanha inteira está implementada: **Prólogo**, **Atos I a IV** e os **três finais**. O que cada ato faz no jogo (missões, chefes, escolhas) está em `docs/status/story.md`.
 
 ## Premissa
 
@@ -55,30 +55,41 @@ Kaelen acorda na **Cripta do Despertar**. Saqueadores Corvos arrancam cristais d
    - *Libertar o espírito do Guardião:* o espírito entrega a **Lâmina Temporal** e um **fragmento de memória** extra. Inclina para os finais luminosos.
 5. **Ecos do Passado:** o primeiro fragmento de memória revela Kaelen projetando o Coração do Eclipse e a voz do Rei agradecendo. Maren reage conforme as escolhas e aponta Ferroluz. O Ato I se encerra com um epílogo de capítulo. O mundo segue aberto para exploração e missões secundárias.
 
-### Ato II — A Cidade de Ferro *(planejado)*
+### Ato II — A Cidade de Ferro *(implementado)*
 
 - Os portões de **Ferroluz** se abrem. O **Barão Teodric** recebe Kaelen como "herói da era antiga" e pede ajuda para religar a **Forja Celeste**.
 - Chefes: **Colosso de Ferro e Magia** (o teste do Barão), **Bruxa das Tempestades** (montanhas do norte; controla o clima da arena), **Dragão de Cristal Corrompido** (picos cristalinos; luta aérea).
 - Revelações: a **Grande Cisão** foi obra de Kaelen. Os sussurros que guiam o Barão vêm do Coração.
 - Escolha: expor o Barão publicamente (Ferroluz entra em guerra civil) ou convencê-lo em particular. A segunda opção exige ter poupado Ravena *ou* ter as cartas do arquivo.
+- No jogo: `q_ferroluz` (sentinela Mirela abre o portão, encontro com o Barão, Colosso), `q_tempestade` (Morgana, uma das Sete do Conselho) e `q_dragao` (Vyrmathal) em qualquer ordem, depois `q_forja`. Os dois núcleos acendem a Forja Celeste e tocam a memória da Grande Cisão; a voz de Aldric sai da forja. Convencer o Barão aceita a carta com lacre, as cartas do arquivo (ponto opcional na torre) ou ter poupado Ravena. Recompensa: Placa do Colosso + aprimoramento grátis (convencido) ou 400 de ouro (exposto).
 
-### Ato III — A Primeira Era *(planejado)*
+### Ato III — A Primeira Era *(implementado)*
 
 - No **Pântano Sombrio**, o **Devorador de Almas** é a fonte visível da corrupção. Num templo submerso está o **Guardião da Primeira Era**, que testa a memória de Kaelen com fases baseadas nos fragmentos coletados.
 - O **Cavaleiro do Eclipse** é Darian, o aprendiz que Kaelen deixou para trás durante a Cisão. Ele pode ser redimido se o jogador tiver os fragmentos de memória certos.
 - Reviravolta: o selo só se fecha de novo se Kaelen voltar a dormir... ou se o Coração for usado.
+- No jogo: `q_pantano` (Devorador de Almas, que não se move e ataca com tentáculos), `q_templo` (cada fragmento de memória enfraquece o Guardião em 8%, até 40%; o Selo da Primeira Era mostra Darian trancado do lado de fora do farol) e `q_darian` (duelo; Darian se rende com 12% da vida). Redimir Darian exige o fragmento do Farol Celeste e 5 fragmentos; ele dá o Emblema de Darian. Matá-lo dá a Insígnia do Eclipse.
 
-### Ato IV — Eclipse *(planejado)*
+### Ato IV — Eclipse *(implementado)*
 
 A **Cidadela Celeste** emerge dos céus (só alcançável voando). A batalha final contra **O Antigo Rei** tem três fases: o Rei, o Rei fundido ao Coração e o Eclipse em si, uma arena que gira entre noite e dia.
 
-### Finais (dependem das escolhas acumuladas)
+No jogo: `q_eclipse` começa com a cinemática da cidadela descendo sobre o Desfiladeiro das Cinzas (300 m de altura) e o eclipse escurecendo o céu. Na luta, os aliados aparecem conforme as escolhas: Ravena (bombas de fumaça e dano), os canhões de Ferroluz (Barão convencido) e Darian (escudo e cura na fase 3). Depois do Rei, o jogador fala com o Coração do Eclipse e escolhe o final.
+
+### Finais (dependem das escolhas acumuladas) *(implementados)*
 
 1. **Reunificação:** Kaelen usa o Coração como foi projetado. Magia e tecnologia voltam a coexistir, e Kaelen perde a imortalidade e envelhece normalmente. Exige ter libertado o Guardião, redimido o Barão ou Darian e coletado os fragmentos.
 2. **Selo Eterno:** Kaelen sela Aldric e a si mesmo de novo. O mundo continua dividido, mas seguro. É agridoce, e os aliados lembram dele em lendas.
 3. **Ascensão Sombria:** Kaelen absorve o Coração e se torna o novo eclipse. O final fica disponível se ele absorveu os núcleos dos chefes e fez escolhas implacáveis.
 
 Os aliados poupados (Ravena, Darian, o Barão) aparecem na batalha final e nos epílogos conforme as escolhas.
+
+Requisitos no jogo (conversa `coracao_final`; opções bloqueadas mostram o motivo):
+- **Reunificação:** Guardião libertado, Barão *ou* Darian redimido e 6 fragmentos de memória. O eclipse some do céu.
+- **Selo Eterno:** sempre disponível. O eclipse fica fraco no céu.
+- **Ascensão Sombria:** núcleo do Guardião absorvido e ao menos uma escolha implacável (Ravena executada, Barão exposto ou Darian morto). O eclipse fica no máximo para sempre e Kaelen ganha +20% de poder mágico.
+
+Cada final tem sua cinemática e um epílogo que mostra só o destino real de cada aliado (Ravena, Barão, Darian, Guardião, Cervo de Luz). Depois dos créditos o mundo continua aberto.
 
 ## Missões secundárias da fatia vertical
 

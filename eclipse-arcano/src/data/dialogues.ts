@@ -1,5 +1,5 @@
 /**
- * Diálogos de Brumafria e da campanha (Prólogo + Ato I + secundárias).
+ * Diálogos de Brumafria e da campanha (Prólogo, Atos I a IV, finais e secundárias).
  * Estrutura: src/rpg/dialogue/runner.ts. Convenções:
  * - o falante padrão de cada nó é o NPC da conversa; as opções são falas de Kaelen;
  * - `tone` marca a postura (compassivo, pragmático, arrogante, curioso);
@@ -1035,6 +1035,414 @@ dlg({
     bencao: { text: '(Calen hesita, depois põe a mão na sua testa.) Que a Aurora cure o que o tempo feriu. ...Pronto. Não conte para ninguém que eu abençoei um mago.', effects: [{ script: 'bencao_calen', now: true }] },
     medo: { text: 'Meu mestre contava que, na Cisão, a magia arrancou o céu do lugar. Que cidades inteiras flutuaram e caíram. Soberba, ele dizia. A Aurora pede humildade. A magia de Aeternum pediu tudo, e levou.', next: 'ola' },
     arrogante: { text: 'Não é para impressionar. É para consolar. Mas acho que você ainda não precisa de consolo. Vai precisar.' },
+  },
+});
+
+// ===========================================================================
+// ATO II — A Cidade de Ferro
+// ===========================================================================
+dlg({
+  id: 'sentinela_portao',
+  npc: 'sentinela_ferroluz',
+  priority: 20,
+  when: [stage('q_ferroluz', 'portao')],
+  start: 'inicio',
+  nodes: {
+    inicio: {
+      text: 'Alto. Ferroluz está fechada por ordem do Barão Teodric. Ninguém entra, ninguém sai. Volte por onde veio, viajante.',
+      options: [
+        { text: 'Os cristais roubados do meu vale vêm parar aqui.', tone: 'pragmatico', next: 'cristais' },
+        { text: 'Esta carta tem o lacre do seu Barão.', tone: 'curioso', when: [{ item: 'carta_barao' }], next: 'carta' },
+        { text: 'Abra o portão, ou eu abro.', tone: 'arrogante', next: 'ameaca' },
+        { text: 'Meu nome é Kaelen Aurivar.', tone: 'curioso', next: 'nome' },
+      ],
+    },
+    cristais: {
+      text: '(Ela baixa a voz.) Chegam carroças de madrugada, cobertas de lona, direto para a torre do Barão. Eu não pergunto. Ninguém pergunta. Quem é você, afinal?',
+      options: [
+        { text: 'Kaelen Aurivar.', tone: 'pragmatico', next: 'nome' },
+        { text: 'Alguém que vai perguntar.', tone: 'arrogante', next: 'nome' },
+      ],
+    },
+    carta: {
+      text: '(Mirela examina o lacre e empalidece.) Cera azul com engrenagem. É da chancelaria. Se o Barão anda pagando bandido... não, não é problema meu. Mas ele vai querer ver você. Como se chama?',
+      options: [{ text: 'Kaelen Aurivar.', tone: 'pragmatico', next: 'nome' }],
+    },
+    ameaca: { text: '(Ela ri, sem graça.) Já ouvi isso de gente maior. (Pausa.) Mas nunca de alguém com os olhos brilhando assim. Quem é você?', options: [{ text: 'Kaelen Aurivar.', tone: 'arrogante', next: 'nome' }] },
+    nome: {
+      text: 'Aurivar? (Mirela recua um passo.) O Barão repete esse nome há semanas. "Quando o Arquimago Aurivar chegar, abram o portão." Eu achava que era mais uma das manias dele.',
+      next: 'abrir',
+    },
+    abrir: {
+      text: 'ABRAM O PORTÃO! (Engrenagens rangem atrás da muralha.) O Barão está no pátio, diante da torre de comando. E, forasteiro... tome cuidado com o que ele promete. Ele promete muito.',
+      effects: [{ gate: 'portao_ferroluz', open: true }, { set: 'ferroluz_aberta' }, { log: 'A sentinela abriu o portão de Ferroluz. O Barão me esperava pelo nome.', quest: 'q_ferroluz' }],
+    },
+  },
+});
+
+dlg({
+  id: 'barao_encontro',
+  npc: 'barao',
+  priority: 20,
+  when: [stage('q_ferroluz', 'barao')],
+  start: 'inicio',
+  nodes: {
+    inicio: {
+      text: 'Ah! Finalmente! (Um homem de óculos e capa dourada desce a escada quase correndo.) Teodric Vael, Barão de Ferroluz, a seu dispor. O sábio disse que o senhor viria. Disse até a cor dos seus olhos!',
+      options: [
+        { text: 'Que sábio?', tone: 'curioso', next: 'sabio' },
+        { text: 'Você compra os cristais que os Corvos roubam.', tone: 'pragmatico', next: 'cristais' },
+        { text: 'Então sabe quem eu sou.', tone: 'arrogante', next: 'quem' },
+      ],
+    },
+    sabio: {
+      text: 'Um conselheiro antigo. Muito antigo. Fala comigo por um espelho de cristal, na minha torre. Me ensinou mais Arcanotecnia em um ano do que a Academia em vinte. Ele quer o mesmo que eu: devolver ao povo as maravilhas de Aeternum.',
+      effects: [{ set: 'barao_falou_sabio' }],
+      next: 'plano',
+    },
+    cristais: {
+      text: '(Ele ajeita os óculos.) Compro. Não me orgulho. Mas aqueles cristais apodreciam em criptas! Aqui, iluminam ruas e aquecem casas. O sábio diz que é um empréstimo do passado para o futuro.',
+      next: 'plano',
+    },
+    quem: { text: 'O Arquimago Kaelen Aurivar, Guardião do Tempo! Bem, é o que o sábio diz. Confesso que eu imaginava o senhor mais alto.', next: 'plano' },
+    plano: {
+      text: 'Ferroluz guarda a Forja Celeste, a maior máquina que o Império deixou. Está apagada há quatro mil anos. Acesa, nenhum vilarejo do vale passaria frio de novo. Mas o sábio pediu uma prova antes. Precisa ver que o senhor é quem diz ser.',
+      options: [
+        { text: 'Que tipo de prova?', tone: 'curioso', next: 'prova' },
+        { text: 'Não tenho nada a provar a você.', tone: 'arrogante', next: 'prova' },
+      ],
+    },
+    prova: {
+      text: '(Ele estala os dedos. No fundo do pátio, algo enorme se levanta, soltando vapor.) O Colosso de Ferroluz! Ferro, runa e um núcleo de cristal do tamanho de um barril. Se o senhor é mesmo Aurivar, ele não será problema. Se não for... bem, vamos descobrir juntos!',
+      effects: [{ log: 'O Barão quer uma prova. A prova tem seis metros de altura.', quest: 'q_ferroluz' }],
+      options: [end('Então afaste-se.'), end('Vinte anos de trabalho, e você vai me ver desmontá-lo.')],
+    },
+  },
+});
+
+dlg({
+  id: 'barao_pedido',
+  npc: 'barao',
+  priority: 20,
+  when: [stage('q_ferroluz', 'pedido')],
+  start: 'inicio',
+  nodes: {
+    inicio: {
+      text: '(Teodric aplaude, encantado.) Magnífico! Vinte anos para construir, e o senhor o desmontou em minutos! O sábio tinha razão. O senhor é ele.',
+      options: [
+        { text: 'Aquilo podia ter matado alguém.', tone: 'compassivo', next: 'perigo' },
+        { text: 'Agora diga o que quer de mim.', tone: 'pragmatico', next: 'pedido' },
+      ],
+    },
+    perigo: { text: 'Ninguém se feriu! Bem, quase ninguém. O Ruço quebrou o braço, mas foi pulando de alegria. (Pigarreia.) Desculpe. Eu me empolgo.', next: 'pedido' },
+    pedido: {
+      text: 'A Forja Celeste precisa de dois núcleos para acender. O Coração da Tempestade, no pico ao norte, onde chove há quatro mil anos. Uma bruxa guarda o lugar. E um Cristal Primordial, dos Picos de Cristal, a oeste. Lá dorme um dragão.',
+      options: [
+        { text: 'Uma bruxa e um dragão. Só isso?', tone: 'arrogante', next: 'so' },
+        { text: 'Por que o seu sábio quer tanto essa forja?', tone: 'curioso', next: 'porque', once: true },
+        { text: 'Eu trago os núcleos.', tone: 'pragmatico', next: 'fim' },
+      ],
+    },
+    so: { text: '(Ele ri, nervoso.) O sábio disse que o senhor diria isso. Com essas mesmas palavras.', next: 'fim' },
+    porque: {
+      text: 'Ele diz que a forja é o coração de Ferroluz. E que, quando ela bater, ele vai poder vir nos ver em pessoa. (Os olhos dele brilham.) Imagine, mestre: um sábio de Aeternum andando entre nós!',
+      effects: [{ set: 'barao_sabio_vir' }],
+      options: [
+        { text: 'Isso não me tranquiliza.', tone: 'pragmatico', next: 'fim' },
+        { text: 'Eu trago os núcleos.', tone: 'pragmatico', next: 'fim' },
+      ],
+    },
+    fim: {
+      text: 'Ferroluz fica em dívida com o senhor. Leve estas poções para a viagem. A forja espera há quatro mil anos, e o sábio diz que não espera nem mais um.',
+      effects: [{ give: 'pocao_vida', qty: 3 }, { give: 'pocao_energia', qty: 2 }],
+    },
+  },
+});
+
+dlg({
+  id: 'barao_espera',
+  npc: 'barao',
+  priority: 9,
+  when: [{ any: [{ quest: 'q_tempestade', status: 'active' }, { quest: 'q_dragao', status: 'active' }] }],
+  start: 'ola',
+  nodes: {
+    ola: {
+      text: [
+        { when: [{ item: 'coracao_tempestade' }], text: 'O Coração da Tempestade! Sinto cheiro de chuva daqui. Agora só falta o cristal do dragão.' },
+        { when: [{ item: 'cristal_primordial' }], text: 'O Cristal Primordial! Ouviu? Ele canta. Agora só falta o Coração da Tempestade.' },
+        { text: 'Alguma notícia da bruxa? Do dragão? O sábio pergunta de hora em hora.' },
+      ],
+      options: [
+        { text: 'Fale mais desse sábio.', tone: 'curioso', next: 'sabio', once: true },
+        { text: 'Onde ficam o pico e os picos de cristal?', tone: 'pragmatico', next: 'onde' },
+        end('Volto quando tiver os núcleos.'),
+      ],
+    },
+    sabio: {
+      text: 'Ele nunca diz o nome. Diz que nomes são correntes. Às vezes, de madrugada, ouço ele rir no espelho. Deve ser o cansaço. O meu, claro. Não o dele.',
+      next: 'ola',
+    },
+    onde: {
+      text: 'O Pico das Tempestades é o pico isolado da serra norte, acima do Pântano Sombrio. Os Picos de Cristal ficam no extremo oeste, ao sul do santuário. Siga o brilho: dá para ver de longe à noite.',
+      next: 'ola',
+    },
+  },
+});
+
+dlg({
+  id: 'barao_forja',
+  npc: 'barao',
+  priority: 20,
+  when: [stage('q_forja', 'forja')],
+  start: 'ola',
+  nodes: {
+    ola: {
+      text: 'Os dois núcleos! Rápido, mestre, a forja! Os encaixes ficam na frente, perto dos caixotes. Eu mesmo poli as runas.',
+      options: [
+        { text: 'Posso ver o seu arquivo?', tone: 'curioso', next: 'arquivo', once: true },
+        end('Vamos acender essa forja.'),
+      ],
+    },
+    arquivo: {
+      text: 'Meu arquivo? (Ele hesita.) São só cartas. Contas. Nada que interesse a um Arquimago. A porta fica nos fundos da torre, se o senhor faz questão. Eu... não tranco.',
+      effects: [{ set: 'barao_hesitou' }],
+    },
+  },
+});
+
+dlg({
+  id: 'barao_confronto',
+  npc: 'barao',
+  priority: 20,
+  when: [stage('q_forja', 'confronto')],
+  start: 'inicio',
+  nodes: {
+    inicio: {
+      text: '(Teodric está pálido, as mãos tremendo.) Eu ouvi. Todos ouviram. A voz saiu da forja, chamou o senhor de Arquimago e me chamou de "servo fiel". Mestre, quem é o sábio?',
+      options: [
+        { text: 'É Aldric Valmora, o Antigo Rei. Ele usou você.', tone: 'pragmatico', next: 'rei' },
+        { text: 'Você sabia. Lá no fundo, você sabia.', tone: 'arrogante', next: 'sabia' },
+      ],
+    },
+    sabia: { text: '(Ele abre a boca e fecha.) Eu queria acreditar. Ele sabia tanta coisa. Ninguém em Ferroluz me ouvia, e ele me ouvia.', next: 'rei' },
+    rei: {
+      text: 'O Rei do Eclipse... das canções das avós. (Ele se senta no degrau.) Eu acendi a forja dele. Comprei os cristais dele. Fiz tudo que ele pediu.',
+      next: 'decisao',
+    },
+    decisao: {
+      text: 'O que eu faço agora, mestre? O que o senhor vai fazer comigo?',
+      options: [
+        {
+          text: 'Os engenheiros merecem a verdade. Vou contar tudo a Ferroluz, diante de todos.',
+          tone: 'pragmatico',
+          important: true,
+          next: 'expor',
+          effects: [
+            { choose: 'barao', value: 'exposto' },
+            { set: 'barao_exposto' },
+            { set: 'barao_destino', value: 'exposto' },
+            { log: 'Expus o Barão diante de Ferroluz. A cidade tirou Teodric da torre e agora briga entre si.', quest: 'q_forja' },
+          ],
+        },
+        {
+          text: 'Você foi enganado, não é um traidor. Quebre o espelho e me ajude a consertar o que fez.',
+          tone: 'compassivo',
+          important: true,
+          when: [{ any: [{ flag: 'ravena_poupada' }, { item: 'carta_barao' }, { item: 'cartas_arquivo' }] }],
+          lockedText: 'Preciso de provas de que ele foi manipulado: a carta com o lacre, as cartas do arquivo ou o testemunho de Ravena.',
+          next: 'convencer',
+          effects: [
+            { choose: 'barao', value: 'redimido' },
+            { set: 'barao_redimido' },
+            { set: 'barao_destino', value: 'redimido' },
+            { attitude: 2 },
+            { log: 'Convenci Teodric em particular. Ele quebrou o espelho do "sábio". Ferroluz vai lutar do meu lado.', quest: 'q_forja' },
+          ],
+        },
+        { text: 'Por que os cristais da minha cripta?', tone: 'curioso', next: 'porque', once: true },
+      ],
+    },
+    porque: {
+      text: 'Ele disse que os cristais da cripta eram especiais. Que guardavam um homem dormindo, e que esse homem precisava acordar para a forja funcionar. (Ele olha para você, horrorizado.) Ele precisava que o senhor acordasse. Fui eu que mandei os Corvos à cripta.',
+      effects: [{ set: 'barao_confessou' }],
+      next: 'decisao',
+    },
+    expor: {
+      speaker: 'narrador',
+      text: '(Você sobe a escada da torre e fala alto. Os engenheiros param as máquinas para ouvir. Quando você termina, ninguém diz nada por um bom tempo. Então a sentinela Mirela tira o elmo e segura o Barão pelo braço.)',
+      effects: [{ script: 'barao_exposto' }],
+    },
+    convencer: {
+      text: [
+        { when: [{ item: 'cartas_arquivo' }], text: '(Você mostra as cartas do arquivo, com as respostas escritas numa letra de quatro mil anos.) ...Eu nunca reparei na letra. Nunca quis reparar.' },
+        { when: [{ flag: 'ravena_poupada' }], text: '(Você conta o que Ravena disse do homem de luvas.) A própria Corva sabia, e eu não. Que tolo eu fui.' },
+        { text: '(Você mostra a carta com o lacre da chancelaria.) Minha própria cera, pagando bandidos. Que tolo eu fui.' },
+      ],
+      next: 'convencer2',
+    },
+    convencer2: {
+      text: '(Teodric sobe a torre. Você ouve vidro se partindo.) Pronto. O espelho acabou. Ferroluz vai pagar a dívida que eu fiz, mestre. Quando o Rei vier, os canhões da cidade vão estar apontados para ele, não para o senhor.',
+      effects: [{ script: 'barao_convencido' }],
+    },
+  },
+});
+
+dlg({
+  id: 'barao_depois',
+  npc: 'barao',
+  priority: 7,
+  when: [{ flag: 'barao_redimido' }],
+  start: 'ola',
+  nodes: {
+    ola: {
+      text: [
+        { when: [{ flag: 'jogo_concluido' }], text: 'Mestre! Ferroluz inteira fala do senhor. Os canhões nunca dispararam tão bonito.' },
+        { text: 'Os canhões estão limpos e apontados para o céu, mestre. Quando o Rei aparecer, Ferroluz responde.' },
+      ],
+      options: [{ text: 'Como está a cidade?', tone: 'curioso', next: 'cidade' }, end('Até breve, Teodric.')],
+    },
+    cidade: { text: 'Envergonhada, mas de pé. Os engenheiros me deixaram ficar na torre se eu varrer a oficina toda manhã. É justo. A vassoura é a primeira máquina honesta que eu uso em anos.' },
+  },
+});
+
+// ===========================================================================
+// ATO III — O Cavaleiro do Eclipse
+// ===========================================================================
+dlg({
+  id: 'darian_escolha',
+  npc: 'darian_rendido',
+  priority: 20,
+  when: [stage('q_darian', 'escolha')],
+  start: 'inicio',
+  nodes: {
+    inicio: {
+      speaker: 'darian',
+      text: '(Darian está de joelhos, a espada negra cravada na terra. A voz sai rouca de dentro do elmo.) Quatro mil anos, mestre. Quatro mil anos no farol, esperando você voltar. Você fechou a porta e me deixou do lado de fora.',
+      options: [
+        { text: 'Eu me lembro. Escolhi o mundo em vez de você.', tone: 'compassivo', next: 'lembro' },
+        { text: 'E você escolheu servir ao Rei.', tone: 'pragmatico', next: 'rei' },
+        { text: 'Você foi fraco, Darian.', tone: 'arrogante', next: 'fraco' },
+      ],
+    },
+    lembro: { speaker: 'darian', text: 'Você lembra. (Ele ri, e soa como choro.) Eu achava que, se você lembrasse, doeria menos. Não dói menos.', next: 'decisao' },
+    rei: { speaker: 'darian', text: 'O Rei me achou no farol. Disse que você tinha nos traído e que só ele podia trazer você de volta. Ele cumpriu, não cumpriu? Aqui está você.', next: 'decisao' },
+    fraco: { speaker: 'darian', text: 'Fraco. (Ele aperta o cabo da espada.) Eu tinha dezesseis anos, mestre. Você era tudo que eu tinha.', next: 'decisao' },
+    decisao: {
+      speaker: 'darian',
+      text: 'Acabe com isso. Ou não. Eu já não sei o que quero. O Rei vai saber que eu perdi.',
+      options: [
+        {
+          text: 'Volte comigo, Darian. Você ainda pode acender aquele farol.',
+          tone: 'compassivo',
+          important: true,
+          when: [{ flag: 'frag_farol' }, { item: 'fragmento_memoria', min: 5 }],
+          lockedText: 'Preciso lembrar mais de Darian: o fragmento do Farol Celeste e pelo menos 5 fragmentos de memória.',
+          next: 'redimir',
+          effects: [
+            { choose: 'darian', value: 'redimido' },
+            { set: 'darian_redimido' },
+            { set: 'darian_destino', value: 'redimido' },
+            { give: 'emblema_darian' },
+            { log: 'Estendi a mão para Darian, e ele aceitou. Disse que vai estar comigo quando o eclipse vier.', quest: 'q_darian' },
+          ],
+        },
+        {
+          text: 'Você fez a sua escolha há quatro mil anos. Esta é a minha.',
+          tone: 'pragmatico',
+          important: true,
+          next: 'matar',
+          effects: [
+            { choose: 'darian', value: 'morto' },
+            { set: 'darian_morto' },
+            { set: 'darian_destino', value: 'morto' },
+            { give: 'insignia_eclipse' },
+            { log: 'Darian caiu diante da torre onde aprendeu os primeiros feitiços. Fiquei com a insígnia dele.', quest: 'q_darian' },
+          ],
+        },
+        { text: 'Onde está o Rei?', tone: 'curioso', next: 'onde', once: true },
+      ],
+    },
+    onde: {
+      speaker: 'darian',
+      text: 'Na Cidadela Celeste, onde sempre esteve. Ela dorme nas nuvens sobre o Desfiladeiro das Cinzas. Quando o Coração bater forte o bastante, ela desce. Falta pouco.',
+      next: 'decisao',
+    },
+    redimir: {
+      speaker: 'darian',
+      text: '(Darian tira o elmo. É só um rapaz, de olhos fundos e cansados.) O farol. Você lembra do farol. (Ele se levanta devagar.) Quando o eclipse vier, mestre, eu vou estar lá. Desta vez eu fico.',
+      effects: [{ script: 'darian_redimir' }],
+    },
+    matar: {
+      speaker: 'darian',
+      text: '(Darian fecha os olhos e abaixa a cabeça.) Então faça direito. Ele nunca fazia direito.',
+      effects: [{ script: 'darian_matar' }],
+    },
+  },
+});
+
+// ===========================================================================
+// ATO IV — O Coração do Eclipse (a escolha final)
+// ===========================================================================
+dlg({
+  id: 'coracao_final',
+  npc: 'coracao_eclipse',
+  priority: 20,
+  when: [stage('q_eclipse', 'escolha')],
+  start: 'inicio',
+  nodes: {
+    inicio: {
+      speaker: 'coracao',
+      text: '(O Coração do Eclipse pulsa no ar, devagar, como se respirasse. De dentro dele vem a sua própria voz, mais jovem.) "Ele vai unir magia e máquina sem que nenhuma devore a outra."',
+      next: 'kaelen',
+    },
+    kaelen: {
+      speaker: 'kaelen',
+      text: 'Eu desenhei você para unir. Aldric usou você para devorar. E agora você espera por mim, como sempre esperou.',
+      next: 'escolha',
+    },
+    escolha: {
+      speaker: 'narrador',
+      text: [
+        { when: [{ flag: 'nucleo_absorvido' }], text: 'O Coração bate no mesmo ritmo que o núcleo do Guardião dentro de você. Ele sabe o que você já tomou. Três caminhos se abrem.' },
+        { text: 'O Coração bate devagar, esperando. Três caminhos se abrem diante dele.' },
+      ],
+      options: [
+        {
+          text: 'Usar o Coração como ele foi pensado: reunir magia e máquina. E deixar meu poder ir junto.',
+          tone: 'compassivo',
+          important: true,
+          when: [{ flag: 'guardiao_libertado' }, { any: [{ flag: 'barao_redimido' }, { flag: 'darian_redimido' }] }, { item: 'fragmento_memoria', min: 6 }],
+          lockedText: 'Reunificação: exige ter libertado o Guardião, redimido o Barão ou Darian e reunido 6 fragmentos de memória.',
+          next: 'reunificacao',
+          effects: [{ choose: 'final', value: 'reunificacao' }],
+        },
+        {
+          text: 'Selar Aldric de novo, e eu junto com ele. O mundo fica dividido, mas seguro.',
+          tone: 'pragmatico',
+          important: true,
+          next: 'selo',
+          effects: [{ choose: 'final', value: 'selo' }],
+        },
+        {
+          text: 'Beber o Coração. Se alguém tem que ser o eclipse, que seja eu.',
+          tone: 'arrogante',
+          important: true,
+          when: [{ flag: 'nucleo_absorvido' }, { any: [{ flag: 'ravena_executada' }, { flag: 'barao_exposto' }, { flag: 'darian_morto' }] }],
+          lockedText: 'Ascensão Sombria: exige ter absorvido o núcleo do Guardião e ter feito ao menos uma escolha implacável.',
+          next: 'sombrio',
+          effects: [{ choose: 'final', value: 'sombrio' }],
+        },
+        { text: '(Ficar mais um pouco em silêncio.)', tone: 'curioso', next: 'silencio', once: true },
+      ],
+    },
+    silencio: {
+      speaker: 'kaelen',
+      text: 'Quatro mil anos dormindo, e a decisão continua a mesma. Eu só tenho menos desculpas agora.',
+      next: 'escolha',
+    },
+    reunificacao: { speaker: 'kaelen', text: 'Seja o que você deveria ter sido.', effects: [{ script: 'final_reunificacao' }] },
+    selo: { speaker: 'kaelen', text: 'Mais uma vez, então. Pela última vez.', effects: [{ script: 'final_selo' }] },
+    sombrio: { speaker: 'kaelen', text: 'Você é meu. Sempre foi.', effects: [{ script: 'final_sombrio' }] },
   },
 });
 

@@ -13,6 +13,9 @@ import { Enemy, type EnemySpawnOptions } from './Enemy';
 import { Creature, type CreatureSpawnOptions } from './creatures/Creature';
 import { BirdFlocks } from './creatures/BirdFlocks';
 import { Guardian } from './bosses/Guardian';
+import { StoryBoss } from './bosses/StoryBoss';
+import { STORY_BOSSES } from '../data/storyBosses';
+import { evalAll, type NarrativeEnv } from '../rpg/dialogue/script';
 import { Spawner } from './Spawner';
 import { AttackTokens, PlayerStyle, closestApproach } from './logic';
 import { distXZ, dist2XZ, rand } from './shared';
@@ -55,6 +58,9 @@ export class AI implements GameSystem, Saveable {
   spawner!: Spawner;
   flocks!: BirdFlocks;
   boss: Guardian | null = null;
+  /** Chefe da história em luta (Atos II a IV). */
+  storyBoss: StoryBoss | null = null;
+  private storyCheckT = 0;
   /** Relógio interno (s de jogo). */
   time = 0;
   private music: MusicState | null = null;
@@ -96,6 +102,7 @@ export class AI implements GameSystem, Saveable {
     });
     ev.on('player:death', () => {
       if (this.boss && this.boss.state !== 'dead') this.resetBossFight('morte');
+      if (this.storyBoss && this.storyBoss.state !== 'dead' && this.storyBoss.state !== 'yield') this.resetStoryBoss('morte');
     });
     ev.on('time:hour', () => this.maybeDragon());
   }
@@ -130,6 +137,7 @@ export class AI implements GameSystem, Saveable {
 
   /** Cria o chefe na arena (se ainda não derrotado). Fecha o portão e mostra a barra. */
   spawnBoss(bossId: string): Entity | null {
+    if (STORY_BOSSES[bossId]) return this.spawnStoryBoss(bossId);
     if (bossId !== GUARDIAN.id) {
       console.warn(`[AI] chefe desconhecido: ${bossId}`);
       return null;
@@ -151,6 +159,57 @@ export class AI implements GameSystem, Saveable {
     ctx.events.emit('boss:start', { bossId, entity: g });
     this.setMusic('boss');
     return g;
+  }
+
+  /** Cria um chefe da história na arena (se ainda não derrotado). */
+  spawnStoryBoss(bossId: string): StoryBoss | null {
+    const def = STORY_BOSSES[bossId];
+    if (!def || this.defeatedBosses.has(bossId)) return null;
+    const cur = this.storyBoss;
+    if (cur && !cur.removed && cur.state !== 'dead') return cur.bossId === bossId ? cur : null;
+    const ctx = this.ctx;
+    const b = new StoryBoss(def);
+    const A = def.arena;
+    // aparece do lado oposto da arena em relação ao jogador
+    const pl = ctx.sys.player.entity.position;
+    const ang = Math.atan2(A.x - pl.x, A.z - pl.z);
+    const r = A.radius * 0.45;
+    const x = A.x + Math.sin(ang) * r;
+    const z = A.z + Math.cos(ang) * r;
+    b.position.set(x, (A.y ?? ctx.physics.terrainHeight(x, z)) + 1, z);
+    b.yaw = ang + Math.PI;
+    ctx.entities.add(b);
+    this.storyBoss = b;
+    ctx.sys.ui.showBossBar(def.title, b);
+    ctx.events.emit('boss:start', { bossId, entity: b });
+    this.setMusic('boss');
+    return b;
+  }
+
+  /** Chefe da história vencido (ou rendido: Darian). */
+  onStoryBossDefeated(b: StoryBoss, yielded: boolean) {
+    const ctx = this.ctx;
+    this.defeatedBosses.add(b.bossId);
+    ctx.sys.ui.showBossBar(null, null);
+    for (const s of b.summons) if (s.alive && !s.removed) ctx.sys.vfx.dissolve(s.object3d, { duration: 1.2, color: b.def.glow, height: s.height, onDone: () => ctx.entities.remove(s) });
+    b.summons.length = 0;
+    ctx.events.emit('boss:defeated', { bossId: b.bossId, entity: b });
+    ctx.events.emit('ui:notify', { text: yielded ? `${b.def.name} se rendeu.` : `${b.def.title} foi derrotado!`, kind: 'discovery' });
+    this.setMusic('victory');
+    this.victoryT = 8;
+  }
+
+  /** Reseta a luta do chefe da história (morte do jogador/fuga). */
+  resetStoryBoss(_reason: string) {
+    const b = this.storyBoss;
+    const ctx = this.ctx;
+    if (!b) return;
+    b.cleanup(ctx);
+    if (!b.removed) ctx.entities.remove(b);
+    this.storyBoss = null;
+    ctx.sys.ui.showBossBar(null, null);
+    this.storyCheckT = 4;
+    this.setMusic('explore');
   }
 
   /** NPC nomeado pelo id de dados (delegado ao sistema de NPCs — contrato C8). */
@@ -189,7 +248,9 @@ export class AI implements GameSystem, Saveable {
   /** Chefe em luta (ou null). */
   activeBoss(): Entity | null {
     const b = this.boss;
-    return b && !b.removed && b.alive && b.state !== 'dead' ? b : null;
+    if (b && !b.removed && b.alive && b.state !== 'dead') return b;
+    const s = this.storyBoss;
+    return s && !s.removed && s.alive && s.state !== 'dead' && s.state !== 'yield' ? s : null;
   }
 
   /** Cria uma criatura (src/data/creatures.ts). */
@@ -465,7 +526,36 @@ export class AI implements GameSystem, Saveable {
     this.stats.tokens = this.tokens.size;
   }
 
+  /** Chefes da história: aparecem quando o jogador entra na arena no estágio certo da missão. */
+  private updateStoryTrigger(dt: number, ctx: GameContext) {
+    this.storyCheckT -= dt;
+    if (this.storyCheckT > 0) return;
+    this.storyCheckT = 0.3;
+    const cur = this.storyBoss;
+    if (cur && !cur.removed && cur.state !== 'dead') return;
+    if (cur && (cur.removed || cur.state === 'dead')) this.storyBoss = null;
+    const pl = ctx.sys.player.entity;
+    if (!pl.alive || ctx.state !== 'playing') return;
+    const env = (ctx.sys.quests as unknown as { narrative?: { env: NarrativeEnv } }).narrative?.env;
+    if (!env) return;
+    for (const id in STORY_BOSSES) {
+      if (this.defeatedBosses.has(id)) continue;
+      const d = STORY_BOSSES[id];
+      const A = d.arena;
+      const dx = pl.position.x - A.x;
+      const dz = pl.position.z - A.z;
+      const R = A.radius - 2;
+      if (dx * dx + dz * dz > R * R) continue;
+      const gy = A.y ?? ctx.physics.terrainHeight(A.x, A.z);
+      if (Math.abs(pl.position.y - gy) > (A.y !== undefined ? 12 : 16)) continue;
+      if (!evalAll(d.when, env)) continue;
+      this.spawnStoryBoss(id);
+      return;
+    }
+  }
+
   private updateBossTrigger(dt: number, ctx: GameContext) {
+    this.updateStoryTrigger(dt, ctx);
     this.bossCheckT -= dt;
     if (this.bossCheckT > 0) return;
     this.bossCheckT = 0.25;
@@ -553,6 +643,7 @@ export class AI implements GameSystem, Saveable {
     this.spawner?.reset();
     this.flocks?.clear();
     this.boss = null;
+    this.storyBoss = null;
     this.dragon = null;
     this.enemies.length = 0;
     this.creatures.length = 0;
@@ -585,6 +676,7 @@ export class AI implements GameSystem, Saveable {
       tokens: this.tokens.size,
       style: { block: +this.style.block.toFixed(2), ranged: +this.style.ranged.toFixed(2) },
       boss: this.boss ? this.boss.debug() : null,
+      storyBoss: this.storyBoss ? this.storyBoss.debug() : null,
       music: this.music,
       zones: this.spawner.debugZones(),
       flocks: this.flocks.debug(),

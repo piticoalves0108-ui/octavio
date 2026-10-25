@@ -24,6 +24,15 @@ export const QUEST_RULES = {
   bossCardSeconds: 2.6,
 };
 
+/** Intensidade do Eclipse Arcano no céu conforme a história (0 = some, 1.6 = máximo). */
+export const ECLIPSE_STORY = {
+  /** Quando a Cidadela Celeste surge (Ato IV). */
+  ato4: 1.25,
+  reunificacao: 0,
+  selo: 0.3,
+  sombrio: 1.6,
+};
+
 // ---------------------------------------------------------------------------
 // Pontos de interação de missão
 // ---------------------------------------------------------------------------
@@ -210,6 +219,96 @@ export const QUEST_POINTS: QuestPointDef[] = [
     model: 'fragment',
     effects: [{ set: 'frag_santuario' }, { give: 'fragmento_memoria' }, { script: 'memoria_santuario' }],
     range: 2.6,
+  },
+  // --- Ato II: Ferroluz, Pico das Tempestades, Picos de Cristal ---
+  {
+    id: 'forja_celeste',
+    place: 'ferroluz_forja',
+    offset: [0, 1.2, -3.4],
+    prompt: 'Encaixar os núcleos na Forja Celeste',
+    kind: 'use',
+    name: 'Forja Celeste',
+    when: [inStage('q_forja', 'forja')],
+    requires: [{ item: 'coracao_tempestade' }, { item: 'cristal_primordial' }],
+    lockedText: 'Dois encaixes vazios: um para uma tempestade, outro para um cristal mais velho que o Império.',
+    once: true,
+    effects: [{ take: 'coracao_tempestade' }, { take: 'cristal_primordial' }, { set: 'forja_acesa' }, { set: 'frag_forja' }, { give: 'fragmento_memoria' }, { script: 'forja_acesa' }],
+    range: 4,
+  },
+  {
+    id: 'arquivo_ferroluz',
+    place: 'ferroluz_arquivo',
+    offset: [0, 1, 0],
+    prompt: 'Vasculhar o arquivo do Barão',
+    kind: 'read',
+    name: 'Arquivo do Barão',
+    when: [{ quest: 'q_ferroluz', status: 'completed' }, { noFlag: 'barao_destino' }],
+    once: true,
+    model: 'inscription',
+    effects: [{ give: 'cartas_arquivo' }, { subtitle: 'Cartas do Barão ao "sábio". As respostas vêm numa letra antiga, de quatro mil anos atrás. Ninguém escreve assim hoje. Ninguém vivo.', duration: 6 }],
+    range: 2.6,
+  },
+  {
+    id: 'altar_tempestade',
+    place: 'tempestade_altar',
+    offset: [0, 1.2, 0],
+    prompt: 'Pegar o Coração da Tempestade',
+    kind: 'pickup',
+    when: [inStage('q_tempestade', 'coracao')],
+    once: true,
+    model: 'core',
+    effects: [{ give: 'coracao_tempestade' }, { subtitle: 'O céu do pico se abre pela primeira vez em quatro mil anos. Por um instante, só vento e sol.', duration: 5 }],
+    range: 3,
+  },
+  {
+    id: 'cristal_primordial_pegar',
+    place: 'cristal_primordial_ponto',
+    offset: [0, 1.4, 0],
+    prompt: 'Arrancar o Cristal Primordial',
+    kind: 'pickup',
+    when: [inStage('q_dragao', 'cristal')],
+    once: true,
+    model: 'fragment',
+    effects: [{ give: 'cristal_primordial' }, { subtitle: 'O cristal se solta com um som de sino. As agulhas em volta escurecem, uma a uma.', duration: 5 }],
+    range: 3,
+  },
+  // --- Ato III: Templo Submerso e a Torre ---
+  {
+    id: 'selo_primeira_era',
+    place: 'templo_selo',
+    offset: [0, 1.3, 0],
+    prompt: 'Tocar o Selo da Primeira Era',
+    kind: 'read',
+    when: [inStage('q_templo', 'selo')],
+    once: true,
+    model: 'fragment',
+    effects: [{ set: 'frag_templo' }, { give: 'fragmento_memoria' }, { script: 'memoria_templo' }],
+    range: 3,
+  },
+  {
+    id: 'darian_rendido',
+    place: 'torre_duelo',
+    offset: [0, 0.4, 0],
+    prompt: 'Falar com Darian',
+    kind: 'talk',
+    name: 'Darian',
+    when: [inStage('q_darian', 'escolha')],
+    dialogue: 'darian_escolha',
+    model: 'none',
+    range: 6,
+  },
+  // --- Ato IV: o Coração do Eclipse ---
+  {
+    id: 'coracao_eclipse',
+    place: 'cidadela_coracao',
+    offset: [0, 1.2, 0],
+    prompt: 'Aproximar-se do Coração do Eclipse',
+    kind: 'talk',
+    name: 'Coração do Eclipse',
+    when: [inStage('q_eclipse', 'escolha')],
+    dialogue: 'coracao_final',
+    model: 'core',
+    range: 6,
   },
   // --- Vila ---
   { id: 'quadro_missoes', place: 'quadro_missoes_brumafria', offset: [0, 1.3, 0], prompt: 'Ler o quadro de missões', kind: 'board', name: 'Quadro de Missões', dialogue: 'quadro_missoes', range: 2.6 },
@@ -425,6 +524,265 @@ export const QUESTS: Record<string, QuestDef> = {
         log: 'Eu desenhei o Coração do Eclipse. Eu. E alguém — um rei — me agradeceu por isso.',
         objectives: [{ id: 'maren', kind: 'talk', npc: 'maren', dialogue: 'maren_ecos', text: 'Contar a Maren o que viu' }],
         onComplete: [{ script: 'epilogo_ato1' }],
+      },
+    ],
+  },
+
+  // ========================================================= ATO II — A CIDADE DE FERRO
+  q_ferroluz: {
+    id: 'q_ferroluz',
+    title: 'A Cidade de Ferro',
+    category: 'main',
+    description: 'Maren aponta para Ferroluz. O Barão Teodric fechou os portões há meses, e é para lá que vão os cristais roubados do vale.',
+    autoStart: [{ quest: 'q_ecos', status: 'completed' }],
+    rewards: { xp: 500, gold: 150 },
+    next: ['q_tempestade', 'q_dragao'],
+    completedText: 'O Barão quer religar a Forja Celeste e me pediu duas coisas impossíveis: o Coração da Tempestade e um Cristal Primordial. Ele fala de um "sábio" que o aconselha. Não gosto do jeito que ele fala dele.',
+    stages: [
+      {
+        id: 'viagem',
+        nextStep: 'Ferroluz fica no extremo sudeste do vale. Saia pelo portão leste de Brumafria, siga a estrada e as placas para Ferroluz.',
+        log: 'Ferroluz. Uma fortaleza de engenheiros que estudam o que o Império deixou. Se alguém compra cristais, é lá.',
+        objectives: [{ id: 'chegar', kind: 'reach', location: 'posto_ferroluz', radius: 95, text: 'Chegar a Ferroluz' }],
+      },
+      {
+        id: 'portao',
+        nextStep: 'Uma sentinela vigia o portão oeste de Ferroluz. Fale com ela.',
+        log: 'Muralhas de metal e cristal, torres com faróis apagados. E um portão fechado.',
+        objectives: [{ id: 'sentinela', kind: 'talk', npc: 'sentinela_ferroluz', dialogue: 'sentinela_portao', text: 'Falar com a sentinela no portão' }],
+      },
+      {
+        id: 'barao',
+        nextStep: 'O Barão Teodric espera no pátio, diante da torre de comando.',
+        objectives: [{ id: 'barao', kind: 'talk', npc: 'barao', dialogue: 'barao_encontro', text: 'Falar com o Barão Teodric' }],
+      },
+      {
+        id: 'teste',
+        nextStep: 'Enfrente o Colosso no pátio. Ele é lento, mas cada golpe pesa: pule a onda de choque e saia da frente da investida. Raios fazem estrago no metal dele.',
+        log: 'O Barão quer um "teste". O teste tem seis metros de altura e cheira a óleo queimado.',
+        objectives: [{ id: 'colosso', kind: 'boss', bossId: 'colosso_ferro', text: 'Derrotar o Colosso de Ferro e Magia', marker: { place: 'ferroluz_arena', radius: 24 } }],
+      },
+      {
+        id: 'pedido',
+        nextStep: 'Fale de novo com o Barão no pátio.',
+        log: 'O Colosso caiu. O Barão aplaudiu como quem vê um espetáculo, não como quem perdeu a máquina mais cara da cidade.',
+        objectives: [{ id: 'barao2', kind: 'talk', npc: 'barao', dialogue: 'barao_pedido', text: 'Ouvir o pedido do Barão' }],
+      },
+    ],
+  },
+
+  q_tempestade: {
+    id: 'q_tempestade',
+    title: 'A Bruxa das Tempestades',
+    category: 'main',
+    giver: 'barao',
+    description: 'No alto da serra norte, um platô onde a tempestade nunca para. O Barão diz que lá está o Coração da Tempestade, guardado por uma bruxa.',
+    rewards: { xp: 700 },
+    completedText: 'Morgana era uma das Sete do Conselho. Ela me reconheceu. Ela me odiava. E, no fim, me agradeceu por deixá-la descansar.',
+    stages: [
+      {
+        id: 'subida',
+        nextStep: 'O Pico das Tempestades é o pico isolado da serra norte, a noroeste do Pântano Sombrio. Uma crista estreita sobe pelo norte; também dá para escalar os paredões ou voar até o topo.',
+        objectives: [{ id: 'pico', kind: 'reach', location: 'pico_tempestades', radius: 40, text: 'Subir ao Pico das Tempestades' }],
+      },
+      {
+        id: 'bruxa',
+        nextStep: 'A Bruxa flutua e foge: fique em movimento, saia dos círculos antes do raio e cuidado com a rajada de vento na beira do platô. Guarde a arma de metal.',
+        log: 'Menires queimados por raios, e no centro uma mulher flutuando no olho da tempestade.',
+        objectives: [{ id: 'bruxa', kind: 'boss', bossId: 'bruxa_tempestades', text: 'Derrotar Morgana, a Bruxa das Tempestades', marker: { place: 'tempestade_centro', radius: 26 } }],
+      },
+      {
+        id: 'coracao',
+        nextStep: 'O Coração da Tempestade repousa no altar ao norte do círculo.',
+        objectives: [{ id: 'pegar', kind: 'collect', item: 'coracao_tempestade', count: 1, text: 'Pegar o Coração da Tempestade', points: ['altar_tempestade'] }],
+      },
+    ],
+  },
+
+  q_dragao: {
+    id: 'q_dragao',
+    title: 'O Dragão de Cristal',
+    category: 'main',
+    giver: 'barao',
+    description: 'Nos Picos de Cristal, a oeste, dorme Vyrmathal, guardião dos cristais primordiais. A corrupção chegou ao ninho dele.',
+    rewards: { xp: 800 },
+    completedText: 'Vyrmathal não era mau. Estava envenenado pelo mesmo veneno que sai do pântano. Arranquei o cristal do ninho dele e não me senti herói.',
+    stages: [
+      {
+        id: 'ninho',
+        nextStep: 'Os Picos de Cristal ficam no extremo oeste do mapa, ao sul do Santuário de Cristal.',
+        objectives: [{ id: 'picos', kind: 'reach', location: 'picos_cristal', radius: 45, text: 'Chegar aos Picos de Cristal' }],
+      },
+      {
+        id: 'dragao',
+        nextStep: 'Quando o dragão voar, fique de olho na linha vermelha do mergulho e esquive para o lado. Os cristais que caem do céu também avisam onde batem.',
+        log: 'Agulhas de cristal do tamanho de torres. E entre elas, um ninho de ossos.',
+        objectives: [{ id: 'dragao', kind: 'boss', bossId: 'dragao_cristal', text: 'Derrotar o Dragão de Cristal', marker: { place: 'cristal_ninho', radius: 30 } }],
+      },
+      {
+        id: 'cristal',
+        nextStep: 'O Cristal Primordial brilha no pedestal do ninho.',
+        objectives: [{ id: 'pegar', kind: 'collect', item: 'cristal_primordial', count: 1, text: 'Arrancar o Cristal Primordial', points: ['cristal_primordial_pegar'] }],
+      },
+    ],
+  },
+
+  q_forja: {
+    id: 'q_forja',
+    title: 'A Forja Celeste',
+    category: 'main',
+    giver: 'barao',
+    description: 'Com o Coração da Tempestade e o Cristal Primordial, a Forja Celeste de Ferroluz pode voltar a arder. O "sábio" do Barão está muito ansioso por isso.',
+    autoStart: [{ quest: 'q_tempestade', status: 'completed' }, { quest: 'q_dragao', status: 'completed' }],
+    rewards: { xp: 900, gold: 250 },
+    branchRewards: [
+      { when: [{ flag: 'barao_redimido' }], rewards: { items: [['placa_colosso', 1]], effects: [{ freeUpgrade: 1 }] } },
+      { when: [{ flag: 'barao_exposto' }], rewards: { gold: 400 } },
+    ],
+    onComplete: [{ set: 'ato2_concluido' }, { script: 'epilogo_ato2' }],
+    next: ['q_pantano'],
+    completedText: [
+      { when: [{ flag: 'barao_redimido' }], text: 'Teodric ouviu. Quebrou o espelho de cristal onde o "sábio" falava e chorou feito criança. Ferroluz vai me ajudar quando chegar a hora.' },
+      { when: [{ flag: 'barao_exposto' }], text: 'Contei a verdade no pátio, diante de todos. Os engenheiros tiraram o Barão da torre. Ferroluz está livre — e furiosa.' },
+      { text: 'A Forja Celeste arde de novo. E dentro dela, uma voz antiga sabe meu nome.' },
+    ],
+    stages: [
+      {
+        id: 'forja',
+        nextStep: 'Leve o Coração da Tempestade e o Cristal Primordial à Forja Celeste, no pátio de Ferroluz (o gerador de cristal perto dos caixotes).',
+        log: 'Tenho os dois núcleos. O Barão vai ter a forja dele. Espero que o "sábio" fique satisfeito.',
+        objectives: [
+          { id: 'forja', kind: 'interact', target: 'forja_celeste', text: 'Acender a Forja Celeste', marker: { place: 'ferroluz_forja' } },
+          { id: 'arquivo', kind: 'interact', target: 'arquivo_ferroluz', text: 'Vasculhar o arquivo do Barão', optional: true, marker: { place: 'ferroluz_arquivo' } },
+        ],
+      },
+      {
+        id: 'confronto',
+        nextStep: 'O "sábio" do Barão é o Rei Aldric. Fale com Teodric e decida o que fazer com ele.',
+        log: 'A voz saiu da forja e me chamou de "Arquimago". Era o Rei. Sempre foi o Rei. E agora eu lembro: a Grande Cisão foi obra minha.',
+        objectives: [
+          { id: 'barao', kind: 'flag', flag: 'barao_destino', text: 'Confrontar o Barão Teodric', marker: { npc: 'barao' } },
+          { id: 'arquivo2', kind: 'interact', target: 'arquivo_ferroluz', text: 'Procurar provas no arquivo do Barão', optional: true, marker: { place: 'ferroluz_arquivo' } },
+        ],
+      },
+    ],
+  },
+
+  // ========================================================= ATO III — A PRIMEIRA ERA
+  q_pantano: {
+    id: 'q_pantano',
+    title: 'O Devorador de Almas',
+    category: 'main',
+    description: 'A corrupção que vaza do Coração do Eclipse tem uma ponta visível: algo enorme no meio do Pântano Sombrio, que come memórias.',
+    rewards: { xp: 1000 },
+    onComplete: [{ set: 'corrupcao_enfraquecida' }, { subtitle: 'Com o Devorador morto, a água negra recua e revela degraus de pedra a oeste: um templo afundado.', duration: 5 }],
+    next: ['q_templo'],
+    completedText: 'O Devorador se desfez em lodo e vozes. Por um instante ouvi todas as memórias que ele tinha comido. Algumas eram minhas.',
+    stages: [
+      {
+        id: 'pantano',
+        nextStep: 'O Coração do Pântano fica no sudoeste, no meio do Pântano Sombrio. Leve fogo: corrompidos odeiam fogo.',
+        log: 'O Ato II terminou, mas o veneno não. Ele vem do pântano. Hora de ir até a fonte.',
+        objectives: [{ id: 'chegar', kind: 'reach', location: 'coracao_pantano', radius: 40, text: 'Chegar ao Coração do Pântano' }],
+      },
+      {
+        id: 'devorador',
+        nextStep: 'O Devorador não se move: fique fora do alcance dos tentáculos (círculos roxos) e ataque de longe. Fogo queima a carne corrompida.',
+        log: 'Uma ilha de raízes negras. No centro, uma massa que respira e tem olhos demais.',
+        objectives: [{ id: 'devorador', kind: 'boss', bossId: 'devorador_almas', text: 'Destruir o Devorador de Almas', marker: { place: 'pantano_coracao', radius: 30 } }],
+      },
+    ],
+  },
+
+  q_templo: {
+    id: 'q_templo',
+    title: 'A Primeira Era',
+    category: 'main',
+    description: 'Um templo mais antigo que Aeternum emergiu do pântano. O guardião dele faz perguntas que só o verdadeiro Guardião do Tempo saberia responder.',
+    rewards: { xp: 1100 },
+    next: ['q_darian'],
+    completedText: 'O selo me devolveu o pior pedaço de mim: Darian, sozinho no farol, me chamando enquanto eu fechava a Cisão. E a verdade sobre o selo — ele só se fecha se eu voltar a dormir. Ou se o Coração for usado.',
+    stages: [
+      {
+        id: 'descer',
+        nextStep: 'O Templo Submerso fica a oeste do Coração do Pântano, onde a água recuou.',
+        objectives: [{ id: 'templo', kind: 'reach', location: 'templo_submerso', radius: 32, text: 'Entrar no Templo Submerso' }],
+      },
+      {
+        id: 'guardiao',
+        nextStep: 'Cada fragmento de memória que você tem enfraquece o Guardião. Pule as ondas douradas: elas deixam lento.',
+        log: 'Colunas partidas, água parada e um sol de sete raios no chão. O guardião acordou antes de eu chegar ao centro.',
+        objectives: [{ id: 'guardiao', kind: 'boss', bossId: 'guardiao_primeira_era', text: 'Responder ao Guardião da Primeira Era', marker: { place: 'templo_centro', radius: 26 } }],
+      },
+      {
+        id: 'selo',
+        nextStep: 'O Selo da Primeira Era brilha no altar ao norte do templo.',
+        objectives: [{ id: 'selo', kind: 'interact', target: 'selo_primeira_era', text: 'Tocar o Selo da Primeira Era', marker: { place: 'templo_selo' } }],
+      },
+    ],
+  },
+
+  q_darian: {
+    id: 'q_darian',
+    title: 'O Cavaleiro do Eclipse',
+    category: 'main',
+    description: 'Darian, meu aprendiz, serve o Rei com uma armadura negra. Ele me espera na Torre do Observador. Quatro mil anos esperando.',
+    rewards: { xp: 1200 },
+    onComplete: [{ set: 'ato3_concluido' }, { script: 'epilogo_ato3' }],
+    next: ['q_eclipse'],
+    completedText: [
+      { when: [{ flag: 'darian_redimido' }], text: 'Estendi a mão e Darian aceitou. Ele tirou o elmo e era só um rapaz cansado. Disse que vai estar lá quando o eclipse vier.' },
+      { when: [{ flag: 'darian_morto' }], text: 'Darian caiu diante da torre onde aprendeu seus primeiros feitiços. Fiquei com a insígnia dele. Pesa mais do que deveria.' },
+      { text: 'O Cavaleiro do Eclipse não está mais no caminho.' },
+    ],
+    stages: [
+      {
+        id: 'torre',
+        nextStep: 'A Torre do Observador fica a leste do vale, no alto de uma colina.',
+        log: 'Darian. Eu me lembro dele rindo no farol. Eu me lembro de ter fechado a porta.',
+        objectives: [{ id: 'torre', kind: 'reach', location: 'torre_observador', radius: 45, text: 'Ir à Torre do Observador' }],
+      },
+      {
+        id: 'duelo',
+        nextStep: 'Darian é rápido: bloqueie ou esquive dos cortes e não deixe que ele tome distância para a investida.',
+        objectives: [{ id: 'duelo', kind: 'boss', bossId: 'cavaleiro_eclipse', text: 'Duelar com Darian, o Cavaleiro do Eclipse', marker: { place: 'torre_duelo', radius: 24 } }],
+      },
+      {
+        id: 'escolha',
+        nextStep: 'Darian está de joelhos no círculo de duelo. Fale com ele.',
+        log: 'Ele caiu de joelhos. Ainda segura a espada, mas não a levanta.',
+        objectives: [{ id: 'decidir', kind: 'flag', flag: 'darian_destino', text: 'Decidir o destino de Darian', marker: { place: 'torre_duelo' } }],
+      },
+    ],
+  },
+
+  // ========================================================= ATO IV — ECLIPSE
+  q_eclipse: {
+    id: 'q_eclipse',
+    title: 'Eclipse',
+    category: 'main',
+    description: 'A Cidadela Celeste emergiu dos céus sobre o Desfiladeiro das Cinzas. O Antigo Rei espera no trono, com o Coração do Eclipse aos pés.',
+    onStart: [{ script: 'cidadela_surge' }],
+    rewards: { xp: 3000 },
+    onComplete: [{ set: 'jogo_concluido' }],
+    completedText: [
+      { when: [{ flag: 'final', is: 'reunificacao' }], text: 'Usei o Coração como ele foi pensado. Magia e máquina, juntas de novo. E eu vou envelhecer, como todo mundo. Finalmente.' },
+      { when: [{ flag: 'final', is: 'selo' }], text: 'Fechei o selo com Aldric e comigo dentro. O mundo continua dividido, mas seguro. Contem uma boa história sobre mim.' },
+      { when: [{ flag: 'final', is: 'sombrio' }], text: 'Bebi o Coração. Agora o eclipse sou eu. O mundo está a salvo do Rei. Só não sei se está a salvo de mim.' },
+      { text: 'O Rei caiu.' },
+    ],
+    stages: [
+      {
+        id: 'rei',
+        nextStep: 'Voe até a Cidadela Celeste, no alto do céu sobre o Desfiladeiro das Cinzas. Encha a energia antes: a subida é longa. Os aliados que você poupou virão ajudar.',
+        log: 'A cidadela subiu das nuvens como se sempre estivesse ali, esperando.',
+        objectives: [{ id: 'rei', kind: 'boss', bossId: 'rei_aldric', text: 'Derrotar o Antigo Rei Aldric Valmora', marker: { place: 'cidadela_centro', radius: 34 } }],
+      },
+      {
+        id: 'escolha',
+        nextStep: 'O Coração do Eclipse pulsa diante do trono. Aproxime-se e decida o destino do mundo.',
+        log: 'Aldric se desfez. O Coração continua batendo. Ele espera por mim, como sempre esperou.',
+        objectives: [{ id: 'final', kind: 'flag', flag: 'final', text: 'Decidir o destino do Coração do Eclipse', marker: { place: 'cidadela_coracao' } }],
       },
     ],
   },
@@ -669,14 +1027,33 @@ export const QUEST_OFFERS: Record<string, QuestOffer> = {
 // ---------------------------------------------------------------------------
 export type CineVec = string | [number, number, number];
 
-export type CineStep =
+export type CineStep = (
   | { fade: 'out' | 'in'; duration?: number; color?: 'black' | 'white' }
   | { subtitle: string; speaker?: string; duration?: number }
   | { title: string; subtitle?: string; duration?: number }
   /** Plano de câmera: posição e alvo (âncora ou [x, y, z]); `rise` soma altura à âncora. */
   | { shot: { from: CineVec; fromOffset?: [number, number, number]; look: CineVec; lookOffset?: [number, number, number] }; duration?: number }
   | { wait: number }
-  | { effects: Effect[] };
+  | { effects: Effect[] }
+) & {
+  /** Só toca este passo se as condições passarem (epílogos que dependem das escolhas). */
+  when?: Cond[];
+};
+
+/** Epílogo dos aliados (mostra só o que aconteceu de verdade nesta partida). */
+function allyEpilogues(): CineStep[] {
+  return [
+    { when: [{ flag: 'ravena_poupada' }], subtitle: 'Ravena sumiu das estradas. Anos depois, uma caravana de Sabine foi salva de bandidos por uma mulher de capuz negro que não quis pagamento.', duration: 6 },
+    { when: [{ flag: 'ravena_executada' }], subtitle: 'Sem a Corva, os Corvos viraram meia dúzia de ladrões de galinha. Bran Holt pendurou as lâminas dela na guarita.', duration: 5.5 },
+    { when: [{ flag: 'barao_redimido' }], subtitle: 'Ferroluz usou a Forja Celeste para fazer arados e lanternas. Teodric Vael varre a oficina toda manhã e ensina as crianças a ler runas.', duration: 6 },
+    { when: [{ flag: 'barao_exposto' }], subtitle: 'Ferroluz passou um inverno inteiro em guerra entre engenheiros e guardas. Teodric terminou os dias numa cela, conversando com cacos de espelho.', duration: 6 },
+    { when: [{ flag: 'darian_redimido' }], subtitle: 'Darian voltou ao Farol Celeste. Numa noite sem nuvens, acendeu o farol sozinho, e deixou a luz acesa até o amanhecer.', duration: 6 },
+    { when: [{ flag: 'darian_morto' }], subtitle: 'Ninguém visita a Torre do Observador. A insígnia do Cavaleiro do Eclipse ficou guardada num baú que nunca mais foi aberto.', duration: 5.5 },
+    { when: [{ flag: 'guardiao_libertado' }], subtitle: 'Nas ruínas de Aeternum, Teodoro jura que, de vez em quando, ouve engrenagens cantando baixinho.', duration: 5 },
+    { when: [{ flag: 'nucleo_absorvido' }], subtitle: 'O Irmão Calen nunca mais falou o nome do mago. Mas acendeu uma vela por ele todas as noites.', duration: 5 },
+    { when: [{ flag: 'cervo_decisao', is: 'proteger' }], subtitle: 'Na Floresta de Lúmen, Ilsa jura que o Cervo de Luz ainda aparece nas noites de lua cheia.', duration: 5 },
+  ];
+}
 
 export const CINEMATICS: Record<string, CineStep[]> = {
   intro: [
@@ -741,9 +1118,118 @@ export const CINEMATICS: Record<string, CineStep[]> = {
   revelacao_fragmentos: [
     { subtitle: 'Kaelen: O Conselho dos Sete. Darian. Uma porta trancada por dentro da minha cabeça. Eu me apaguei de propósito.', speaker: 'kaelen', duration: 5.5 },
   ],
+  // ======================================================= ATO II
+  memoria_forja: [
+    { shot: { from: 'ferroluz_forja', fromOffset: [-9, 6, 9], look: 'ferroluz_forja', lookOffset: [0, 3, 0] }, duration: 0.01 },
+    { subtitle: '(Os núcleos se encaixam. A Forja Celeste respira fundo, e um fogo azul sobe pelas chaminés pela primeira vez em quatro mil anos.)', duration: 5 },
+    { subtitle: 'Barão Teodric: Ela acendeu! ELA ACENDEU! Sábio, está ouvindo?', speaker: 'barao', duration: 3.8 },
+    { fade: 'out', duration: 1.2, color: 'white' },
+    { subtitle: '(Memória. Sete magos em volta de um círculo de runas, no alto de uma torre. O céu racha como vidro.)', duration: 5 },
+    { subtitle: 'Conselheira: Agora, Kaelen! Se esperarmos mais, Aldric vai beber o mundo inteiro!', duration: 4.5 },
+    { subtitle: 'Kaelen (memória): Separem tudo. A magia de um lado, a máquina do outro. Cortem cada fio.', speaker: 'kaelen', duration: 4.5 },
+    { subtitle: '(Kaelen puxa. O mundo se parte ao meio. Cidades caem do céu. Em algum lugar, um farol se apaga.)', duration: 5 },
+    { fade: 'in', duration: 1.4 },
+    { subtitle: 'Kaelen: A Grande Cisão... fui eu. Eu quebrei o mundo para salvá-lo.', speaker: 'kaelen', duration: 4.5 },
+    { subtitle: 'Voz da Forja: Obrigado, Arquimago. E obrigado a você, meu servo fiel. A forja bate, o Coração ouve. Logo eu também andarei entre vocês.', speaker: 'aldric', duration: 6 },
+    { subtitle: 'Kaelen: Eu conheço essa voz. Aldric.', speaker: 'kaelen', duration: 3.5 },
+    { effects: [{ set: 'rei_revelado' }] },
+  ],
+  epilogo_ato2: [
+    { fade: 'out', duration: 1.5 },
+    { title: 'Fim do Ato II', subtitle: 'A Cidade de Ferro', duration: 3.5 },
+    { when: [{ flag: 'barao_redimido' }], subtitle: 'Em Ferroluz, Teodric manda virar os canhões da muralha para o céu. Os engenheiros obedecem sem perguntar.', duration: 5 },
+    { when: [{ flag: 'barao_exposto' }], subtitle: 'Em Ferroluz, engenheiros e guardas brigam pelo comando da cidade. A Forja Celeste continua acesa, sem dono.', duration: 5 },
+    { subtitle: 'No Pântano Sombrio, algo enorme abre mais um olho.', duration: 4 },
+    { subtitle: 'E na Torre do Observador, um cavaleiro de armadura negra afia a espada e espera pelo mestre.', duration: 4.5 },
+    { title: 'Ato III', subtitle: 'A Primeira Era', duration: 3.5 },
+    { fade: 'in', duration: 1.5 },
+  ],
+  // ======================================================= ATO III
+  memoria_templo: [
+    { fade: 'out', duration: 1, color: 'white' },
+    { subtitle: '(Memória. O Farol Celeste, na noite da Cisão. O céu está rachando.)', duration: 4 },
+    { subtitle: 'Darian (memória): Mestre! Abra! Eu acendi o farol sozinho, como prometi! Me deixe entrar!', speaker: 'darian', duration: 5 },
+    { subtitle: 'Kaelen (memória): (Do outro lado da porta.) Me perdoe, Darian. Se eu abrir, o selo não fecha.', speaker: 'kaelen', duration: 5 },
+    { subtitle: '(A porta se fecha. O farol se apaga.)', duration: 3.5 },
+    { fade: 'in', duration: 1.4 },
+    { subtitle: 'Guardião da Primeira Era (eco): O selo foi costurado com a sua vida, Guardião do Tempo. Ele só se fecha de novo se você voltar a dormir. Ou se o Coração for usado.', duration: 6.5 },
+    { subtitle: 'Kaelen: Dormir de novo, ou usar a coisa que eu mesmo construí. Que belas opções.', speaker: 'kaelen', duration: 4.5 },
+  ],
+  epilogo_ato3: [
+    { fade: 'out', duration: 1.5 },
+    { title: 'Fim do Ato III', subtitle: 'A Primeira Era', duration: 3.5 },
+    { when: [{ flag: 'darian_redimido' }], subtitle: 'No Farol Celeste, Darian tira quatro mil anos de poeira dos degraus e acende uma vela no alto da torre.', duration: 5 },
+    { when: [{ flag: 'darian_morto' }], subtitle: 'Diante da Torre do Observador, o vento empurra uma armadura vazia de um lado para o outro.', duration: 5 },
+    { subtitle: 'Sobre o Desfiladeiro das Cinzas, as nuvens começam a girar.', duration: 4 },
+    { subtitle: 'O Coração do Eclipse bate mais forte. A Cidadela Celeste desperta.', duration: 4 },
+    { title: 'Ato IV', subtitle: 'Eclipse', duration: 3.5 },
+    { fade: 'in', duration: 1.5 },
+  ],
+  // ======================================================= ATO IV
+  cidadela_surge: [
+    { effects: [{ set: 'cidadela_surgiu' }, { script: 'eclipse_avanca' }] },
+    { shot: { from: [250, 0, 30], fromOffset: [0, 30, 0], look: 'cidadela_centro', lookOffset: [0, -10, 0] }, duration: 0.01 },
+    { subtitle: '(O céu escurece ao meio-dia. Sobre o Desfiladeiro das Cinzas, as nuvens se abrem, e uma cidade inteira desce do alto, presa a correntes de luz.)', duration: 6 },
+    { subtitle: 'Kaelen: A Cidadela Celeste. Só dá para chegar lá voando. E ele sabe que eu vou.', speaker: 'kaelen', duration: 4.5 },
+  ],
+  // ======================================================= FINAIS
+  final_reunificacao: [
+    { shot: { from: 'cidadela_coracao', fromOffset: [10, 5, 14], look: 'cidadela_coracao', lookOffset: [0, 1, 0] }, duration: 0.01 },
+    { subtitle: '(Kaelen apoia as duas mãos no Coração. As runas mudam de cor: do roxo ao azul, do azul ao dourado.)', duration: 5 },
+    { subtitle: 'Kaelen: Magia e máquina. Nenhuma devorando a outra. Era só isso que eu queria.', speaker: 'kaelen', duration: 4.5 },
+    { effects: [{ script: 'fim_reunificacao' }] },
+    { subtitle: '(Uma luz dourada desce da cidadela e corre pelo vale como água. Nas torres de Brumafria, os cristais se acendem sozinhos.)', duration: 6 },
+    { fade: 'out', duration: 2, color: 'white' },
+    { title: 'Reunificação', subtitle: 'Final', duration: 4 },
+    ...allyEpilogues(),
+    { subtitle: 'E Kaelen Aurivar, pela primeira vez em quatro mil anos, sentiu frio, fome e sono. Achou ótimo.', duration: 5 },
+    { subtitle: 'Ele envelheceu como todo mundo. Dizem que morreu bem velho, em Brumafria, contando histórias em que ninguém acreditava.', duration: 6 },
+    { effects: [{ set: 'final', value: 'reunificacao' }] },
+    { title: 'Eclipse Arcano', subtitle: 'Obrigado por jogar. O vale continua aberto para você.', duration: 5 },
+    { fade: 'in', duration: 2 },
+  ],
+  final_selo: [
+    { shot: { from: 'cidadela_coracao', fromOffset: [-10, 5, 14], look: 'cidadela_coracao', lookOffset: [0, 1, 0] }, duration: 0.01 },
+    { subtitle: '(Kaelen fecha os dedos em volta do Coração. O selo se abre de novo, como uma porta que reconhece a chave.)', duration: 5 },
+    { subtitle: 'Aldric (eco): Você de novo, Arquimago. Sempre você.', speaker: 'aldric', duration: 3.8 },
+    { subtitle: 'Kaelen: Desta vez eu fico do lado de dentro com você, Aldric. Vamos ter muito tempo para conversar.', speaker: 'kaelen', duration: 5 },
+    { effects: [{ script: 'fim_selo' }] },
+    { subtitle: '(Uma luz azul engole o trono. Quando ela se apaga, a cidadela está vazia, e o Coração dorme.)', duration: 5 },
+    { fade: 'out', duration: 2 },
+    { title: 'Selo Eterno', subtitle: 'Final', duration: 4 },
+    ...allyEpilogues(),
+    { subtitle: 'Em Brumafria, a Anciã Maren conta às crianças a história do mago que dormiu para o mundo acordar. Elas nunca acreditam na parte do dragão.', duration: 6 },
+    { subtitle: 'Às vezes, em noite de eclipse, alguém jura ver uma luz azul no alto do céu, piscando como quem vigia.', duration: 5.5 },
+    { effects: [{ set: 'final', value: 'selo' }] },
+    { title: 'Eclipse Arcano', subtitle: 'Obrigado por jogar. O vale continua aberto para você.', duration: 5 },
+    { fade: 'in', duration: 2 },
+  ],
+  final_sombrio: [
+    { shot: { from: 'cidadela_coracao', fromOffset: [0, 4, 12], look: 'cidadela_coracao', lookOffset: [0, 1, 0] }, duration: 0.01 },
+    { subtitle: '(Kaelen abre a mão. O Coração escurece, encolhe e entra no peito dele como fumaça voltando para casa.)', duration: 5 },
+    { subtitle: 'Aldric (eco): Sim... SIM. Agora você entende, Arquimago. Sempre entendeu.', speaker: 'aldric', duration: 4.5 },
+    { subtitle: 'Kaelen: Cale-se. Agora quem fala sou eu.', speaker: 'kaelen', duration: 3.5 },
+    { effects: [{ script: 'fim_sombrio' }, { statMod: 'coracao_eclipse', mods: { spellPower: 0.2 } }] },
+    { subtitle: '(O sol some atrás de um disco negro. O disco não sai mais do lugar.)', duration: 4.5 },
+    { fade: 'out', duration: 2 },
+    { title: 'Ascensão Sombria', subtitle: 'Final', duration: 4 },
+    ...allyEpilogues(),
+    { subtitle: 'O eclipse nunca mais saiu do céu do vale. As colheitas continuaram, os monstros sumiram, e as pessoas pararam de rir alto.', duration: 6 },
+    { subtitle: 'Dizem que na Cidadela Celeste há um trono, e que o homem sentado nele ainda se lembra de ter sido bom. Às vezes.', duration: 6 },
+    { effects: [{ set: 'final', value: 'sombrio' }] },
+    { title: 'Eclipse Arcano', subtitle: 'Obrigado por jogar. O vale continua aberto para você.', duration: 5 },
+    { fade: 'in', duration: 2 },
+  ],
 };
 
 /** Textos do cartão de nome de chefes. */
 export const BOSS_CARDS: Record<string, { title: string; subtitle: string }> = {
   guardiao_mecanico: { title: 'Guardião Mecânico das Ruínas', subtitle: 'Sentinela da Câmara de Aeternum' },
+  colosso_ferro: { title: 'Colosso de Ferro e Magia', subtitle: 'O orgulho de Ferroluz' },
+  bruxa_tempestades: { title: 'Morgana, a Bruxa das Tempestades', subtitle: 'Uma das Sete do Conselho' },
+  dragao_cristal: { title: 'Vyrmathal, o Dragão de Cristal', subtitle: 'Guardião dos cristais primordiais' },
+  devorador_almas: { title: 'O Devorador de Almas', subtitle: 'A boca da corrupção' },
+  guardiao_primeira_era: { title: 'Guardião da Primeira Era', subtitle: 'Ele pergunta o que você esqueceu' },
+  cavaleiro_eclipse: { title: 'Darian, o Cavaleiro do Eclipse', subtitle: 'O aprendiz que ficou para trás' },
+  rei_aldric: { title: 'Aldric Valmora', subtitle: 'O Antigo Rei' },
 };

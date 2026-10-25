@@ -167,6 +167,22 @@ function buildBone(look: HumanoidLook, B: Build, bone: number, b: PartBuilder) {
           b.box(r * 0.35, r * 0.18, 0.05, look.eyes ?? 0x7ff0ff, { x: r * 0.45, y: r * 1.0, z: r * 0.92, glow: 2.4 });
           b.box(r * 0.35, r * 0.18, 0.05, look.eyes ?? 0x7ff0ff, { x: -r * 0.45, y: r * 1.0, z: r * 0.92, glow: 2.4 });
           break;
+        case 'crown':
+          // rei: cabelo prateado, barba e coroa de ouro com gemas que brilham
+          b.sphere(r, look.skin, { y: r * 1.05 }, 10, 8);
+          b.sphere(r * 1.08, 0xd8d8e0, { y: r * 1.2, z: -r * 0.18, sy: 1.02 }, 10, 8);
+          b.cone(r * 0.75, r * 1.0, 0xd8d8e0, { y: r * 0.45, z: r * 0.55, rx: Math.PI }, 7);
+          b.cyl(r * 1.05, r * 1.0, r * 0.38, look.trim, { y: r * 1.95 }, 12);
+          for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * Math.PI * 2;
+            b.cone(r * 0.16, r * 0.55, look.trim, { x: Math.sin(a) * r * 0.98, y: r * 2.35, z: Math.cos(a) * r * 0.98 }, 4);
+          }
+          b.gem(r * 0.2, look.eyes ?? 0xffc860, { y: r * 2.0, z: r * 1.04, glow: 2.4 });
+          if (look.eyes !== undefined) {
+            b.sphere(r * 0.1, look.eyes, { x: r * 0.32, y: r * 1.12, z: r * 0.92, glow: 2 }, 5, 4);
+            b.sphere(r * 0.1, look.eyes, { x: -r * 0.32, y: r * 1.12, z: r * 0.92, glow: 2 }, 5, 4);
+          }
+          break;
         case 'guardian':
           b.box(r * 2.4, r * 1.9, r * 2.2, look.torso, { y: r * 1.0 });
           b.cone(r * 1.5, r * 1.2, look.trim, { y: r * 2.4 }, 4);

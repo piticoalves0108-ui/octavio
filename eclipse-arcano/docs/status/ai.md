@@ -1,4 +1,4 @@
-# Status — módulo `ai` (inimigos, chefe, criaturas e população)
+# Status — módulo `ai` (inimigos, chefes, criaturas e população)
 
 Arquivos: `src/ai/**`, `src/data/enemies.ts`, `src/data/bosses.ts`, `src/data/creatures.ts`, `src/data/spawns.ts`, testes em `tests/ai.*.test.ts`.
 Nada foi acrescentado fora da área: os eventos (`boss:*`, `enemy:killed`, `npc:alarm`, `music:intensity`), os `SfxId` e os `VfxKind` usados já existiam.
@@ -84,6 +84,12 @@ Cada tipo define vida, armadura, resistências e fraquezas, postura, velocidades
 - Imune a stun, root e bleed; lentidão reduzida (50%).
 - **Derrota:** animação de colapso, `boss:defeated` e `enemy:killed` (o rpg dá a recompensa; drop garantido `espada_cyber_runica`), portão reaberto, barra escondida, `ai.defeatedBosses` (salvo) e o chefe não renasce. O corpo fica no lugar (até 180 s, ou até o jogador se afastar 140 m) para a escolha narrativa.
 - **Reset:** se o jogador morre (ou fica 5 s fora da arena), a luta reseta: chefe, pilares e invocações são removidos, o portão reabre, a barra some e o chefe volta com vida cheia na próxima entrada.
+
+### Chefes da história (`bosses/StoryBoss.ts`, `src/data/storyBosses.ts`)
+- Motor genérico para os 7 chefes dos Atos II a IV (detalhes em `docs/status/story.md`). Ataques, fases, eventos de fase, arena e condição de aparecimento (`when`) vêm todos dos dados.
+- `AI.updateStoryTrigger` cria o chefe quando o jogador entra na arena (XZ e altura) no estágio certo da missão. `ai.storyBoss` guarda o chefe atual, e `activeBoss()` também o considera (música, câmera, save).
+- `onStoryBossDefeated` marca `defeatedBosses`, dissolve as invocações e emite `boss:defeated`. Darian se rende (estado `yield`) sem morrer; os roteiros `darian_redimir` (`depart`) ou `darian_matar` (`combat.kill`) decidem o resto.
+- A luta reseta se o jogador morrer ou ficar fora da arena além do tempo de `STORY_BOSS_RULES`.
 
 ### Criaturas (`creatures/Creature.ts`, `creatures/BirdFlocks.ts`, `src/data/creatures.ts`)
 - Temperamentos:

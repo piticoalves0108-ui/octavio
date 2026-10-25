@@ -22,15 +22,15 @@ No navegador, `window.__game` expõe o `GameContext` para depuração.
 - `docs/HISTORIA.md`: bíblia narrativa (personagens, atos, escolhas, finais, missões).
 - `docs/status/*.md`: o que cada módulo já faz, como foi testado e o que está pendente.
 
-## Estado atual (24/10/2026)
+## Estado atual (25/10/2026)
 
 Concluídos e testados:
 - núcleo e mundo;
 - ambiente (céu, clima, dia/noite);
 - jogador (movimento, voo, câmera);
-- combate e IA (inimigos, chefe Guardião, criaturas);
+- combate e IA (inimigos, chefe Guardião, 7 chefes da história, criaturas);
 - RPG (inventário, loot, lojas, progressão, talentos);
-- narrativa (missões, diálogos, NPCs com rotinas), áudio procedural e salvamento;
+- narrativa completa (Prólogo, Atos I a IV, três finais; missões, diálogos, NPCs com rotinas), áudio procedural e salvamento;
 - interface completa (`docs/status/ui.md`).
 
 Etapas "estilo Zelda" pedidas pelo dono do projeto:
@@ -39,7 +39,8 @@ Etapas "estilo Zelda" pedidas pelo dono do projeto:
 3. Clima (poças, neve nas alturas, arco-íris, raios perigosos, rajadas visíveis): **feito** (`docs/status/env.md`).
 4. Mundo interativo (fogo na grama, cortar grama e arbustos, objetos físicos, Centelha/Estase, fogueiras e
    cozinha): **feito** (`docs/status/interactive.md`).
-5. História até o final: Atos II a IV, chefes e os três finais (`docs/HISTORIA.md`). **Próxima etapa.**
+5. História até o final: Atos II a IV, 7 chefes novos, Cidadela Celeste e os três finais: **feito**
+   (`docs/status/story.md`, bíblia em `docs/HISTORIA.md`).
 
 Outras pendências conhecidas: montaria e pathfinding de inimigos fora da vila.
 
