@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Analisador de Sinais 15s</title>
+<meta name="description" content="Mede, com preço real da Binance, quantas vezes cada sinal de compra ou venda de 15 segundos acerta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  /* Layout: coluna única no celular (sinal → gráficos → placar); a partir de 960px, sinal e gráficos à esquerda e placar à direita */
+  --bg:#EDF0F5; --surface:#FFFFFF; --ink:#14223A; --muted:#5A6781; --line:#D4DBE6; --track:#E6EAF1;
+  --accent:#2A52D6; --up:#0A8456; --down:#C8392D; --warn:#A5680F;
+  --up-soft:rgba(10,132,86,.10); --down-soft:rgba(200,57,45,.10); --accent-soft:rgba(42,82,214,.07); --warn-soft:rgba(165,104,15,.12);
+  --f-display:'Archivo','Arial Narrow',system-ui,sans-serif;
+  --f-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C121C; --surface:#131B29; --ink:#E3E9F3; --muted:#93A0B7; --line:#243046; --track:#1B2536;
+    --accent:#88A3FF; --up:#37C589; --down:#FF6F62; --warn:#E8AC48;
+    --up-soft:rgba(55,197,137,.13); --down-soft:rgba(255,111,98,.13); --accent-soft:rgba(136,163,255,.10); --warn-soft:rgba(232,172,72,.14);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C121C; --surface:#131B29; --ink:#E3E9F3; --muted:#93A0B7; --line:#243046; --track:#1B2536;
+  --accent:#88A3FF; --up:#37C589; --down:#FF6F62; --warn:#E8AC48;
+  --up-soft:rgba(55,197,137,.13); --down-soft:rgba(255,111,98,.13); --accent-soft:rgba(136,163,255,.10); --warn-soft:rgba(232,172,72,.14);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:15px/1.5 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:max(16px,env(safe-area-inset-top,0px)) max(32px,env(safe-area-inset-bottom,0px));
+}
+.wrap{max-width:1180px; margin:0 auto; display:grid; gap:16px}
+h1,h2{font-family:var(--f-display); text-wrap:balance; margin:0; letter-spacing:-.01em}
+h1{font-size:clamp(26px,5vw,34px); font-weight:800; font-stretch:82%; line-height:1.05}
+h2{font-size:18px; font-weight:700; font-stretch:90%}
+p{margin:0}
+.num{font-family:var(--f-mono); font-variant-numeric:tabular-nums}
+
+/* Cabeçalho */
+.top{display:flex; flex-wrap:wrap; gap:12px 24px; align-items:flex-end; justify-content:space-between; padding-top:4px}
+.brand{display:grid; gap:6px; min-width:0; max-width:60ch}
+.lede{color:var(--muted)}
+.status{display:inline-flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); font-family:var(--f-mono); min-width:0}
+.dot{width:9px; height:9px; border-radius:50%; background:var(--muted); flex:none}
+.status[data-kind="live"] .dot{background:var(--up); box-shadow:0 0 0 4px var(--up-soft)}
+.status[data-kind="demo"] .dot,.status[data-kind="file"] .dot{background:var(--warn); box-shadow:0 0 0 4px var(--warn-soft)}
+.status[data-kind="error"] .dot{background:var(--down)}
+.status[data-kind="loading"] .dot{background:var(--accent)}
+.status[data-kind="demo"]{color:var(--warn)}
+
+/* Controles */
+.controls{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px 12px; align-items:end}
+.field{display:grid; gap:4px; min-width:0}
+.field label,.label{font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted)}
+select,input[type="number"]{
+  width:100%; min-width:0; height:42px; padding:0 10px; border-radius:8px;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink);
+  font:500 15px var(--f-body);
+}
+input[type="number"]{font-family:var(--f-mono)}
+.check{display:flex; align-items:center; gap:8px; height:42px; padding:0 12px; border:1px solid var(--line); border-radius:8px; background:var(--surface); cursor:pointer; font-size:14px; color:var(--ink); text-transform:none; letter-spacing:0; font-weight:500}
+.field .check{font-size:14px; font-weight:500; letter-spacing:0; text-transform:none; color:var(--ink)}
+.check input{width:18px; height:18px; accent-color:var(--accent); margin:0}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+button,.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  height:40px; padding:0 14px; border-radius:8px; border:1px solid var(--line);
+  background:var(--surface); color:var(--ink); font:600 14px var(--f-body); cursor:pointer; text-decoration:none;
+}
+button.primary{background:var(--accent); border-color:var(--accent); color:var(--surface)}
+
+.notice{border:1px solid var(--down); background:var(--down-soft); border-radius:10px; padding:14px 16px; display:grid; gap:10px}
+.notice .why{color:var(--muted); font-size:13px; font-family:var(--f-mono); overflow-wrap:anywhere}
+.actions{display:flex; flex-wrap:wrap; gap:8px}
+
+/* Grade principal */
+.main{display:grid; gap:16px; align-items:start}
+.col{display:grid; gap:16px; min-width:0}
+@media (min-width:960px){ .main{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)} }
+
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px; display:grid; gap:12px; min-width:0}
+.phead{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 12px}
+.hint{font-size:12px; color:var(--muted)}
+
+/* Sinal ao vivo */
+.live-top{display:grid; gap:10px}
+.call{border-radius:10px; padding:18px 16px; background:var(--track); display:grid; gap:6px; transition:background-color .2s}
+.call-word{font-family:var(--f-display); font-weight:800; font-stretch:78%; font-size:clamp(40px,11vw,60px); line-height:.95; letter-spacing:-.01em; color:var(--muted)}
+.call-sub{font-size:14px; color:var(--muted); min-height:1.5em}
+.call[data-dir="1"]{background:var(--up-soft)}
+.call[data-dir="1"] .call-word{color:var(--up)}
+.call[data-dir="-1"]{background:var(--down-soft)}
+.call[data-dir="-1"] .call-word{color:var(--down)}
+.call[data-dir="1"] .call-sub,.call[data-dir="-1"] .call-sub{color:var(--ink)}
+.call[data-stale="1"] .call-word{opacity:.45}
+.call.flash{animation:flash .6s ease-out 2}
+@keyframes flash{50%{filter:brightness(1.25)}}
+@media (prefers-reduced-motion:reduce){.call{transition:none}.call.flash{animation:none}}
+.count{display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted)}
+.count-bar{flex:1; height:6px; border-radius:3px; background:var(--track); overflow:hidden}
+.count-bar i{display:block; height:100%; width:0; background:var(--ink); border-radius:3px}
+
+.facts{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:0}
+.facts div{display:grid; gap:2px; min-width:0}
+.facts dt{font-size:11px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--muted)}
+.facts dd{margin:0; font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:17px; font-weight:600}
+.facts dd small{display:block; font-size:12px; font-weight:400; color:var(--muted)}
+@media (max-width:440px){ .facts{grid-template-columns:1fr 1fr} .facts div:last-child{grid-column:1/-1} }
+
+.recent{list-style:none; margin:0; padding:0; display:grid; border-top:1px solid var(--line)}
+.recent li{display:grid; grid-template-columns:auto auto minmax(0,1fr) auto; gap:10px; align-items:baseline; padding:7px 0; border-bottom:1px solid var(--line); font-size:13px}
+.recent .t{font-family:var(--f-mono); color:var(--muted)}
+.recent .d{font-weight:600}
+.recent .p{font-family:var(--f-mono); color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.recent .r{font-family:var(--f-mono); font-weight:600; text-align:right}
+.is-up{color:var(--up)} .is-down{color:var(--down)} .is-muted{color:var(--muted)}
+.empty{color:var(--muted); font-size:13px; padding:8px 0}
+
+/* Gráficos */
+.chart{display:block; width:100%; height:230px}
+.chart.small{height:170px}
+.keys{display:flex; flex-wrap:wrap; gap:4px 14px; font-size:12px; color:var(--muted); align-items:center}
+.keys span{display:inline-flex; align-items:center; gap:5px}
+.sw{width:14px; height:3px; border-radius:2px; background:var(--accent); display:inline-block}
+.sw.coin{background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 7px)}
+
+/* Placar */
+.summary{border-radius:10px; padding:12px 14px; background:var(--track); font-size:14px}
+.summary[data-kind="bad"]{background:var(--down-soft)}
+.summary[data-kind="good"]{background:var(--warn-soft)}
+.summary b{font-weight:600}
+.scale{display:grid; grid-template-columns:minmax(0,1fr); gap:4px; font-size:11px; color:var(--muted)}
+.scale-ticks{position:relative; height:14px; font-family:var(--f-mono)}
+.scale-ticks span{position:absolute; transform:translateX(-50%)}
+.scale-ticks span:first-child{transform:none}
+.scale-ticks span:last-child{transform:translateX(-100%)}
+.scale-keys{display:flex; flex-wrap:wrap; gap:4px 14px}
+.scale-keys i{display:inline-block; vertical-align:middle; margin-right:5px}
+.k-pt{width:9px; height:9px; border-radius:50%; background:var(--ink)}
+.k-ci{width:16px; height:8px; border-radius:2px; background:var(--line)}
+.k-be{width:2px; height:12px; background:var(--warn)}
+
+.rows{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.row{
+  width:100%; height:auto; display:grid; gap:8px; text-align:left; align-items:stretch; justify-content:stretch;
+  padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--ink); font-weight:400;
+}
+.row:hover{border-color:var(--muted)}
+.row[aria-pressed="true"]{background:var(--accent-soft); border-color:var(--accent)}
+.row-head{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+.row-name{display:grid; gap:1px; min-width:0}
+.row-name b{font-weight:600; font-size:15px}
+.row-name span{font-size:12.5px; color:var(--muted)}
+.chip{flex:none; font-size:11.5px; font-weight:600; padding:3px 8px; border-radius:999px; white-space:nowrap; background:var(--track); color:var(--muted)}
+.chip.good{background:var(--up-soft); color:var(--up)}
+.chip.bad{background:var(--down-soft); color:var(--down)}
+.chip.warn{background:var(--warn-soft); color:var(--warn)}
+.row-rate{display:grid; grid-template-columns:64px minmax(0,1fr); gap:12px; align-items:center}
+.rate{font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:19px; font-weight:600}
+.bar{position:relative; height:16px}
+.bar::before{content:""; position:absolute; left:0; right:0; top:7px; height:2px; background:var(--track); border-radius:1px}
+.bar .ci{position:absolute; top:3px; height:10px; border-radius:3px; background:var(--line)}
+.bar .half{position:absolute; top:2px; width:1px; height:12px; background:var(--muted); opacity:.5}
+.bar .be{position:absolute; top:0; width:2px; height:16px; margin-left:-1px; background:var(--warn)}
+.bar .pt{position:absolute; top:3px; width:10px; height:10px; margin-left:-5px; border-radius:50%; background:var(--ink); border:2px solid var(--surface)}
+.bar .pt.good{background:var(--up)} .bar .pt.bad{background:var(--down)}
+.row-meta{font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums}
+.row-meta b{font-weight:600; color:var(--ink)}
+
+/* Como ler */
+.howto ul{margin:0; padding-left:18px; display:grid; gap:8px; max-width:72ch}
+.howto li::marker{color:var(--muted)}
+.fine{font-size:12.5px; color:var(--muted)}
+.sources{display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:13px; color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Analisador de Sinais 15s</h1>
+      <p class="lede">Mostra quando cada estratégia manda comprar ou vender e mede, com preço real, quantas vezes ela acerta em 15 segundos.</p>
+    </div>
+    <div class="status" id="status" data-kind="loading" role="status" aria-live="polite"><i class="dot"></i><span id="statusText">Conectando…</span></div>
+  </header>
+
+  <form class="controls" id="controls" onsubmit="return false">
+    <div class="field">
+      <label for="sym">Ativo</label>
+      <select id="sym">
+        <option value="BTCUSDT">Bitcoin (BTC)</option>
+        <option value="ETHUSDT">Ethereum (ETH)</option>
+        <option value="SOLUSDT">Solana (SOL)</option>
+        <option value="BNBUSDT">BNB</option>
+        <option value="XRPUSDT">XRP</option>
+        <option value="EURUSDT">Euro (EUR/USDT)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="mins">Histórico</label>
+      <select id="mins">
+        <option value="30">Últimos 30 min</option>
+        <option value="60">Última 1 hora</option>
+        <option value="120">Últimas 2 horas</option>
+        <option value="240">Últimas 4 horas</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="payout">Payout (%)</label>
+      <input id="payout" type="number" inputmode="decimal" min="1" max="200" step="1" value="85">
+    </div>
+    <div class="field">
+      <label for="stake">Entrada (R$)</label>
+      <input id="stake" type="number" inputmode="decimal" min="1" step="1" value="10">
+    </div>
+    <div class="field">
+      <span class="label">Aviso</span>
+      <label class="check" for="beep"><input id="beep" type="checkbox"> Som e vibração</label>
+    </div>
+  </form>
+
+  <div class="notice" id="notice" hidden>
+    <p><b>Não consegui buscar o preço ao vivo da Binance.</b> Abra este link direto no navegador do celular (Chrome ou Safari), com internet ligada. Alguns apps e redes bloqueiam essa conexão.</p>
+    <p class="why" id="noticeWhy"></p>
+    <div class="actions">
+      <button type="button" class="primary" id="btnRetry">Tentar de novo</button>
+      <button type="button" id="btnDemo">Ver demonstração</button>
+      <label class="btn" for="csv">Abrir arquivo CSV</label>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="col">
+      <section class="panel" aria-labelledby="hLive">
+        <div class="live-top">
+          <h2 id="hLive">Sinal agora</h2>
+          <div class="field">
+            <label for="strat">Estratégia</label>
+            <select id="strat"></select>
+          </div>
+        </div>
+        <div class="call" id="call" data-dir="0" data-stale="0" aria-live="assertive">
+          <div class="call-word" id="callWord">CARREGANDO</div>
+          <div class="call-sub" id="callSub">Buscando o preço segundo a segundo…</div>
+        </div>
+        <div class="count" id="count" hidden><div class="count-bar"><i id="countFill"></i></div><span id="countText" class="num"></span></div>
+        <dl class="facts">
+          <div><dt>Acerto medido</dt><dd id="fRate">—</dd></div>
+          <div><dt>Precisa p/ empatar</dt><dd id="fBe">—</dd></div>
+          <div><dt>Desde que abriu</dt><dd id="fLive">—</dd></div>
+        </dl>
+        <div>
+          <div class="label" style="margin-bottom:4px">Últimos resultados desta estratégia</div>
+          <ol class="recent" id="recent"></ol>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="hPrice">
+        <div class="phead"><h2 id="hPrice">Preço</h2><span class="hint">últimos 2 minutos · faixa à direita = próximos 15s</span></div>
+        <canvas id="price" class="chart" role="img" aria-label="Preço dos últimos 2 minutos com os sinais da estratégia escolhida"></canvas>
+        <div class="keys"><span class="is-up">▲ comprar (CALL)</span><span class="is-down">▼ vender (PUT)</span><span>● resultado após 15s</span></div>
+      </section>
+
+      <section class="panel" aria-labelledby="hEq">
+        <div class="phead"><h2 id="hEq">Dinheiro acumulado</h2><span class="hint" id="eqHint">simulação no período</span></div>
+        <div class="keys"><span><i class="sw"></i><span id="eqName">Estratégia</span></span><span><i class="sw coin"></i>Cara ou coroa</span></div>
+        <canvas id="equity" class="chart small" role="img" aria-label="Resultado acumulado em reais da estratégia escolhida comparado com cara ou coroa"></canvas>
+      </section>
+    </div>
+
+    <section class="panel" aria-labelledby="hBoard">
+      <div class="phead"><h2 id="hBoard">Placar das estratégias</h2><span class="hint" id="boardSub"></span></div>
+      <div class="summary" id="summary">Calculando…</div>
+      <div class="scale" aria-hidden="true">
+        <div class="scale-keys"><span><i class="k-pt"></i>taxa de acerto</span><span><i class="k-ci"></i>faixa provável (95%)</span><span><i class="k-be"></i><span id="beKey">equilíbrio</span></span></div>
+        <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px"><span></span><div class="scale-ticks"><span style="left:0">30%</span><span style="left:25%">40%</span><span style="left:50%">50%</span><span style="left:75%">60%</span><span style="left:100%">70%</span></div></div>
+      </div>
+      <ul class="rows" id="rows"></ul>
+      <p class="fine">Toque numa estratégia para ver os sinais dela no painel “Sinal agora”. Cada estratégia faz uma operação por vez: entra no fechamento do segundo e confere o preço 15 segundos depois. Preço igual é empate (devolve o valor).</p>
+    </section>
+  </div>
+
+  <section class="panel howto" aria-labelledby="hHow">
+    <h2 id="hHow">Como ler o placar</h2>
+    <ul>
+      <li id="howBe"><b>Ponto de equilíbrio.</b></li>
+      <li><b>Faixa provável.</b> A barra cinza mostra onde a taxa de acerto verdadeira provavelmente está. Se ela encosta na linha do equilíbrio, o resultado pode ser só sorte.</li>
+      <li><b>1ª e 2ª metade.</b> Um sinal bom de verdade acerta bem nas duas metades do período. Se foi bem só numa delas, foi sorte.</li>
+      <li><b>Cara ou coroa.</b> Fica no placar como régua. Um sinal que não ganha da moeda não está lendo nada no gráfico.</li>
+      <li><b>Bric Trade x Binance.</b> Os preços daqui vêm da Binance. A Bric Trade usa o próprio gráfico, que pode ser diferente, e o tempo que você leva para apertar o botão muda o preço de entrada. Na prática, o resultado tende a ser pior que o do placar.</li>
+    </ul>
+    <div class="sources">
+      <span>Outra fonte de dados:</span>
+      <button type="button" id="btnLive2">Ao vivo (Binance)</button>
+      <button type="button" id="btnDemo2">Demonstração</button>
+      <label class="btn" for="csv">Abrir arquivo CSV</label>
+      <input type="file" id="csv" accept=".csv,.txt,text/csv" hidden>
+    </div>
+    <p class="fine">O CSV precisa ter velas de 1 segundo: tempo, abertura, máxima, mínima, fechamento (formato da Binance serve). Ferramenta de estudo. Não é recomendação de investimento e não garante resultado.</p>
+  </section>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+const H = 15; // segundos até a expiração
+const REST = ['https://data-api.binance.vision', 'https://api.binance.com'];
+const WSS = ['wss://data-stream.binance.vision/ws/', 'wss://stream.binance.com:9443/ws/'];
+const ASSETS = {BTCUSDT:'BTC/USDT', ETHUSDT:'ETH/USDT', SOLUSDT:'SOL/USDT', BNBUSDT:'BNB/USDT', XRPUSDT:'XRP/USDT', EURUSDT:'EUR/USDT'};
+const STRATS = [
+  {id:'conf', name:'Confluência RSI + Bollinger', desc:'RSI e Bandas de Bollinger apontam virada ao mesmo tempo'},
+  {id:'rsi',  name:'RSI 14 (virada)', desc:'RSI cai abaixo de 25 → compra; passa de 75 → venda'},
+  {id:'bb',   name:'Bandas de Bollinger (virada)', desc:'Preço fura a banda de baixo → compra; a de cima → venda'},
+  {id:'ema',  name:'Cruzamento de médias 5/20', desc:'Média rápida cruza a lenta para cima → compra; para baixo → venda'},
+  {id:'mom',  name:'Tendência forte 15s', desc:'Movimento dos últimos 15s bem acima do normal → segue a direção'},
+  {id:'v3',   name:'3 velas iguais (virada)', desc:'3 velas de 15s da mesma cor → aposta na cor contrária'},
+  {id:'coin', name:'Cara ou coroa', desc:'Direção sorteada. Mostra o resultado da pura sorte'},
+];
+const NAME = Object.fromEntries(STRATS.map(s => [s.id, s.name]));
+
+const $ = s => document.querySelector(s);
+const nfCache = {};
+const nf = d => nfCache[d] || (nfCache[d] = new Intl.NumberFormat('pt-BR', {minimumFractionDigits:d, maximumFractionDigits:d}));
+const fmtPct = v => Number.isFinite(v) ? nf(1).format(v * 100) + '%' : '—';
+const fmtBRL = v => (v < -0.004 ? '−' : v > 0.004 ? '+' : '') + 'R$ ' + nf(2).format(Math.abs(v));
+const fmtInt = v => nf(0).format(v);
+const fmtTime = ms => new Date(ms).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+const fmtPrice = p => nf(p >= 100 ? 2 : p >= 1 ? 4 : 5).format(p);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// ---------- Estado ----------
+const S = {
+  sym:'BTCUSDT', mins:60, payout:0.85, stake:10, strat:'conf', beep:false,
+  mode:'loading', statusText:'Conectando…', label:'', fileName:'',
+  gen:0, ws:null, poll:null, demoTimer:null, watchdog:null,
+  liveT:null, liveSym:null, lastRx:0, lastAlert:null, restOrder:[0,1], err:'',
+};
+const D = {t:[], o:[], c:[]}; // velas de 1s em grade contínua (segundos sem negócio repetem o último preço)
+let R = null;
+
+function loadPrefs(){
+  try {
+    const p = JSON.parse(localStorage.getItem('sinais15s') || '{}');
+    if (ASSETS[p.sym]) S.sym = p.sym;
+    if ([30,60,120,240].includes(p.mins)) S.mins = p.mins;
+    if (p.payout > 0 && p.payout <= 2) S.payout = p.payout;
+    if (p.stake > 0) S.stake = p.stake;
+    if (NAME[p.strat]) S.strat = p.strat;
+  } catch (e) {}
+}
+function savePrefs(){
+  try { localStorage.setItem('sinais15s', JSON.stringify({sym:S.sym, mins:S.mins, payout:S.payout, stake:S.stake, strat:S.strat})); } catch (e) {}
+}
+
+// ---------- Série de preços ----------
+function resetData(){ D.t = []; D.o = []; D.c = []; }
+function push(t, o, c){
+  if (!(Number.isFinite(t) && Number.isFinite(o) && Number.isFinite(c))) return;
+  t = Math.floor(t / 1000) * 1000;
+  const n = D.t.length;
+  if (n){
+    const last = D.t[n - 1];
+    if (t <= last){
+      const idx = (t - D.t[0]) / 1000;
+      if (idx >= 0 && idx < n && D.t[idx] === t){ D.o[idx] = o; D.c[idx] = c; }
+      return;
+    }
+    if (t - last > 3600 * 1000) resetData();
+    else {
+      const pc = D.c[n - 1];
+      for (let x = last + 1000; x < t; x += 1000){ D.t.push(x); D.o.push(pc); D.c.push(pc); }
+    }
+  }
+  D.t.push(t); D.o.push(o); D.c.push(c);
+}
+function trim(){
+  const extra = D.t.length - (S.mins * 60 + 7200);
+  if (extra > 0){ D.t.splice(0, extra); D.o.splice(0, extra); D.c.splice(0, extra); }
+}
+
+// ---------- Indicadores e sinais (só usam dados até o segundo atual) ----------
+function hash(x){
+  x = Math.imul(x ^ (x >>> 16), 0x45d9f3b);
+  x = Math.imul(x ^ (x >>> 16), 0x45d9f3b);
+  return (x ^ (x >>> 16)) >>> 0;
+}
+function computeSignals(T, O, C){
+  const n = C.length;
+  const out = {};
+  for (const s of STRATS) out[s.id] = new Int8Array(n);
+  if (n < 60) return out;
+
+  // RSI 14 (Wilder)
+  const rsi = new Float64Array(n).fill(50);
+  let ag = 0, al = 0;
+  for (let i = 1; i < n; i++){
+    const d = C[i] - C[i - 1], g = d > 0 ? d : 0, l = d < 0 ? -d : 0;
+    if (i <= 14){ ag += g / 14; al += l / 14; if (i < 14) continue; }
+    else { ag = (ag * 13 + g) / 14; al = (al * 13 + l) / 14; }
+    rsi[i] = (ag + al) > 0 ? 100 * ag / (ag + al) : 50;
+  }
+  // Médias exponenciais 5 e 20
+  const e5 = new Float64Array(n), e20 = new Float64Array(n);
+  e5[0] = e20[0] = C[0];
+  for (let i = 1; i < n; i++){
+    e5[i] = e5[i - 1] + (2 / 6) * (C[i] - e5[i - 1]);
+    e20[i] = e20[i - 1] + (2 / 21) * (C[i] - e20[i - 1]);
+  }
+  // Bandas de Bollinger 20, 2 desvios
+  const up = new Float64Array(n).fill(NaN), lo = new Float64Array(n).fill(NaN);
+  for (let i = 19; i < n; i++){
+    let m = 0; for (let j = i - 19; j <= i; j++) m += C[j]; m /= 20;
+    let v = 0; for (let j = i - 19; j <= i; j++){ const d = C[j] - m; v += d * d; }
+    const sd = Math.sqrt(v / 20);
+    if (sd > 0){ up[i] = m + 2 * sd; lo[i] = m - 2 * sd; }
+  }
+  // Variação de 15s e o tamanho "normal" dela nos 5 minutos anteriores
+  const r = new Float64Array(n);
+  for (let i = H; i < n; i++) r[i] = C[i] - C[i - H];
+  const W = 300, sdR = new Float64Array(n).fill(NaN);
+  let s1 = 0, s2 = 0;
+  for (let i = H; i < n; i++){
+    if (i - W >= H){ const m = s1 / W; sdR[i] = Math.sqrt(Math.max(0, s2 / W - m * m)); }
+    s1 += r[i]; s2 += r[i] * r[i];
+    if (i - W >= H){ const x = r[i - W]; s1 -= x; s2 -= x * x; }
+  }
+  const color = j => (j - H + 1 >= 0 && T[j - H + 1] === T[j] - (H - 1) * 1000) ? Math.sign(C[j] - O[j - H + 1]) : 0;
+  const confState = i => (rsi[i] < 30 && C[i] < lo[i]) ? 1 : (rsi[i] > 70 && C[i] > up[i]) ? -1 : 0;
+
+  for (let i = 21; i < n; i++){
+    if (rsi[i] < 25 && rsi[i - 1] >= 25) out.rsi[i] = 1;
+    else if (rsi[i] > 75 && rsi[i - 1] <= 75) out.rsi[i] = -1;
+
+    if (!Number.isNaN(lo[i]) && !Number.isNaN(lo[i - 1])){
+      if (C[i] < lo[i] && C[i - 1] >= lo[i - 1]) out.bb[i] = 1;
+      else if (C[i] > up[i] && C[i - 1] <= up[i - 1]) out.bb[i] = -1;
+    }
+
+    const d0 = e5[i - 1] - e20[i - 1], d1 = e5[i] - e20[i];
+    if (d0 <= 0 && d1 > 0) out.ema[i] = 1;
+    else if (d0 >= 0 && d1 < 0) out.ema[i] = -1;
+
+    if (sdR[i] > 0 && Math.abs(r[i]) > 2 * sdR[i]) out.mom[i] = r[i] > 0 ? 1 : -1;
+
+    const cs = confState(i);
+    if (cs !== 0 && cs !== confState(i - 1)) out.conf[i] = cs;
+
+    if ((T[i] + 1000) % (H * 1000) === 0 && i >= 3 * H){
+      const a = color(i), b = color(i - H), c = color(i - 2 * H);
+      if (a !== 0 && a === b && b === c) out.v3[i] = -a;
+    }
+
+    const h = hash((T[i] / 1000) | 0);
+    if (h % 5 === 0) out.coin[i] = (h >>> 8) & 1 ? 1 : -1;
+  }
+  return out;
+}
+
+function simulate(sig, T, C){
+  const n = C.length, trades = [];
+  let busy = 0;
+  for (let i = 0; i < n; i++){
+    if (i < busy || !sig[i]) continue;
+    const e = i + H;
+    const tr = {i, t:T[i] + 1000, dir:sig[i], entry:C[i], exit:null, res:null};
+    if (e < n){
+      const d = (C[e] - C[i]) * sig[i];
+      tr.exit = C[e]; tr.res = d > 0 ? 1 : d < 0 ? -1 : 0;
+    }
+    trades.push(tr);
+    busy = e;
+  }
+  return trades;
+}
+
+function wilson(w, n){
+  if (!n) return [NaN, NaN];
+  const z = 1.96, p = w / n, z2 = z * z;
+  const c = (p + z2 / (2 * n)) / (1 + z2 / n);
+  const h = z * Math.sqrt(p * (1 - p) / n + z2 / (4 * n * n)) / (1 + z2 / n);
+  return [Math.max(0, c - h), Math.min(1, c + h)];
+}
+
+function stats(trades, n){
+  const st = {trades, w:0, l:0, ties:0, pend:0, pnl:0, w1:0, l1:0, w2:0, l2:0, lw:0, ll:0, lt:0, lpnl:0, eq:[]};
+  const half = n / 2, win = S.stake * S.payout;
+  for (const tr of trades){
+    if (tr.res === null){ st.pend++; continue; }
+    const v = tr.res > 0 ? win : tr.res < 0 ? -S.stake : 0;
+    if (tr.res > 0) st.w++; else if (tr.res < 0) st.l++; else st.ties++;
+    st.pnl += v;
+    st.eq.push([tr.t + H * 1000, st.pnl]);
+    if (tr.i < half){ if (tr.res > 0) st.w1++; else if (tr.res < 0) st.l1++; }
+    else { if (tr.res > 0) st.w2++; else if (tr.res < 0) st.l2++; }
+    if (S.liveT !== null && tr.t >= S.liveT){
+      if (tr.res > 0) st.lw++; else if (tr.res < 0) st.ll++; else st.lt++;
+      st.lpnl += v;
+    }
+  }
+  st.n = st.w + st.l;
+  st.rate = st.n ? st.w / st.n : NaN;
+  [st.lo, st.hi] = wilson(st.w, st.n);
+  st.r1 = (st.w1 + st.l1) ? st.w1 / (st.w1 + st.l1) : NaN;
+  st.r2 = (st.w2 + st.l2) ? st.w2 / (st.w2 + st.l2) : NaN;
+  return st;
+}
+
+const breakEven = () => 1 / (1 + S.payout);
+function verdict(st){
+  const be = breakEven();
+  if (st.n < 30) return {cls:'', txt:'Poucos sinais'};
+  if (st.lo > be) return {cls:'good', txt:'Acima do equilíbrio'};
+  if (st.hi < be) return {cls:'bad', txt:'Dá prejuízo'};
+  if (st.rate < be) return {cls:'bad', txt:'Tende a perder'};
+  return {cls:'warn', txt:'Pode ser sorte'};
+}
+
+// ---------- Cálculo e desenho ----------
+let queued = false;
+function schedule(){ if (!queued){ queued = true; setTimeout(recompute, 0); } }
+function recompute(){
+  queued = false;
+  const n = D.c.length;
+  if (n < 60){ R = null; render(); return; }
+  const sig = computeSignals(D.t, D.o, D.c);
+  const res = {};
+  for (const s of STRATS) res[s.id] = stats(simulate(sig[s.id], D.t, D.c), n);
+  R = {n, res};
+  maybeAlert();
+  render();
+}
+
+function render(){
+  renderStatus();
+  renderLive();
+  renderBoard();
+  renderHowTo();
+  drawPrice();
+  drawEquity();
+}
+
+function renderStatus(){
+  const el = $('#status'), tx = $('#statusText');
+  let kind = S.mode, text = S.statusText;
+  const n = D.t.length;
+  if (S.mode === 'live') text = `Ao vivo · Binance · ${ASSETS[S.sym]}` + (n ? ` · ${fmtTime(D.t[n - 1] + 1000)}` : '');
+  if (S.mode === 'demo') text = 'Demonstração · preço simulado, não é real';
+  if (S.mode === 'file') text = `Arquivo: ${S.fileName} · ${fmtInt(n)} segundos`;
+  el.dataset.kind = kind;
+  tx.textContent = text;
+}
+
+function pendingOf(st){
+  const last = st.trades[st.trades.length - 1];
+  return last && last.res === null ? last : null;
+}
+
+function renderLive(){
+  const box = $('#call'), word = $('#callWord'), sub = $('#callSub'), cnt = $('#count');
+  const be = breakEven();
+  $('#fBe').innerHTML = `${fmtPct(be)}<small>payout ${nf(0).format(S.payout * 100)}%</small>`;
+  if (!R){
+    box.dataset.dir = '0'; box.dataset.stale = '0'; cnt.hidden = true;
+    word.textContent = S.mode === 'error' ? 'SEM DADOS' : 'CARREGANDO';
+    sub.textContent = S.mode === 'error' ? 'Sem preço ao vivo. Veja o aviso acima.' : 'Buscando o preço segundo a segundo…';
+    $('#fRate').textContent = '—'; $('#fLive').textContent = '—';
+    $('#recent').innerHTML = '';
+    return;
+  }
+  const st = R.res[S.strat], n = R.n, pend = pendingOf(st);
+  if (pend){
+    const age = (n - 1) - pend.i, left = Math.max(0, pend.i + H - (n - 1));
+    const fresh = age <= 2 && S.mode !== 'file';
+    box.dataset.dir = String(pend.dir); box.dataset.stale = fresh ? '0' : '1';
+    word.textContent = pend.dir > 0 ? 'COMPRAR ▲' : 'VENDER ▼';
+    sub.textContent = fresh
+      ? `${pend.dir > 0 ? 'CALL' : 'PUT'} de 15 segundos · sinal das ${fmtTime(pend.t)} a ${fmtPrice(pend.entry)}`
+      : `O sinal das ${fmtTime(pend.t)} já passou do momento de entrar. Resultado em ${left}s.`;
+    cnt.hidden = false;
+    $('#countFill').style.width = (left / H * 100) + '%';
+    $('#countText').textContent = `expira em ${left}s`;
+  } else {
+    box.dataset.dir = '0'; box.dataset.stale = '0'; cnt.hidden = true;
+    word.textContent = 'AGUARDE';
+    sub.textContent = 'Sem sinal desta estratégia agora. O aviso aparece aqui no segundo em que ela disparar.';
+  }
+  $('#fRate').innerHTML = st.n ? `${fmtPct(st.rate)}<small>em ${fmtInt(st.n)} operações</small>` : '—<small>sem operações</small>';
+  const ln = st.lw + st.ll + st.lt;
+  $('#fLive').innerHTML = S.liveT === null ? '—<small>sem dados ao vivo</small>'
+    : ln ? `${st.lw} ✓ · ${st.ll} ✗<small>${fmtBRL(st.lpnl)}</small>` : `0 operações<small>aguardando sinais</small>`;
+
+  const done = st.trades.filter(t => t.res !== null).slice(-6).reverse();
+  $('#recent').innerHTML = done.length ? done.map(t => {
+    const ok = t.res > 0, tie = t.res === 0;
+    const v = ok ? S.stake * S.payout : tie ? 0 : -S.stake;
+    return `<li><span class="t">${fmtTime(t.t)}</span><span class="d ${t.dir > 0 ? 'is-up' : 'is-down'}">${t.dir > 0 ? '▲ Compra' : '▼ Venda'}</span>`
+      + `<span class="p">${fmtPrice(t.entry)} → ${fmtPrice(t.exit)}</span>`
+      + `<span class="r ${ok ? 'is-up' : tie ? 'is-muted' : 'is-down'}">${ok ? 'Acertou' : tie ? 'Empate' : 'Errou'} ${fmtBRL(v)}</span></li>`;
+  }).join('') : '<li class="empty">Nenhuma operação encerrada ainda.</li>';
+}
+
+function renderBoard(){
+  const be = breakEven();
+  $('#beKey').textContent = `equilíbrio ${fmtPct(be)}`;
+  const span = S.mode === 'file' ? 'do arquivo' : S.mode === 'demo' ? 'da demonstração' : `${S.mins >= 60 ? (S.mins / 60) + (S.mins === 60 ? ' hora' : ' horas') : S.mins + ' min'} de ${ASSETS[S.sym]}`;
+  $('#boardSub').textContent = R ? `${span} · ${fmtInt(R.n)} segundos` : '';
+  const sum = $('#summary');
+  if (!R){ sum.dataset.kind = ''; sum.textContent = S.mode === 'error' ? 'Sem dados para calcular.' : 'Calculando…'; $('#rows').innerHTML = ''; return; }
+
+  const real = STRATS.filter(s => s.id !== 'coin').map(s => ({s, st:R.res[s.id]}));
+  const good = real.filter(x => x.st.n >= 30 && x.st.lo > be);
+  const ranked = real.filter(x => x.st.n >= 30).sort((a, b) => b.st.rate - a.st.rate);
+  const coin = R.res.coin;
+  if (good.length){
+    sum.dataset.kind = 'good';
+    sum.innerHTML = `<b>${good.map(x => esc(x.s.name)).join(', ')}</b> ficou acima do equilíbrio de ${fmtPct(be)} neste período. Antes de confiar, confira se se mantém na 1ª e na 2ª metade, em outro horário e no placar “desde que abriu”.`;
+  } else if (ranked.length){
+    sum.dataset.kind = 'bad';
+    sum.innerHTML = `<b>Nenhuma estratégia passou do equilíbrio de ${fmtPct(be)} com segurança.</b> A melhor acertou ${fmtPct(ranked[0].st.rate)} (${esc(ranked[0].s.name)}). Cara ou coroa acertou ${fmtPct(coin.rate)}.`;
+  } else {
+    sum.dataset.kind = '';
+    sum.textContent = 'Ainda há poucos sinais para tirar conclusão. Escolha um histórico maior.';
+  }
+
+  const pos = v => Number.isFinite(v) ? Math.max(0, Math.min(100, (v * 100 - 30) / 40 * 100)) : 50;
+  $('#rows').innerHTML = STRATS.map(s => {
+    const st = R.res[s.id], vd = verdict(st);
+    const ptCls = st.n >= 30 ? (st.lo > be ? 'good' : st.rate < be ? 'bad' : '') : '';
+    const bar = st.n
+      ? `<span class="ci" style="left:${pos(st.lo)}%;width:${Math.max(1, pos(st.hi) - pos(st.lo))}%"></span><span class="half" style="left:${pos(.5)}%"></span><span class="be" style="left:${pos(be)}%"></span><span class="pt ${ptCls}" style="left:${pos(st.rate)}%"></span>`
+      : `<span class="be" style="left:${pos(be)}%"></span>`;
+    const meta = [
+      `<b>${fmtInt(st.n)}</b> operações` + (st.ties ? ` · ${fmtInt(st.ties)} empates` : ''),
+      `1ª metade ${fmtPct(st.r1)} · 2ª metade ${fmtPct(st.r2)}`,
+      `resultado <b class="${st.pnl > 0 ? 'is-up' : st.pnl < 0 ? 'is-down' : ''}">${fmtBRL(st.pnl)}</b>`,
+    ].join(' · ');
+    return `<li><button type="button" class="row" data-id="${s.id}" aria-pressed="${s.id === S.strat}">`
+      + `<span class="row-head"><span class="row-name"><b>${esc(s.name)}</b><span>${esc(s.desc)}</span></span><span class="chip ${vd.cls}">${vd.txt}</span></span>`
+      + `<span class="row-rate"><span class="rate">${fmtPct(st.rate)}</span><span class="bar" aria-hidden="true">${bar}</span></span>`
+      + `<span class="row-meta">${meta}</span></button></li>`;
+  }).join('');
+}
+
+function renderHowTo(){
+  const be = breakEven(), win = S.stake * S.payout;
+  $('#howBe').innerHTML = `<b>Ponto de equilíbrio.</b> Com payout de ${nf(0).format(S.payout * 100)}%, cada acerto paga ${fmtBRL(win).replace('+', '')} e cada erro tira R$ ${nf(2).format(S.stake)}. Para empatar é preciso acertar 1 ÷ (1 + ${nf(2).format(S.payout)}) = <b>${fmtPct(be)}</b> das vezes. Abaixo disso, perde dinheiro com o tempo.`;
+}
+
+function cssv(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function setupCanvas(cv){
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)){ cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  return {ctx, w, h};
+}
+function emptyChart(ctx, w, h, text){
+  ctx.fillStyle = cssv('--muted'); ctx.font = `13px ${cssv('--f-body')}`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, w / 2, h / 2);
+}
+
+function drawPrice(){
+  const cv = $('#price'); if (!cv.clientWidth) return;
+  const {ctx, w, h} = setupCanvas(cv);
+  const n = D.c.length;
+  if (n < 2){ emptyChart(ctx, w, h, 'Sem preço ainda'); return; }
+  const ink = cssv('--ink'), muted = cssv('--muted'), line = cssv('--line'), track = cssv('--track');
+  const upC = cssv('--up'), dnC = cssv('--down'), mono = cssv('--f-mono');
+  const N = Math.min(120, n), s = n - N, span = (N - 1) + H;
+  const padL = 4, padR = 74, padT = 12, padB = 22, pw = w - padL - padR, ph = h - padT - padB;
+  const trades = R ? R.res[S.strat].trades.filter(t => t.i + H >= s) : [];
+  let mn = Infinity, mx = -Infinity;
+  for (let i = s; i < n; i++){ mn = Math.min(mn, D.c[i]); mx = Math.max(mx, D.c[i]); }
+  for (const t of trades){ mn = Math.min(mn, t.entry); mx = Math.max(mx, t.entry); }
+  if (mx - mn < mx * 1e-6){ const e = Math.max(mx * 1e-5, 1e-6); mx += e; mn -= e; }
+  const pad = (mx - mn) * 0.14; mn -= pad; mx += pad;
+  const X = i => padL + (i - s) / span * pw;
+  const Y = v => padT + (1 - (v - mn) / (mx - mn)) * ph;
+
+  // faixa dos próximos 15s
+  ctx.fillStyle = track; ctx.fillRect(X(n - 1), padT, X(n - 1 + H) - X(n - 1), ph);
+  ctx.fillStyle = muted; ctx.font = `11px ${mono}`; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  ctx.fillText('+15s', (X(n - 1) + X(n - 1 + H)) / 2, padT + 4);
+
+  // grade e preços
+  ctx.lineWidth = 1; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  const lastY = Y(D.c[n - 1]);
+  for (let k = 0; k <= 3; k++){
+    const v = mn + (mx - mn) * (0.1 + 0.8 * k / 3), y = Math.round(Y(v)) + 0.5;
+    ctx.strokeStyle = line; ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + pw, y); ctx.stroke();
+    if (Math.abs(y - lastY) > 16){ ctx.fillStyle = muted; ctx.fillText(fmtPrice(v), padL + pw + 6, y); }
+  }
+  // horários
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'center';
+  for (let i = s; i < n; i++){
+    if ((D.t[i] + 1000) % 30000 === 0){
+      const x = X(i);
+      if (x > padL + 24 && x < padL + pw - 24) ctx.fillText(fmtTime(D.t[i] + 1000), x, h - 5);
+    }
+  }
+  // linha do preço
+  ctx.strokeStyle = ink; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.beginPath();
+  for (let i = s; i < n; i++){ const x = X(i), y = Y(D.c[i]); i === s ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+  ctx.stroke();
+  // preço atual
+  const lx = X(n - 1), ly = Y(D.c[n - 1]);
+  ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(lx, ly, 3, 0, Math.PI * 2); ctx.fill();
+  ctx.font = `600 11px ${mono}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  const label = fmtPrice(D.c[n - 1]), tw = ctx.measureText(label).width;
+  ctx.fillStyle = ink; ctx.fillRect(padL + pw + 2, ly - 9, tw + 8, 18);
+  ctx.fillStyle = cssv('--surface'); ctx.fillText(label, padL + pw + 6, ly);
+
+  // sinais da estratégia escolhida
+  for (const t of trades){
+    const col = t.dir > 0 ? upC : dnC;
+    const x0 = X(Math.max(t.i, s)), x1 = X(t.i + H), y = Y(t.entry);
+    ctx.setLineDash([4, 3]); ctx.strokeStyle = col; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke(); ctx.setLineDash([]);
+    if (t.i >= s){
+      const x = X(t.i), o = t.dir > 0 ? 9 : -9;
+      ctx.fillStyle = col; ctx.beginPath();
+      if (t.dir > 0){ ctx.moveTo(x, y + 3); ctx.lineTo(x - 6, y + 3 + o); ctx.lineTo(x + 6, y + 3 + o); }
+      else { ctx.moveTo(x, y - 3); ctx.lineTo(x - 6, y - 3 + o); ctx.lineTo(x + 6, y - 3 + o); }
+      ctx.closePath(); ctx.fill();
+    }
+    if (t.res !== null){
+      ctx.fillStyle = t.res > 0 ? upC : t.res < 0 ? dnC : muted;
+      ctx.strokeStyle = cssv('--surface'); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x1, Y(t.exit), 4.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    }
+  }
+}
+
+function drawEquity(){
+  const cv = $('#equity'); if (!cv.clientWidth) return;
+  const {ctx, w, h} = setupCanvas(cv);
+  $('#eqName').textContent = NAME[S.strat];
+  if (!R){ emptyChart(ctx, w, h, 'Sem dados ainda'); return; }
+  const a = R.res[S.strat].eq, b = R.res.coin.eq;
+  if (!a.length && !b.length){ emptyChart(ctx, w, h, 'Sem operações encerradas ainda'); return; }
+  const muted = cssv('--muted'), line = cssv('--line'), acc = cssv('--accent'), mono = cssv('--f-mono');
+  const t0 = D.t[0], t1 = D.t[D.t.length - 1] + 1000;
+  let mn = 0, mx = 0;
+  for (const p of a.concat(b)){ mn = Math.min(mn, p[1]); mx = Math.max(mx, p[1]); }
+  if (mx === mn){ mx += 1; mn -= 1; }
+  const pad = (mx - mn) * 0.1; mn -= pad; mx += pad;
+  const padL = 4, padR = 86, padT = 10, padB = 10, pw = w - padL - padR, ph = h - padT - padB;
+  const X = t => padL + (t - t0) / Math.max(1, t1 - t0) * pw;
+  const Y = v => padT + (1 - (v - mn) / (mx - mn)) * ph;
+  const y0 = Math.round(Y(0)) + 0.5;
+  ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, y0); ctx.lineTo(padL + pw, y0); ctx.stroke();
+  ctx.fillStyle = muted; ctx.font = `11px ${mono}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText('R$ 0', padL + pw + 6, y0);
+  const series = (pts, col, dash, width) => {
+    if (!pts.length) return null;
+    ctx.strokeStyle = col; ctx.lineWidth = width; ctx.setLineDash(dash); ctx.lineJoin = 'round'; ctx.beginPath();
+    ctx.moveTo(X(Math.max(t0, pts[0][0] - 1)), Y(0));
+    for (const [t, v] of pts) ctx.lineTo(X(t), Y(v));
+    ctx.stroke(); ctx.setLineDash([]);
+    const [lt, lv] = pts[pts.length - 1];
+    return {x:X(lt), y:Y(lv), v:lv};
+  };
+  const eb = series(b, muted, [4, 3], 1.4);
+  const ea = series(a, acc, [], 2);
+  const labels = [];
+  if (ea) labels.push({...ea, col:acc});
+  if (eb) labels.push({...eb, col:muted});
+  labels.sort((p, q) => p.y - q.y);
+  if (labels.length === 2 && labels[1].y - labels[0].y < 15){ const m = (labels[0].y + labels[1].y) / 2; labels[0].y = m - 8; labels[1].y = m + 8; }
+  for (const l of labels){
+    ctx.fillStyle = l.col; ctx.beginPath(); ctx.arc(l.x, Y(l.v), 3, 0, Math.PI * 2); ctx.fill();
+    ctx.font = `600 11px ${mono}`; ctx.fillText(fmtBRL(l.v), padL + pw + 6, Math.max(padT + 6, Math.min(h - 6, l.y)));
+  }
+}
+
+// ---------- Alerta ----------
+let actx = null;
+function beep(dir){
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    const o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime;
+    o.frequency.value = dir > 0 ? 880 : dir < 0 ? 440 : 660;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.25, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+    o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t + 0.32);
+  } catch (e) {}
+  try { navigator.vibrate && navigator.vibrate(dir ? 180 : 40); } catch (e) {}
+}
+function maybeAlert(){
+  if (!R || (S.mode !== 'live' && S.mode !== 'demo')) return;
+  const pend = pendingOf(R.res[S.strat]);
+  if (!pend || (R.n - 1) - pend.i !== 0) return;
+  const key = S.sym + S.strat + pend.t;
+  if (key === S.lastAlert) return;
+  S.lastAlert = key;
+  const box = $('#call'); box.classList.remove('flash'); void box.offsetWidth; box.classList.add('flash');
+  if (S.beep) beep(pend.dir);
+}
+
+// ---------- Fontes de dados ----------
+function setStatus(mode, text){ S.mode = mode; S.statusText = text; renderStatus(); }
+function stopFeeds(){
+  S.gen++;
+  if (S.ws){ try { S.ws.onclose = null; S.ws.onerror = null; S.ws.onmessage = null; S.ws.close(); } catch (e) {} S.ws = null; }
+  clearInterval(S.poll); S.poll = null;
+  clearInterval(S.demoTimer); S.demoTimer = null;
+}
+function showNotice(err){ $('#notice').hidden = false; $('#noticeWhy').textContent = err ? `Detalhe técnico: ${err.message || err}` : ''; }
+function hideNotice(){ $('#notice').hidden = true; }
+
+async function fetchKlines(qs){
+  let err;
+  for (const k of S.restOrder){
+    const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 9000);
+    try {
+      const r = await fetch(`${REST[k]}/api/v3/klines?${qs}`, {signal:ctl.signal, cache:'no-store'});
+      if (!r.ok) throw new Error(`HTTP ${r.status} em ${new URL(REST[k]).host}`);
+      const j = await r.json();
+      if (!Array.isArray(j)) throw new Error('Resposta inesperada da Binance');
+      if (S.restOrder[0] !== k) S.restOrder = [k, 1 - k];
+      return j;
+    } catch (e) { err = e; }
+    finally { clearTimeout(to); }
+  }
+  throw err || new Error('Falha de rede');
+}
+
+async function startLive(keep){
+  stopFeeds();
+  const gen = S.gen;
+  if (!(keep && S.liveSym === S.sym)) S.liveT = null;
+  resetData(); R = null; hideNotice();
+  setStatus('loading', `Carregando histórico de ${ASSETS[S.sym]}…`);
+  render();
+  const need = S.mins * 60 + 360;
+  try {
+    const rows = [];
+    let end = Date.now();
+    while (rows.length < need){
+      const lim = Math.min(1000, need - rows.length);
+      const j = await fetchKlines(`symbol=${S.sym}&interval=1s&limit=${lim}&endTime=${end}`);
+      if (gen !== S.gen) return;
+      if (!j.length) break;
+      for (let k = j.length - 1; k >= 0; k--) rows.push(j[k]);
+      end = j[0][0] - 1;
+      setStatus('loading', `Carregando histórico… ${Math.min(99, Math.round(rows.length / need * 100))}%`);
+      if (j.length < lim) break;
+    }
+    if (rows.length < 100) throw new Error('A Binance devolveu poucos dados para este ativo.');
+    rows.reverse();
+    rows.pop(); // a vela do segundo atual ainda está aberta
+    for (const r of rows) push(+r[0], +r[1], +r[4]);
+    S.mode = 'live'; S.liveSym = S.sym; S.lastRx = Date.now();
+    if (S.liveT === null) S.liveT = D.t[D.t.length - 1] + 1000;
+    recompute();
+    openWS(gen);
+    startWatchdog();
+  } catch (e) {
+    if (gen !== S.gen) return;
+    resetData(); R = null;
+    setStatus('error', 'Sem conexão com o preço ao vivo');
+    showNotice(e);
+    render();
+  }
+}
+
+function onLiveCandle(t, o, c, gen){
+  if (gen !== S.gen) return;
+  const n = D.t.length;
+  if (n && t - D.t[n - 1] > 30000){ startLive(true); return; } // ficou tempo demais sem dados: recarrega
+  push(t, o, c); trim();
+  S.lastRx = Date.now();
+  schedule();
+}
+
+function openWS(gen){
+  let attempt = 0, lastK = null;
+  const connect = () => {
+    if (gen !== S.gen) return;
+    if (typeof WebSocket === 'undefined' || attempt >= 4){ startPolling(gen); return; }
+    let ws;
+    try { ws = new WebSocket(WSS[attempt % WSS.length] + S.sym.toLowerCase() + '@kline_1s'); }
+    catch (e) { attempt++; setTimeout(connect, 1000); return; }
+    S.ws = ws;
+    let opened = false;
+    ws.onopen = () => { opened = true; attempt = 0; catchUp(gen); };
+    ws.onmessage = ev => {
+      if (gen !== S.gen) return;
+      let m; try { m = JSON.parse(ev.data); } catch (e) { return; }
+      const k = m && m.k; if (!k) return;
+      const t = +k.t;
+      if (lastK && lastK.t < t && !lastK.done){ lastK.done = true; onLiveCandle(lastK.t, lastK.o, lastK.c, gen); }
+      lastK = {t, o:+k.o, c:+k.c, done:false};
+      if (k.x){ lastK.done = true; onLiveCandle(t, +k.o, +k.c, gen); }
+    };
+    ws.onerror = () => {};
+    ws.onclose = () => {
+      if (gen !== S.gen) return;
+      S.ws = null;
+      if (!opened) attempt++;
+      setTimeout(connect, opened ? 800 : 1500);
+    };
+  };
+  connect();
+}
+
+async function catchUp(gen){
+  try {
+    const j = await fetchKlines(`symbol=${S.sym}&interval=1s&limit=60`);
+    if (gen !== S.gen || !j.length) return;
+    j.pop();
+    const last = D.t[D.t.length - 1];
+    for (const r of j) if (+r[0] > last) push(+r[0], +r[1], +r[4]);
+    trim(); schedule();
+  } catch (e) {}
+}
+
+function startPolling(gen){
+  if (gen !== S.gen) return;
+  const tick = async () => {
+    try {
+      const j = await fetchKlines(`symbol=${S.sym}&interval=1s&limit=30`);
+      if (gen !== S.gen || !j.length) return;
+      j.pop();
+      const n = D.t.length, last = n ? D.t[n - 1] : 0;
+      if (n && j.length && +j[0][0] - last > 30000){ startLive(true); return; }
+      let added = false;
+      for (const r of j) if (+r[0] > last){ push(+r[0], +r[1], +r[4]); added = true; }
+      if (added){ trim(); S.lastRx = Date.now(); schedule(); }
+    } catch (e) {}
+  };
+  S.poll = setInterval(tick, 2000);
+  tick();
+}
+
+function startWatchdog(){
+  clearInterval(S.watchdog);
+  S.watchdog = setInterval(() => {
+    if (S.mode === 'live' && Date.now() - S.lastRx > 25000){ startLive(true); }
+    else if (S.mode === 'live') renderStatus();
+  }, 5000);
+}
+
+function startDemo(){
+  stopFeeds(); clearInterval(S.watchdog);
+  resetData(); R = null; hideNotice();
+  S.mode = 'demo'; S.liveSym = null;
+  let seed = (Date.now() & 0x7fffffff) || 1;
+  const rnd = () => (seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296;
+  const gauss = () => { let u = 0; while (!u) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); };
+  let p = 65000, vol = 3;
+  const next = () => {
+    vol = Math.max(0.6, vol + 0.03 * (3 - vol) + 0.25 * gauss());
+    const o = p;
+    if (rnd() > 0.12) p = Math.max(1, Math.round((p + gauss() * vol) * 100) / 100);
+    return [o, p];
+  };
+  const N = S.mins * 60 + 360;
+  let t = Math.floor(Date.now() / 1000) * 1000 - N * 1000;
+  for (let k = 0; k < N; k++){ const [o, c] = next(); push(t, o, c); t += 1000; }
+  S.liveT = t;
+  const gen = S.gen;
+  S.demoTimer = setInterval(() => {
+    if (gen !== S.gen) return;
+    const [o, c] = next(); push(t, o, c); t += 1000; trim(); schedule();
+  }, 1000);
+  recompute();
+}
+
+function parseCSV(text){
+  const rows = [];
+  for (const raw of text.split(/\r?\n/)){
+    const line = raw.trim(); if (!line) continue;
+    const sep = line.includes(';') ? ';' : line.includes('\t') ? '\t' : ',';
+    const p = line.split(sep).map(x => x.trim().replace(/^"|"$/g, ''));
+    if (p.length < 2) continue;
+    const num = x => Number(sep === ',' ? x : x.replace(',', '.'));
+    let t = Number(p[0]);
+    if (!Number.isFinite(t)){ t = Date.parse(p[0].replace(' ', 'T')); if (Number.isNaN(t)) continue; }
+    else if (t > 1e17) t /= 1e6; else if (t > 1e14) t /= 1e3; else if (t < 1e11) t *= 1000;
+    const o = num(p[1]), c = p.length >= 5 ? num(p[4]) : o;
+    if (!Number.isFinite(o) || !Number.isFinite(c)) continue;
+    rows.push([t, o, c]);
+  }
+  rows.sort((a, b) => a[0] - b[0]);
+  return rows;
+}
+async function loadFile(file){
+  if (!file) return;
+  let rows;
+  try { rows = parseCSV(await file.text()); } catch (e) { rows = []; }
+  if (rows.length < 100){ setStatus('error', 'O arquivo não tem velas suficientes (mínimo 100).'); showNotice(new Error('Arquivo sem dados reconhecíveis')); return; }
+  const gaps = []; for (let k = 1; k < Math.min(rows.length, 500); k++) gaps.push(rows[k][0] - rows[k - 1][0]);
+  gaps.sort((a, b) => a - b);
+  if (gaps[gaps.length >> 1] > 5000){ setStatus('error', 'O arquivo precisa ter velas de 1 segundo.'); showNotice(new Error('Intervalo entre velas maior que 1 segundo')); return; }
+  stopFeeds(); clearInterval(S.watchdog); hideNotice();
+  resetData(); R = null;
+  for (const r of rows) push(r[0], r[1], r[2]);
+  S.mode = 'file'; S.fileName = file.name; S.liveT = null; S.liveSym = null;
+  recompute();
+}
+
+// ---------- Controles ----------
+function init(){
+  loadPrefs();
+  $('#strat').innerHTML = STRATS.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
+  $('#sym').value = S.sym; $('#mins').value = String(S.mins);
+  $('#payout').value = Math.round(S.payout * 100); $('#stake').value = S.stake; $('#strat').value = S.strat;
+
+  $('#sym').addEventListener('change', e => { S.sym = e.target.value; savePrefs(); startLive(false); });
+  $('#mins').addEventListener('change', e => {
+    S.mins = Number(e.target.value); savePrefs();
+    if (S.mode === 'demo') startDemo(); else if (S.mode !== 'file') startLive(true); else render();
+  });
+  $('#payout').addEventListener('input', e => { const v = Number(e.target.value); if (v >= 1 && v <= 200){ S.payout = v / 100; savePrefs(); schedule(); } });
+  $('#stake').addEventListener('input', e => { const v = Number(e.target.value); if (v > 0){ S.stake = v; savePrefs(); schedule(); } });
+  $('#strat').addEventListener('change', e => { S.strat = e.target.value; savePrefs(); render(); });
+  $('#rows').addEventListener('click', e => {
+    const b = e.target.closest('.row'); if (!b) return;
+    S.strat = b.dataset.id; $('#strat').value = S.strat; savePrefs(); render();
+  });
+  $('#beep').addEventListener('change', e => { S.beep = e.target.checked; if (S.beep) beep(0); });
+  $('#btnRetry').addEventListener('click', () => startLive(false));
+  $('#btnLive2').addEventListener('click', () => startLive(false));
+  $('#btnDemo').addEventListener('click', startDemo);
+  $('#btnDemo2').addEventListener('click', startDemo);
+  $('#csv').addEventListener('change', e => { loadFile(e.target.files[0]); e.target.value = ''; });
+
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { drawPrice(); drawEquity(); }, 120); });
+  const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  if (mq && mq.addEventListener) mq.addEventListener('change', () => { drawPrice(); drawEquity(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && S.mode === 'live' && Date.now() - S.lastRx > 15000) startLive(true);
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawPrice(); drawEquity(); });
+
+  startLive(false);
+}
+init();
+})();
+</script>
+</body>
+</html>
