@@ -13,6 +13,7 @@ Abra no navegador (Chrome ou Safari). A página busca o preço direto da Binance
 - **Sinal agora**: avisa no segundo em que a estratégia escolhida dispara, com contagem regressiva de 15s e o resultado. Pode tocar som e vibrar.
 - **Placar das estratégias**: taxa de acerto de cada estratégia no histórico, faixa provável (95%), comparação com o ponto de equilíbrio do payout, 1ª x 2ª metade do período e resultado em R$.
 - **Cara ou coroa**: fica no placar como régua da pura sorte.
+- **Onde operar**: em "Opção binária" o resultado usa o payout; em "Binance (com taxa)" usa o quanto o preço andou menos a taxa da compra e da venda (0,1% por ordem, ajustável).
 
 ## Estratégias testadas
 

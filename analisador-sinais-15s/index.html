@@ -221,8 +221,19 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
       </select>
     </div>
     <div class="field">
+      <label for="market">Onde operar</label>
+      <select id="market">
+        <option value="binary">Opção binária</option>
+        <option value="spot">Binance (com taxa)</option>
+      </select>
+    </div>
+    <div class="field" id="fieldPayout">
       <label for="payout">Payout (%)</label>
       <input id="payout" type="number" inputmode="decimal" min="1" max="200" step="1" value="85">
+    </div>
+    <div class="field" id="fieldFee" hidden>
+      <label for="fee">Taxa por ordem (%)</label>
+      <input id="fee" type="number" inputmode="decimal" min="0" max="5" step="0.005" value="0.1">
     </div>
     <div class="field">
       <label for="stake">Entrada (R$)</label>
@@ -261,7 +272,7 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
         <div class="count" id="count" hidden><div class="count-bar"><i id="countFill"></i></div><span id="countText" class="num"></span></div>
         <dl class="facts">
           <div><dt>Acerto medido</dt><dd id="fRate">—</dd></div>
-          <div><dt>Precisa p/ empatar</dt><dd id="fBe">—</dd></div>
+          <div><dt id="dBe">Precisa p/ empatar</dt><dd id="fBe">—</dd></div>
           <div><dt>Desde que abriu</dt><dd id="fLive">—</dd></div>
         </dl>
         <div>
@@ -287,7 +298,7 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
       <div class="phead"><h2 id="hBoard">Placar das estratégias</h2><span class="hint" id="boardSub"></span></div>
       <div class="summary" id="summary">Calculando…</div>
       <div class="scale" aria-hidden="true">
-        <div class="scale-keys"><span><i class="k-pt"></i>taxa de acerto</span><span><i class="k-ci"></i>faixa provável (95%)</span><span><i class="k-be"></i><span id="beKey">equilíbrio</span></span></div>
+        <div class="scale-keys"><span><i class="k-pt"></i><span id="ptKey">taxa de acerto</span></span><span><i class="k-ci"></i>faixa provável (95%)</span><span id="beKeyWrap"><i class="k-be"></i><span id="beKey">equilíbrio</span></span></div>
         <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px"><span></span><div class="scale-ticks"><span style="left:0">30%</span><span style="left:25%">40%</span><span style="left:50%">50%</span><span style="left:75%">60%</span><span style="left:100%">70%</span></div></div>
       </div>
       <ul class="rows" id="rows"></ul>
@@ -299,6 +310,7 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
     <h2 id="hHow">Como ler o placar</h2>
     <ul>
       <li id="howBe"><b>Ponto de equilíbrio.</b></li>
+      <li id="howSell" hidden><b>Vender.</b> Na Binance à vista, “vender” só funciona se você já tiver a moeda. Apostar na queda exige Futuros ou margem, que usam dinheiro emprestado e podem zerar a conta muito rápido.</li>
       <li><b>Faixa provável.</b> A barra cinza mostra onde a taxa de acerto verdadeira provavelmente está. Se ela encosta na linha do equilíbrio, o resultado pode ser só sorte.</li>
       <li><b>1ª e 2ª metade.</b> Um sinal bom de verdade acerta bem nas duas metades do período. Se foi bem só numa delas, foi sorte.</li>
       <li><b>Cara ou coroa.</b> Fica no placar como régua. Um sinal que não ganha da moeda não está lendo nada no gráfico.</li>
@@ -338,6 +350,7 @@ const $ = s => document.querySelector(s);
 const nfCache = {};
 const nf = d => nfCache[d] || (nfCache[d] = new Intl.NumberFormat('pt-BR', {minimumFractionDigits:d, maximumFractionDigits:d}));
 const fmtPct = v => Number.isFinite(v) ? nf(1).format(v * 100) + '%' : '—';
+const fmtPct3 = v => Number.isFinite(v) ? nf(3).format(v * 100) + '%' : '—';
 const fmtBRL = v => (v < -0.004 ? '−' : v > 0.004 ? '+' : '') + 'R$ ' + nf(2).format(Math.abs(v));
 const fmtInt = v => nf(0).format(v);
 const fmtTime = ms => new Date(ms).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
@@ -346,7 +359,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
 
 // ---------- Estado ----------
 const S = {
-  sym:'BTCUSDT', mins:60, payout:0.85, stake:10, strat:'conf', beep:false,
+  sym:'BTCUSDT', mins:60, payout:0.85, stake:10, strat:'conf', beep:false, market:'binary', fee:0.001,
   mode:'loading', statusText:'Conectando…', label:'', fileName:'',
   gen:0, ws:null, poll:null, demoTimer:null, watchdog:null,
   liveT:null, liveSym:null, lastRx:0, lastAlert:null, restOrder:[0,1], err:'',
@@ -362,10 +375,12 @@ function loadPrefs(){
     if (p.payout > 0 && p.payout <= 2) S.payout = p.payout;
     if (p.stake > 0) S.stake = p.stake;
     if (NAME[p.strat]) S.strat = p.strat;
+    if (p.market === 'binary' || p.market === 'spot') S.market = p.market;
+    if (p.fee >= 0 && p.fee <= 0.05) S.fee = p.fee;
   } catch (e) {}
 }
 function savePrefs(){
-  try { localStorage.setItem('sinais15s', JSON.stringify({sym:S.sym, mins:S.mins, payout:S.payout, stake:S.stake, strat:S.strat})); } catch (e) {}
+  try { localStorage.setItem('sinais15s', JSON.stringify({sym:S.sym, mins:S.mins, payout:S.payout, stake:S.stake, strat:S.strat, market:S.market, fee:S.fee})); } catch (e) {}
 }
 
 // ---------- Série de preços ----------
@@ -497,19 +512,28 @@ function wilson(w, n){
   return [Math.max(0, c - h), Math.min(1, c + h)];
 }
 
+const isSpot = () => S.market === 'spot';
+// Opção binária: ganha o payout ou perde a entrada. Binance: ganha ou perde o quanto o preço andou, menos a taxa da compra e da venda.
+function tradeValue(tr){
+  if (isSpot()) return S.stake * (tr.dir * (tr.exit - tr.entry) / tr.entry - 2 * S.fee);
+  return tr.res > 0 ? S.stake * S.payout : tr.res < 0 ? -S.stake : 0;
+}
+const outcome = tr => isSpot() ? Math.sign(tradeValue(tr)) : tr.res;
+
 function stats(trades, n){
-  const st = {trades, w:0, l:0, ties:0, pend:0, pnl:0, w1:0, l1:0, w2:0, l2:0, lw:0, ll:0, lt:0, lpnl:0, eq:[]};
-  const half = n / 2, win = S.stake * S.payout;
+  const st = {trades, w:0, l:0, ties:0, pend:0, pnl:0, w1:0, l1:0, w2:0, l2:0, lw:0, ll:0, lt:0, lpnl:0, eq:[], all:0, gross:0, s1:0, s2:0};
+  const half = n / 2;
   for (const tr of trades){
     if (tr.res === null){ st.pend++; continue; }
-    const v = tr.res > 0 ? win : tr.res < 0 ? -S.stake : 0;
+    const v = tradeValue(tr), oc = outcome(tr);
     if (tr.res > 0) st.w++; else if (tr.res < 0) st.l++; else st.ties++;
+    st.all++; st.gross += tr.dir * (tr.exit - tr.entry) / tr.entry; st.s1 += v; st.s2 += v * v;
     st.pnl += v;
     st.eq.push([tr.t + H * 1000, st.pnl]);
     if (tr.i < half){ if (tr.res > 0) st.w1++; else if (tr.res < 0) st.l1++; }
     else { if (tr.res > 0) st.w2++; else if (tr.res < 0) st.l2++; }
     if (S.liveT !== null && tr.t >= S.liveT){
-      if (tr.res > 0) st.lw++; else if (tr.res < 0) st.ll++; else st.lt++;
+      if (oc > 0) st.lw++; else if (oc < 0) st.ll++; else st.lt++;
       st.lpnl += v;
     }
   }
@@ -518,11 +542,24 @@ function stats(trades, n){
   [st.lo, st.hi] = wilson(st.w, st.n);
   st.r1 = (st.w1 + st.l1) ? st.w1 / (st.w1 + st.l1) : NaN;
   st.r2 = (st.w2 + st.l2) ? st.w2 / (st.w2 + st.l2) : NaN;
+  st.avgMove = st.all ? st.gross / st.all : NaN;
+  st.mean = st.netLo = st.netHi = NaN;
+  if (st.all > 1){
+    const m = st.s1 / st.all, sd = Math.sqrt(Math.max(0, (st.s2 - st.all * m * m) / (st.all - 1))), e = 1.96 * sd / Math.sqrt(st.all);
+    st.mean = m; st.netLo = m - e; st.netHi = m + e;
+  }
   return st;
 }
 
 const breakEven = () => 1 / (1 + S.payout);
 function verdict(st){
+  if (isSpot()){
+    if (st.all < 30) return {cls:'', txt:'Poucos sinais'};
+    if (st.netLo > 0) return {cls:'good', txt:'Lucrou após a taxa'};
+    if (st.netHi < 0) return {cls:'bad', txt:'Dá prejuízo'};
+    if (st.mean < 0) return {cls:'bad', txt:'Tende a perder'};
+    return {cls:'warn', txt:'Pode ser sorte'};
+  }
   const be = breakEven();
   if (st.n < 30) return {cls:'', txt:'Poucos sinais'};
   if (st.lo > be) return {cls:'good', txt:'Acima do equilíbrio'};
@@ -541,7 +578,10 @@ function recompute(){
   const sig = computeSignals(D.t, D.o, D.c);
   const res = {};
   for (const s of STRATS) res[s.id] = stats(simulate(sig[s.id], D.t, D.c), n);
-  R = {n, res};
+  const mv = [];
+  for (let i = 0; i + H < n; i += H) mv.push(Math.abs(D.c[i + H] - D.c[i]) / D.c[i]);
+  mv.sort((a, b) => a - b);
+  R = {n, res, typMove: mv.length ? mv[mv.length >> 1] : NaN};
   maybeAlert();
   render();
 }
@@ -574,7 +614,10 @@ function pendingOf(st){
 function renderLive(){
   const box = $('#call'), word = $('#callWord'), sub = $('#callSub'), cnt = $('#count');
   const be = breakEven();
-  $('#fBe').innerHTML = `${fmtPct(be)}<small>payout ${nf(0).format(S.payout * 100)}%</small>`;
+  $('#dBe').textContent = isSpot() ? 'Taxa ida e volta' : 'Precisa p/ empatar';
+  $('#fBe').innerHTML = isSpot()
+    ? `${fmtPct3(2 * S.fee)}<small>${R ? 'ganho médio ' + fmtPct3(R.res[S.strat].avgMove) : 'compra + venda'}</small>`
+    : `${fmtPct(be)}<small>payout ${nf(0).format(S.payout * 100)}%</small>`;
   if (!R){
     box.dataset.dir = '0'; box.dataset.stale = '0'; cnt.hidden = true;
     word.textContent = S.mode === 'error' ? 'SEM DADOS' : 'CARREGANDO';
@@ -590,7 +633,9 @@ function renderLive(){
     box.dataset.dir = String(pend.dir); box.dataset.stale = fresh ? '0' : '1';
     word.textContent = pend.dir > 0 ? 'COMPRAR ▲' : 'VENDER ▼';
     sub.textContent = fresh
-      ? `${pend.dir > 0 ? 'CALL' : 'PUT'} de 15 segundos · sinal das ${fmtTime(pend.t)} a ${fmtPrice(pend.entry)}`
+      ? (isSpot()
+          ? `${pend.dir > 0 ? 'Comprar agora e vender' : 'Vender agora e recomprar'} em 15 segundos · sinal das ${fmtTime(pend.t)} a ${fmtPrice(pend.entry)}`
+          : `${pend.dir > 0 ? 'CALL' : 'PUT'} de 15 segundos · sinal das ${fmtTime(pend.t)} a ${fmtPrice(pend.entry)}`)
       : `O sinal das ${fmtTime(pend.t)} já passou do momento de entrar. Resultado em ${left}s.`;
     cnt.hidden = false;
     $('#countFill').style.width = (left / H * 100) + '%';
@@ -600,24 +645,26 @@ function renderLive(){
     word.textContent = 'AGUARDE';
     sub.textContent = 'Sem sinal desta estratégia agora. O aviso aparece aqui no segundo em que ela disparar.';
   }
-  $('#fRate').innerHTML = st.n ? `${fmtPct(st.rate)}<small>em ${fmtInt(st.n)} operações</small>` : '—<small>sem operações</small>';
+  $('#fRate').innerHTML = st.n ? `${fmtPct(st.rate)}<small>${isSpot() ? 'acerto da direção' : 'em ' + fmtInt(st.n) + ' operações'}</small>` : '—<small>sem operações</small>';
   const ln = st.lw + st.ll + st.lt;
   $('#fLive').innerHTML = S.liveT === null ? '—<small>sem dados ao vivo</small>'
     : ln ? `${st.lw} ✓ · ${st.ll} ✗<small>${fmtBRL(st.lpnl)}</small>` : `0 operações<small>aguardando sinais</small>`;
 
   const done = st.trades.filter(t => t.res !== null).slice(-6).reverse();
   $('#recent').innerHTML = done.length ? done.map(t => {
-    const ok = t.res > 0, tie = t.res === 0;
-    const v = ok ? S.stake * S.payout : tie ? 0 : -S.stake;
+    const oc = outcome(t), ok = oc > 0, tie = oc === 0;
+    const v = tradeValue(t);
     return `<li><span class="t">${fmtTime(t.t)}</span><span class="d ${t.dir > 0 ? 'is-up' : 'is-down'}">${t.dir > 0 ? '▲ Compra' : '▼ Venda'}</span>`
       + `<span class="p">${fmtPrice(t.entry)} → ${fmtPrice(t.exit)}</span>`
-      + `<span class="r ${ok ? 'is-up' : tie ? 'is-muted' : 'is-down'}">${ok ? 'Acertou' : tie ? 'Empate' : 'Errou'} ${fmtBRL(v)}</span></li>`;
+      + `<span class="r ${ok ? 'is-up' : tie ? 'is-muted' : 'is-down'}">${isSpot() ? (ok ? 'Lucro' : tie ? 'Zero' : 'Prejuízo') : (ok ? 'Acertou' : tie ? 'Empate' : 'Errou')} ${fmtBRL(v)}</span></li>`;
   }).join('') : '<li class="empty">Nenhuma operação encerrada ainda.</li>';
 }
 
 function renderBoard(){
   const be = breakEven();
   $('#beKey').textContent = `equilíbrio ${fmtPct(be)}`;
+  $('#beKeyWrap').hidden = isSpot();
+  $('#ptKey').textContent = isSpot() ? 'acerto da direção (sem contar a taxa)' : 'taxa de acerto';
   const span = S.mode === 'file' ? 'do arquivo' : S.mode === 'demo' ? 'da demonstração' : `${S.mins >= 60 ? (S.mins / 60) + (S.mins === 60 ? ' hora' : ' horas') : S.mins + ' min'} de ${ASSETS[S.sym]}`;
   $('#boardSub').textContent = R ? `${span} · ${fmtInt(R.n)} segundos` : '';
   const sum = $('#summary');
@@ -627,7 +674,21 @@ function renderBoard(){
   const good = real.filter(x => x.st.n >= 30 && x.st.lo > be);
   const ranked = real.filter(x => x.st.n >= 30).sort((a, b) => b.st.rate - a.st.rate);
   const coin = R.res.coin;
-  if (good.length){
+  if (isSpot()){
+    const okN = real.filter(x => x.st.all >= 30);
+    const goodS = okN.filter(x => x.st.netLo > 0);
+    const bestMove = okN.slice().sort((a, b) => b.st.avgMove - a.st.avgMove)[0];
+    if (goodS.length){
+      sum.dataset.kind = 'good';
+      sum.innerHTML = `<b>${goodS.map(x => esc(x.s.name)).join(', ')}</b> lucrou depois da taxa neste período. Antes de confiar, confira em outro horário e no placar “desde que abriu”.`;
+    } else if (bestMove){
+      sum.dataset.kind = 'bad';
+      sum.innerHTML = `<b>Nenhuma estratégia lucrou depois da taxa.</b> A que mais ganhou andou em média ${fmtPct3(bestMove.st.avgMove)} a favor por operação (${esc(bestMove.s.name)}), mas comprar e vender custa ${fmtPct3(2 * S.fee)}. Em 15 segundos o preço costuma andar só ${fmtPct3(R.typMove)}.`;
+    } else {
+      sum.dataset.kind = '';
+      sum.textContent = 'Ainda há poucos sinais para tirar conclusão. Escolha um histórico maior.';
+    }
+  } else if (good.length){
     sum.dataset.kind = 'good';
     sum.innerHTML = `<b>${good.map(x => esc(x.s.name)).join(', ')}</b> ficou acima do equilíbrio de ${fmtPct(be)} neste período. Antes de confiar, confira se se mantém na 1ª e na 2ª metade, em outro horário e no placar “desde que abriu”.`;
   } else if (ranked.length){
@@ -641,15 +702,22 @@ function renderBoard(){
   const pos = v => Number.isFinite(v) ? Math.max(0, Math.min(100, (v * 100 - 30) / 40 * 100)) : 50;
   $('#rows').innerHTML = STRATS.map(s => {
     const st = R.res[s.id], vd = verdict(st);
-    const ptCls = st.n >= 30 ? (st.lo > be ? 'good' : st.rate < be ? 'bad' : '') : '';
+    const ptCls = isSpot() ? (vd.cls === 'good' ? 'good' : vd.cls === 'bad' ? 'bad' : '')
+      : st.n >= 30 ? (st.lo > be ? 'good' : st.rate < be ? 'bad' : '') : '';
+    const beMark = isSpot() ? '' : `<span class="be" style="left:${pos(be)}%"></span>`;
     const bar = st.n
-      ? `<span class="ci" style="left:${pos(st.lo)}%;width:${Math.max(1, pos(st.hi) - pos(st.lo))}%"></span><span class="half" style="left:${pos(.5)}%"></span><span class="be" style="left:${pos(be)}%"></span><span class="pt ${ptCls}" style="left:${pos(st.rate)}%"></span>`
-      : `<span class="be" style="left:${pos(be)}%"></span>`;
-    const meta = [
+      ? `<span class="ci" style="left:${pos(st.lo)}%;width:${Math.max(1, pos(st.hi) - pos(st.lo))}%"></span><span class="half" style="left:${pos(.5)}%"></span>${beMark}<span class="pt ${ptCls}" style="left:${pos(st.rate)}%"></span>`
+      : beMark;
+    const result = `resultado <b class="${st.pnl > 0 ? 'is-up' : st.pnl < 0 ? 'is-down' : ''}">${fmtBRL(st.pnl)}</b>`;
+    const meta = (isSpot() ? [
+      `<b>${fmtInt(st.all)}</b> operações`,
+      `ganho médio ${fmtPct3(st.avgMove)} · taxa ${fmtPct3(2 * S.fee)}`,
+      result,
+    ] : [
       `<b>${fmtInt(st.n)}</b> operações` + (st.ties ? ` · ${fmtInt(st.ties)} empates` : ''),
       `1ª metade ${fmtPct(st.r1)} · 2ª metade ${fmtPct(st.r2)}`,
-      `resultado <b class="${st.pnl > 0 ? 'is-up' : st.pnl < 0 ? 'is-down' : ''}">${fmtBRL(st.pnl)}</b>`,
-    ].join(' · ');
+      result,
+    ]).join(' · ');
     return `<li><button type="button" class="row" data-id="${s.id}" aria-pressed="${s.id === S.strat}">`
       + `<span class="row-head"><span class="row-name"><b>${esc(s.name)}</b><span>${esc(s.desc)}</span></span><span class="chip ${vd.cls}">${vd.txt}</span></span>`
       + `<span class="row-rate"><span class="rate">${fmtPct(st.rate)}</span><span class="bar" aria-hidden="true">${bar}</span></span>`
@@ -659,6 +727,11 @@ function renderBoard(){
 
 function renderHowTo(){
   const be = breakEven(), win = S.stake * S.payout;
+  $('#howSell').hidden = !isSpot();
+  if (isSpot()){
+    $('#howBe').innerHTML = `<b>Taxa.</b> Cada ordem na Binance paga ${fmtPct3(S.fee)} (25% a menos pagando a taxa com BNB). Comprar e vender custa ${fmtPct3(2 * S.fee)} no total. Para lucrar, o preço precisa andar mais que isso a seu favor em 15 segundos.` + (R ? ` Nos dados carregados, em 15 segundos o preço andou em média só ${fmtPct3(R.typMove)}.` : '');
+    return;
+  }
   $('#howBe').innerHTML = `<b>Ponto de equilíbrio.</b> Com payout de ${nf(0).format(S.payout * 100)}%, cada acerto paga ${fmtBRL(win).replace('+', '')} e cada erro tira R$ ${nf(2).format(S.stake)}. Para empatar é preciso acertar 1 ÷ (1 + ${nf(2).format(S.payout)}) = <b>${fmtPct(be)}</b> das vezes. Abaixo disso, perde dinheiro com o tempo.`;
 }
 
@@ -742,7 +815,8 @@ function drawPrice(){
       ctx.closePath(); ctx.fill();
     }
     if (t.res !== null){
-      ctx.fillStyle = t.res > 0 ? upC : t.res < 0 ? dnC : muted;
+      const oc = outcome(t);
+      ctx.fillStyle = oc > 0 ? upC : oc < 0 ? dnC : muted;
       ctx.strokeStyle = cssv('--surface'); ctx.lineWidth = 2;
       ctx.beginPath(); ctx.arc(x1, Y(t.exit), 4.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     }
@@ -1021,17 +1095,21 @@ async function loadFile(file){
 }
 
 // ---------- Controles ----------
+function syncMarket(){ $('#fieldPayout').hidden = isSpot(); $('#fieldFee').hidden = !isSpot(); }
 function init(){
   loadPrefs();
   $('#strat').innerHTML = STRATS.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
   $('#sym').value = S.sym; $('#mins').value = String(S.mins);
   $('#payout').value = Math.round(S.payout * 100); $('#stake').value = S.stake; $('#strat').value = S.strat;
+  $('#market').value = S.market; $('#fee').value = +(S.fee * 100).toFixed(3); syncMarket();
 
   $('#sym').addEventListener('change', e => { S.sym = e.target.value; savePrefs(); startLive(false); });
   $('#mins').addEventListener('change', e => {
     S.mins = Number(e.target.value); savePrefs();
     if (S.mode === 'demo') startDemo(); else if (S.mode !== 'file') startLive(true); else render();
   });
+  $('#market').addEventListener('change', e => { S.market = e.target.value; syncMarket(); savePrefs(); schedule(); });
+  $('#fee').addEventListener('input', e => { const v = Number(e.target.value); if (e.target.value !== '' && v >= 0 && v <= 5){ S.fee = v / 100; savePrefs(); schedule(); } });
   $('#payout').addEventListener('input', e => { const v = Number(e.target.value); if (v >= 1 && v <= 200){ S.payout = v / 100; savePrefs(); schedule(); } });
   $('#stake').addEventListener('input', e => { const v = Number(e.target.value); if (v > 0){ S.stake = v; savePrefs(); schedule(); } });
   $('#strat').addEventListener('change', e => { S.strat = e.target.value; savePrefs(); render(); });
