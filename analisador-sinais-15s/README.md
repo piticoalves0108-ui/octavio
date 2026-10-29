@@ -8,6 +8,11 @@ https://raw.githack.com/piticoalves0108-ui/octavio/ccr-22f756aa-y5hqda/analisado
 
 Abra no navegador (Chrome ou Safari). A página busca o preço direto da Binance; não precisa de cadastro.
 
+## Corretoras
+
+- **Binance**: histórico e ao vivo segundo a segundo.
+- **KuCoin**: ao vivo montado negócio por negócio. A KuCoin só guarda velas de 1 minuto, então o histórico do placar vem da Binance (preço praticamente igual). Ativos: BTC, ETH, SOL e XRP. Se a KuCoin bloquear a conexão direta do navegador, a página avisa e oferece trocar para a Binance.
+
 ## O que tem na tela
 
 - **Sinal agora**: avisa no segundo em que a estratégia escolhida dispara, com contagem regressiva de 15s e o resultado. Pode tocar som e vibrar.

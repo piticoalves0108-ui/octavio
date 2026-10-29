@@ -201,6 +201,13 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
 
   <form class="controls" id="controls" onsubmit="return false">
     <div class="field">
+      <label for="ex">Corretora</label>
+      <select id="ex">
+        <option value="binance">Binance</option>
+        <option value="kucoin">KuCoin</option>
+      </select>
+    </div>
+    <div class="field">
       <label for="sym">Ativo</label>
       <select id="sym">
         <option value="BTCUSDT">Bitcoin (BTC)</option>
@@ -224,7 +231,7 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
       <label for="market">Onde operar</label>
       <select id="market">
         <option value="binary">Opção binária</option>
-        <option value="spot">Binance (com taxa)</option>
+        <option value="spot" id="optSpot">Binance (com taxa)</option>
       </select>
     </div>
     <div class="field" id="fieldPayout">
@@ -246,10 +253,11 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
   </form>
 
   <div class="notice" id="notice" hidden>
-    <p><b>Não consegui buscar o preço ao vivo da Binance.</b> Abra este link direto no navegador do celular (Chrome ou Safari), com internet ligada. Alguns apps e redes bloqueiam essa conexão.</p>
+    <p id="noticeMsg"><b>Não consegui buscar o preço ao vivo da Binance.</b> Abra este link direto no navegador do celular (Chrome ou Safari), com internet ligada. Alguns apps e redes bloqueiam essa conexão.</p>
     <p class="why" id="noticeWhy"></p>
     <div class="actions">
       <button type="button" class="primary" id="btnRetry">Tentar de novo</button>
+      <button type="button" id="btnBinance" hidden>Usar a Binance</button>
       <button type="button" id="btnDemo">Ver demonstração</button>
       <label class="btn" for="csv">Abrir arquivo CSV</label>
     </div>
@@ -310,7 +318,7 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
     <h2 id="hHow">Como ler o placar</h2>
     <ul>
       <li id="howBe"><b>Ponto de equilíbrio.</b></li>
-      <li id="howSell" hidden><b>Vender.</b> Na Binance à vista, “vender” só funciona se você já tiver a moeda. Apostar na queda exige Futuros ou margem, que usam dinheiro emprestado e podem zerar a conta muito rápido.</li>
+      <li id="howSell" hidden><b>Vender.</b> No mercado à vista, “vender” só funciona se você já tiver a moeda. Apostar na queda exige Futuros ou margem, que usam dinheiro emprestado e podem zerar a conta muito rápido.</li>
       <li><b>Faixa provável.</b> A barra cinza mostra onde a taxa de acerto verdadeira provavelmente está. Se ela encosta na linha do equilíbrio, o resultado pode ser só sorte.</li>
       <li><b>1ª e 2ª metade.</b> Um sinal bom de verdade acerta bem nas duas metades do período. Se foi bem só numa delas, foi sorte.</li>
       <li><b>Cara ou coroa.</b> Fica no placar como régua. Um sinal que não ganha da moeda não está lendo nada no gráfico.</li>
@@ -318,7 +326,7 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
     </ul>
     <div class="sources">
       <span>Outra fonte de dados:</span>
-      <button type="button" id="btnLive2">Ao vivo (Binance)</button>
+      <button type="button" id="btnLive2">Ao vivo</button>
       <button type="button" id="btnDemo2">Demonstração</button>
       <label class="btn" for="csv">Abrir arquivo CSV</label>
       <input type="file" id="csv" accept=".csv,.txt,text/csv" hidden>
@@ -334,6 +342,9 @@ button.primary{background:var(--accent); border-color:var(--accent); color:var(-
 const H = 15; // segundos até a expiração
 const REST = ['https://data-api.binance.vision', 'https://api.binance.com'];
 const WSS = ['wss://data-stream.binance.vision/ws/', 'wss://stream.binance.com:9443/ws/'];
+const KU_REST = 'https://api.kucoin.com';
+const KU = {BTCUSDT:'BTC-USDT', ETHUSDT:'ETH-USDT', SOLUSDT:'SOL-USDT', XRPUSDT:'XRP-USDT'}; // ativos disponíveis na KuCoin
+const EXNAME = {binance:'Binance', kucoin:'KuCoin'};
 const ASSETS = {BTCUSDT:'BTC/USDT', ETHUSDT:'ETH/USDT', SOLUSDT:'SOL/USDT', BNBUSDT:'BNB/USDT', XRPUSDT:'XRP/USDT', EURUSDT:'EUR/USDT'};
 const STRATS = [
   {id:'conf', name:'Confluência RSI + Bollinger', desc:'RSI e Bandas de Bollinger apontam virada ao mesmo tempo'},
@@ -363,6 +374,7 @@ const S = {
   mode:'loading', statusText:'Conectando…', label:'', fileName:'',
   gen:0, ws:null, poll:null, demoTimer:null, watchdog:null,
   liveT:null, liveSym:null, lastRx:0, lastAlert:null, restOrder:[0,1], err:'',
+  ex:'binance', liveEx:null, histOk:true, kuPing:null, kuTimer:null,
 };
 const D = {t:[], o:[], c:[]}; // velas de 1s em grade contínua (segundos sem negócio repetem o último preço)
 let R = null;
@@ -376,11 +388,12 @@ function loadPrefs(){
     if (p.stake > 0) S.stake = p.stake;
     if (NAME[p.strat]) S.strat = p.strat;
     if (p.market === 'binary' || p.market === 'spot') S.market = p.market;
+    if (EXNAME[p.ex]) S.ex = p.ex;
     if (p.fee >= 0 && p.fee <= 0.05) S.fee = p.fee;
   } catch (e) {}
 }
 function savePrefs(){
-  try { localStorage.setItem('sinais15s', JSON.stringify({sym:S.sym, mins:S.mins, payout:S.payout, stake:S.stake, strat:S.strat, market:S.market, fee:S.fee})); } catch (e) {}
+  try { localStorage.setItem('sinais15s', JSON.stringify({sym:S.sym, mins:S.mins, payout:S.payout, stake:S.stake, strat:S.strat, market:S.market, fee:S.fee, ex:S.ex})); } catch (e) {}
 }
 
 // ---------- Série de preços ----------
@@ -599,7 +612,7 @@ function renderStatus(){
   const el = $('#status'), tx = $('#statusText');
   let kind = S.mode, text = S.statusText;
   const n = D.t.length;
-  if (S.mode === 'live') text = `Ao vivo · Binance · ${ASSETS[S.sym]}` + (n ? ` · ${fmtTime(D.t[n - 1] + 1000)}` : '');
+  if (S.mode === 'live') text = `Ao vivo · ${EXNAME[S.ex]} · ${pairName()}` + (n ? ` · ${fmtTime(D.t[n - 1] + 1000)}` : '');
   if (S.mode === 'demo') text = 'Demonstração · preço simulado, não é real';
   if (S.mode === 'file') text = `Arquivo: ${S.fileName} · ${fmtInt(n)} segundos`;
   el.dataset.kind = kind;
@@ -620,8 +633,9 @@ function renderLive(){
     : `${fmtPct(be)}<small>payout ${nf(0).format(S.payout * 100)}%</small>`;
   if (!R){
     box.dataset.dir = '0'; box.dataset.stale = '0'; cnt.hidden = true;
-    word.textContent = S.mode === 'error' ? 'SEM DADOS' : 'CARREGANDO';
-    sub.textContent = S.mode === 'error' ? 'Sem preço ao vivo. Veja o aviso acima.' : 'Buscando o preço segundo a segundo…';
+    word.textContent = S.mode === 'error' ? 'SEM DADOS' : S.mode === 'live' ? 'COLETANDO' : 'CARREGANDO';
+    sub.textContent = S.mode === 'error' ? 'Sem preço ao vivo. Veja o aviso acima.'
+      : S.mode === 'live' ? `Juntando o preço da ${EXNAME[S.ex]}: ${D.t.length} de 60 segundos…` : 'Buscando o preço segundo a segundo…';
     $('#fRate').textContent = '—'; $('#fLive').textContent = '—';
     $('#recent').innerHTML = '';
     return;
@@ -666,7 +680,8 @@ function renderBoard(){
   $('#beKeyWrap').hidden = isSpot();
   $('#ptKey').textContent = isSpot() ? 'acerto da direção (sem contar a taxa)' : 'taxa de acerto';
   const span = S.mode === 'file' ? 'do arquivo' : S.mode === 'demo' ? 'da demonstração' : `${S.mins >= 60 ? (S.mins / 60) + (S.mins === 60 ? ' hora' : ' horas') : S.mins + ' min'} de ${ASSETS[S.sym]}`;
-  $('#boardSub').textContent = R ? `${span} · ${fmtInt(R.n)} segundos` : '';
+  const src = S.mode === 'live' && S.ex === 'kucoin' ? (S.histOk ? ' · histórico da Binance, ao vivo da KuCoin' : ' · só ao vivo da KuCoin') : '';
+  $('#boardSub').textContent = R ? `${span} · ${fmtInt(R.n)} segundos${src}` : '';
   const sum = $('#summary');
   if (!R){ sum.dataset.kind = ''; sum.textContent = S.mode === 'error' ? 'Sem dados para calcular.' : 'Calculando…'; $('#rows').innerHTML = ''; return; }
 
@@ -729,7 +744,7 @@ function renderHowTo(){
   const be = breakEven(), win = S.stake * S.payout;
   $('#howSell').hidden = !isSpot();
   if (isSpot()){
-    $('#howBe').innerHTML = `<b>Taxa.</b> Cada ordem na Binance paga ${fmtPct3(S.fee)} (25% a menos pagando a taxa com BNB). Comprar e vender custa ${fmtPct3(2 * S.fee)} no total. Para lucrar, o preço precisa andar mais que isso a seu favor em 15 segundos.` + (R ? ` Nos dados carregados, em 15 segundos o preço andou em média só ${fmtPct3(R.typMove)}.` : '');
+    $('#howBe').innerHTML = `<b>Taxa.</b> Cada ordem na ${EXNAME[S.ex]} paga ${fmtPct3(S.fee)} (${S.ex === 'kucoin' ? 'com desconto pagando a taxa com KCS' : '25% a menos pagando a taxa com BNB'}). Comprar e vender custa ${fmtPct3(2 * S.fee)} no total. Para lucrar, o preço precisa andar mais que isso a seu favor em 15 segundos.` + (R ? ` Nos dados carregados, em 15 segundos o preço andou em média só ${fmtPct3(R.typMove)}.` : '');
     return;
   }
   $('#howBe').innerHTML = `<b>Ponto de equilíbrio.</b> Com payout de ${nf(0).format(S.payout * 100)}%, cada acerto paga ${fmtBRL(win).replace('+', '')} e cada erro tira R$ ${nf(2).format(S.stake)}. Para empatar é preciso acertar 1 ÷ (1 + ${nf(2).format(S.payout)}) = <b>${fmtPct(be)}</b> das vezes. Abaixo disso, perde dinheiro com o tempo.`;
@@ -898,8 +913,19 @@ function stopFeeds(){
   if (S.ws){ try { S.ws.onclose = null; S.ws.onerror = null; S.ws.onmessage = null; S.ws.close(); } catch (e) {} S.ws = null; }
   clearInterval(S.poll); S.poll = null;
   clearInterval(S.demoTimer); S.demoTimer = null;
+  clearInterval(S.kuPing); S.kuPing = null;
+  clearInterval(S.kuTimer); S.kuTimer = null;
+  kuCur = null;
 }
-function showNotice(err){ $('#notice').hidden = false; $('#noticeWhy').textContent = err ? `Detalhe técnico: ${err.message || err}` : ''; }
+function showNotice(err){
+  const ku = S.ex === 'kucoin' && S.mode !== 'file';
+  $('#noticeMsg').innerHTML = ku
+    ? '<b>Não consegui conectar na KuCoin.</b> Ela pode bloquear conexões feitas direto do navegador. Use a Binance: o preço do Bitcoin nas duas fica praticamente igual.'
+    : '<b>Não consegui buscar o preço ao vivo da Binance.</b> Abra este link direto no navegador do celular (Chrome ou Safari), com internet ligada. Alguns apps e redes bloqueiam essa conexão.';
+  $('#btnBinance').hidden = !ku;
+  $('#notice').hidden = false;
+  $('#noticeWhy').textContent = err ? `Detalhe técnico: ${err.message || err}` : '';
+}
 function hideNotice(){ $('#notice').hidden = true; }
 
 async function fetchKlines(qs){
@@ -919,43 +945,136 @@ async function fetchKlines(qs){
   throw err || new Error('Falha de rede');
 }
 
+async function loadHistory(gen){
+  const need = S.mins * 60 + 360;
+  const rows = [];
+  let end = Date.now();
+  while (rows.length < need){
+    const lim = Math.min(1000, need - rows.length);
+    const j = await fetchKlines(`symbol=${S.sym}&interval=1s&limit=${lim}&endTime=${end}`);
+    if (gen !== S.gen) return false;
+    if (!j.length) break;
+    for (let k = j.length - 1; k >= 0; k--) rows.push(j[k]);
+    end = j[0][0] - 1;
+    setStatus('loading', `Carregando histórico… ${Math.min(99, Math.round(rows.length / need * 100))}%`);
+    if (j.length < lim) break;
+  }
+  if (rows.length < 100) throw new Error('A Binance devolveu poucos dados para este ativo.');
+  rows.reverse();
+  rows.pop(); // a vela do segundo atual ainda está aberta
+  for (const r of rows) push(+r[0], +r[1], +r[4]);
+  return true;
+}
+
 async function startLive(keep){
   stopFeeds();
   const gen = S.gen;
-  if (!(keep && S.liveSym === S.sym)) S.liveT = null;
+  if (!(keep && S.liveSym === S.sym && S.liveEx === S.ex)) S.liveT = null;
   resetData(); R = null; hideNotice();
   setStatus('loading', `Carregando histórico de ${ASSETS[S.sym]}…`);
   render();
-  const need = S.mins * 60 + 360;
+  // O histórico segundo a segundo sempre vem da Binance: a KuCoin só guarda velas de 1 minuto.
+  let histErr = null;
+  try { if (await loadHistory(gen) === false) return; } catch (e) { histErr = e; }
+  if (gen !== S.gen) return;
+  S.histOk = !histErr;
   try {
-    const rows = [];
-    let end = Date.now();
-    while (rows.length < need){
-      const lim = Math.min(1000, need - rows.length);
-      const j = await fetchKlines(`symbol=${S.sym}&interval=1s&limit=${lim}&endTime=${end}`);
+    if (S.ex === 'kucoin'){
+      if (histErr) resetData();
+      setStatus('loading', 'Conectando na KuCoin…');
+      await openKucoin(gen);
       if (gen !== S.gen) return;
-      if (!j.length) break;
-      for (let k = j.length - 1; k >= 0; k--) rows.push(j[k]);
-      end = j[0][0] - 1;
-      setStatus('loading', `Carregando histórico… ${Math.min(99, Math.round(rows.length / need * 100))}%`);
-      if (j.length < lim) break;
-    }
-    if (rows.length < 100) throw new Error('A Binance devolveu poucos dados para este ativo.');
-    rows.reverse();
-    rows.pop(); // a vela do segundo atual ainda está aberta
-    for (const r of rows) push(+r[0], +r[1], +r[4]);
-    S.mode = 'live'; S.liveSym = S.sym; S.lastRx = Date.now();
-    if (S.liveT === null) S.liveT = D.t[D.t.length - 1] + 1000;
+    } else if (histErr) throw histErr;
+    S.mode = 'live'; S.liveSym = S.sym; S.liveEx = S.ex; S.lastRx = Date.now();
+    if (S.liveT === null) S.liveT = D.t.length ? D.t[D.t.length - 1] + 1000 : Math.floor(Date.now() / 1000) * 1000;
     recompute();
-    openWS(gen);
+    if (S.ex === 'binance') openWS(gen);
     startWatchdog();
   } catch (e) {
     if (gen !== S.gen) return;
+    stopFeeds();
     resetData(); R = null;
     setStatus('error', 'Sem conexão com o preço ao vivo');
     showNotice(e);
     render();
   }
+}
+
+// ---------- KuCoin: monta velas de 1 segundo a partir de cada negócio ----------
+let kuCur = null; // vela do segundo em andamento
+const pairName = () => S.ex === 'kucoin' ? (KU[S.sym] || ASSETS[S.sym]) : ASSETS[S.sym];
+const kuTime = t => { const n = Number(t); return n > 1e17 ? Math.floor(n / 1e6) : n > 1e14 ? Math.floor(n / 1e3) : n; };
+
+function onKuTrade(p, ms, gen){
+  if (gen !== S.gen || !(p > 0) || !Number.isFinite(ms)) return;
+  S.lastRx = Date.now();
+  const t = Math.floor(ms / 1000) * 1000;
+  const n = D.t.length, last = n ? D.t[n - 1] : -Infinity;
+  if (t <= last){ // chegou atrasado: só atualiza o fechamento daquele segundo
+    const idx = (t - D.t[0]) / 1000;
+    if (idx >= 0 && idx < n && D.t[idx] === t) D.c[idx] = p;
+    return;
+  }
+  if (kuCur && t > kuCur.t){ const c = kuCur; kuCur = null; onLiveCandle(c.t, c.o, c.c, gen); }
+  if (!kuCur) kuCur = {t, o:p, c:p}; else kuCur.c = p;
+}
+
+function kuTick(gen){ // fecha os segundos pelo relógio, mesmo quando não há negócio
+  if (gen !== S.gen) return;
+  const closedMax = Math.floor((Date.now() - 1400) / 1000) * 1000;
+  if (kuCur && kuCur.t <= closedMax){ const c = kuCur; kuCur = null; onLiveCandle(c.t, c.o, c.c, gen); return; }
+  const n = D.t.length;
+  if (n && D.t[n - 1] < closedMax){
+    if (closedMax - D.t[n - 1] > 30000){ startLive(true); return; }
+    push(closedMax, D.c[n - 1], D.c[n - 1]); trim(); schedule();
+  }
+}
+
+async function openKucoin(gen){
+  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 9000);
+  let j;
+  try {
+    const r = await fetch(`${KU_REST}/api/v1/bullet-public`, {method:'POST', signal:ctl.signal, cache:'no-store'});
+    if (!r.ok) throw new Error(`HTTP ${r.status} em api.kucoin.com`);
+    j = await r.json();
+  } finally { clearTimeout(to); }
+  const srv = j && j.data && j.data.instanceServers && j.data.instanceServers[0];
+  if (!srv || !j.data.token) throw new Error('Resposta inesperada da KuCoin');
+  if (gen !== S.gen) return;
+  const url = new URL(srv.endpoint);
+  url.searchParams.set('token', j.data.token);
+  url.searchParams.set('connectId', 'c' + Date.now());
+  await new Promise((resolve, reject) => {
+    let ready = false;
+    const ws = new WebSocket(url.toString());
+    S.ws = ws;
+    const wait = setTimeout(() => { if (!ready){ try { ws.close(); } catch (e) {} reject(new Error('A KuCoin não respondeu')); } }, 10000);
+    ws.onmessage = ev => {
+      if (gen !== S.gen) return;
+      let m; try { m = JSON.parse(ev.data); } catch (e) { return; }
+      if (m.type === 'welcome' && !ready){
+        ws.send(JSON.stringify({id:String(Date.now()), type:'subscribe', topic:`/market/match:${KU[S.sym]}`, privateChannel:false, response:true}));
+        S.kuPing = setInterval(() => { try { ws.send(JSON.stringify({id:String(Date.now()), type:'ping'})); } catch (e) {} }, Math.max(5000, (srv.pingInterval || 18000) - 3000));
+        S.kuTimer = setInterval(() => kuTick(gen), 250);
+        ready = true; clearTimeout(wait); resolve();
+      } else if (m.type === 'message' && m.data && m.data.price !== undefined){
+        onKuTrade(+m.data.price, kuTime(m.data.time), gen);
+      } else if (m.type === 'error'){
+        if (!ready){ clearTimeout(wait); reject(new Error(`KuCoin: ${m.data || 'erro'}`)); return; }
+        stopFeeds(); clearInterval(S.watchdog);
+        setStatus('error', 'A KuCoin recusou este ativo');
+        showNotice(new Error(`KuCoin: ${m.data || 'erro'}`));
+        render();
+      }
+    };
+    ws.onerror = () => {};
+    ws.onclose = () => {
+      if (gen !== S.gen) return;
+      S.ws = null;
+      if (!ready){ clearTimeout(wait); reject(new Error('A KuCoin fechou a conexão')); return; }
+      setTimeout(() => { if (gen === S.gen) startLive(true); }, 1500);
+    };
+  });
 }
 
 function onLiveCandle(t, o, c, gen){
@@ -1096,13 +1215,20 @@ async function loadFile(file){
 
 // ---------- Controles ----------
 function syncMarket(){ $('#fieldPayout').hidden = isSpot(); $('#fieldFee').hidden = !isSpot(); }
+function syncExchange(){
+  for (const o of $('#sym').options){ const ok = S.ex === 'binance' || !!KU[o.value]; o.disabled = !ok; o.hidden = !ok; }
+  if (S.ex === 'kucoin' && !KU[S.sym]){ S.sym = 'BTCUSDT'; }
+  $('#sym').value = S.sym;
+  $('#optSpot').textContent = `${EXNAME[S.ex]} (com taxa)`;
+}
 function init(){
   loadPrefs();
   $('#strat').innerHTML = STRATS.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
-  $('#sym').value = S.sym; $('#mins').value = String(S.mins);
+  $('#ex').value = S.ex; syncExchange(); $('#mins').value = String(S.mins);
   $('#payout').value = Math.round(S.payout * 100); $('#stake').value = S.stake; $('#strat').value = S.strat;
   $('#market').value = S.market; $('#fee').value = +(S.fee * 100).toFixed(3); syncMarket();
 
+  $('#ex').addEventListener('change', e => { S.ex = e.target.value; syncExchange(); savePrefs(); startLive(false); });
   $('#sym').addEventListener('change', e => { S.sym = e.target.value; savePrefs(); startLive(false); });
   $('#mins').addEventListener('change', e => {
     S.mins = Number(e.target.value); savePrefs();
@@ -1119,6 +1245,7 @@ function init(){
   });
   $('#beep').addEventListener('change', e => { S.beep = e.target.checked; if (S.beep) beep(0); });
   $('#btnRetry').addEventListener('click', () => startLive(false));
+  $('#btnBinance').addEventListener('click', () => { S.ex = 'binance'; $('#ex').value = 'binance'; syncExchange(); savePrefs(); startLive(false); });
   $('#btnLive2').addEventListener('click', () => startLive(false));
   $('#btnDemo').addEventListener('click', startDemo);
   $('#btnDemo2').addEventListener('click', startDemo);
